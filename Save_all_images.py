@@ -50,6 +50,6 @@ def run():
 				return
 	
 	msg += "<br/>Successfully saved " + str(wcount) + " files.<br/>"
-    IJ.showMessage(PluginTitle, msg)
+	IJ.showMessage(PluginTitle, msg)
 
 run()
