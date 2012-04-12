@@ -2,6 +2,8 @@ from ij import IJ
 from ij.io import FileSaver
 from os import path
 
+PluginTitle = '"Save all images" plugin'
+
 def run():
 	msg = "<html>"
 	
@@ -9,7 +11,7 @@ def run():
 	wcount = wm.getWindowCount()
 	if wcount == 0:
 		msg += "No windows open, nothing to do.<br/>"
-		IJ.showMessage(msg)
+		IJ.showMessage(PluginTitle, msg)
 		return
 	msg += "Number of open windows: " + str(wcount) + "<br/>"
 
@@ -18,7 +20,7 @@ def run():
 	if target is None:
 		# User canceled the dialog
 		msg += "<br/>No directory chosen, aborting.<br/>"
-		IJ.showMessage(msg)
+		IJ.showMessage(PluginTitle, msg)
 		return
 	msg += "Selected '" + target + "'as destination folder.<br/>"
 	
@@ -48,6 +50,6 @@ def run():
 				return
 	
 	msg += "<br/>Successfully saved " + str(wcount) + " files.<br/>"
-	IJ.showMessage(msg)
+    IJ.showMessage(PluginTitle, msg)
 
 run()
