@@ -20,19 +20,17 @@ def run():
 	pad = len(str(wcount))
 
 	for i in range(wcount):
-		### image ID lists start with 1, not 0
-		## wid = id + 1
-		imgid = wm.getNthImageID(i+1)
-		# print "window id ", i+1, ":", wm.getNthImageID(i+1)
-		imp = wm.getImage(i+1)
-		fs = FileSaver(imp)
-		# Print image details
-		# print "  title:", imp.title
-		# print "  current window:", wm.getCurrentWindow()
+		# image ID lists start with 1 instead of 0, so for convenience:
+		wid = i + 1
+		imp = wm.getImage(wid)
+		imgid = wm.getNthImageID(wid)
+		print "window id ", wid, ":", wm.getNthImageID(wid)
+		
 		# Construct filename
-		filename = 'tile_' + str(i+1).zfill(pad) + '.tif'
+		filename = 'tile_' + str(wid).zfill(pad) + '.tif'
 		filepath = target + '/' + filename
 		#print "filename:", filename
+		fs = FileSaver(imp)
 		if fs.saveAsTiffStack(filepath):
 			print "imageID", imgid, "saved as", filename
 		else:
