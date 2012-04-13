@@ -5,6 +5,14 @@ from os import path
 def run():
 	msg = "<html>"
 	# Choose a directory to store each slice as a file
+	wm = WindowManager
+	wcount = wm.getWindowCount()
+	if wcount == 0:
+		msg += "No windows open, nothing to do.<br/>"
+		IJ.showMessage(msg)
+		return
+	msg += "Number of open windows: " + str(wcount) + "<br/>"
+
 	target = DirectoryChooser("Choose target directory").getDirectory()
 	if target is None:
 		# User canceled the dialog
@@ -12,10 +20,6 @@ def run():
 		return
 	msg += "Selected '" + target + "'as destination folder.<br/>"
 	
-	wm = WindowManager
-	wcount = wm.getWindowCount()
-	msg += "Number of open windows: " + str(wcount) + "<br/>"
-
 	# determine padding width for filename
 	pad = len(str(wcount))
 
