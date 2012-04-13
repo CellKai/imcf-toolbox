@@ -4,7 +4,7 @@ from os import path
 
 def run():
 	msg = "<html>"
-	# Choose a directory to store each slice as a file
+	
 	wm = WindowManager
 	wcount = wm.getWindowCount()
 	if wcount == 0:
@@ -13,14 +13,16 @@ def run():
 		return
 	msg += "Number of open windows: " + str(wcount) + "<br/>"
 
+	# let the User choose a directory to store the files
 	target = DirectoryChooser("Choose target directory").getDirectory()
 	if target is None:
 		# User canceled the dialog
-		IJ.showMessage("No directory chosen, aborting.")
+		msg += "<br/>No directory chosen, aborting.<br/>"
+		IJ.showMessage(msg)
 		return
 	msg += "Selected '" + target + "'as destination folder.<br/>"
 	
-	# determine padding width for filename
+	# determine padding width for filenames
 	pad = len(str(wcount))
 
 	for i in range(wcount):
@@ -28,7 +30,7 @@ def run():
 		wid = i + 1
 		imp = wm.getImage(wid)
 		imgid = wm.getNthImageID(wid)
-		print "window id:", wid, ", imageID:", wm.getNthImageID(wid)
+		#print "window id:", wid, ", imageID:", wm.getNthImageID(wid)
 		
 		# Construct filename
 		filename = 'tile_' + str(wid).zfill(pad) + '.tif'
