@@ -3,8 +3,15 @@ from ij.io import FileSaver
 from os import path
 
 def run():
-	target = 'C:/Users/ehrenfeu/Desktop/tmpfast/ivana/stitch_test'
-	print "Using", target, "as destination folder"
+	# Choose a directory to store each slice as a file
+	target = DirectoryChooser("Choose target directory").getDirectory()
+	if target is None:
+		# User canceled the dialog
+		IJ.showMessage("No directory chosen, aborting.")
+		return
+	#print "Using", target, "as destination folder"
+
+	return
 
 	wm = WindowManager
 
