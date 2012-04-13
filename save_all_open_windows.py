@@ -36,13 +36,16 @@ def run():
 		filename = 'tile_' + str(wid).zfill(pad) + '.tif'
 		filepath = target + '/' + filename
 		fs = FileSaver(imp)
-		#FIXME: check if this is a stack!!
-		if fs.saveAsTiffStack(filepath):
-			print "imageID", imgid, "saved as", filename
+		if imp.getImageStackSize() > 1:
+			if fs.saveAsTiffStack(filepath):
+				print "imageID", imgid, "saved as", filename
+			else:
+				IJ.error("<html>Error saving current image, stopping.")
+				return
 		else:
-			IJ.error("Error saving current image, stopping.")
-			# FIXME: return a "bad" value
-			return
+			if not fs.saveAsTiff(filepath):
+				IJ.error("<html>Error saving current image, stopping.")
+				return
 	
 	msg += "<br/>Successfully saved " + str(wcount) + " files.<br/>"
 	IJ.showMessage(msg)
