@@ -3,22 +3,20 @@ from ij.io import FileSaver
 from os import path
 
 def run():
+	msg = "<html>"
 	# Choose a directory to store each slice as a file
 	target = DirectoryChooser("Choose target directory").getDirectory()
 	if target is None:
 		# User canceled the dialog
 		IJ.showMessage("No directory chosen, aborting.")
 		return
-	#print "Using", target, "as destination folder"
-
-	return
-
+	msg += "Selected '" + target + "'as destination folder.<br/>"
+	
 	wm = WindowManager
-
 	wcount = wm.getWindowCount()
-	print "number of windows:", wcount
+	msg += "Number of open windows: " + wcount + "<br/>"
 
-	# determine padding width
+	# determine padding width for filename
 	pad = len(str(wcount))
 
 	for i in range(wcount):
@@ -38,6 +36,9 @@ def run():
 		if fs.saveAsTiffStack(filepath):
 			print "imageID", imgid, "saved as", filename
 		else:
-			print "ERROR saving imageID", imgid, "file at", filepath
+			IJ.error("could not save imageID " + imgid + " to file '" + filepath + "'")
+	
+	msg += "<br/>Successfully saved " + wcount + " files.<br/>"
+	IJ.showMessage(msg)
 
 run()
