@@ -24,13 +24,13 @@ def run():
 		wid = i + 1
 		imp = wm.getImage(wid)
 		imgid = wm.getNthImageID(wid)
-		print "window id ", wid, ":", wm.getNthImageID(wid)
+		print "window id:", wid, ", imageID:", wm.getNthImageID(wid)
 		
 		# Construct filename
 		filename = 'tile_' + str(wid).zfill(pad) + '.tif'
 		filepath = target + '/' + filename
-		#print "filename:", filename
 		fs = FileSaver(imp)
+		#FIXME: check if this is a stack!!
 		if fs.saveAsTiffStack(filepath):
 			print "imageID", imgid, "saved as", filename
 		else:
