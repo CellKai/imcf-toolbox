@@ -14,7 +14,7 @@ def run():
 	
 	wm = WindowManager
 	wcount = wm.getWindowCount()
-	msg += "Number of open windows: " + wcount + "<br/>"
+	msg += "Number of open windows: " + str(wcount) + "<br/>"
 
 	# determine padding width for filename
 	pad = len(str(wcount))
@@ -34,9 +34,11 @@ def run():
 		if fs.saveAsTiffStack(filepath):
 			print "imageID", imgid, "saved as", filename
 		else:
-			IJ.error("could not save imageID " + imgid + " to file '" + filepath + "'")
+			IJ.error("Error saving current image, stopping.")
+			# FIXME: return a "bad" value
+			return
 	
-	msg += "<br/>Successfully saved " + wcount + " files.<br/>"
+	msg += "<br/>Successfully saved " + str(wcount) + " files.<br/>"
 	IJ.showMessage(msg)
 
 run()
