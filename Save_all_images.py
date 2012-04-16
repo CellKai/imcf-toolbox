@@ -1,3 +1,12 @@
+# 2012-04-12 Niko Ehrenfeuchter
+# Save all open windows as TIFF files, either as single TIF or as TIFF stack,
+# depending on the content of the window (decided separately for each window).
+
+# TODO:
+#  * split code into setup() and run()
+#  * let the user select a file and decide how it should be split (channel,
+#    timepoints, positions, ...) and save it instead of using all open windows
+
 from ij import IJ
 from ij.io import FileSaver
 from os import path
