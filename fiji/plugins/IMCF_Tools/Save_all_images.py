@@ -12,28 +12,16 @@ from ij.io import FileSaver
 from os import path
 
 PluginTitle = '"Save all images" plugin'
+msg = "<html>"
+wm = WindowManager
+target = ''
+wcount = wm.getWindowCount()
+# num1 = 0
 
 def run():
-	msg = "<html>"
-	
-	wm = WindowManager
-	wcount = wm.getWindowCount()
-	if wcount == 0:
-		msg += "No windows open, nothing to do.<br/>"
-		IJ.showMessage(PluginTitle, msg)
-		return
-	msg += "Number of open windows: " + str(wcount) + "<br/>"
-
-	# let the User choose a directory to store the files
-	target = DirectoryChooser("Choose target directory").getDirectory()
-	if target is None:
-		# User canceled the dialog
-		msg += "<br/>No directory chosen, aborting.<br/>"
-		IJ.showMessage(PluginTitle, msg)
-		return
-	msg += "Selected '" + target + "'as destination folder.<br/>"
-	
 	# determine padding width for filenames
+	global wcount
+	global msg
 	pad = len(str(wcount))
 
 	for i in range(wcount):
@@ -59,4 +47,30 @@ def run():
 	msg += "<br/>Successfully saved " + str(wcount) + " files.<br/>"
 	IJ.showMessage(PluginTitle, msg)
 
-run()
+def setup():
+	global wcount
+	global msg
+	global target
+	if wcount == 0:
+		msg += "No windows open, nothing to do.<br/>"
+		IJ.showMessage(PluginTitle, msg)
+		return false
+	msg += "Number of open windows: " + str(wcount) + "<br/>"
+	IJ.showMessage(PluginTitle, msg)
+
+	# let the User choose a directory to store the files
+	target = DirectoryChooser("Choose target directory").getDirectory()
+	if target is None:
+		# User canceled the dialog
+		msg += "<br/>No directory chosen, aborting.<br/>"
+		IJ.showMessage(PluginTitle, msg)
+		return false
+	msg += "Selected '" + target + "'as destination folder.<br/>"
+	IJ.showMessage(PluginTitle, msg)
+	
+	# gd = GenericDialog('bla')
+	# gd.addNumericField('numeric field:', num1, 2)
+	# gd.showDialog()
+
+if setup():
+	run()
