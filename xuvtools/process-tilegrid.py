@@ -45,9 +45,13 @@ print data
 # parse xuv project file, get tile size etc.
 elt_size_um = []
 elt_size_px = []
+xuvdata_orig = []
 
 xuvfile = open('file.xuv')
 for line in xuvfile:
+    # remember original xuv file content
+    xuvdata_orig.append(line)
+    # strip trailing whitespaces and split key-value pairs
     line_elt = line.rstrip().rsplit('=')
     if line_elt[0] == 'scene_element_size_um':
         for size in line_elt[1].rsplit(','):
@@ -55,6 +59,7 @@ for line in xuvfile:
     if line_elt[0] == 'stack0001_size_pix':
         for size in line_elt[1].rsplit(','):
             elt_size_px.append(int(size))
+xuvfile.close()
 
 print elt_size_um
 print elt_size_px
