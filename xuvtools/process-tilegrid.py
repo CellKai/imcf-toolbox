@@ -7,7 +7,6 @@
 # have the same size (x-y-z)!
 
 # TODO:
-#  - parse tile position information from CSV file
 #  - check if number of tiles from CSV matches .xuv file
 #  - generate new position information
 #  - update corresponding lines in .xuv file
@@ -38,7 +37,17 @@ for row in parsedata:
     # the last entry holds the maxval of this line, we discard it:
     data.append(row_num[0:-1])
 
-print data
+# print data
+# print tilemax
+
+# construct a list of tuples with tile positions indexed by tile number
+tilepos = [()] * tilemax
+# print tilepos
+for coord_y, line in enumerate(data):
+    for coord_x, tile in enumerate(line):
+        if not tile is None:
+            tilepos[tile - 1] = (coord_y, coord_x)
+print tilepos
 
 
 
