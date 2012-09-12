@@ -22,6 +22,7 @@
 import csv
 
 data = [] # the 2D-list holding our tile numbers
+tilemax = 0
 
 # parse elements of the row and discard all non-numerical ones:
 parsedata = csv.reader(open('tiles-arrangement.csv'), delimiter=';')
@@ -29,7 +30,9 @@ for row in parsedata:
     row_num = [] # holds the converted numerical values
     for num in row:
         if num.isdigit():
-            row_num.append(int(num))
+            tile = int(num)
+            row_num.append(tile)
+            tilemax = max(tilemax, tile)
         else:
             row_num.append(None)
     # the last entry holds the maxval of this line, we discard it:
