@@ -8,17 +8,11 @@
 
 # TODO:
 #  - check if number of tiles from CSV matches .xuv file
-#  - generate new position information
-#  - update corresponding lines in .xuv file
-
-# file = open('tiles-arrangement.csv')
-# for line in file:
-# 	for num in line.rsplit(';'):
-# 		if num.isdigit():
-# 			print int(num)
-
+#  - use commandline parameters for input, output and overlap
 
 import csv
+
+overlap = 0.15 # set overlap to 15 percent
 
 data = [] # the 2D-list holding our tile numbers
 tilemax = 0
@@ -50,10 +44,9 @@ for coord_y, line in enumerate(data):
 print tilepos
 
 
-
 # parse xuv project file, get tile size etc.
-elt_size_um = []
-elt_size_px = []
+size_um = []
+size_px = []
 xuvdata_orig = []
 
 xuvfile = open('file.xuv')
@@ -64,11 +57,31 @@ for line in xuvfile:
     line_elt = line.rstrip().rsplit('=')
     if line_elt[0] == 'scene_element_size_um':
         for size in line_elt[1].rsplit(','):
-            elt_size_um.append(float(size))
+            size_um.append(float(size))
     if line_elt[0] == 'stack0001_size_pix':
         for size in line_elt[1].rsplit(','):
-            elt_size_px.append(int(size))
+            size_px.append(int(size))
 xuvfile.close()
 
-print elt_size_um
-print elt_size_px
+print size_um
+print size_px
+
+
+# generate new xuv file content
+xuvfile = open('newfile.xuv', 'w')
+for line in xuvdata_orig:
+    line_elt = line.rstrip().rsplit('=')
+    # scan for lines holding tile coordinates
+    if line_elt[0].endswith('abs_pos_um'):
+        prefix = line_elt[0].split('_', 1)[0]
+        tileno = int(prefix[4:8])
+        ## now calculate the new tile position
+        coord_y = tilepos[tileno - 1][0] * (1 - overlap)
+        coord_x = tilepos[tileno - 1][1] * (1 - overlap)
+        coord_y = coord_y * size_px[1] * size_um[1]
+        coord_x = coord_x * size_px[2] * size_um[2]
+        xuvfile.write(line_elt[0] + '=0,'
+            + str(coord_y) + ',' + str(coord_x) + '\n')
+    else:
+        xuvfile.write(line)
+xuvfile.close()
