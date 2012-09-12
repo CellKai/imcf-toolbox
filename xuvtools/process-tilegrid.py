@@ -3,8 +3,10 @@
 """Parse CSV file containing tile numbers and update a XuV projectfile with this information.
 """
 
+# WARNING: this script assumes *ALL* stacks in the project file do
+# have the same size (x-y-z)!
+
 # TODO:
-#  - parse tile size (pixels and real units) from the .xuv file
 #  - parse tile position information from CSV file
 #  - check if number of tiles from CSV matches .xuv file
 #  - generate new position information
@@ -19,10 +21,10 @@
 
 import csv
 
-parsedata = csv.reader(open('tiles-arrangement.csv'), delimiter=';')
 data = [] # the 2D-list holding our tile numbers
 
 # parse elements of the row and discard all non-numerical ones:
+parsedata = csv.reader(open('tiles-arrangement.csv'), delimiter=';')
 for row in parsedata:
     row_num = [] # holds the converted numerical values
     for num in row:
@@ -34,3 +36,22 @@ for row in parsedata:
     data.append(row_num[0:-1])
 
 print data
+
+
+
+# parse xuv project file, get tile size etc.
+elt_size_um = []
+elt_size_px = []
+
+xuvfile = open('file.xuv')
+for line in xuvfile:
+    line_elt = line.rstrip().rsplit('=')
+    if line_elt[0] == 'scene_element_size_um':
+        for size in line_elt[1].rsplit(','):
+            elt_size_um.append(float(size))
+    if line_elt[0] == 'stack0001_size_pix':
+        for size in line_elt[1].rsplit(','):
+            elt_size_px.append(int(size))
+
+print elt_size_um
+print elt_size_px
