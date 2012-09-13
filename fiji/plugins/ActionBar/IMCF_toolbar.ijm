@@ -2,6 +2,13 @@
 run("Action Bar","/plugins/ActionBar/IMCF_toolbar.ijm");
 exit();
 
+<DnDAction>
+file=getArgument();
+param = "open=[" + file + "]";
+run("Bio-Formats Importer", param);
+//run("Bio-Formats Macro Extensions");
+//Ext.openImagePlus(file)
+</DnDAction>
 
 <line>
 <button> 1 line 1
