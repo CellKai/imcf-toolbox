@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-"""Parse CSV file containing tile numbers and update a XuV projectfile with this information.
+"""Parse a CSV file containing tile positions and update a Xuv projectfile with
+this information.
 """
 
 # WARNING: this script assumes *ALL* stacks in the project file do
