@@ -41,8 +41,10 @@ function extractFilaments(vImApp)
 		end
 	end
 		
-	vFilamentsXYZ = vFilaments.GetPositionsXYZ(0);
-	vFilamentsXYZ
+	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
+		vFilamentsXYZ = vFilaments.GetPositionsXYZ(FilamentID);
+		fname = sprintf('filaments-%d.csv', FilamentID);
+		csvwrite(fname, vFilamentsXYZ)
+	end
 
-	csvwrite('h:\bla.csv', vFilamentsXYZ)
 end
