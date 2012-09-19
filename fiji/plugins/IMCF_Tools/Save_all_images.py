@@ -48,9 +48,7 @@ def run():
 		filepath = target + '/' + filename
 		fs = FileSaver(imp)
 		if imp.getImageStackSize() > 1:
-			if fs.saveAsTiffStack(filepath):
-				print "imageID", imgid, "saved as", filename
-			else:
+			if not fs.saveAsTiffStack(filepath):
 				IJ.error("<html>Error saving current image, stopping.")
 				return
 		else:
