@@ -1,9 +1,12 @@
 %
-%  Filaments Sandbox for Imaris 7
+%  Filaments Sandbox for Imaris 7 by Niko Ehrenfeuchter
+%
+%  Requirements:
+%    - IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
 %
 
 function XTGetFilaments()
-	ver = 28
+	ver = 28; 
 	
 	% start Imaris and set up the connection
 	conn = IceImarisConnector();
