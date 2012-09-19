@@ -11,6 +11,10 @@ import sys
 import math
 import numpy as np
 
+class imaris_xml:
+
+    def __init__(self, filename):
+
 """Parse Excel XML files into a python datastructure.
 """
 
