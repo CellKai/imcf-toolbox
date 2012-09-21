@@ -5,11 +5,11 @@ Imaris via the XT/Matlab interface.
 """
 
 # TODO:
-#  - build data structure from coordinates
 
 import csv
 import argparse
-from dist_tools import dist, largest_dist_idx
+from dist_tools import dist_matrix_euclidean
+from numpy.matlib import where
 
 argparser = argparse.ArgumentParser(description=__doc__)
 argparser.add_argument('-i', '--infile', required=True, type=file,
@@ -33,13 +33,14 @@ for row in parsedata:
 # print data
 print 'Parsed ' + str(len(data)) + ' points from CSV file.'
 
+# Calculate the full distance matrix for all points using Euklid and
+# determine the pair having the largest distance.
+maxdist = 0
+distance_matrix = dist_matrix_euclidean(data)
+print distance_matrix
+for row_num, row in enumerate(distance_matrix):
+    row_max = max(row)
+    if row_max > maxdist:
+        maxdist = row_max
+        print [row_num] + [where(row == row_max)[0][0]] + [maxdist]
 
-# calculate longest distance pair:
-maxdist_pair = [0, 0, 0.0]
-for idx, point in enumerate(data):
-    dist_tuple = largest_dist_idx(point, data)
-    # print dist_tuple
-    if dist_tuple[1] > maxdist_pair[2]:
-        maxdist_pair = [idx] + dist_tuple
-        print 'updating maxdist_pair: ' + str(maxdist_pair)
-    # print str(point) + ' ' + str(dist_tuple)
