@@ -21,7 +21,7 @@ def largest_dist_idx(point, pointlist):
     return([distances.index(maxdist), maxdist])
 
 from scipy import reshape, sqrt
-from numpy.matlib import repmat, repeat, sum
+from numpy.matlib import repmat, repeat, sum, where
 def dist_matrix_euclidean(points):
     num_points = len(points)
     # print len(repmat(points, num_points, 1))
@@ -29,6 +29,21 @@ def dist_matrix_euclidean(points):
     dist_mat = sqrt(sum((repmat(points, num_points, 1) -
                         repeat(points, num_points, axis=0))**2, axis=1))
     return dist_mat.reshape((num_points, num_points))
+
+def get_max_dist_pair(matrix):
+    # Takes a distance matrix and finds the pair having the largest
+    # distance to each other. Returns a tuple of index numbers.
+    maxdist = 0
+    pair = (-1, -1)
+    for row_num, row in enumerate(matrix):
+        row_max = max(row)
+        if row_max > maxdist:
+            maxdist = row_max
+            max_pos = where(row == row_max)[0][0]
+            pair = (row_num, max_pos)
+            # print [row_num] + [where(row == row_max)[0][0]] + [maxdist]
+            # print pair
+    return pair
 
 
 if __name__ == "__main__":
