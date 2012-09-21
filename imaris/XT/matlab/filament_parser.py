@@ -11,14 +11,6 @@ import argparse
 from dist_tools import dist_matrix_euclidean
 from numpy.matlib import where
 
-argparser = argparse.ArgumentParser(description=__doc__)
-argparser.add_argument('-i', '--infile', required=True, type=file,
-    help='CSV file containing filament coordinates')
-try:
-    args = argparser.parse_args()
-except IOError as e:
-    argparser.error(str(e))
-
 def parse_float_tuples(fname):
     """Parses every line of a CSV file into a tuple.
 
@@ -49,6 +41,14 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
+
+argparser = argparse.ArgumentParser(description=__doc__)
+argparser.add_argument('-i', '--infile', required=True, type=file,
+    help='CSV file containing filament coordinates')
+try:
+    args = argparser.parse_args()
+except IOError as e:
+    argparser.error(str(e))
 
 data = parse_float_tuples(args.infile)
 
