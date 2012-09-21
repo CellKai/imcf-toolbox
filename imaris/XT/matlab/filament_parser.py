@@ -19,11 +19,13 @@ try:
 except IOError as e:
     argparser.error(str(e))
 
-# parse elements of the row, non-float values will raise a ValueError
+# Now parse the file using the csv mechanisms to make sure we retrieve
+# float values (non-floats will raise a ValueError), then assemble a
+# 2D list of point-coordinates (tuples).
 parsedata = csv.reader(args.infile, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
-
-data = [] # the 2D-list holding our points
+data = []
 for row in parsedata:
+    # FIXME: should be num_val instead of row_num
     row_num = [] # holds the converted numerical values
     for val in row:
         row_num.append(val)
