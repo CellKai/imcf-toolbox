@@ -6,7 +6,7 @@
 %
 
 function XTGetFilaments()
-	ver = 28; 
+	ver = 28;
 	
 	% start Imaris and set up the connection
 	conn = IceImarisConnector();
@@ -41,6 +41,7 @@ function extractFilaments(vImApp)
 		end
 	end
 		
+    % extract positions of filament points for each and store them
 	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
 		vFilamentsXYZ = vFilaments.GetPositionsXYZ(FilamentID);
 		fname = sprintf('filaments-%d.csv', FilamentID);
