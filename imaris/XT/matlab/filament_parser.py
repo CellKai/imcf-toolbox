@@ -25,11 +25,10 @@ except IOError as e:
 parsedata = csv.reader(args.infile, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
 data = []
 for row in parsedata:
-    # FIXME: should be num_val instead of row_num
-    row_num = [] # holds the converted numerical values
+    num_val = []
     for val in row:
-        row_num.append(val)
-    data.append(row_num)
+        num_val.append(val)
+    data.append(num_val)
 # print data
 print 'Parsed ' + str(len(data)) + ' points from CSV file.'
 
