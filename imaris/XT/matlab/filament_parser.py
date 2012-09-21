@@ -6,9 +6,10 @@ Imaris via the XT/Matlab interface.
 
 # TODO:
 
+import sys
 import csv
 import argparse
-from dist_tools import dist_matrix_euclidean
+from dist_tools import dist_matrix_euclidean, get_max_dist_pair
 from numpy.matlib import where
 
 def parse_float_tuples(fname):
@@ -41,25 +42,21 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
+def main():
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-i', '--infile', required=True, type=file,
+        help='CSV file containing filament coordinates')
+    try:
+        args = argparser.parse_args()
+    except IOError as e:
+        argparser.error(str(e))
 
-argparser = argparse.ArgumentParser(description=__doc__)
-argparser.add_argument('-i', '--infile', required=True, type=file,
-    help='CSV file containing filament coordinates')
-try:
-    args = argparser.parse_args()
-except IOError as e:
-    argparser.error(str(e))
+    data = parse_float_tuples(args.infile)
+    distance_matrix = dist_matrix_euclidean(data)
+    max_dist_pair = get_max_dist_pair(distance_matrix)
 
-data = parse_float_tuples(args.infile)
+    print distance_matrix
+    print max_dist_pair
 
-# Calculate the full distance matrix for all points using Euklid and
-# determine the pair having the largest distance.
-maxdist = 0
-distance_matrix = dist_matrix_euclidean(data)
-print distance_matrix
-for row_num, row in enumerate(distance_matrix):
-    row_max = max(row)
-    if row_max > maxdist:
-        maxdist = row_max
-        print [row_num] + [where(row == row_max)[0][0]] + [maxdist]
-
+if __name__ == "__main__":
+    sys.exit(main())
