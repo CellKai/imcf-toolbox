@@ -1,2 +1,3 @@
 helper/target-hostnames.txt
 .*.sw?
+*.pyc
