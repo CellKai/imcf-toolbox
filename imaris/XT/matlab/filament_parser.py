@@ -62,6 +62,9 @@ def main():
     argparser.add_argument('--plot', dest='plot', action='store_const',
         const=True, default=False,
         help='plot parsed filament data')
+    argparser.add_argument('--showmatrix', dest='showmatrix', action='store_const',
+        const=True, default=False,
+        help='show the calculated distance matrix and the longest distance pair')
     try:
         args = argparser.parse_args()
     except IOError as e:
@@ -71,8 +74,9 @@ def main():
     distance_matrix = dist_matrix_euclidean(data)
     max_dist_pair = get_max_dist_pair(distance_matrix)
 
-    print distance_matrix
-    print max_dist_pair
+    if args.showmatrix:
+        print distance_matrix
+        print max_dist_pair
 
     if args.plot:
         plot_3d(data)
