@@ -10,7 +10,11 @@ import sys
 import csv
 import argparse
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair
-from numpy.matlib import where
+
+# stuff required for matplotlib:
+import matplotlib.pyplot as plt
+from numpy import asarray
+from mpl_toolkits.mplot3d import Axes3D
 
 def parse_float_tuples(fname):
     """Parses every line of a CSV file into a tuple.
@@ -42,10 +46,22 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
+def plot_3d(data):
+    x,y,z = asarray(zip(*data))
+    # print x,y,z
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.scatter(x,y,z,zdir='z', c='k')
+    plt.show()
+
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-i', '--infile', required=True, type=file,
         help='CSV file containing filament coordinates')
+    argparser.add_argument('--plot', dest='plot', action='store_const',
+        const=True, default=False,
+        help='plot parsed filament data')
     try:
         args = argparser.parse_args()
     except IOError as e:
@@ -57,6 +73,10 @@ def main():
 
     print distance_matrix
     print max_dist_pair
+
+    if args.plot:
+        plot_3d(data)
+
 
 if __name__ == "__main__":
     sys.exit(main())
