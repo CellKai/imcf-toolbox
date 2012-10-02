@@ -11,11 +11,6 @@ import csv
 import argparse
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair
 
-# stuff required for matplotlib:
-import matplotlib.pyplot as plt
-from numpy import asarray
-from mpl_toolkits.mplot3d import Axes3D
-
 def parse_float_tuples(fname):
     """Parses every line of a CSV file into a tuple.
 
@@ -46,13 +41,19 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
-def plot_3d(data):
+def plot_3d(data, color):
+    # stuff required for matplotlib:
+    import matplotlib.pyplot as plt
+    from numpy import asarray
+    from mpl_toolkits.mplot3d import Axes3D
+
+    # we need to have the coordinates as 3 ndarrays (x,y,z):
     x,y,z = asarray(zip(*data))
     # print x,y,z
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.scatter(x,y,z,zdir='z', c='k')
+    ax.scatter(x,y,z,zdir='z', c=color)
     plt.show()
 
 def main():
@@ -78,8 +79,11 @@ def main():
         print distance_matrix
         print max_dist_pair
 
+    for point in max_dist_pair:
+        print data[point]
+
     if args.plot:
-        plot_3d(data)
+        plot_3d(data, color='k')
 
 
 if __name__ == "__main__":
