@@ -41,19 +41,21 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
-def plot_3d(data, color):
+def plot_3d(data1, data2, color1, color2):
     # stuff required for matplotlib:
     import matplotlib.pyplot as plt
     from numpy import asarray
     from mpl_toolkits.mplot3d import Axes3D
 
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x,y,z = asarray(zip(*data))
+    x1,y1,z1 = asarray(zip(*data1))
+    x2,y2,z2 = asarray(zip(*data2))
     # print x,y,z
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.scatter(x,y,z,zdir='z', c=color)
+    ax.scatter(x1,y1,z1,zdir='z', c=color1)
+    ax.scatter(x2,y2,z2,zdir='z', c=color2, linewidth=8)
     plt.show()
 
 def main():
@@ -79,11 +81,14 @@ def main():
         print distance_matrix
         print max_dist_pair
 
+    maxdist_points = []
     for point in max_dist_pair:
-        print data[point]
+        maxdist_points.append(data[point])
+
+    print maxdist_points
 
     if args.plot:
-        plot_3d(data, color='k')
+        plot_3d(data1=data, data2=maxdist_points, color1='w', color2='r')
 
 
 if __name__ == "__main__":
