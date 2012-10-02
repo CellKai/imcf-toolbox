@@ -55,7 +55,7 @@ def plot_3d(data1, data2, color1, color2):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     ax.scatter(x1,y1,z1,zdir='z', c=color1)
-    ax.scatter(x2,y2,z2,zdir='z', c=color2, linewidth=8)
+    ax.scatter(x2,y2,z2,zdir='z', c=color2, linewidth=18)
     plt.show()
 
 def main():
@@ -77,15 +77,15 @@ def main():
     distance_matrix = dist_matrix_euclidean(data)
     max_dist_pair = get_max_dist_pair(distance_matrix)
 
-    if args.showmatrix:
-        print distance_matrix
-        print max_dist_pair
-
     maxdist_points = []
     for point in max_dist_pair:
         maxdist_points.append(data[point])
 
-    print maxdist_points
+
+    if args.showmatrix:
+        print distance_matrix
+        print max_dist_pair
+        print maxdist_points
 
     if args.plot:
         plot_3d(data1=data, data2=maxdist_points, color1='w', color2='r')
