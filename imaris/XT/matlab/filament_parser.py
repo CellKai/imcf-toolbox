@@ -120,6 +120,7 @@ def main():
         plot = plot3d_prep()
         plot3d_scatter(plot, data, 'w')
         plot3d_scatter(plot, maxdist_points, 'r', lw=18)
+        plot3d_line(plot, maxdist_points, 'g')
         for p in build_tuple_seq(adjacent):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'r')
