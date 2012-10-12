@@ -11,6 +11,21 @@ import csv
 import argparse
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair
 
+def build_tuple_seq(sequence):
+    """Convert a sequence into a list of 2-tuples.
+
+    Takes a sequence (list) and returns a list of 2-tuples where
+    each tuple consists of the previous list entry and the current one,
+    starting with the entry (last, 1st), then (1st, 2nd) and so on.
+    """
+    tuples = []
+    for i, elt in enumerate(sequence):
+        if i == 0:
+            prev = sequence[len(sequence) - 1]
+        tuples.append((prev, elt))
+        prev = elt
+    return tuples
+
 def parse_float_tuples(fname):
     """Parses every line of a CSV file into a tuple.
 
