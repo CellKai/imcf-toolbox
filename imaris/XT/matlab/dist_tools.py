@@ -45,6 +45,27 @@ def get_max_dist_pair(matrix):
             # print pair
     return pair
 
+from numpy import ma
+def find_neighbor(pid, dist_mat, mask):
+    """Finds the closest neighbor in a given distance matrix.
+
+    Takes a reference point and looks up the closest neighbor in a
+    masked distance matrix. The mask can be used to exclude selected
+    points in the calculation, for example when they have already been
+    processed earlier. Otherwise use a 0-mask.
+
+    Args:
+        pid: the index of the reference point
+        dist_mat: the euclidean distance matrix of all points
+        mask: binary array to use as a mask
+
+    Returns:
+        closest: index of the closest neighbor
+    """
+    masked_dists = ma.array(dist_mat[pid], mask=mask)
+    closest = masked_dists.argmin()
+    return closest
+
 
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."
