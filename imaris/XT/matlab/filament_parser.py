@@ -127,14 +127,10 @@ def main():
             # print str(p) + ' --> ' + str(coords)
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
-        # print fm1
-        # print fma1
-        fm1 = [ [x,x,x] for x in fm1 ]
-        filpnts1 = ma.array(data, mask=fm1)
-        adjacent = sort_neighbors(distance_matrix, filpnts1)
-        # print adjacent
-        for p in build_tuple_seq(adjacent):
-            coords = [filpnts1[p[0]], filpnts1[p[1]]]
+        filpnts1 = ma.array(adjacent, mask=fma1).compressed()
+        for p in build_tuple_seq(filpnts1):
+            print p
+            coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'g')
         # for x in filpnts1: print tuple(x)
         # print len(filpnts1)
