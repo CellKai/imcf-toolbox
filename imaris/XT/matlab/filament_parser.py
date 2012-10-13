@@ -12,7 +12,8 @@ import sys
 import csv
 import argparse
 import matplotlib.pyplot as plt
-from dist_tools import dist_matrix_euclidean, get_max_dist_pair, sort_neighbors
+from numpy import ma
+from dist_tools import dist_matrix_euclidean, get_max_dist_pair, sort_neighbors, build_filament_mask
 
 def build_tuple_seq(sequence):
     """Convert a sequence into a list of 2-tuples.
@@ -124,6 +125,19 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'r')
             # print str(p) + ' --> ' + str(coords)
+
+        fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
+        # print fm1
+        # print fma1
+        fm1 = [ [x,x,x] for x in fm1 ]
+        filpnts1 = ma.array(data, mask=fm1)
+        adjacent = sort_neighbors(distance_matrix, filpnts1)
+        # print adjacent
+        for p in build_tuple_seq(adjacent):
+            coords = [filpnts1[p[0]], filpnts1[p[1]]]
+            plot3d_line(plot, coords, 'g')
+        # for x in filpnts1: print tuple(x)
+        # print len(filpnts1)
         plot3d_show()
 
 
