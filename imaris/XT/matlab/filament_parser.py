@@ -4,7 +4,9 @@
 Imaris via the XT/Matlab interface.
 """
 
-# TODO:
+# TODO: create a class for filaments, containing the coordinates list,
+#       the distance matrix, the masks of the individual filaments,
+#       access to start and end points, etc.
 
 import sys
 import csv
@@ -68,10 +70,8 @@ def plot3d_show():
 
 def plot3d_scatter(plot, points, color, lw=1):
     from numpy import asarray
-
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x,y,z = asarray(zip(*points))
-
     plot.scatter(x,y,z,zdir='z', c=color, linewidth=lw)
 
 def plot3d_line(plot, points, color, lw=1):
@@ -106,7 +106,6 @@ def main():
 
     adjacent = sort_neighbors(distance_matrix, data)
 
-
     if args.showmatrix:
         print distance_matrix
         print '---------------------------------------------------'
@@ -114,7 +113,7 @@ def main():
         print '   corresponding coordinates: ' + str(maxdist_points)
         print '      corresponding distance: ' + str(distance_matrix[maxdist_pair])
         print '---------------------------------------------------'
-        print adjacent
+        # print adjacent
 
     if args.plot:
         plot = plot3d_prep()
