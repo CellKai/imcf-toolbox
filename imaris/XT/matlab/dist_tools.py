@@ -3,6 +3,7 @@
 # TODO:
 #  - add documentation
 #  - sanity/type checks
+#  - rename into filament_tools?
 
 from numpy import array, linalg
 def dist(p1, p2):
@@ -97,6 +98,29 @@ def sort_neighbors(dist_mat, coords):
         # print str(cur) + ' - ' + str(closest)
         cur = closest
     return adjacents
+
+def build_filament_mask(adjacent, delimiters):
+    mask = [True] * len(adjacent)
+    mask_adj = [True] * len(adjacent)
+    maskval = True
+    # required to determine which delimiter is found first:
+    found_first = False
+    # if second comes first, we need to invert the mask eventually:
+    for i, point in enumerate(adjacent):
+        if point == delimiters[0]:
+            found_first = True
+            maskval = not(maskval)
+        if point == delimiters[1]:
+            maskval = not(maskval)
+            # check if we need to invert the mask:
+            if not(found_first): invert = True
+        mask[point] = maskval
+        mask_adj[i] = maskval
+    if invert:
+        # print 'inverting mask.'
+        mask = [ not(x) for x in mask ]
+    # print mask
+    return (mask, mask_adj)
 
 
 if __name__ == "__main__":
