@@ -8,19 +8,13 @@ Imaris via the XT/Matlab interface.
 #  - create a class for filaments, containing the coordinates list,
 #    the distance matrix, the masks of the individual filaments,
 #    access to start and end points, etc.
-#  - for each point of a filament segment calculate the closest point
-#    of the opposing filament (think of elastic bands of minimal energy
-#    connecting them) - use a set of tuples to store the calculated
-#    connections in the form (id1, id2) where id1 < id2 to keep the
-#    set entries unique, since it is required to run over both segments
-#    and we'll introduce inverted duplicates otherwise
 
 import sys
 import csv
 import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
-from dist_tools import dist_matrix_euclidean, get_max_dist_pair, sort_neighbors, build_filament_mask
+from dist_tools import dist_matrix_euclidean, get_max_dist_pair, sort_neighbors, build_filament_mask, elastic_bands
 
 def build_tuple_seq(sequence):
     """Convert a sequence into a list of 2-tuples.
@@ -145,6 +139,12 @@ def main():
         for p in build_tuple_seq(filpnts2):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
+
+        elastic = elastic_bands(filpnts1, filpnts2, fm1, fm2, distance_matrix)
+        for p in elastic:
+            coords = [data[p[0]], data[p[1]]]
+            plot3d_line(plot, coords, 'r')
+
         plot3d_show()
 
 
