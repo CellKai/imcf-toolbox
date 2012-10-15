@@ -124,16 +124,23 @@ def main():
         for p in build_tuple_seq(adjacent):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'r')
-            # print str(p) + ' --> ' + str(coords)
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
         filpnts1 = ma.array(adjacent, mask=fma1).compressed()
+        # print fma1
+        # print filpnts1
         for p in build_tuple_seq(filpnts1):
-            print p
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'g')
-        # for x in filpnts1: print tuple(x)
-        # print len(filpnts1)
+
+        maxdist_pair = (maxdist_pair[1], maxdist_pair[0])
+        fm2, fma2 = build_filament_mask(adjacent, maxdist_pair)
+        filpnts2 = ma.array(adjacent, mask=fma2).compressed()
+        # print fma2
+        # print filpnts2
+        for p in build_tuple_seq(filpnts2):
+            coords = [data[p[0]], data[p[1]]]
+            plot3d_line(plot, coords, 'b')
         plot3d_show()
 
 
