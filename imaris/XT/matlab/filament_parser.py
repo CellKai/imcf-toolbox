@@ -9,6 +9,7 @@ Imaris via the XT/Matlab interface.
 import sys
 import csv
 import argparse
+import matplotlib.pyplot as plt
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair, sort_neighbors
 
 def build_tuple_seq(sequence):
@@ -56,36 +57,29 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
-def plot_3d(data1, data2, color1, color2, adjacent):
+def plot3d_prep():
     # stuff required for matplotlib:
-    import matplotlib.pyplot as plt
-    from numpy import asarray
     from mpl_toolkits.mplot3d import Axes3D
+    fig = plt.figure()
+    return fig.gca(projection='3d')
+
+def plot3d_show():
+    plt.show()
+
+def plot3d_scatter(plot, points, color, lw=1):
+    from numpy import asarray
 
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x1,y1,z1 = asarray(zip(*data1))
-    x2,y2,z2 = asarray(zip(*data2))
-    # print x,y,z
+    x,y,z = asarray(zip(*points))
 
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    ax.scatter(x1,y1,z1,zdir='z', c=color1)
-    ax.scatter(x2,y2,z2,zdir='z', c=color2, linewidth=18)
-    ax.plot(x2,y2,z2,zdir='z', c=color2)
+    plot.scatter(x,y,z,zdir='z', c=color, linewidth=lw)
 
-    # FIXME: clean up this mess!!!
-    tuples = build_tuple_seq(adjacent)
-    # print tuples
-    for pair in tuples:
-        print pair
-        coords = []
-        coords.append(data1[pair[0]])
-        coords.append(data1[pair[1]])
-        # print coords
-        x3,y3,z3 = asarray(zip(*coords))
-        ax.plot(x3,y3,z3,zdir='z', c=color2)
+def plot3d_line(plot, points, color, lw=1):
+    from numpy import asarray
+    # we need to have the coordinates as 3 ndarrays (x,y,z):
+    x,y,z = asarray(zip(*points))
+    plot.plot(x,y,z,zdir='z', c=color)
 
-    plt.show()
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -110,6 +104,8 @@ def main():
     for point in maxdist_pair:
         maxdist_points.append(data[point])
 
+    adjacent = sort_neighbors(distance_matrix, data)
+
 
     if args.showmatrix:
         print distance_matrix
@@ -118,11 +114,18 @@ def main():
         print '   corresponding coordinates: ' + str(maxdist_points)
         print '      corresponding distance: ' + str(distance_matrix[maxdist_pair])
         print '---------------------------------------------------'
-        adjacent = sort_neighbors(distance_matrix, data)
         print adjacent
 
     if args.plot:
-        plot_3d(data1=data, data2=maxdist_points, color1='w', color2='r', adjacent=adjacent)
+        plot = plot3d_prep()
+        plot3d_scatter(plot, data, 'w')
+        plot3d_scatter(plot, maxdist_points, 'r', lw=18)
+        plot3d_line(plot, maxdist_points, 'g')
+        for p in build_tuple_seq(adjacent):
+            coords = [data[p[0]], data[p[1]]]
+            plot3d_line(plot, coords, 'r')
+            # print str(p) + ' --> ' + str(coords)
+        plot3d_show()
 
 
 if __name__ == "__main__":
