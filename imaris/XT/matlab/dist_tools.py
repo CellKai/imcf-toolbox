@@ -106,6 +106,7 @@ def build_filament_mask(adjacent, delimiters):
     # required to determine which delimiter is found first:
     found_first = False
     # if second comes first, we need to invert the mask eventually:
+    invert = False
     for i, point in enumerate(adjacent):
         if point == delimiters[0]:
             found_first = True
@@ -119,6 +120,7 @@ def build_filament_mask(adjacent, delimiters):
     if invert:
         # print 'inverting mask.'
         mask = [ not(x) for x in mask ]
+        mask_adj = [ not(x) for x in mask_adj ]
     # print mask
     return (mask, mask_adj)
 
