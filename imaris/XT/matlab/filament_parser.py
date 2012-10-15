@@ -4,9 +4,16 @@
 Imaris via the XT/Matlab interface.
 """
 
-# TODO: create a class for filaments, containing the coordinates list,
-#       the distance matrix, the masks of the individual filaments,
-#       access to start and end points, etc.
+# TODO:
+#  - create a class for filaments, containing the coordinates list,
+#    the distance matrix, the masks of the individual filaments,
+#    access to start and end points, etc.
+#  - for each point of a filament segment calculate the closest point
+#    of the opposing filament (think of elastic bands of minimal energy
+#    connecting them) - use a set of tuples to store the calculated
+#    connections in the form (id1, id2) where id1 < id2 to keep the
+#    set entries unique, since it is required to run over both segments
+#    and we'll introduce inverted duplicates otherwise
 
 import sys
 import csv
@@ -127,8 +134,6 @@ def main():
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
         filpnts1 = ma.array(adjacent, mask=fma1).compressed()
-        # print fma1
-        # print filpnts1
         for p in build_tuple_seq(filpnts1):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'g')
@@ -136,8 +141,6 @@ def main():
         maxdist_pair = (maxdist_pair[1], maxdist_pair[0])
         fm2, fma2 = build_filament_mask(adjacent, maxdist_pair)
         filpnts2 = ma.array(adjacent, mask=fma2).compressed()
-        # print fma2
-        # print filpnts2
         for p in build_tuple_seq(filpnts2):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
