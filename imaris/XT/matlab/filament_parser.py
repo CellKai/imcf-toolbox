@@ -114,13 +114,14 @@ def main():
 
     adjacent = sort_neighbors(distance_matrix, data)
 
+    print '---------------------------------------------------'
+    print 'points with largest distance: ' + str(maxdist_pair)
+    print '   corresponding coordinates: ' + str(maxdist_points)
+    print '      corresponding distance: ' + str(distance_matrix[maxdist_pair])
+    print '---------------------------------------------------'
+
     if args.showmatrix:
         print distance_matrix
-        print '---------------------------------------------------'
-        print 'points with largest distance: ' + str(maxdist_pair)
-        print '   corresponding coordinates: ' + str(maxdist_points)
-        print '      corresponding distance: ' + str(distance_matrix[maxdist_pair])
-        print '---------------------------------------------------'
         # print adjacent
 
     if args.plot:
