@@ -124,6 +124,40 @@ def build_filament_mask(adjacent, delimiters):
     # print mask
     return (mask, mask_adj)
 
+def elastic_bands(pl1, pl2, mask1, mask2, dist_mat):
+    """Calculates minimal connections between two filament pointsets.
+
+    Takes two pointlists (the filaments), the corresponding masks, and a
+    distance matrix. Iterates over the pointlists and calculates the
+    closest point from the other set (think of elastic bands of minimal
+    energy connecting them, hence the name). Builds a set of tuples
+    representing the bands of the form (id1, id2) where id1 < id2 to make
+    sure we don't add "inverted" duplicates.
+
+    Args:
+        pl1, pl2: pointlists (ids of points)
+        mask1, mask2: corresponding array masks
+        dist_mat: euclidean distance matrix
+
+    Returns:
+        bands: a set of tuples (id_a, id_b) where id_a < id_b
+    """
+    bands = set()
+    for cur in pl1:
+        neigh = find_neighbor(cur, dist_mat, mask2)
+        if cur < neigh:
+            bands.add((cur, neigh))
+        else:
+            bands.add((neigh, cur))
+    for cur in pl2:
+        neigh = find_neighbor(cur, dist_mat, mask1)
+        if cur < neigh:
+            bands.add((cur, neigh))
+        else:
+            bands.add((neigh, cur))
+    # print bands
+    return bands
+
 
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."
