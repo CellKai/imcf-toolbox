@@ -99,13 +99,10 @@ def main():
     except IOError as e:
         argparser.error(str(e))
 
-    file1 = args.single
-    file2 = args.multi
-
-    tree1 = parse_xml(file1)
+    tree1 = parse_xml(args.single)
     myns = check_namesp(tree1, 'urn:schemas-microsoft-com:office:spreadsheet')
 
-    tree2 = parse_xml(file2)
+    tree2 = parse_xml(args.multi)
     myns = check_namesp(tree2, 'urn:schemas-microsoft-com:office:spreadsheet')
 
     # we're looking for stuff in the "Position" worksheet:
