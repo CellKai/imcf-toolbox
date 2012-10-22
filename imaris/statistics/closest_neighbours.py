@@ -12,7 +12,6 @@ file with the closest distance to the one from the first file.
 #  - create a class for handling Excel XML, move to separate package
 #  - do sanity checking
 #  - evaluate datatypes from XML cells
-#  - document functions
 
 import argparse
 import xml.etree.ElementTree as etree
@@ -21,6 +20,14 @@ import math
 import numpy as np
 
 def calc_dist_xyz(p1, p2):
+    """Calculates the euclidean distance between two points in 3D.
+
+    Args:
+        p1, p2: lists with 3 numerical elements each
+
+    Returns:
+        dist: float containing euclidean distance
+    """
 	dx = abs(p2[0] - p1[0])
 	dy = abs(p2[1] - p1[1])
 	dz = abs(p2[2] - p1[2])
@@ -28,11 +35,23 @@ def calc_dist_xyz(p1, p2):
 	return(dist)
 
 def dist(p1, p2):
+    """Calculates the euclidean distance of two points (N dimensional).
+
+    Args:
+        p1, p2: lists with an equal nr of numerical elements
+
+    Returns:
+        dist: float containing euclidean distance
+    """
 	point1 = np.array(p1)
 	point2 = np.array(p2)
 	return(np.linalg.norm(point1 - point2))
 
 def parse_xml(infile):
+    """Aux function to call the etree parser.
+
+    Just an auxiliary function for debugging statements.
+    """
     print "Processing file: " + infile.name
     tree = etree.parse(infile)
     # print "Done parsing the XML."
@@ -40,6 +59,13 @@ def parse_xml(infile):
     return(tree)
 
 def check_namesp(xml_etree, expected_ns):
+    """Check if an XML tree has a certain namespace.
+
+    Takes an XML etree object and a string denoting the expected
+    namespace, checks if the namespace of the XML tree matches.
+    Returns the namespace if yes, exits otherwise.
+    """
+    # FIXME: throw an exception or return false instead of exiting
     real_ns = xml_etree.getroot().tag[1:].split("}")[0]
     if not real_ns == expected_ns:
         print "ERROR, this file doesn't have the expected XML namespace!"
@@ -49,11 +75,36 @@ def check_namesp(xml_etree, expected_ns):
     return(real_ns)
 
 def get_worksheet(xml_etree, ns, pattern):
+    """Look up a certain worksheet in an Excel XML tree.
+
+    Args:
+        xml_etree: etree object
+        ns: the XML namespace to use for searching
+        pattern: the name of the worksheet
+
+    Returns:
+        worksheet: pointer to a subtree of the given etree
+    """
+    # FIXME: what happens if the worksheet can't be found??
     pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % (ns, ns, pattern)
     worksheet = xml_etree.findall(pattern)
     return(worksheet)
 
 def parse_celldata(worksheet, ns):
+    """Parse the cell-contents of a worksheet into a 2D array.
+
+    Args:
+        worksheet: the worksheet to process
+        ns: the XML namespace
+
+    Returns:
+        cells: a 2D array of the form (r=row, c=column):
+               [ [r1c1, r1c2, r1c3, ...],
+                 [r2c1, r2c2, r2c3, ...],
+                 [r3c1, r3c2, r3c3, ...],
+                 ...                      ]
+    """
+    # TODO: error handling
     cells = []
     rows = worksheet.findall('.//{%s}Row' % ns)
     for row in rows:
@@ -69,14 +120,19 @@ def parse_celldata(worksheet, ns):
         # print content
         cells.append(content)
     # print cells
-    # cells is now [ [r1c1, r1c2, r1c3, ...],
-    #                [r2c1, r2c2, r2c3, ...],
-    #                [r3c1, r3c2, r3c3, ...],
-    #                ...                      ]
     # print "Parsed rows: " + str(len(cells))
     return(cells)
 
 def IMS_extract_coords(table_cells):
+    """Extract Imaris-style coordinates and ID's from a cell array.
+
+    Args:
+        table_cells: 2D array with the cell contents of a worksheet.
+
+    Returns:
+        coords: array using the ID as index, storing 3-tuples of floats
+                representing the coordinates in (x, y, z) order.
+    """
     coords = []
     # extract positions and ID:
     for cell in table_cells:
