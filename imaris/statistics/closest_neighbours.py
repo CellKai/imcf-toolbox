@@ -20,21 +20,6 @@ import math
 import numpy as np
 from dist_tools import dist
 
-def calc_dist_xyz(p1, p2):
-    """Calculates the euclidean distance between two points in 3D.
-
-    Args:
-        p1, p2: lists with 3 numerical elements each
-
-    Returns:
-        dist: float containing euclidean distance
-    """
-    dx = abs(p2[0] - p1[0])
-    dy = abs(p2[1] - p1[1])
-    dz = abs(p2[2] - p1[2])
-    dist = math.sqrt(dx**2 + dy**2 + dz**2)
-    return(dist)
-
 def parse_xml(infile):
     """Aux function to call the etree parser.
 
