@@ -5,6 +5,7 @@
 #  - sanity/type checks
 #  - rename into filament_tools?
 
+import math
 def calc_dist_xyz(p1, p2):
     """Calculates the euclidean distance between two points in 3D.
 
