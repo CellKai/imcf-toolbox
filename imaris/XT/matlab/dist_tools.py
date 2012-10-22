@@ -7,6 +7,14 @@
 
 from numpy import array, linalg
 def dist(p1, p2):
+    """Calculates the euclidean distance of two points (N dimensional).
+
+    Args:
+        p1, p2: lists with an equal nr of numerical elements
+
+    Returns:
+        dist: float containing euclidean distance
+    """
     point1 = array(p1)
     point2 = array(p2)
     return(linalg.norm(point1 - point2))
