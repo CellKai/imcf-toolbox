@@ -28,11 +28,11 @@ def calc_dist_xyz(p1, p2):
     Returns:
         dist: float containing euclidean distance
     """
-	dx = abs(p2[0] - p1[0])
-	dy = abs(p2[1] - p1[1])
-	dz = abs(p2[2] - p1[2])
-	dist = math.sqrt(dx**2 + dy**2 + dz**2)
-	return(dist)
+    dx = abs(p2[0] - p1[0])
+    dy = abs(p2[1] - p1[1])
+    dz = abs(p2[2] - p1[2])
+    dist = math.sqrt(dx**2 + dy**2 + dz**2)
+    return(dist)
 
 def dist(p1, p2):
     """Calculates the euclidean distance of two points (N dimensional).
@@ -43,9 +43,9 @@ def dist(p1, p2):
     Returns:
         dist: float containing euclidean distance
     """
-	point1 = np.array(p1)
-	point2 = np.array(p2)
-	return(np.linalg.norm(point1 - point2))
+    point1 = np.array(p1)
+    point2 = np.array(p2)
+    return(np.linalg.norm(point1 - point2))
 
 def parse_xml(infile):
     """Aux function to call the etree parser.
