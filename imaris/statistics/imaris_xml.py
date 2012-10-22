@@ -3,6 +3,7 @@
 # TODO:
 
 import xml.etree.ElementTree as etree
+import sys
 
 def parse_xml(infile):
     """Aux function to call the etree parser.

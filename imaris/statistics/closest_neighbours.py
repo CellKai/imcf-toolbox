@@ -14,9 +14,7 @@ file with the closest distance to the one from the first file.
 #  - evaluate datatypes from XML cells
 
 import argparse
-import xml.etree.ElementTree as etree
 import sys
-import math
 import numpy as np
 from dist_tools import dist
 import imaris_xml as ix
