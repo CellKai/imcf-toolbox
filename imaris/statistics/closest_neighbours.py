@@ -14,6 +14,7 @@ file with the closest distance to the one from the first file.
 #  - evaluate datatypes from XML cells
 #  - document functions
 
+import argparse
 import xml.etree.ElementTree as etree
 import sys
 import math
@@ -32,7 +33,7 @@ def dist(p1, p2):
 	return(np.linalg.norm(point1 - point2))
 
 def parse_xml(infile):
-    print "Processing file: " + infile
+    print "Processing file: " + infile.name
     tree = etree.parse(infile)
     # print "Done parsing the XML."
     # print
@@ -88,12 +89,18 @@ def IMS_extract_coords(table_cells):
     return(coords)
 
 def main():
-    if not len(sys.argv) == 3:
-        print __doc__
-        return(1)
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-s', '--single', required=True, type=file,
+        help='Excel XML file containing a single spot.')
+    argparser.add_argument('-m', '--multi', required=True, type=file,
+        help='Excel XML file containing multiple spots.')
+    try:
+        args = argparser.parse_args()
+    except IOError as e:
+        argparser.error(str(e))
 
-    file1 = sys.argv[1]
-    file2 = sys.argv[2]
+    file1 = args.single
+    file2 = args.multi
 
     tree1 = parse_xml(file1)
     myns = check_namesp(tree1, 'urn:schemas-microsoft-com:office:spreadsheet')
