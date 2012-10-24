@@ -43,20 +43,20 @@ def main():
     cells1 = ix.parse_celldata(ws1_pos[0], myns)
     cells2 = ix.parse_celldata(ws2_pos[0], myns)
 
-    # reference_spots are taken as the base to find the closest ones
+    # ref_spots are taken as the base to find the closest ones
     # in the set of cand_spots
-    reference_spots = ix.IMS_extract_coords(cells1)
+    ref_spots = ix.IMS_extract_coords(cells1)
     cand_spots = ix.IMS_extract_coords(cells2)
-    dist_mat = dist_matrix_euclidean(reference_spots + cand_spots)
+    dist_mat = dist_matrix_euclidean(ref_spots + cand_spots)
 
-    ref_mask = [1] * len(reference_spots) + [0] * len(cand_spots)
+    ref_mask = [1] * len(ref_spots) + [0] * len(cand_spots)
 
-    for refid, refspot in enumerate(reference_spots):
+    for refid, refspot in enumerate(ref_spots):
         print
         print 'Calculating closest neighbour.'
         print 'Original spot:  [' + str(refid) + ']', refspot
         nearest = find_neighbor(refid, dist_mat, ref_mask)
-        print "Neighbour spot: [" + str(nearest - len(reference_spots)) + ']', cand_spots[nearest - len(reference_spots)]
+        print "Neighbour spot: [" + str(nearest - len(ref_spots)) + ']', cand_spots[nearest - len(ref_spots)]
         print "Distance:", dist_mat[refid, nearest]
     return(0)
 
