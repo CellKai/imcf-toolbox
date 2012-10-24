@@ -75,8 +75,15 @@ def dist_matrix_euclidean(pts):
     """
     # print len(repmat(pts, len(pts), 1))
     # print len(repeat(pts, len(pts), axis=0))
-    dist_mat = sqrt(sum((repmat(pts, len(pts), 1) -
-                         repeat(pts, len(pts), axis=0))**2, axis=1))
+    dist_mat = sqrt(
+                    sum(
+                           (
+                               repmat(pts, len(pts), 1) -
+                               repeat(pts, len(pts), axis=0)
+                           )**2,
+                           axis=1
+                       )
+                   )
     return dist_mat.reshape((len(pts), len(pts)))
 
 def get_max_dist_pair(matrix):
