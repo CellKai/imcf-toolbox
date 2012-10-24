@@ -50,13 +50,21 @@ from numpy.matlib import repmat, repeat, sum, where
 def dist_matrix_euclidean(pts):
     """Calculates the euclidean distance matrix for a set of points.
 
-    For example consider pts=[[1, 2], [4, 6]]
+    Args:
+        pts: a list of n-dimensional coordinates, e.g.
+             pts = [ [1, 2], [4, 6] ]
+
+    Details:
+    Uses two auxiliary matrixes to easily calculate the distance from
+    each point to every other point in the list using this approach:
+    (1) aux matrixes:
     repmat(l, n1, n2): l is repeated n1 times, along axis 1, and n2
         times along axis 2, so repmat(pts, len(pts), 1) =
         array( [ [1, 2], [4, 6], [1, 2], [4, 6] ] )
     repeat(l, n, a): each element of l is repeated n times along axis a
         (w/o 'a' a plain list is generated), so repeat(pts, 2, 1) =
         array( [ [1, 2], [1, 2], [4, 6], [4, 6] ] )
+    (2) Pythagoras:
     Then, the element-wise difference of the generated matrixes is
         calculated each value is squared:
         array( [ [ 0,  0], [ 9, 16], [ 9, 16], [ 0,  0] ] )
@@ -64,17 +72,12 @@ def dist_matrix_euclidean(pts):
         array([ 0, 25, 25,  0])
     Finally the square root is taken for each element:
         array([ 0.,  5.,  5.,  0.])
-    This corresponds to the Pythagoras equation.
-    To return a distance matrix reshape(len(pts), len(pts)) is used:
-        array([[ 0.,  5.],
-               [ 5.,  0.]])
 
-    Args:
-        pts: a list of n-dimensional coordinates, e.g.
-                [[1.3, 2.7, 4.22], [22.5, 3.2, 5.5], [2.2, 8.3, 7.6]]
+    Returns:
+        To transform the list into a distance matrix, we use reshape():
+        array( [ [ 0.,  5.],
+                 [ 5.,  0.] ] )
     """
-    # print len(repmat(pts, len(pts), 1))
-    # print len(repeat(pts, len(pts), axis=0))
     dist_mat = sqrt(
                     sum(
                            (
