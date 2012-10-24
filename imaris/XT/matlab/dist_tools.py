@@ -47,7 +47,7 @@ def largest_dist_idx(point, pointlist):
 
 from scipy import reshape, sqrt
 from numpy.matlib import repmat, repeat, sum, where
-def dist_matrix_euclidean(points):
+def dist_matrix_euclidean(pts):
     """Calculates the euclidean distance matrix for a set of points.
 
     For example consider pts=[[1, 2], [4, 6]]
@@ -70,15 +70,14 @@ def dist_matrix_euclidean(points):
                [ 5.,  0.]])
 
     Args:
-        points: a list of n-dimensional coordinates, e.g.
+        pts: a list of n-dimensional coordinates, e.g.
                 [[1.3, 2.7, 4.22], [22.5, 3.2, 5.5], [2.2, 8.3, 7.6]]
     """
-    num_points = len(points)
-    # print len(repmat(points, num_points, 1))
-    # print len(repeat(points, num_points, axis=0))
-    dist_mat = sqrt(sum((repmat(points, num_points, 1) -
-                        repeat(points, num_points, axis=0))**2, axis=1))
-    return dist_mat.reshape((num_points, num_points))
+    # print len(repmat(pts, len(pts), 1))
+    # print len(repeat(pts, len(pts), axis=0))
+    dist_mat = sqrt(sum((repmat(pts, len(pts), 1) -
+                         repeat(pts, len(pts), axis=0))**2, axis=1))
+    return dist_mat.reshape((len(pts), len(pts)))
 
 def get_max_dist_pair(matrix):
     # Takes a distance matrix and finds the pair having the largest
