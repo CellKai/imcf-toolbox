@@ -90,8 +90,14 @@ def dist_matrix_euclidean(pts):
     return dist_mat.reshape((len(pts), len(pts)))
 
 def get_max_dist_pair(matrix):
-    # Takes a distance matrix and finds the pair having the largest
-    # distance to each other. Returns a tuple of index numbers.
+    """Determine points with largest distance using a distance matrix.
+
+    Args:
+        matrix: euclidean distance matrix
+
+    Returns:
+        (i1, i2): tuple of index numbers of the largest distance pair.
+    """
     maxdist = 0
     pair = (-1, -1)
     for row_num, row in enumerate(matrix):
