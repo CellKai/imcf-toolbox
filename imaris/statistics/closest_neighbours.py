@@ -16,7 +16,7 @@ file with the closest distance to the one from the first file.
 import argparse
 import sys
 import numpy as np
-from dist_tools import dist
+from dist_tools import dist, dist_matrix_euclidean, find_neighbor
 import imaris_xml as ix
 
 def main():
@@ -47,21 +47,17 @@ def main():
     # in the set of cand_spots
     reference_spots = ix.IMS_extract_coords(cells1)
     cand_spots = ix.IMS_extract_coords(cells2)
+    dist_mat = dist_matrix_euclidean(reference_spots + cand_spots)
 
-    # test if calculation seems to be plausible:
-    # cand_spots[len(cand_spots) - 1] = (59.84, 25.602, 1.161)
+    ref_mask = [1] * len(reference_spots) + [0] * len(cand_spots)
 
     for refid, refspot in enumerate(reference_spots):
-        # create a numpy array for the distances to all spots in file1
-        distances = np.empty(len(cand_spots))
         print
         print 'Calculating closest neighbour.'
         print 'Original spot:  [' + str(refid) + ']', refspot
-        for idx, candspot in enumerate(cand_spots):
-            distances[idx] = dist(refspot, candspot)
-        nearest = distances.argmin()
-        print "Neighbour spot: [" + str(nearest) + ']', cand_spots[nearest]
-        print "Distance:", distances[nearest]
+        nearest = find_neighbor(refid, dist_mat, ref_mask)
+        print "Neighbour spot: [" + str(nearest - len(reference_spots)) + ']', cand_spots[nearest - len(reference_spots)]
+        print "Distance:", dist_mat[refid, nearest]
     return(0)
 
 # see http://www.artima.com/weblogs/viewpost.jsp?thread=4829
