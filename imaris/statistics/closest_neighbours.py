@@ -19,6 +19,7 @@ import numpy as np
 from dist_tools import dist, dist_matrix_euclidean, find_neighbor
 import imaris_xml as ix
 
+
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-s', '--single', required=True, type=file,
@@ -30,15 +31,15 @@ def main():
     except IOError as e:
         argparser.error(str(e))
 
-    tree1 = ix.parse_xml(args.single)
-    myns = ix.check_namesp(tree1, 'urn:schemas-microsoft-com:office:spreadsheet')
+    t1 = ix.parse_xml(args.single)
+    myns = ix.check_namesp(t1, 'urn:schemas-microsoft-com:office:spreadsheet')
 
-    tree2 = ix.parse_xml(args.multi)
-    myns = ix.check_namesp(tree2, 'urn:schemas-microsoft-com:office:spreadsheet')
+    t2 = ix.parse_xml(args.multi)
+    myns = ix.check_namesp(t2, 'urn:schemas-microsoft-com:office:spreadsheet')
 
     # we're looking for stuff in the "Position" worksheet:
-    ws1_pos = ix.get_worksheet(tree1, myns, 'Position')
-    ws2_pos = ix.get_worksheet(tree2, myns, 'Position')
+    ws1_pos = ix.get_worksheet(t1, myns, 'Position')
+    ws2_pos = ix.get_worksheet(t2, myns, 'Position')
 
     cells1 = ix.parse_celldata(ws1_pos[0], myns)
     cells2 = ix.parse_celldata(ws2_pos[0], myns)
