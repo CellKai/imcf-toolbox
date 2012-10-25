@@ -56,7 +56,8 @@ def main():
         print 'Calculating closest neighbour.'
         print 'Original spot:  [' + str(refid) + ']', refspot
         nearest = find_neighbor(refid, dist_mat, ref_mask)
-        print "Neighbour spot: [" + str(nearest - len(ref_spots)) + ']', cand_spots[nearest - len(ref_spots)]
+        print "Neighbour spot: [" + str(nearest - len(ref_spots)) + ']', \
+            cand_spots[nearest - len(ref_spots)]
         print "Distance:", dist_mat[refid, nearest]
     return(0)
 
