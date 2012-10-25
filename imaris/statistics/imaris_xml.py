@@ -5,6 +5,7 @@
 import xml.etree.ElementTree as etree
 import sys
 
+
 def parse_xml(infile):
     """Aux function to call the etree parser.
 
@@ -15,6 +16,7 @@ def parse_xml(infile):
     # print "Done parsing the XML."
     # print
     return(tree)
+
 
 def check_namesp(xml_etree, expected_ns):
     """Check if an XML tree has a certain namespace.
@@ -32,6 +34,7 @@ def check_namesp(xml_etree, expected_ns):
     # print
     return(real_ns)
 
+
 def get_worksheet(xml_etree, ns, pattern):
     """Look up a certain worksheet in an Excel XML tree.
 
@@ -47,6 +50,7 @@ def get_worksheet(xml_etree, ns, pattern):
     pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % (ns, ns, pattern)
     worksheet = xml_etree.findall(pattern)
     return(worksheet)
+
 
 def parse_celldata(worksheet, ns):
     """Parse the cell-contents of a worksheet into a 2D array.
@@ -80,6 +84,7 @@ def parse_celldata(worksheet, ns):
     # print cells
     # print "Parsed rows: " + str(len(cells))
     return(cells)
+
 
 def IMS_extract_coords(table_cells):
     """Extract Imaris-style coordinates and ID's from a cell array.
