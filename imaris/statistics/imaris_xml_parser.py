@@ -6,10 +6,11 @@
 
 import xml.etree.ElementTree as etree
 
+
 class ImXMLError(Exception): pass
 
-class ImarisXML:
 
+class ImarisXML(object):
     '''Parse Excel XML files into a python datastructure.
 
        Structure returned by celldata() is a list of lists:
@@ -17,7 +18,7 @@ class ImarisXML:
              [r2c1, r2c2, r2c3, ...],
              [r3c1, r3c2, r3c3, ...],
              ...                      ]
-'''
+    '''
 
     debug = 0
     tree = None
