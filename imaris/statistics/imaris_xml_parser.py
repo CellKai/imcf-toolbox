@@ -15,6 +15,7 @@ class ImarisXML:
 
     debug = 0
     tree = None
+    cells = []
     # by default, we expect the namespace of Excel XML:
     namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
 
@@ -45,13 +46,19 @@ class ImarisXML:
     def worksheet(self, pattern):
         pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % \
             (self.namespace, self.namespace, pattern)
-        worksheet = self.tree.findall(pattern)
+        # we ignore broken files that contain multiple worksheets having
+        # identical names and just return the first one (should be safe):
+        worksheet = self.tree.findall(pattern)[0]
         if self.debug > 1: print "Found worksheet: " + str(worksheet)
         return(worksheet)
 
     def celldata(self, ws):
-        cells = []
-        rows = self.worksheet(ws)[0].findall('.//{%s}Row' % self.namespace)
+        if self.cells == []:
+            self.parse_cells(ws)
+        return(self.cells)
+
+    def parse_cells(self, ws):
+        rows = self.worksheet(ws).findall('.//{%s}Row' % self.namespace)
         for row in rows:
             content = []
             # check if this is a header row:
@@ -59,16 +66,16 @@ class ImarisXML:
             if style_att in row.attrib:
                 # currently we don't process the header rows, so skip to the next
                 continue
-            if self.debug > 1: print str(len(row))
             for cell in row:
                 content.append(cell[0].text)
-            if self.debug > 1: print content
-            cells.append(content)
-        if self.debug: print cells
+            if self.debug > 2:
+                print str(len(row))
+                print content
+            self.cells.append(content)
         # cells is now [ [r1c1, r1c2, r1c3, ...],
         #                [r2c1, r2c2, r2c3, ...],
         #                [r3c1, r3c2, r3c3, ...],
         #                ...                      ]
-        # print "Parsed rows: " + str(len(cells))
-        return(cells)
+        if self.debug > 1: print self.cells
+        if self.debug: print "Parsed rows: " + str(len(self.cells))
 
