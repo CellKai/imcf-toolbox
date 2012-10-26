@@ -15,12 +15,13 @@ class ImarisXML:
 
     debug = 0
     tree = None
-    namespace = ''
+    # by default, we expect the namespace of Excel XML:
+    namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
 
     def __init__(self, xmlfile, ns='', debug=0):
         self.set_debug(debug)
-        self.namespace = ns
         self.parse_xml(xmlfile)
+        if ns: self.namespace = ns
         self.check_namespace()
 # TODO:
 #    ws1_pos = get_worksheet(tree1, myns, 'Position')
@@ -45,7 +46,7 @@ class ImarisXML:
                 print "Namespace parsed from XML: '" + real_ns + "'"
             raise(ImXMLError)
 
-    def get_worksheet(xml_etree, ns, pattern):
+    def get_worksheet(self, pattern):
         pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % (ns, ns, pattern)
         worksheet = xml_etree.findall(pattern)
         return(worksheet)
