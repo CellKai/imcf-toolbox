@@ -8,15 +8,11 @@ other file containing many spots. Calculates the spot from the second
 file with the closest distance to the one from the first file.
 """
 
-# TODO:
-#  - create a class for handling Excel XML, move to separate package
-#  - do sanity checking
-#  - evaluate datatypes from XML cells
-
 import argparse
 import sys
+from ImsXMLlib import ImarisXML
 from dist_tools import dist_matrix_euclidean, find_neighbor
-import imaris_xml as ix
+from imaris_xml import IMS_extract_coords
 
 
 def main():
@@ -30,23 +26,18 @@ def main():
     except IOError as e:
         argparser.error(str(e))
 
-    t1 = ix.parse_xml(args.reference)
-    myns = ix.check_namesp(t1, 'urn:schemas-microsoft-com:office:spreadsheet')
+    print 'Processing file: ' + args.reference.name
+    XMLref = ImarisXML(args.reference)
+    print 'Processing file: ' + args.candidate.name
+    XMLcnd = ImarisXML(args.candidate)
 
-    t2 = ix.parse_xml(args.candidate)
-    myns = ix.check_namesp(t2, 'urn:schemas-microsoft-com:office:spreadsheet')
-
-    # we're looking for stuff in the "Position" worksheet:
-    ws1_pos = ix.get_worksheet(t1, myns, 'Position')
-    ws2_pos = ix.get_worksheet(t2, myns, 'Position')
-
-    cells1 = ix.parse_celldata(ws1_pos[0], myns)
-    cells2 = ix.parse_celldata(ws2_pos[0], myns)
+    refs = XMLref.celldata('Position')
+    cand = XMLcnd.celldata('Position')
 
     # ref_spots are taken as the base to find the closest ones
     # in the set of cand_spots
-    ref_spots = ix.IMS_extract_coords(cells1)
-    cand_spots = ix.IMS_extract_coords(cells2)
+    ref_spots = IMS_extract_coords(refs)
+    cand_spots = IMS_extract_coords(cand)
     dist_mat = dist_matrix_euclidean(ref_spots + cand_spots)
 
     ref_mask = [1] * len(ref_spots) + [0] * len(cand_spots)
