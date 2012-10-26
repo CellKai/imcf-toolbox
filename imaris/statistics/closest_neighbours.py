@@ -12,7 +12,6 @@ import argparse
 import sys
 from ImsXMLlib import ImarisXML
 from dist_tools import dist_matrix_euclidean, find_neighbor
-from imaris_xml import IMS_extract_coords
 
 
 def main():
@@ -31,13 +30,10 @@ def main():
     print 'Processing file: ' + args.candidate.name
     XMLcnd = ImarisXML(args.candidate)
 
-    refs = XMLref.celldata('Position')
-    cand = XMLcnd.celldata('Position')
-
     # ref_spots are taken as the base to find the closest ones
     # in the set of cand_spots
-    ref_spots = IMS_extract_coords(refs)
-    cand_spots = IMS_extract_coords(cand)
+    ref_spots = XMLref.coordinates('Position')
+    cand_spots = XMLcnd.coordinates('Position')
     dist_mat = dist_matrix_euclidean(ref_spots + cand_spots)
 
     ref_mask = [1] * len(ref_spots) + [0] * len(cand_spots)
