@@ -80,9 +80,7 @@ class ImarisXML:
         Automatically calls the parser if the selected worksheet
         has not yet been processed before.
         """
-        try:
-            self.cells[ws]
-        except(KeyError):
+        if not ws in self.cells:
             self.parse_cells(ws)
         return(self.cells[ws])
 
@@ -101,7 +99,7 @@ class ImarisXML:
             # check if this is a header row:
             style_att = '{%s}StyleID' % self.namespace
             if style_att in row.attrib:
-                # currently we don't process the header rows, so skip to the next
+                # we don't process the header row, so skip it
                 continue
             for cell in row:
                 content.append(cell[0].text)
