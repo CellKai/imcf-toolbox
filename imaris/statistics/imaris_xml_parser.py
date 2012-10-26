@@ -7,7 +7,8 @@
 import xml.etree.ElementTree as etree
 
 
-class ImXMLError(Exception): pass
+class ImXMLError(Exception):
+    pass
 
 
 class ImarisXML(object):
@@ -27,11 +28,11 @@ class ImarisXML(object):
     namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
 
     def __init__(self, xmlfile, ns='', debug=0):
+        if ns:
+            self.namespace = ns
         self.debug = debug
         self.parse_xml(xmlfile)
-        if ns: self.namespace = ns
         self.check_namespace()
-
 
     def parse_xml(self, infile):
         """Aux function to call the etree parser.
@@ -111,4 +112,3 @@ class ImarisXML(object):
         self.cells[ws] = cells
         if self.debug > 1: print self.cells
         if self.debug: print "Parsed rows: " + str(len(self.cells))
-
