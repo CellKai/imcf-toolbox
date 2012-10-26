@@ -40,7 +40,7 @@ class ImarisXML(object):
         Just an auxiliary function for debugging statements.
         """
         if self.debug:
-            print "Processing file: " + infile
+            print "Processing file: " + infile.name
         self.tree = etree.parse(infile)
         if self.debug > 1: print "Done parsing XML: " + str(self.tree)
 
