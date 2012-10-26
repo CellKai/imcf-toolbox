@@ -15,8 +15,7 @@ file with the closest distance to the one from the first file.
 
 import argparse
 import sys
-import numpy as np
-from dist_tools import dist, dist_matrix_euclidean, find_neighbor
+from dist_tools import dist_matrix_euclidean, find_neighbor
 import imaris_xml as ix
 
 
