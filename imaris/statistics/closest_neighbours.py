@@ -21,19 +21,19 @@ import imaris_xml as ix
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
-    argparser.add_argument('-s', '--single', required=True, type=file,
-        help='Excel XML file containing a single spot.')
-    argparser.add_argument('-m', '--multi', required=True, type=file,
-        help='Excel XML file containing multiple spots.')
+    argparser.add_argument('-r', '--reference', required=True, type=file,
+        help='Imaris Excel XML export containing reference spots.')
+    argparser.add_argument('-c', '--candidate', required=True, type=file,
+        help='Imaris Excel XML export containing candidate spots.')
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
 
-    t1 = ix.parse_xml(args.single)
+    t1 = ix.parse_xml(args.reference)
     myns = ix.check_namesp(t1, 'urn:schemas-microsoft-com:office:spreadsheet')
 
-    t2 = ix.parse_xml(args.multi)
+    t2 = ix.parse_xml(args.candidate)
     myns = ix.check_namesp(t2, 'urn:schemas-microsoft-com:office:spreadsheet')
 
     # we're looking for stuff in the "Position" worksheet:
