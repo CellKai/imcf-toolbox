@@ -15,16 +15,14 @@ class ImarisXML:
 
     debug = 0
     tree = None
-    namesp = ''
+    namespace = ''
 
     def __init__(self, xmlfile, ns='', debug=0):
         self.set_debug(debug)
-        self.namesp = ns
+        self.namespace = ns
         self.parse_xml(xmlfile)
-        self.check_namesp()
+        self.check_namespace()
 # TODO:
-#    myns = check_namesp(tree1, 'urn:schemas-microsoft-com:office:spreadsheet')
-#
 #    ws1_pos = get_worksheet(tree1, myns, 'Position')
 #
 #    cells1 = parse_celldata(ws1_pos[0], myns)
@@ -39,9 +37,9 @@ class ImarisXML:
         self.tree = etree.parse(infile)
         if self.debug > 1: print "Done parsing XML: " + str(self.tree)
 
-    def check_namesp(self):
+    def check_namespace(self):
         real_ns = self.tree.getroot().tag[1:].split("}")[0]
-        if not real_ns == self.namesp:
+        if not real_ns == self.namespace:
             if self.debug:
                 print "ERROR, couldn't find the expected XML namespace!"
                 print "Namespace parsed from XML: '" + real_ns + "'"
