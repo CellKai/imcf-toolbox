@@ -15,22 +15,19 @@ class ImarisXML:
 
     debug = 0
     tree = None
+    namesp = ''
 
     def __init__(self, xmlfile, ns='', debug=0):
         self.set_debug(debug)
-        tree = self.parse_xml(xmlfile)
-#    tree1 = parse_xml(file1)
+        self.namesp = ns
+        self.parse_xml(xmlfile)
+        self.check_namesp()
+# TODO:
 #    myns = check_namesp(tree1, 'urn:schemas-microsoft-com:office:spreadsheet')
 #
-#    tree2 = parse_xml(file2)
-#    myns = check_namesp(tree2, 'urn:schemas-microsoft-com:office:spreadsheet')
-#
-#    # we're looking for stuff in the "Position" worksheet:
 #    ws1_pos = get_worksheet(tree1, myns, 'Position')
-#    ws2_pos = get_worksheet(tree2, myns, 'Position')
 #
 #    cells1 = parse_celldata(ws1_pos[0], myns)
-#    cells2 = parse_celldata(ws2_pos[0], myns)
 
 
     def set_debug(self, level):
@@ -39,19 +36,18 @@ class ImarisXML:
     def parse_xml(self, infile):
         if self.debug:
             print "Processing file: " + infile
-        tree = etree.parse(infile)
-        # print "Done parsing the XML."
-        # print
-        return(tree)
+        self.tree = etree.parse(infile)
+        if self.debug > 1:
+            print "Done parsing the XML."
+            print self.tree
 
-    def check_namesp(xml_etree, expected_ns):
-        real_ns = xml_etree.getroot().tag[1:].split("}")[0]
-        if not real_ns == expected_ns:
-            print "ERROR, this file doesn't have the expected XML namespace!"
-            sys.exit(1)
-        # print "Namespace parsed from XML document: '" + real_ns + "'"
-        # print
-        return(real_ns)
+    def check_namesp(self):
+        real_ns = self.tree.getroot().tag[1:].split("}")[0]
+        if not real_ns == self.namesp:
+            if self.debug:
+                print "ERROR, couldn't find the expected XML namespace!"
+                print "Namespace parsed from XML: '" + real_ns + "'"
+            raise(ImXMLError)
 
     def get_worksheet(xml_etree, ns, pattern):
         pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % (ns, ns, pattern)

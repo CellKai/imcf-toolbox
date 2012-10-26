@@ -2,5 +2,7 @@
 
 from imaris_xml_parser import ImarisXML
 
-XML = ImarisXML('__testdata/spots_green_single_ws-all.xml', debug=1)
+namesp = 'urn:schemas-microsoft-com:office:spreadsheet'
 
+XML = ImarisXML('__testdata/spots_green_single_ws-all.xml',
+                namesp, debug=1)
