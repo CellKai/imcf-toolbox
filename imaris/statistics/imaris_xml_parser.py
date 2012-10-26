@@ -37,9 +37,7 @@ class ImarisXML:
         if self.debug:
             print "Processing file: " + infile
         self.tree = etree.parse(infile)
-        if self.debug > 1:
-            print "Done parsing the XML."
-            print self.tree
+        if self.debug > 1: print "Done parsing XML: " + str(self.tree)
 
     def check_namesp(self):
         real_ns = self.tree.getroot().tag[1:].split("}")[0]
