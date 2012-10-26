@@ -13,9 +13,11 @@ class ImarisXML:
     '''Parse Excel XML files into a python datastructure.
 '''
 
+    debug = 0
     tree = None
 
-    def __init__(self, xmlfile, ns=''):
+    def __init__(self, xmlfile, ns='', debug=0):
+        self.set_debug(debug)
         tree = self.parse_xml(xmlfile)
 #    tree1 = parse_xml(file1)
 #    myns = check_namesp(tree1, 'urn:schemas-microsoft-com:office:spreadsheet')
@@ -31,8 +33,12 @@ class ImarisXML:
 #    cells2 = parse_celldata(ws2_pos[0], myns)
 
 
+    def set_debug(self, level):
+        self.debug = level
+
     def parse_xml(self, infile):
-        print "Processing file: " + infile
+        if self.debug:
+            print "Processing file: " + infile
         tree = etree.parse(infile)
         # print "Done parsing the XML."
         # print
