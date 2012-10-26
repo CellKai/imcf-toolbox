@@ -21,16 +21,14 @@ class ImarisXML(object):
              ...                      ]
     '''
 
-    debug = 0
-    tree = None
-    cells = {}
-    # by default, we expect the namespace of Excel XML:
-    namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
-
     def __init__(self, xmlfile, ns='', debug=0):
+        self.tree = None
+        self.cells = {}
+        self.debug = debug
+        # by default, we expect the namespace of Excel XML:
+        self.namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
         if ns:
             self.namespace = ns
-        self.debug = debug
         self.parse_xml(xmlfile)
         self.check_namespace()
 
