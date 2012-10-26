@@ -23,10 +23,6 @@ class ImarisXML:
         self.parse_xml(xmlfile)
         if ns: self.namespace = ns
         self.check_namespace()
-# TODO:
-#    ws1_pos = get_worksheet(tree1, myns, 'Position')
-#
-#    cells1 = parse_celldata(ws1_pos[0], myns)
 
 
     def set_debug(self, level):
@@ -46,27 +42,29 @@ class ImarisXML:
                 print "Namespace parsed from XML: '" + real_ns + "'"
             raise(ImXMLError)
 
-    def get_worksheet(self, pattern):
-        pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % (ns, ns, pattern)
-        worksheet = xml_etree.findall(pattern)
+    def worksheet(self, pattern):
+        pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % \
+            (self.namespace, self.namespace, pattern)
+        worksheet = self.tree.findall(pattern)
+        if self.debug > 1: print "Found worksheet: " + str(worksheet)
         return(worksheet)
 
-    def parse_celldata(worksheet, ns):
+    def celldata(self, ws):
         cells = []
-        rows = worksheet.findall('.//{%s}Row' % ns)
+        rows = self.worksheet(ws)[0].findall('.//{%s}Row' % self.namespace)
         for row in rows:
             content = []
             # check if this is a header row:
-            style_att = '{%s}StyleID' % ns
+            style_att = '{%s}StyleID' % self.namespace
             if style_att in row.attrib:
                 # currently we don't process the header rows, so skip to the next
                 continue
-            # print str(len(row))
+            if self.debug > 1: print str(len(row))
             for cell in row:
                 content.append(cell[0].text)
-            # print content
+            if self.debug > 1: print content
             cells.append(content)
-        # print cells
+        if self.debug: print cells
         # cells is now [ [r1c1, r1c2, r1c3, ...],
         #                [r2c1, r2c2, r2c3, ...],
         #                [r3c1, r3c2, r3c3, ...],
