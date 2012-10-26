@@ -20,14 +20,11 @@ class ImarisXML:
     namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
 
     def __init__(self, xmlfile, ns='', debug=0):
-        self.set_debug(debug)
+        self.debug = debug
         self.parse_xml(xmlfile)
         if ns: self.namespace = ns
         self.check_namespace()
 
-
-    def set_debug(self, level):
-        self.debug = level
 
     def parse_xml(self, infile):
         if self.debug:
