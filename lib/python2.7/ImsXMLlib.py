@@ -111,23 +111,25 @@ class ImarisXML(object):
         if self.debug: print self.cells
         if self.debug: print "Parsed rows: " + str(len(self.cells))
 
-def IMS_extract_coords(table_cells):
-    """Extract Imaris-style coordinates and ID's from a cell array.
+    def coordinates(self, ws):
+        """Extract coordinates and ID's from a list of worksheet-cells.
 
-    Args:
-        table_cells: 2D array with the cell contents of a worksheet.
+        Args: ws: the worksheet to process
 
-    Returns:
-        coords: array using the ID as index, storing 3-tuples of floats
-                representing the coordinates in (x, y, z) order.
-    """
-    coords = []
-    # extract positions and ID:
-    for cell in table_cells:
-        id = int(cell[7])
-        x = float(cell[0])
-        y = float(cell[1])
-        z = float(cell[2])
-        coords.insert(id, (x, y, z))
-    # print "Parsed coordinates:", str(len(coords))
-    return(coords)
+        Returns:
+            coords: array using the ID as index, storing 3-tuples of floats
+                    representing the coordinates in (x, y, z) order.
+        """
+        coords = []
+        # make sure the cells were already parsed:
+        if not ws in self.cells:
+            self.parse_cells(ws)
+        # extract positions and ID:
+        for cell in self.cells[ws]:
+            id = int(cell[7])
+            x = float(cell[0])
+            y = float(cell[1])
+            z = float(cell[2])
+            coords.insert(id, (x, y, z))
+        if self.debug > 1: print "Parsed coordinates:", str(len(coords))
+        return(coords)
