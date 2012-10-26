@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # TODO:
+#  - store contents per worksheet
 #  - do sanity checking
 #  - evaluate datatypes from XML cells
 
