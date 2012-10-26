@@ -110,5 +110,5 @@ class ImarisXML(object):
                 print content
             cells.append(content)
         self.cells[ws] = cells
-        if self.debug > 1: print self.cells
+        if self.debug: print self.cells
         if self.debug: print "Parsed rows: " + str(len(self.cells))
