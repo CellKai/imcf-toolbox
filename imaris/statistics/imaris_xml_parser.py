@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 # TODO:
-#  - store contents per worksheet
 #  - do sanity checking
 #  - evaluate datatypes from XML cells
 
@@ -16,7 +15,7 @@ class ImarisXML:
 
     debug = 0
     tree = None
-    cells = []
+    cells = {}
     # by default, we expect the namespace of Excel XML:
     namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
 
@@ -54,12 +53,15 @@ class ImarisXML:
         return(worksheet)
 
     def celldata(self, ws):
-        if self.cells == []:
+        try:
+            self.cells[ws]
+        except(KeyError):
             self.parse_cells(ws)
-        return(self.cells)
+        return(self.cells[ws])
 
     def parse_cells(self, ws):
         rows = self.worksheet(ws).findall('.//{%s}Row' % self.namespace)
+        cells = []
         for row in rows:
             content = []
             # check if this is a header row:
@@ -72,11 +74,12 @@ class ImarisXML:
             if self.debug > 2:
                 print str(len(row))
                 print content
-            self.cells.append(content)
+            cells.append(content)
         # cells is now [ [r1c1, r1c2, r1c3, ...],
         #                [r2c1, r2c2, r2c3, ...],
         #                [r3c1, r3c2, r3c3, ...],
         #                ...                      ]
+        self.cells[ws] = cells
         if self.debug > 1: print self.cells
         if self.debug: print "Parsed rows: " + str(len(self.cells))
 
