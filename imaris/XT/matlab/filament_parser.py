@@ -14,7 +14,9 @@ import csv
 import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
-from dist_tools import dist_matrix_euclidean, get_max_dist_pair, sort_neighbors, build_filament_mask, elastic_bands
+from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
+    sort_neighbors, build_filament_mask, elastic_bands
+
 
 def build_tuple_seq(sequence):
     """Convert a sequence into a list of 2-tuples.
@@ -30,6 +32,7 @@ def build_tuple_seq(sequence):
         tuples.append((prev, elt))
         prev = elt
     return tuples
+
 
 def parse_float_tuples(fname):
     """Parses every line of a CSV file into a tuple.
@@ -61,26 +64,30 @@ def parse_float_tuples(fname):
     print 'Parsed ' + str(len(data)) + ' points from CSV file.'
     return data
 
+
 def plot3d_prep():
     # stuff required for matplotlib:
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
     return fig.gca(projection='3d')
 
+
 def plot3d_show():
     plt.show()
+
 
 def plot3d_scatter(plot, points, color, lw=1):
     from numpy import asarray
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x,y,z = asarray(zip(*points))
-    plot.scatter(x,y,z,zdir='z', c=color, linewidth=lw)
+    x, y, z = asarray(zip(*points))
+    plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
+
 
 def plot3d_line(plot, points, color, lw=1):
     from numpy import asarray
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x,y,z = asarray(zip(*points))
-    plot.plot(x,y,z,zdir='z', c=color)
+    x, y, z = asarray(zip(*points))
+    plot.plot(x, y, z, zdir='z', c=color)
 
 
 def main():
@@ -90,9 +97,9 @@ def main():
     argparser.add_argument('--plot', dest='plot', action='store_const',
         const=True, default=False,
         help='plot parsed filament data')
-    argparser.add_argument('--showmatrix', dest='showmatrix', action='store_const',
-        const=True, default=False,
-        help='show the calculated distance matrix and the longest distance pair')
+    argparser.add_argument('--showmatrix', dest='showmatrix',
+        action='store_const', const=True, default=False,
+        help='show the distance matrix and the longest distance pair')
     try:
         args = argparser.parse_args()
     except IOError as e:
