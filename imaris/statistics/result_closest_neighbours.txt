@@ -1,5 +1,5 @@
-Processing file: ../../sample_data/spots_distances/spots_green_single_ws-all.xml
-Processing file: ../../sample_data/spots_distances/spots_red_multi_ws-all.xml
+Processing file: __testdata/spots_green_single_ws-all.xml
+Processing file: __testdata/spots_red_multi_ws-all.xml
 
 Calculating closest neighbour.
 Original spot:  [0] (31.851, 29.564, 1.273)
