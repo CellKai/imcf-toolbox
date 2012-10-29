@@ -7,7 +7,7 @@
 import xml.etree.ElementTree as etree
 
 
-class ImXMLError(Exception):
+class ImsXMLError(Exception):
     pass
 
 
@@ -54,7 +54,7 @@ class ImarisXML(object):
             if self.debug:
                 print "ERROR, couldn't find the expected XML namespace!"
                 print "Namespace parsed from XML: '" + real_ns + "'"
-            raise(ImXMLError)
+            raise(ImsXMLError)
 
     def worksheet(self, pattern):
         """Look up a certain worksheet in the Excel XML tree.
