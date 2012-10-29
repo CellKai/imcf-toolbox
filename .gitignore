@@ -2,3 +2,5 @@ helper/tgt_hosts/
 .*.sw?
 *.pyc
 __testdata
+*.wxg#
+*.py~
