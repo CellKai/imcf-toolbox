@@ -20,14 +20,18 @@ def main():
         help='Imaris Excel XML export containing reference spots.')
     argparser.add_argument('-c', '--candidate', required=True, type=file,
         help='Imaris Excel XML export containing candidate spots.')
+    argparser.add_argument('-o', '--outfile', default=sys.stdout,
+        type=argparse.FileType('w'), help='File to store the results.')
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
 
-    print 'Processing file: ' + args.reference.name
+    output = args.outfile.write
+
+    output('Processing file: ' + str(args.reference.name) + "\n")
     XMLref = ImarisXML(args.reference)
-    print 'Processing file: ' + args.candidate.name
+    output('Processing file: ' + str(args.candidate.name) + "\n")
     XMLcnd = ImarisXML(args.candidate)
 
     # ref_spots are taken as the base to find the closest ones
@@ -39,13 +43,13 @@ def main():
     ref_mask = [1] * len(ref_spots) + [0] * len(cand_spots)
 
     for refid, refspot in enumerate(ref_spots):
-        print
-        print 'Calculating closest neighbour.'
-        print 'Original spot:  [' + str(refid) + ']', refspot
+        output("\n")
+        output("Calculating closest neighbour.\n")
+        output('Original spot:  [' + str(refid) + '] ' + str(refspot) + "\n")
         nearest = find_neighbor(refid, dist_mat, ref_mask)
-        print "Neighbour spot: [" + str(nearest - len(ref_spots)) + ']', \
-            cand_spots[nearest - len(ref_spots)]
-        print "Distance:", dist_mat[refid, nearest]
+        output('Neighbour spot: [' + str(nearest - len(ref_spots)) + '] ' + \
+            str(cand_spots[nearest - len(ref_spots)]) + "\n")
+        output("Distance: " + str(dist_mat[refid, nearest]) + "\n")
     return(0)
 
 # see http://www.artima.com/weblogs/viewpost.jsp?thread=4829
