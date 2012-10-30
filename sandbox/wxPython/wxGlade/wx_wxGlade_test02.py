@@ -4,7 +4,7 @@
 
 import wx
 from wx_filechooser import FileChooser
-import wx.lib.filebrowsebutton
+import wx.lib.filebrowsebutton as fbb
 
 # begin wxGlade: extracode
 # end wxGlade
@@ -27,13 +27,10 @@ class MyBaseFrame(wx.Frame):
         self.text_ctrl_2 = wx.TextCtrl(self, -1, "")
         self.button_2 = wx.Button(self, -1, "Select")
         self.button_3 = wx.Button(self, -1, "Go")
-        self.fbbutton = wx.lib.filebrowsebutton.FileBrowseButton(buttonText='Browse',
-            dialogTitle='Choose a file', fileMask='*.*',
-            initialValue='',
-            labelText='File Entry:', parent=self, pos=wx.Point(8, 8),
-            size=wx.Size(472, 48), startDirectory='.', style=wx.TAB_TRAVERSAL,
-            toolTip='Type filename or click browse to choose file')
-
+        self.fbbutton = fbb.FileBrowseButton(buttonText='Browse',
+            dialogTitle='Select a file to save the results', fileMask='*.txt',
+            labelText='File to save results:', parent=self,
+            size=wx.Size(500, 35), style=wx.TAB_TRAVERSAL)
 
 
         self.__set_properties()
@@ -60,8 +57,8 @@ class MyBaseFrame(wx.Frame):
         grid_sizer_1.Add(self.text_ctrl_2, 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 0)
         grid_sizer_1.Add(self.button_2, 0, wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, 20)
         grid_sizer_1.Add((20, 0), 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 0)
-        grid_sizer_1.Add(self.button_3, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 10)
         grid_sizer_1.Add(self.fbbutton, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 10)
+        grid_sizer_1.Add(self.button_3, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 10)
         self.SetSizer(grid_sizer_1)
         grid_sizer_1.Fit(self)
         grid_sizer_1.AddGrowableCol(1)
