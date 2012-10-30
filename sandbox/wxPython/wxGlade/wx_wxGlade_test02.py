@@ -62,6 +62,7 @@ class MyBaseFrame(wx.Frame):
         self.SetSizer(grid_sizer_1)
         grid_sizer_1.Fit(self)
         grid_sizer_1.AddGrowableCol(1)
+        self.SetBackgroundStyle(wx.BG_STYLE_SYSTEM)
         self.Layout()
         # end wxGlade
 
