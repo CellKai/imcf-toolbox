@@ -48,17 +48,21 @@ class MyBaseFrame(wx.Frame):
         # end wxGlade
 
     def __do_layout(self):
+        st_label = wx.LEFT|wx.RIGHT|wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL
+        st_txt_ctrl = wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL
+        st_btn = wx.RIGHT|wx.ALIGN_CENTER_VERTICAL
+        st_btn2 = wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL
         # begin wxGlade: MyBaseFrame.__do_layout
         grid_sizer_1 = wx.FlexGridSizer(3, 3, 2, 2)
-        grid_sizer_1.Add(self.label_1, 0, wx.LEFT|wx.RIGHT|wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL, 4)
-        grid_sizer_1.Add(self.text_ctrl_1, 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 0)
-        grid_sizer_1.Add(self.button_1, 0, wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, 20)
-        grid_sizer_1.Add(self.label_2, 0, wx.LEFT|wx.RIGHT|wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL, 4)
-        grid_sizer_1.Add(self.text_ctrl_2, 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 0)
-        grid_sizer_1.Add(self.button_2, 0, wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, 20)
-        grid_sizer_1.Add((20, 0), 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 0)
-        grid_sizer_1.Add(self.fbbutton, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 10)
-        grid_sizer_1.Add(self.button_3, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 10)
+        grid_sizer_1.Add(self.label_1, 0, st_label, 4)
+        grid_sizer_1.Add(self.text_ctrl_1, 0, st_txt_ctrl, 0)
+        grid_sizer_1.Add(self.button_1, 0, st_btn, 20)
+        grid_sizer_1.Add(self.label_2, 0, st_label, 4)
+        grid_sizer_1.Add(self.text_ctrl_2, 0, st_txt_ctrl, 0)
+        grid_sizer_1.Add(self.button_2, 0, st_btn, 20)
+        grid_sizer_1.Add((20, 0), 0, st_txt_ctrl, 0)
+        grid_sizer_1.Add(self.fbbutton, 0, st_btn2, 10)
+        grid_sizer_1.Add(self.button_3, 0, st_btn2, 10)
         self.SetSizer(grid_sizer_1)
         grid_sizer_1.Fit(self)
         grid_sizer_1.AddGrowableCol(1)
