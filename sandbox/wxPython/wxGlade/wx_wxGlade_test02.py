@@ -71,15 +71,19 @@ class MyBaseFrame(wx.Frame):
         # end wxGlade
 
     def hdlr_btn_select_1(self, event): # wxGlade: MyBaseFrame.<event_handler>
-        fcd = FileChooser()
+        list_filter = 'Comma separated values (*.csv)|*.csv'
+        fcd = FileChooser(wcd=list_filter)
         fname = fcd.get_path()
-        self.text_ctrl_1.SetValue(fname)
+        if fname:
+            self.text_ctrl_1.SetValue(fname)
         event.Skip()
 
     def hdlr_btn_select_2(self, event): # wxGlade: MyBaseFrame.<event_handler>
-        fcd = FileChooser()
+        list_filter = 'Xuv project file (*.xuv)|*.xuv'
+        fcd = FileChooser(wcd=list_filter)
         fname = fcd.get_path()
-        self.text_ctrl_2.SetValue(fname)
+        if fname:
+            self.text_ctrl_2.SetValue(fname)
         event.Skip()
 
 # end of class MyBaseFrame
