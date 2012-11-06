@@ -13,30 +13,21 @@ import sys
 from ImsXMLlib import ImarisXML
 from dist_tools import dist_matrix_euclidean, find_neighbor
 
+
 class ClosestNeighbours(object):
 
-    def __init__(self):
-        argparser = argparse.ArgumentParser(description=__doc__)
-        argparser.add_argument('-r', '--reference', required=True, type=file,
-            help='Imaris Excel XML export containing reference spots.')
-        argparser.add_argument('-c', '--candidate', required=True, type=file,
-            help='Imaris Excel XML export containing candidate spots.')
-        argparser.add_argument('-o', '--outfile', default=sys.stdout,
-            type=argparse.FileType('w'), help='File to store the results.')
-        try:
-            self.args = argparser.parse_args()
-        except IOError as e:
-            argparser.error(str(e))
-
-        self.out = self.args.outfile.write
+    def __init__(self, file_ref, file_cand, file_out):
+        self.out = file_out.write
+        self.ref = file_ref
+        self.cand = file_cand
         self._parse()
         self._process()
 
     def _parse(self):
-        self.out('Processing file: ' + str(self.args.reference.name) + "\n")
-        self.XMLref = ImarisXML(self.args.reference)
-        self.out('Processing file: ' + str(self.args.candidate.name) + "\n")
-        self.XMLcnd = ImarisXML(self.args.candidate)
+        self.out('Processing file: ' + str(self.ref.name) + "\n")
+        self.XMLref = ImarisXML(self.ref)
+        self.out('Processing file: ' + str(self.cand.name) + "\n")
+        self.XMLcnd = ImarisXML(self.cand)
 
         # ref_spots are taken as the base to find the closest ones
         # in the set of cand_spots
@@ -62,7 +53,22 @@ class ClosestNeighbours(object):
             self.out("Distance: " + str(self.dist_mat[id_ref, id_neigh]) + "\n")
 
 def main():
-    neighbours = ClosestNeighbours()
+    # main() is only called when we're run directly from the cmdline, so we
+    # have to parse the arguments first:
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-r', '--reference', required=True, type=file,
+        help='Imaris Excel XML export containing reference spots.')
+    argparser.add_argument('-c', '--candidate', required=True, type=file,
+        help='Imaris Excel XML export containing candidate spots.')
+    argparser.add_argument('-o', '--outfile', default=sys.stdout,
+        type=argparse.FileType('w'), help='File to store the results.')
+    try:
+        args = argparser.parse_args()
+    except IOError as e:
+        argparser.error(str(e))
+
+    neighbours = ClosestNeighbours(args.reference, args.candidate,
+        args.outfile)
 
 # see http://www.artima.com/weblogs/viewpost.jsp?thread=4829
 # for this nice way to handle the sys.exit()/return() calls
