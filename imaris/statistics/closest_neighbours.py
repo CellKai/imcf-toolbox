@@ -44,13 +44,13 @@ class ClosestNeighbours(object):
             self.write_output(refid, refspot, len(self.ref_spots), nearest)
         return(0)
 
-    def write_output(self, id_ref, coord_ref, count_refs, id_neigh):
+    def write_output(self, id_r, coord_r, count_refs, id_neigh):
             nearest_orig_id = id_neigh - count_refs
-            self.out("\nCalculating closest neighbour.\n")
-            self.out('Original spot:  [' + str(id_ref) + '] ' + str(coord_ref) + "\n")
-            self.out('Neighbour spot: [' + str(nearest_orig_id) + '] ' + \
-                str(self.cand_spots[nearest_orig_id]) + "\n")
-            self.out("Distance: " + str(self.dist_mat[id_ref, id_neigh]) + "\n")
+            self.out('\nCalculating closest neighbour.\n')
+            self.out('Original spot:  [%s] %s\nNeighbour spot: [%s] %s\n' %
+                (id_r, coord_r, nearest_orig_id,
+                self.cand_spots[nearest_orig_id]))
+            self.out('Distance: %s\n' % self.dist_mat[id_r, id_neigh])
 
 def main():
     # main() is only called when we're run directly from the cmdline, so we
