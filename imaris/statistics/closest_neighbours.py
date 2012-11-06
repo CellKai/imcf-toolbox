@@ -29,19 +29,19 @@ class ClosestNeighbours(object):
         self.out('Processing file: ' + str(self.cand.name) + "\n")
         self.XMLcnd = ImarisXML(self.cand)
 
-        # ref_spots are taken as the base to find the closest ones
-        # in the set of cand_spots
-        self.ref_spots = self.XMLref.coordinates('Position')
-        self.cand_spots = self.XMLcnd.coordinates('Position')
+        # spots_r are taken as the base to find the closest ones
+        # in the set of spots_c
+        self.spots_r = self.XMLref.coordinates('Position')
+        self.spots_c = self.XMLcnd.coordinates('Position')
 
     def _process(self):
-        self.dist_mat = dist_matrix_euclidean(self.ref_spots + self.cand_spots)
+        self.dist_mat = dist_matrix_euclidean(self.spots_r + self.spots_c)
 
-        ref_mask = [1] * len(self.ref_spots) + [0] * len(self.cand_spots)
+        ref_mask = [1] * len(self.spots_r) + [0] * len(self.spots_c)
 
-        for refid, refspot in enumerate(self.ref_spots):
+        for refid, refspot in enumerate(self.spots_r):
             nearest = find_neighbor(refid, self.dist_mat, ref_mask)
-            self.write_output(refid, refspot, len(self.ref_spots), nearest)
+            self.write_output(refid, refspot, len(self.spots_r), nearest)
         return(0)
 
     def write_output(self, id_r, coord_r, count_r, id_n):
@@ -49,7 +49,7 @@ class ClosestNeighbours(object):
         id_n_orig = id_n - count_r
         self.out('\nCalculating closest neighbour.\n')
         self.out('Original spot:  [%s] %s\nNeighbour spot: [%s] %s\n' %
-            (id_r, coord_r, id_n_orig, self.cand_spots[id_n_orig]))
+            (id_r, coord_r, id_n_orig, self.spots_c[id_n_orig]))
         self.out('Distance: %s\n' % self.dist_mat[id_r, id_n])
 
 
