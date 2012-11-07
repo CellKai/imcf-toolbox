@@ -10,11 +10,10 @@ from closest_neighbours import ClosestNeighbours
 # end wxGlade
 
 
-
 class MyBaseFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         self.infile1 = ''
-        self.infile1 = ''
+        self.infile2 = ''
         self.outfile1 = ''
 
         # begin wxGlade: MyBaseFrame.__init__
@@ -60,6 +59,7 @@ class MyBaseFrame(wx.Frame):
         st_txt_ctrl = wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL
         st_btn = wx.RIGHT|wx.ALIGN_CENTER_VERTICAL
         st_btn2 = wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL
+
         # begin wxGlade: MyBaseFrame.__do_layout
         grid_sizer_1 = wx.FlexGridSizer(4, 3, 2, 2)
 
@@ -85,6 +85,7 @@ class MyBaseFrame(wx.Frame):
         self.Layout()
         # end wxGlade
 
+    # TODO: remember path once a file has been selected
     def hdlr_btn_select_1(self, event): # wxGlade: MyBaseFrame.<event_handler>
         list_filter = 'Excel XML file (*.xml)|*.xml'
         fcd = FileChooser(wcd=list_filter)
@@ -110,6 +111,7 @@ class MyBaseFrame(wx.Frame):
         event.Skip()
 
     def hdlr_btn_select_4(self, event):
+        # TODO: use FileType object from argparse
         file_1 = self.text_ctrl_1.GetValue()
         file_2 = self.text_ctrl_2.GetValue()
         file_3 = self.text_ctrl_3.GetValue()
