@@ -110,8 +110,14 @@ class MyBaseFrame(wx.Frame):
         event.Skip()
 
     def hdlr_btn_select_4(self, event):
-        print('files selected:\n%s\n%s\n%s\n' % (self.text_ctrl_1.GetValue(),
-            self.text_ctrl_2.GetValue(), self.text_ctrl_3.GetValue()))
+        file_1 = self.text_ctrl_1.GetValue()
+        file_2 = self.text_ctrl_2.GetValue()
+        file_3 = self.text_ctrl_3.GetValue()
+        print('files selected:\n%s\n%s\n%s\n' % (file_1, file_2, file_3))
+        fh_1 = open(file_1, 'r', -1)
+        fh_2 = open(file_2, 'r', -1)
+        fh_3 = open(file_3, 'w', -1)
+        neighbours = ClosestNeighbours(fh_1, fh_2, fh_3)
         event.Skip()
 
 # end of class MyBaseFrame
