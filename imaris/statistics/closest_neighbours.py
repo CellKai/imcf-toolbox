@@ -8,6 +8,9 @@ other file containing many spots. Calculates the spot from the second
 file with the closest distance to the one from the first file.
 """
 
+# TODO: do the write only on an explicit call, add informational functions
+#   like obj.ref_spots_count() or similar
+
 import argparse
 import sys
 from ImsXMLlib import ImarisXML
