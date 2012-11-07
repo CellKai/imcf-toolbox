@@ -4,7 +4,7 @@
 
 import wx
 from wx_filechooser import FileChooser
-import wx.lib.filebrowsebutton as fbb
+from closest_neighbours import ClosestNeighbours
 
 # begin wxGlade: extracode
 # end wxGlade
@@ -20,17 +20,23 @@ class MyBaseFrame(wx.Frame):
         # begin wxGlade: MyBaseFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.label_1 = wx.StaticText(self, -1, "File containing reference spots", style=wx.ALIGN_RIGHT)
+
+        label = "File containing reference spots"
+        self.label_1 = wx.StaticText(self, -1, label, style=wx.ALIGN_RIGHT)
         self.text_ctrl_1 = wx.TextCtrl(self, -1, "")
         self.button_1 = wx.Button(self, -1, "Select")
-        self.label_2 = wx.StaticText(self, -1, "File containing candidate spots", style=wx.ALIGN_RIGHT)
+
+        label = "File containing candidate spots"
+        self.label_2 = wx.StaticText(self, -1, label, style=wx.ALIGN_RIGHT)
         self.text_ctrl_2 = wx.TextCtrl(self, -1, "")
         self.button_2 = wx.Button(self, -1, "Select")
-        self.button_3 = wx.Button(self, -1, "Go")
-        self.fbbutton = fbb.FileBrowseButton(buttonText='Browse',
-            dialogTitle='Select a file to save the results', fileMask='*.txt',
-            labelText='File to save results:', parent=self,
-            size=wx.Size(500, 35), style=wx.TAB_TRAVERSAL)
+
+        label = "File to store results"
+        self.label_3 = wx.StaticText(self, -1, label, style=wx.ALIGN_RIGHT)
+        self.text_ctrl_3 = wx.TextCtrl(self, -1, "")
+        self.button_3 = wx.Button(self, -1, "Select")
+
+        self.button_4 = wx.Button(self, -1, "Go")
 
 
         self.__set_properties()
@@ -38,6 +44,8 @@ class MyBaseFrame(wx.Frame):
 
         self.Bind(wx.EVT_BUTTON, self.hdlr_btn_select_1, self.button_1)
         self.Bind(wx.EVT_BUTTON, self.hdlr_btn_select_2, self.button_2)
+        self.Bind(wx.EVT_BUTTON, self.hdlr_btn_select_3, self.button_3)
+        self.Bind(wx.EVT_BUTTON, self.hdlr_btn_select_4, self.button_4)
         # end wxGlade
 
     def __set_properties(self):
@@ -53,25 +61,32 @@ class MyBaseFrame(wx.Frame):
         st_btn = wx.RIGHT|wx.ALIGN_CENTER_VERTICAL
         st_btn2 = wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL
         # begin wxGlade: MyBaseFrame.__do_layout
-        grid_sizer_1 = wx.FlexGridSizer(3, 3, 2, 2)
+        grid_sizer_1 = wx.FlexGridSizer(4, 3, 2, 2)
+
         grid_sizer_1.Add(self.label_1, 0, st_label, 4)
         grid_sizer_1.Add(self.text_ctrl_1, 0, st_txt_ctrl, 0)
         grid_sizer_1.Add(self.button_1, 0, st_btn, 20)
+
         grid_sizer_1.Add(self.label_2, 0, st_label, 4)
         grid_sizer_1.Add(self.text_ctrl_2, 0, st_txt_ctrl, 0)
         grid_sizer_1.Add(self.button_2, 0, st_btn, 20)
+
+        grid_sizer_1.Add(self.label_3, 0, st_label, 4)
+        grid_sizer_1.Add(self.text_ctrl_3, 0, st_txt_ctrl, 0)
+        grid_sizer_1.Add(self.button_3, 0, st_btn, 20)
+
         grid_sizer_1.Add((20, 0), 0, st_txt_ctrl, 0)
-        grid_sizer_1.Add(self.fbbutton, 0, st_btn2, 10)
-        grid_sizer_1.Add(self.button_3, 0, st_btn2, 10)
+        # grid_sizer_1.Add(self.fbbutton, 0, st_btn2, 10)
+        grid_sizer_1.Add(self.button_4, 0, st_btn2, 10)
+
         self.SetSizer(grid_sizer_1)
         grid_sizer_1.Fit(self)
         grid_sizer_1.AddGrowableCol(1)
-        self.SetBackgroundStyle(wx.BG_STYLE_SYSTEM)
         self.Layout()
         # end wxGlade
 
     def hdlr_btn_select_1(self, event): # wxGlade: MyBaseFrame.<event_handler>
-        list_filter = 'Comma separated values (*.csv)|*.csv'
+        list_filter = 'Excel XML file (*.xml)|*.xml'
         fcd = FileChooser(wcd=list_filter)
         fname = fcd.get_path()
         if fname:
@@ -79,11 +94,24 @@ class MyBaseFrame(wx.Frame):
         event.Skip()
 
     def hdlr_btn_select_2(self, event): # wxGlade: MyBaseFrame.<event_handler>
-        list_filter = 'Xuv project file (*.xuv)|*.xuv'
+        list_filter = 'Excel XML file (*.xml)|*.xml'
         fcd = FileChooser(wcd=list_filter)
         fname = fcd.get_path()
         if fname:
             self.text_ctrl_2.SetValue(fname)
+        event.Skip()
+
+    def hdlr_btn_select_3(self, event): # wxGlade: MyBaseFrame.<event_handler>
+        list_filter = 'Text file (*.txt)|*.txt'
+        fcd = FileChooser(wcd=list_filter)
+        fname = fcd.get_path()
+        if fname:
+            self.text_ctrl_3.SetValue(fname)
+        event.Skip()
+
+    def hdlr_btn_select_4(self, event):
+        print('files selected:\n%s\n%s\n%s\n' % (self.text_ctrl_1.GetValue(),
+            self.text_ctrl_2.GetValue(), self.text_ctrl_3.GetValue()))
         event.Skip()
 
 # end of class MyBaseFrame
