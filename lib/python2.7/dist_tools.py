@@ -253,6 +253,23 @@ def elastic_bands(pl1, pl2, mask1, mask2, dist_mat):
     # print bands
     return bands
 
+def tesselate(pl1, pl2, mask1, mask2, dist_mat):
+    """Calculates a polygonal partition of a surface in space.
+
+    Takes two filament-like structures that describe the border or rim
+    of an object in space. These filaments obviously need to have the
+    same start or end point. The function calculates a partition of this
+    object into triangles (tesselation), trying to minimize the overall
+    area of all triangles.
+
+    Args:
+        pl1, pl2: pointlists (ids of points)
+        mask1, mask2: corresponding array masks
+        dist_mat: euclidean distance matrix
+
+    Returns:
+        FIXME: still unknown
+    """
 
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."
