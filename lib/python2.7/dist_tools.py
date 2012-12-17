@@ -164,6 +164,25 @@ def sort_neighbors(dist_mat, coords):
     return adjacents
 
 def build_filament_mask(adjacent, delimiters):
+    """Calculates filament masks for distance matrix and adjacency lists.
+
+    Takes an ordered list of indices (adjacency list) and a tuple of
+    delimiters marking the first and the last index of the adjacency
+    list that belongs to this filament.
+
+    Calculates two arrays masking the entries that don't belong to the
+    filament denoted this way, the first mask uses the numbers given
+    in the adjacency list (to be used with the distance matrix), the
+    second mask uses the index positions of the list (for usage with
+    the adjacency list itself).
+
+    Args:
+        adjacent: adjacency list of the filament
+        delimiters: index numbers of first and last filament entry
+
+    Returns:
+        (dist_mat_mask, adjacent_mask): tuple of masks
+    """
     mask = [True] * len(adjacent)
     mask_adj = [True] * len(adjacent)
     maskval = True
