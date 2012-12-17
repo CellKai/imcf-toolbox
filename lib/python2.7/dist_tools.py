@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 # TODO:
-#  - add documentation
 #  - sanity/type checks
 #  - rename into filament_tools?
 
@@ -36,6 +35,19 @@ def dist(p1, p2):
     return(linalg.norm(point1 - point2))
 
 def largest_dist_idx(point, pointlist):
+    """Find the point with the largest distance to a marked point.
+
+    Takes a point (euclidean coordinates) and a list of points,
+    calculates the distance of the single point to all points in the
+    list and returns the index and the distance of the marked one.
+
+    Args:
+        point: n-tuple of euclidean coordinates
+        pointlist: list of n-tuples of euclidean coordinates
+
+    Returns:
+        [index, distance]: integer with index, float with distance
+    """
     # print point
     # print pointlist
     distances = [()] * len(pointlist)
