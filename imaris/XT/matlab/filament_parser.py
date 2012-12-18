@@ -156,10 +156,17 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
 
-        elastic = elastic_bands(filpnts1, filpnts2, fm1, fm2, distance_matrix)
+        elastic = elastic_bands(filpnts1, fm2, distance_matrix)
+        print "red:   " + str(elastic)
         for p in elastic:
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'r')
+
+        elastic = elastic_bands(filpnts2, fm1, distance_matrix)
+        print "blue: " + str(elastic)
+        for p in elastic:
+            coords = [data[p[0]], data[p[1]]]
+            plot3d_line(plot, coords, 'b')
 
         plot3d_show()
 

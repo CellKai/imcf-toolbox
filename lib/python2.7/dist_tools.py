@@ -218,8 +218,11 @@ def build_filament_mask(adjacent, delimiters):
     # print mask
     return (mask, mask_adj)
 
-def elastic_bands(pl1, pl2, mask1, mask2, dist_mat):
+def elastic_bands(pl1, mask2, dist_mat):
     """Calculates minimal connections between two filament pointsets.
+
+    FIXME: update documentation, the mask is masking the points in the
+    distance matrix that are not in pointlist now!
 
     Takes two pointlists (the filaments), the corresponding masks, and a
     distance matrix. Iterates over the pointlists and calculates the
@@ -229,8 +232,8 @@ def elastic_bands(pl1, pl2, mask1, mask2, dist_mat):
     sure we don't add "inverted" duplicates.
 
     Args:
-        pl1, pl2: pointlists (ids of points)
-        mask1, mask2: corresponding array masks
+        pl1: pointlist (ids of points)
+        mask2: corresponding array mask
         dist_mat: euclidean distance matrix
 
     Returns:
@@ -243,13 +246,6 @@ def elastic_bands(pl1, pl2, mask1, mask2, dist_mat):
             bands.add((cur, neigh))
         else:
             bands.add((neigh, cur))
-    for cur in pl2:
-        neigh = find_neighbor(cur, dist_mat, mask1)
-        if cur < neigh:
-            bands.add((cur, neigh))
-        else:
-            bands.add((neigh, cur))
-    # print bands
     return bands
 
 def tesselate(pl1, pl2, mask1, mask2, dist_mat):
