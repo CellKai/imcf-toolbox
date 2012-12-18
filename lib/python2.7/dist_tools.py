@@ -286,7 +286,7 @@ def elastic_bands(pl1, mask2, dist_mat):
             bands.add((neigh, cur))
     return bands
 
-def tesselate(pl1, pl2, mask1, mask2, dist_mat):
+def tesselate(pl1, pl2, dist_mat):
     """Calculates a polygonal partition of a surface in space.
 
     Takes two filament-like structures that describe the border or rim
@@ -297,12 +297,34 @@ def tesselate(pl1, pl2, mask1, mask2, dist_mat):
 
     Args:
         pl1, pl2: pointlists (ids of points)
-        mask1, mask2: corresponding array masks
         dist_mat: euclidean distance matrix
 
     Returns:
         FIXME: still unknown
     """
+    # first we need to create the masks:
+    mask1 = [0] * len(dist_mat[0])
+    mask2 = [0] * len(dist_mat[0])
+    for point in pl1:
+        mask1[point] = 1
+    for point in pl2:
+        mask2[point] = 1
+    # print pl1
+    # print mask1
+    # print pl2
+    # print mask2
+
+    pl1_len = len(pl1)
+    for i, cur in enumerate(pl1):
+        bnd_cur = find_neighbor(cur, dist_mat, mask1)
+        if i + 1 < pl1_len:
+            nxt = pl1[i + 1]
+            bnd_nxt = find_neighbor(nxt, dist_mat, mask1)
+        print "%s - %s | %s - %s" % (cur, bnd_cur, nxt, bnd_nxt)
+
+    # for cur in pl2:
+    #     neigh = find_neighbor(cur, dist_mat, mask2)
+    #     print "%s - %s" % (cur, neigh)
 
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."
