@@ -15,7 +15,7 @@ import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
-    sort_neighbors, build_filament_mask, elastic_bands
+    sort_neighbors, build_filament_mask, elastic_bands, path_greedy
 
 
 def build_tuple_seq(sequence, cyclic=False):
@@ -122,8 +122,6 @@ def main():
     for point in maxdist_pair:
         maxdist_points.append(data[point])
 
-    adjacent = sort_neighbors(distance_matrix)
-
     print '---------------------------------------------------'
     print 'points with largest distance: ' + str(maxdist_pair)
     print '   corresponding coordinates: ' + str(maxdist_points)
@@ -132,7 +130,11 @@ def main():
 
     if args.showmatrix:
         print distance_matrix
-        # print adjacent
+
+    adjacent = sort_neighbors(distance_matrix)
+    # print adjacent
+    path_greedy(distance_matrix, maxdist_pair[0], maxdist_pair[1])
+    path_greedy(distance_matrix, maxdist_pair[1], maxdist_pair[0])
 
     if args.plot:
         plot = plot3d_prep()
