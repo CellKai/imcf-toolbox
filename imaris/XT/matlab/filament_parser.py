@@ -18,17 +18,26 @@ from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
     sort_neighbors, build_filament_mask, elastic_bands
 
 
-def build_tuple_seq(sequence):
+def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
 
     Takes a sequence (list) and returns a list of 2-tuples where
     each tuple consists of the previous list entry and the current one,
     starting with the entry (last, 1st), then (1st, 2nd) and so on.
+
+    The optional parameter "cyclic" states whether the sequnce should
+    by cyclic or acyclic, meaning the last and the first element will
+    be connected or not.
     """
     tuples = []
     for i, elt in enumerate(sequence):
         if i == 0:
-            prev = sequence[len(sequence) - 1]
+            if cyclic:
+                # use the last element as the predecessor of the first:
+                prev = sequence[len(sequence) - 1]
+            else:
+                prev = elt
+                continue
         tuples.append((prev, elt))
         prev = elt
     return tuples
