@@ -15,7 +15,7 @@ import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
-    sort_neighbors, build_filament_mask, elastic_bands, path_greedy
+    sort_neighbors, build_filament_mask, elastic_bands, path_greedy, tesselate
 
 
 def build_tuple_seq(sequence, cyclic=False):
@@ -29,6 +29,7 @@ def build_tuple_seq(sequence, cyclic=False):
     by cyclic or acyclic, meaning the last and the first element will
     be connected or not.
     """
+    print sequence
     tuples = []
     for i, elt in enumerate(sequence):
         if i == 0:
@@ -133,30 +134,37 @@ def main():
 
     adjacent = sort_neighbors(distance_matrix)
     # print adjacent
-    path_greedy(distance_matrix, maxdist_pair[0], maxdist_pair[1])
-    path_greedy(distance_matrix, maxdist_pair[1], maxdist_pair[0])
+
+    # create an empty mask with the number of points:
+    mask = [0] * len(distance_matrix[0])
+
+    (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
+    print 'path %s: %s' % (maxdist_pair, p1)
+    (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
+    print 'path %s: %s' % (maxdist_pair, p2)
+    # print mask
 
     if args.plot:
         plot = plot3d_prep()
         plot3d_scatter(plot, data, 'w')
         plot3d_scatter(plot, maxdist_points, 'r', lw=18)
-        plot3d_line(plot, maxdist_points, 'g')
-        for p in build_tuple_seq(adjacent):
+        plot3d_line(plot, maxdist_points, 'y')
+        for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'r')
+            plot3d_line(plot, coords, 'm')
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
         filpnts1 = ma.array(adjacent, mask=fma1).compressed()
-        for p in build_tuple_seq(filpnts1):
-            coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'g')
+        # for p in build_tuple_seq(filpnts1):
+        #     coords = [data[p[0]], data[p[1]]]
+        #     plot3d_line(plot, coords, 'g')
 
         maxdist_pair = (maxdist_pair[1], maxdist_pair[0])
         fm2, fma2 = build_filament_mask(adjacent, maxdist_pair)
         filpnts2 = ma.array(adjacent, mask=fma2).compressed()
-        for p in build_tuple_seq(filpnts2):
-            coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'b')
+        # for p in build_tuple_seq(filpnts2):
+        #     coords = [data[p[0]], data[p[1]]]
+        #     plot3d_line(plot, coords, 'b')
 
         elastic = elastic_bands(filpnts1, fm2, distance_matrix)
         print "red:   " + str(elastic)
@@ -170,6 +178,7 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
 
+        tesselate(p1, p2, distance_matrix)
         plot3d_show()
 
 
