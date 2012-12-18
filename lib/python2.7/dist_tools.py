@@ -143,6 +143,38 @@ def find_neighbor(pid, dist_mat, mask):
     closest = masked_dists.argmin()
     return closest
 
+def path_greedy(dist_mat, first, last):
+    """Uses greedy search to find a path from first to last.
+
+    Takes a euclidean distance matrix and a start and stop index, calculates
+    a path from first to last using the greedy approach by always taking the
+    closest element that has not yet been processed.
+
+    Args:
+        dist_mat: the euclidean distance matrix of all points
+        first, last: index numbers for dist_mat
+
+    Returns:
+        sequence: list of indices denoting the greedy path
+    """
+
+    sequence = []
+
+    # inital mask is 0 everywhere (no masking at all):
+    mask = [0] * len(dist_mat[0])
+
+    cur = first
+    while True:
+        sequence.append(cur)
+        mask[cur] = 1
+        closest = find_neighbor(cur, dist_mat, mask)
+        if closest == last:
+            sequence.append(last)
+            break
+        cur = closest
+    print "path (" + str(first) + "->" + str(last) + "): " + str(sequence)
+    return sequence
+
 def sort_neighbors(dist_mat):
     """Sorts a list of indices to minimize the distance between elements.
 
