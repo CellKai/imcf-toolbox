@@ -143,37 +143,43 @@ def find_neighbor(pid, dist_mat, mask):
     closest = masked_dists.argmin()
     return closest
 
-def path_greedy(dist_mat, first, last):
-    """Uses greedy search to find a path from first to last.
+def path_greedy(dist_mat, mask_ref, pair):
+    """Uses greedy search to find a path between a pair of points.
 
-    Takes a euclidean distance matrix and a start and stop index, calculates
-    a path from first to last using the greedy approach by always taking the
-    closest element that has not yet been processed.
+    Takes a euclidean distance matrix, a mask and a tuple denoting the start
+    and stop index, calculates a path from first to last using the greedy
+    approach by always taking the closest element next that has not yet been
+    processed.
 
     Args:
         dist_mat: the euclidean distance matrix of all points
-        first, last: index numbers for dist_mat
+        mask_ref: array mask (a binary list)
+        pair: tuple of index numbers for dist_mat
 
-    Returns:
+    Returns: (sequence, mask)
         sequence: list of indices denoting the greedy path
+        mask: the mask of the above sequence
     """
-
     sequence = []
 
-    # inital mask is 0 everywhere (no masking at all):
-    mask = [0] * len(dist_mat[0])
+    # 'list' is a mutable type, so we explicitly copy it and return a new
+    # mask at the end, to avoid silently modifying the reference (bad style)
+    mask = mask_ref[:]
+    # make sure the end point is unmasked, otherwise we'll loop endlessly:
+    mask[pair[1]] = 0
 
-    cur = first
+    cur = pair[0]
     while True:
         sequence.append(cur)
         mask[cur] = 1
         closest = find_neighbor(cur, dist_mat, mask)
-        if closest == last:
-            sequence.append(last)
+        if closest == pair[1]:
+            sequence.append(pair[1])
+            mask[closest] = 1
             break
         cur = closest
-    print "path (" + str(first) + "->" + str(last) + "): " + str(sequence)
-    return sequence
+    # print 'path (%s->%s): %s' % (pair[0], pair[1], sequence)
+    return (sequence, mask)
 
 def sort_neighbors(dist_mat):
     """Sorts a list of indices to minimize the distance between elements.
