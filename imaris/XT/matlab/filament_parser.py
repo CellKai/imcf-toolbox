@@ -113,7 +113,7 @@ def main():
     for point in maxdist_pair:
         maxdist_points.append(data[point])
 
-    adjacent = sort_neighbors(distance_matrix, data)
+    adjacent = sort_neighbors(distance_matrix)
 
     print '---------------------------------------------------'
     print 'points with largest distance: ' + str(maxdist_pair)

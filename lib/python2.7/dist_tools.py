@@ -143,16 +143,15 @@ def find_neighbor(pid, dist_mat, mask):
     closest = masked_dists.argmin()
     return closest
 
-def sort_neighbors(dist_mat, coords):
+def sort_neighbors(dist_mat):
     """Sorts a list of indices to minimize the distance between elements.
 
-    Takes a euclidean distance matrix and an array of coordinates and
-    iteratively builds a list of indices where each point is followed
-    by its closest neighbor, starting at point 0 of the coordinates list.
+    Takes a euclidean distance matrix and iteratively builds a list of
+    indices where each point is followed by its closest neighbor, starting at
+    point 0 of the distance matrix.
 
     Args:
         dist_mat: the euclidean distance matrix of all points
-        coords: the list of coordinates
 
     Returns:
         adjacents: list of indices in sorted order
@@ -164,7 +163,7 @@ def sort_neighbors(dist_mat, coords):
 
     # for convenience we use a set instead of a list, so we don't have
     # to care on what position the current element is
-    pointset = set(range(len(coords)))
+    pointset = set(range(len(dist_mat[0])))
     cur = 0
     while len(pointset) > 0:
         adjacents.append(cur)
