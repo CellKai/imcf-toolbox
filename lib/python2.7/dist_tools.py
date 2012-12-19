@@ -302,6 +302,17 @@ def tesselate(pl1, pl2, dist_mat):
     Returns:
         FIXME: still unknown
     """
+    edges = []
+
+    pl1_len = len(pl1)
+    pl2_len = len(pl2)
+
+    # make sure the pointlists are connected:
+    if not pl1[0] == pl2[0]:
+        raise(Exception)
+    if not pl1[pl1_len - 1] == pl2[pl2_len - 1]:
+        raise(Exception)
+
     # first we need to create the masks:
     mask1 = [0] * len(dist_mat[0])
     mask2 = [0] * len(dist_mat[0])
@@ -314,17 +325,43 @@ def tesselate(pl1, pl2, dist_mat):
     # print pl2
     # print mask2
 
-    pl1_len = len(pl1)
-    for i, cur in enumerate(pl1):
-        bnd_cur = find_neighbor(cur, dist_mat, mask1)
-        if i + 1 < pl1_len:
-            nxt = pl1[i + 1]
-            bnd_nxt = find_neighbor(nxt, dist_mat, mask1)
-        print "%s - %s | %s - %s" % (cur, bnd_cur, nxt, bnd_nxt)
+    i2 = 1
+    for i1, cur in enumerate(pl1):
+        opp_cur = find_neighbor(cur, dist_mat, mask1)
+        edges.append((cur, opp_cur))
+        print "-- edgelist: %s" % edges
+        # print "cur: (%s, %s) |" % (cur, opp_cur),
+        if i1 + 1 < pl1_len:
+            nxt = pl1[i1 + 1]
+            opp_nxt = find_neighbor(nxt, dist_mat, mask1)
+            # print "next: (%s, %s)" % (nxt, opp_nxt)
+            if opp_nxt == opp_cur:
+                # leave i2 alone (it's the same point as before)
+                # print "leave i2 alone: pl2[%s] = %s" % (i2, pl2[i2])
+                continue
+            else:
+                # we have to look for missing points:
+                missing = []
+                while i2 < pl2_len:
+                    i2 += 1
+                    # print "i2: %s" % i2
+                    # add to the list of intermediate points:
+                    missing.append(i2)
+                    if pl2[i2] == opp_nxt:
+                        # we found the next point that is connected by a
+                        # regular edge, so we're done and remove this one
+                        # from the list again:
+                        missing.pop()
+                        # the pl2-pointer needs to be decreased as well:
+                        # i2 -= 1
+                        break
+                print "missing points: %s" % (missing)
+                # print "next neighbor: pl2[%s] = %s" % (i2, pl2[i2])
 
     # for cur in pl2:
     #     neigh = find_neighbor(cur, dist_mat, mask2)
     #     print "%s - %s" % (cur, neigh)
+    return edges
 
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."
