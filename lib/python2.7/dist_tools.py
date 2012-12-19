@@ -341,7 +341,7 @@ def tesselate(pl1, pl2, dist_mat):
         opp_nxt = find_neighbor(nxt, dist_mat, mask1)
         # print "next: (%s, %s)" % (nxt, opp_nxt)
 
-        # if the next point has the same neighbor as the current one,
+        # if the next point has the same opponent as the current one,
         # we don't need to care of anything now nor adjust the pointer
         # of 'i2', so we just go on to that next point:
         if opp_nxt == opp_cur:
@@ -352,7 +352,7 @@ def tesselate(pl1, pl2, dist_mat):
         while i2 < pl2_len:
             i2 += 1
             # print "i2: %s" % i2
-            # stop when reaching the neighbor of the next point:
+            # stop when reaching the opponent of the next point:
             if pl2[i2] == opp_nxt:
                 break
             # otherwise it is one of the points we're looking for:
@@ -360,11 +360,8 @@ def tesselate(pl1, pl2, dist_mat):
 
         print "missing points: %s" % (missing)
         # TODO: generate edges for missing points
-        # print "next neighbor: pl2[%s] = %s" % (i2, pl2[i2])
+        # print "next opponent: pl2[%s] = %s" % (i2, pl2[i2])
 
-    # for cur in pl2:
-    #     neigh = find_neighbor(cur, dist_mat, mask2)
-    #     print "%s - %s" % (cur, neigh)
     return edges
 
 if __name__ == "__main__":
