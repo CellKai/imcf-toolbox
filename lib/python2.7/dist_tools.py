@@ -331,32 +331,36 @@ def tesselate(pl1, pl2, dist_mat):
         edges.append((cur, opp_cur))
         print "-- edgelist: %s" % edges
         # print "cur: (%s, %s) |" % (cur, opp_cur),
-        if i1 + 1 < pl1_len:
-            nxt = pl1[i1 + 1]
-            opp_nxt = find_neighbor(nxt, dist_mat, mask1)
-            # print "next: (%s, %s)" % (nxt, opp_nxt)
-            if opp_nxt == opp_cur:
-                # leave i2 alone (it's the same point as before)
-                # print "leave i2 alone: pl2[%s] = %s" % (i2, pl2[i2])
-                continue
-            else:
-                # we have to look for missing points:
-                missing = []
-                while i2 < pl2_len:
-                    i2 += 1
-                    # print "i2: %s" % i2
-                    # add to the list of intermediate points:
-                    missing.append(i2)
-                    if pl2[i2] == opp_nxt:
-                        # we found the next point that is connected by a
-                        # regular edge, so we're done and remove this one
-                        # from the list again:
-                        missing.pop()
-                        # the pl2-pointer needs to be decreased as well:
-                        # i2 -= 1
-                        break
-                print "missing points: %s" % (missing)
-                # print "next neighbor: pl2[%s] = %s" % (i2, pl2[i2])
+
+        # if the next point is the last one, we're done:
+        # FIXME: check if pl2 is empty then!!
+        if i1 + 1 == pl1_len:
+            break
+
+        nxt = pl1[i1 + 1]
+        opp_nxt = find_neighbor(nxt, dist_mat, mask1)
+        # print "next: (%s, %s)" % (nxt, opp_nxt)
+
+        # if the next point has the same neighbor as the current one,
+        # we don't need to care of anything now nor adjust the pointer
+        # of 'i2', so we just go on to that next point:
+        if opp_nxt == opp_cur:
+            continue
+
+        # we have to look for missing points:
+        missing = []
+        while i2 < pl2_len:
+            i2 += 1
+            # print "i2: %s" % i2
+            # stop when reaching the neighbor of the next point:
+            if pl2[i2] == opp_nxt:
+                break
+            # otherwise it is one of the points we're looking for:
+            missing.append(i2)
+
+        print "missing points: %s" % (missing)
+        # TODO: generate edges for missing points
+        # print "next neighbor: pl2[%s] = %s" % (i2, pl2[i2])
 
     # for cur in pl2:
     #     neigh = find_neighbor(cur, dist_mat, mask2)
