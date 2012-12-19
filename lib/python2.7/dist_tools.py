@@ -358,10 +358,22 @@ def tesselate(pl1, pl2, dist_mat):
             # otherwise it is one of the points we're looking for:
             missing.append(i2)
 
-        print "missing points: %s" % (missing)
-        # TODO: generate edges for missing points
+        # now we generate edges for missing points, first by creating
+        # a temporary mask covering everything but the current and the
+        # next point in our list:
+        tmp_mask = [1] * len(dist_mat[0])
+        tmp_mask[cur] = 0
+        tmp_mask[nxt] = 0
+        # print "missing points: %s" % (missing)
+        # print "tmp_mask: %s" % tmp_mask
+        for point in missing:
+            tmp_opp = find_neighbor(pl2[point], dist_mat, tmp_mask)
+            edges.append((tmp_opp, pl2[point]))
+            # print "-- edgelist: %s" % edges
+
         # print "next opponent: pl2[%s] = %s" % (i2, pl2[i2])
 
+    print "edges: %s" % edges
     return edges
 
 if __name__ == "__main__":
