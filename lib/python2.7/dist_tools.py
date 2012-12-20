@@ -343,8 +343,8 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     edges.append((pl1[0], pl2[0]))
 
     while True:
-        print "pl1: %s" % pl1
-        print "pl2: %s" % pl2
+        # print "pl1: %s" % pl1
+        # print "pl2: %s" % pl2
         if len(pl1) == 1:
             break
         if len(pl2) == 1:
@@ -355,18 +355,18 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         nxt2 = pl2[1]
         e1 = dist_mat[nxt1][cur2]
         e2 = dist_mat[cur1][nxt2]
-        print "d1 (%s, %s): %s" % (nxt1, cur2, e1)
-        print "d2 (%s, %s): %s" % (cur1, nxt2, e2)
+        # print "d1 (%s, %s): %s" % (nxt1, cur2, e1)
+        # print "d2 (%s, %s): %s" % (cur1, nxt2, e2)
         if e1 < e2:
             edges.append( (pl1[1], pl2[0]) )
             # remove first element from pl1
-            print "removing %s from pl1" % pl1.pop(0)
+            pl1.pop(0)
         else:
             edges.append( (pl1[0], pl2[1]) )
             # remove first element from pl2
-            print "removing %s from pl2" % pl2.pop(0)
+            pl2.pop(0)
 
-    print "edges: %s" % edges
+    # print "edges: %s" % edges
     return edges
 
 if __name__ == "__main__":
