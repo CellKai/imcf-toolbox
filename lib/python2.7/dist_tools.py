@@ -311,7 +311,7 @@ def tesselate(pl1, pl2, dist_mat):
         dist_mat: euclidean distance matrix
 
     Returns:
-        FIXME: still unknown
+        edges: list of tuples with index numbers denoting the edges
     """
     edges = []
 
@@ -327,10 +327,7 @@ def tesselate(pl1, pl2, dist_mat):
     # first we need to create the masks:
     mask1 = gen_mask(pl1, len(dist_mat[0]))
     mask2 = gen_mask(pl2, len(dist_mat[0]))
-    # print pl1
-    # print mask1
-    # print pl2
-    # print mask2
+    # print "%s\n%s\n%s\n%s" % (pl1, mask1, pl2, mask2)
 
     i2 = 1
     for i1, cur in enumerate(pl1):
@@ -370,8 +367,7 @@ def tesselate(pl1, pl2, dist_mat):
         tmp_mask = [1] * len(dist_mat[0])
         tmp_mask[cur] = 0
         tmp_mask[nxt] = 0
-        # print "missing points: %s" % (missing)
-        # print "tmp_mask: %s" % tmp_mask
+        # print "missing points: %s\ntmp_mask: %s" % (missing, tmp_mask)
         for point in missing:
             tmp_opp = find_neighbor(pl2[point], dist_mat, tmp_mask)
             edges.append((tmp_opp, pl2[point]))
