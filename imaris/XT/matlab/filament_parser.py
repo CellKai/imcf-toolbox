@@ -15,7 +15,7 @@ import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
-    sort_neighbors, build_filament_mask, elastic_bands, path_greedy, tesselate
+    sort_neighbors, build_filament_mask, elastic_bands, path_greedy, tesselate, remove_first_last
 
 
 def build_tuple_seq(sequence, cyclic=False):
@@ -29,7 +29,7 @@ def build_tuple_seq(sequence, cyclic=False):
     by cyclic or acyclic, meaning the last and the first element will
     be connected or not.
     """
-    print sequence
+    # print sequence
     tuples = []
     for i, elt in enumerate(sequence):
         if i == 0:
@@ -139,10 +139,16 @@ def main():
     mask = [0] * len(distance_matrix[0])
 
     (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    print 'path %s: %s' % (maxdist_pair, p1)
+    print 'path1 %s: %s' % (maxdist_pair, p1)
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    print 'path %s: %s' % (maxdist_pair, p2)
-    # print mask
+    print 'path2 %s: %s' % (maxdist_pair, p2)
+
+    fil1 = remove_first_last(p1)
+    fil2 = remove_first_last(p2)
+    # edges1 = tesselate(fil1, fil2, distance_matrix)
+    edges2 = tesselate(fil2, fil1, distance_matrix)
+    # print "edges1: %s" % edges1
+    # print "edges2: %s" % edges2
 
     if args.plot:
         plot = plot3d_prep()
@@ -168,19 +174,16 @@ def main():
         #     coords = [data[p[0]], data[p[1]]]
         #     plot3d_line(plot, coords, 'b')
 
-        elastic = elastic_bands(filpnts1, fm2, distance_matrix)
-        print "red:   " + str(elastic)
-        for p in elastic:
-            coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'r')
+        # print "red:   %s" % edges1
+        # for p in edges1:
+        #     coords = [data[p[0]], data[p[1]]]
+        #     plot3d_line(plot, coords, 'r')
 
-        elastic = elastic_bands(filpnts2, fm1, distance_matrix)
-        print "blue: " + str(elastic)
-        for p in elastic:
+        print "blue:  %s" % edges2
+        for p in edges2:
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
 
-        tesselate(p1, p2, distance_matrix)
         plot3d_show()
 
 
