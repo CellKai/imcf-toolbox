@@ -181,6 +181,15 @@ def path_greedy(dist_mat, mask_ref, pair):
     # print 'path (%s->%s): %s' % (pair[0], pair[1], sequence)
     return (sequence, mask)
 
+def remove_first_last(pointlist):
+    # copy the pointlist
+    cropped = pointlist[:]
+    cropped.pop()
+    cropped.reverse()
+    cropped.pop()
+    cropped.reverse()
+    return cropped
+
 def sort_neighbors(dist_mat):
     """Sorts a list of indices to minimize the distance between elements.
 
