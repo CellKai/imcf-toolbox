@@ -286,6 +286,17 @@ def elastic_bands(pl1, mask2, dist_mat):
             bands.add((neigh, cur))
     return bands
 
+def gen_mask(pointlist, masklength):
+    """Generates a binary mask given by a list of indices.
+
+    Takes a list of indices and a length parameter, generates a mask with
+    that given length, masking the indices in the given list.
+    """
+    mask = [0] * masklength
+    for point in pointlist:
+        mask[point] = 1
+    return mask
+
 def tesselate(pl1, pl2, dist_mat):
     """Calculates a polygonal partition of a surface in space.
 
@@ -314,12 +325,8 @@ def tesselate(pl1, pl2, dist_mat):
         raise(Exception)
 
     # first we need to create the masks:
-    mask1 = [0] * len(dist_mat[0])
-    mask2 = [0] * len(dist_mat[0])
-    for point in pl1:
-        mask1[point] = 1
-    for point in pl2:
-        mask2[point] = 1
+    mask1 = gen_mask(pl1, len(dist_mat[0]))
+    mask2 = gen_mask(pl2, len(dist_mat[0]))
     # print pl1
     # print mask1
     # print pl2
