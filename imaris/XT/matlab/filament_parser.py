@@ -154,6 +154,7 @@ def main():
             plot3d_line(plot, coords, 'm')
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
+        # compressed() returns only the unmasked entries
         filpnts1 = ma.array(adjacent, mask=fma1).compressed()
         # for p in build_tuple_seq(filpnts1):
         #     coords = [data[p[0]], data[p[1]]]
@@ -161,6 +162,7 @@ def main():
 
         maxdist_pair = (maxdist_pair[1], maxdist_pair[0])
         fm2, fma2 = build_filament_mask(adjacent, maxdist_pair)
+        # compressed() returns only the unmasked entries
         filpnts2 = ma.array(adjacent, mask=fma2).compressed()
         # for p in build_tuple_seq(filpnts2):
         #     coords = [data[p[0]], data[p[1]]]
