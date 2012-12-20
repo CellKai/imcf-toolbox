@@ -300,11 +300,12 @@ def gen_mask(pointlist, masklength):
 def tesselate(pl1, pl2, dist_mat):
     """Calculates a polygonal partition of a surface in space.
 
-    Takes two filament-like structures that describe the border or rim
-    of an object in space. These filaments obviously need to have the
-    same start or end point. The function calculates a partition of this
-    object into triangles (tesselation), trying to minimize the overall
-    area of all triangles.
+    Takes a distance matrix and two lists of indices (describing sequences
+    of points, e.g. filament-like structures) that can be thought of the
+    border or rim of an object in space. The two index-lists are required to
+    have the same start and end point. The function calculates a partition
+    of this object into triangles (tesselation), trying to minimize the
+    overall area of all triangles.
 
     Args:
         pl1, pl2: pointlists (ids of points)
