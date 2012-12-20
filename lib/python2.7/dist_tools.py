@@ -317,7 +317,7 @@ def gen_unmask(pointlist, masklength):
         mask[point] = 0
     return mask
 
-def tesselate(pl1, pl2, dist_mat):
+def tesselate(pl1_ref, pl2_ref, dist_mat):
     """Calculates a polygonal partition of a surface in space.
 
     Takes a distance matrix and two lists of indices (describing sequences
@@ -336,67 +336,37 @@ def tesselate(pl1, pl2, dist_mat):
     """
     edges = []
 
-    pl1_len = len(pl1)
-    pl2_len = len(pl2)
+    # we're using the pointlists as a stacks, so copy them first:
+    pl1 = pl1_ref[:]
+    pl2 = pl2_ref[:]
 
-    # make sure the pointlists are connected:
-    if not pl1[0] == pl2[0]:
-        raise(Exception)
-    if not pl1[pl1_len - 1] == pl2[pl2_len - 1]:
-        raise(Exception)
+    edges.append((pl1[0], pl2[0]))
 
-    # first we need to create the masks:
-    mask1 = gen_mask(pl1, len(dist_mat[0]))
-    mask2 = gen_mask(pl2, len(dist_mat[0]))
-    # print "%s\n%s\n%s\n%s" % (pl1, mask1, pl2, mask2)
-
-    i2 = 1
-    for i1, cur in enumerate(pl1):
-        opp_cur = find_neighbor(cur, dist_mat, mask1)
-        edges.append((cur, opp_cur))
-        # print "-- edgelist: %s" % edges
-
-        # if the next point is the last one, we're done:
-        # FIXME: check if pl2 is empty then!!
-        if i1 + 1 == pl1_len:
+    while True:
+        print "pl1: %s" % pl1
+        print "pl2: %s" % pl2
+        if len(pl1) == 1:
             break
+        if len(pl2) == 1:
+            break
+        cur1 = pl1[0]
+        nxt1 = pl1[1]
+        cur2 = pl2[0]
+        nxt2 = pl2[1]
+        e1 = dist_mat[nxt1][cur2]
+        e2 = dist_mat[cur1][nxt2]
+        print "d1 (%s, %s): %s" % (nxt1, cur2, e1)
+        print "d2 (%s, %s): %s" % (cur1, nxt2, e2)
+        if e1 < e2:
+            edges.append( (pl1[1], pl2[0]) )
+            # remove first element from pl1
+            print "removing %s from pl1" % pl1.pop(0)
+        else:
+            edges.append( (pl1[0], pl2[1]) )
+            # remove first element from pl2
+            print "removing %s from pl2" % pl2.pop(0)
 
-        nxt = pl1[i1 + 1]
-        opp_nxt = find_neighbor(nxt, dist_mat, mask1)
-        # print "next: (%s, %s)" % (nxt, opp_nxt)
-
-        # if the next point has the same opponent as the current one,
-        # we don't need to care of anything now nor adjust the pointer
-        # of 'i2', so we just go on to that next point:
-        if opp_nxt == opp_cur:
-            continue
-
-        # we have to look for missing points:
-        missing = []
-        while i2 < pl2_len:
-            i2 += 1
-            # print "i2: %s" % i2
-            # stop when reaching the opponent of the next point:
-            if pl2[i2] == opp_nxt:
-                break
-            # otherwise it is one of the points we're looking for:
-            missing.append(i2)
-
-        # now we generate edges for missing points, first by creating
-        # a temporary mask covering everything but the current and the
-        # next point in our list:
-        tmp_mask = [1] * len(dist_mat[0])
-        tmp_mask[cur] = 0
-        tmp_mask[nxt] = 0
-        # print "missing points: %s\ntmp_mask: %s" % (missing, tmp_mask)
-        for point in missing:
-            tmp_opp = find_neighbor(pl2[point], dist_mat, tmp_mask)
-            edges.append((tmp_opp, pl2[point]))
-            # print "-- edgelist: %s" % edges
-
-        # print "next opponent: pl2[%s] = %s" % (i2, pl2[i2])
-
-    # print "edges: %s" % edges
+    print "edges: %s" % edges
     return edges
 
 if __name__ == "__main__":
