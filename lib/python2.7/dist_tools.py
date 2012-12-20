@@ -329,8 +329,7 @@ def tesselate(pl1, pl2, dist_mat):
     for i1, cur in enumerate(pl1):
         opp_cur = find_neighbor(cur, dist_mat, mask1)
         edges.append((cur, opp_cur))
-        print "-- edgelist: %s" % edges
-        # print "cur: (%s, %s) |" % (cur, opp_cur),
+        # print "-- edgelist: %s" % edges
 
         # if the next point is the last one, we're done:
         # FIXME: check if pl2 is empty then!!
@@ -373,7 +372,7 @@ def tesselate(pl1, pl2, dist_mat):
 
         # print "next opponent: pl2[%s] = %s" % (i2, pl2[i2])
 
-    print "edges: %s" % edges
+    # print "edges: %s" % edges
     return edges
 
 if __name__ == "__main__":
