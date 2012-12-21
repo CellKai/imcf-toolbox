@@ -15,7 +15,7 @@ import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
-    sort_neighbors, build_filament_mask, elastic_bands, path_greedy, tesselate, remove_first_last
+    sort_neighbors, build_filament_mask, path_greedy, tesselate, remove_first_last
 
 
 def build_tuple_seq(sequence, cyclic=False):
@@ -145,10 +145,8 @@ def main():
 
     fil1 = remove_first_last(p1)
     fil2 = remove_first_last(p2)
-    # edges1 = tesselate(fil1, fil2, distance_matrix)
-    edges2 = tesselate(fil2, fil1, distance_matrix)
-    # print "edges1: %s" % edges1
-    # print "edges2: %s" % edges2
+    edges = tesselate(fil2, fil1, distance_matrix)
+    # print "edges: %s" % edges
 
     if args.plot:
         plot = plot3d_prep()
@@ -174,13 +172,8 @@ def main():
         #     coords = [data[p[0]], data[p[1]]]
         #     plot3d_line(plot, coords, 'b')
 
-        # print "red:   %s" % edges1
-        # for p in edges1:
-        #     coords = [data[p[0]], data[p[1]]]
-        #     plot3d_line(plot, coords, 'r')
-
-        print "blue:  %s" % edges2
-        for p in edges2:
+        print "edges (blue):  %s" % edges
+        for p in edges:
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
 
