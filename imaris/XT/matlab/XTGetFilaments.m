@@ -13,7 +13,7 @@ function XTGetFilaments()
 	conn.startImaris();
 
 	% wait until the connection is ready and the user has selected some data
-	ans = questdlg('Click "OK" to contine after opening a dataset and selecting a Filament object.', 'Waiting for Imaris...', 'OK', 'Cancel', 'OK')
+	ans = questdlg('Click "OK" to continue after opening a dataset and selecting a Filament object.', 'Waiting for Imaris...', 'OK', 'Cancel', 'OK')
 	switch ans
 		case 'OK'
 			extractFilaments(conn.mImarisApplication);
