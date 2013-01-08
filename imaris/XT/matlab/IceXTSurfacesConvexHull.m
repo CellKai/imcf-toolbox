@@ -3,23 +3,46 @@
 %
 %  Requirements:
 %    - IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
+% 
+%    <CustomTools>
+%      <Menu>
+%       <Submenu name="Surfaces Functions">
+%        <Item name="Surfaces Convex Hull" icon="Matlab" tooltip="Create a Surface which contains the convex hull of the selected Surfaces.">
+%          <Command>MatlabXT::IceXTSurfacesConvexHull(%i)</Command>
+%        </Item>
+%       </Submenu>
+%      </Menu>
+%      <SurpassTab>
+%        <SurpassComponent name="bpSurfaces">
+%          <Item name="Convex Hull">
+%            <Command>MatlabXT::IceXTSurfacesConvexHull(%i)</Command>
+%          </Item>
+%        </SurpassComponent>
+%      </SurpassTab>
+%    </CustomTools>
 %
 
-function IceXTSurfacesConvexHull()
-	ver = 1; % internal version number
-	
-	% start Imaris and set up the connection
-	conn = IceImarisConnector();
-	conn.startImaris();
+function IceXTSurfacesConvexHull(mImarisApplication)
+	% internal version number
+	ver = 4;
 
-	% wait until the connection is ready and some data is selected
-    msg = ['Click "OK" to continue after opening a dataset and ', ...
-        'selecting a Surface object.'];
-	ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK')
-	switch ans
-		case 'OK'
-			calculateSurfacesConvexHull(conn.mImarisApplication);
-	end
+	if nargin == 1
+        conn = IceImarisConnector(mImarisApplication);
+    else
+        % start Imaris and set up the connection
+        conn = IceImarisConnector();
+        conn.startImaris();
+
+        % wait until the connection is ready and some data is selected
+        msg = ['Click "OK" to continue after opening a dataset and ', ...
+            'selecting a Surface object.'];
+        ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
+        if strcmp(ans, 'Cancel')
+            return;
+        end
+    end
+
+    calculateSurfacesConvexHull(conn.mImarisApplication);
 end
 
 function calculateSurfacesConvexHull(vImApp)
