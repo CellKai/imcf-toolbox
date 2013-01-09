@@ -102,6 +102,10 @@ function calculateSurfacesConvexHull(vImApp)
         vPointsMap(vPoints) = 1:numel(vPoints);
         vTriangles = vPointsMap(vConvexHull(:, [1, 3, 2])) - 1;
         
+        % FIXME: normals calculation was taken from a code example but it
+        % is COMPLETELY WRONG!! (it's calculating the position vectors of
+        % the individual vertices, instead of the normal vectors of the
+        % triangles)
         % generate normals by calculating the center and then the vectors
         % from there to the individual vertices:
         vMean = mean(vVertices, 1);
