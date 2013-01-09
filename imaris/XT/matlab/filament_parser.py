@@ -15,20 +15,30 @@ import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
 from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
-    sort_neighbors, build_filament_mask, elastic_bands
+    sort_neighbors, build_filament_mask, elastic_bands, path_greedy, tesselate, remove_first_last
 
 
-def build_tuple_seq(sequence):
+def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
 
     Takes a sequence (list) and returns a list of 2-tuples where
     each tuple consists of the previous list entry and the current one,
     starting with the entry (last, 1st), then (1st, 2nd) and so on.
+
+    The optional parameter "cyclic" states whether the sequnce should
+    by cyclic or acyclic, meaning the last and the first element will
+    be connected or not.
     """
+    # print sequence
     tuples = []
     for i, elt in enumerate(sequence):
         if i == 0:
-            prev = sequence[len(sequence) - 1]
+            if cyclic:
+                # use the last element as the predecessor of the first:
+                prev = sequence[len(sequence) - 1]
+            else:
+                prev = elt
+                continue
         tuples.append((prev, elt))
         prev = elt
     return tuples
@@ -113,8 +123,6 @@ def main():
     for point in maxdist_pair:
         maxdist_points.append(data[point])
 
-    adjacent = sort_neighbors(distance_matrix, data)
-
     print '---------------------------------------------------'
     print 'points with largest distance: ' + str(maxdist_pair)
     print '   corresponding coordinates: ' + str(maxdist_points)
@@ -123,34 +131,58 @@ def main():
 
     if args.showmatrix:
         print distance_matrix
-        # print adjacent
+
+    adjacent = sort_neighbors(distance_matrix)
+    # print adjacent
+
+    # create an empty mask with the number of points:
+    mask = [0] * len(distance_matrix[0])
+
+    (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
+    print 'path1 %s: %s' % (maxdist_pair, p1)
+    (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
+    print 'path2 %s: %s' % (maxdist_pair, p2)
+
+    fil1 = remove_first_last(p1)
+    fil2 = remove_first_last(p2)
+    # edges1 = tesselate(fil1, fil2, distance_matrix)
+    edges2 = tesselate(fil2, fil1, distance_matrix)
+    # print "edges1: %s" % edges1
+    # print "edges2: %s" % edges2
 
     if args.plot:
         plot = plot3d_prep()
         plot3d_scatter(plot, data, 'w')
         plot3d_scatter(plot, maxdist_points, 'r', lw=18)
-        plot3d_line(plot, maxdist_points, 'g')
-        for p in build_tuple_seq(adjacent):
+        plot3d_line(plot, maxdist_points, 'y')
+        for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'r')
+            plot3d_line(plot, coords, 'm')
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
+        # compressed() returns only the unmasked entries
         filpnts1 = ma.array(adjacent, mask=fma1).compressed()
-        for p in build_tuple_seq(filpnts1):
-            coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'g')
+        # for p in build_tuple_seq(filpnts1):
+        #     coords = [data[p[0]], data[p[1]]]
+        #     plot3d_line(plot, coords, 'g')
 
         maxdist_pair = (maxdist_pair[1], maxdist_pair[0])
         fm2, fma2 = build_filament_mask(adjacent, maxdist_pair)
+        # compressed() returns only the unmasked entries
         filpnts2 = ma.array(adjacent, mask=fma2).compressed()
-        for p in build_tuple_seq(filpnts2):
+        # for p in build_tuple_seq(filpnts2):
+        #     coords = [data[p[0]], data[p[1]]]
+        #     plot3d_line(plot, coords, 'b')
+
+        # print "red:   %s" % edges1
+        # for p in edges1:
+        #     coords = [data[p[0]], data[p[1]]]
+        #     plot3d_line(plot, coords, 'r')
+
+        print "blue:  %s" % edges2
+        for p in edges2:
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
-
-        elastic = elastic_bands(filpnts1, filpnts2, fm1, fm2, distance_matrix)
-        for p in elastic:
-            coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'r')
 
         plot3d_show()
 
