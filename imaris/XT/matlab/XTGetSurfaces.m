@@ -58,3 +58,29 @@ function extractSurfaces(vImApp)
 	end
 
 end
+
+% vSurfaces = vFactory.ToSurfaces(conn.mImarisApplication.GetSurpassSelection)
+% vSurfaces.GetNumberOfSurfaces
+
+% vSurfaceVertices = vSurfaces.GetVertices(0);
+% vConvexHull = convhulln(double(vSurfaceVertices));
+% vNumberOfPoints = size(vSurfaceVertices, 1)
+% vPoints = false(vNumberOfPoints, 1);
+% vPoints(vConvexHull(:)) = true
+% vPoints = find(vPoints)
+% vVertices = vSurfaceVertices(vPoints, :);
+% vPointsMap = zeros(vNumberOfPoints, 1);
+% vPointsMap(vPoints) = 1:numel(vPoints);
+% vTriangles = vPointsMap(vConvexHull(:, [1, 3, 2])) - 1;
+% vPointsMap = zeros(vNumberOfPoints, 1);
+% vPointsMap(vPoints) = 1:numel(vPoints)
+% vMean = mean(vVertices, 1)
+% vNormals = [vVertices(:, 1) - vMean(1), vVertices(:, 2) - vMean(2), ...
+%     vVertices(:, 3) - vMean(3)];
+% vIndexT = vSurfaces.GetTimeIndex(0)
+% vSurfaceHull = vFactory.CreateSurfaces
+% vSurfaceHull.AddSurface(vVertices, vTriangles, vNormals, vIndexT)
+% vSurfaceHull.SetName(['Convex Hull of "Surfaces 4"'])
+% vSurfaceHull.SetColorRGBA(vSurfaces.GetColorRGBA);
+% vSurfaceHull.SetColorRGBA(vSurfaces.GetColorRGBA)
+% vSurfaces.GetParent.AddChild(vSurfaceHull, -1)
