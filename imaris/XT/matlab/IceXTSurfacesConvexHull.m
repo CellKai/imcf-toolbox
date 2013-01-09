@@ -1,26 +1,27 @@
 %
-%  Surfaces Convex Hull calculation for Imaris 7 by Niko Ehrenfeuchter
+% Surfaces Convex Hull calculation for Imaris 7 by Niko Ehrenfeuchter
 %
-%  Requirements:
+% Requirements:
 %    - IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
 % 
-%    <CustomTools>
-%      <Menu>
-%       <Submenu name="Surfaces Functions">
-%        <Item name="Surfaces Convex Hull" icon="Matlab" tooltip="Create a Surface which contains the convex hull of the selected Surfaces.">
-%          <Command>MatlabXT::IceXTSurfacesConvexHull(%i)</Command>
-%        </Item>
-%       </Submenu>
-%      </Menu>
-%      <SurpassTab>
-%        <SurpassComponent name="bpSurfaces">
-%          <Item name="Convex Hull">
-%            <Command>MatlabXT::IceXTSurfacesConvexHull(%i)</Command>
-%          </Item>
-%        </SurpassComponent>
-%      </SurpassTab>
-%    </CustomTools>
-%
+%%% Imaris meta information %%%
+% <CustomTools>
+%  <Menu>
+%   <Submenu name="Surfaces Functions">
+%    <Item name="Surfaces Convex Hull" icon="Matlab"
+%       tooltip="Create the convex hull for each surface.">
+%      <Command>MatlabXT::IceXTSurfacesConvexHull(%i)</Command>
+%    </Item>
+%   </Submenu>
+%  </Menu>
+%  <SurpassTab>
+%    <SurpassComponent name="bpSurfaces">
+%      <Item name="Convex Hull">
+%        <Command>MatlabXT::IceXTSurfacesConvexHull(%i)</Command>
+%      </Item>
+%    </SurpassComponent>
+%  </SurpassTab>
+% </CustomTools>
 
 function IceXTSurfacesConvexHull(mImarisApplication)
 	% internal version number
