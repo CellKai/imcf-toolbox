@@ -8,8 +8,9 @@ other file containing many spots. Calculates the spot from the second
 file with the closest distance to the one from the first file.
 """
 
-# TODO: do the write only on an explicit call, add informational functions
-#   like obj.ref_spots_count() or similar
+# TODO: make the code more usable as an object:
+#   [1] do the write only on an explicit call
+#   [2] add informational functions like obj.ref_spots_count() or similar
 
 import argparse
 import sys
@@ -44,6 +45,7 @@ class ClosestNeighbours(object):
 
         for refid, refspot in enumerate(self.spots_r):
             nearest = find_neighbor(refid, self.dist_mat, ref_mask)
+            # TODO [1]
             self.write_output(refid, refspot, len(self.spots_r), nearest)
         return(0)
 
