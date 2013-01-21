@@ -10,6 +10,7 @@ in three dimensional space."""
 #    the distance matrix, the masks of the individual filaments,
 #    access to start and end points, etc.
 #  - sanity/type checks
+#  - move vprint() to separate module
 
 __all__ = [
     'build_filament_mask',
