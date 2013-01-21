@@ -6,6 +6,9 @@ Provides distance, area, mesh-related calculations on spots
 in three dimensional space."""
 
 # TODO:
+#  - create a class for filaments, containing the coordinates list,
+#    the distance matrix, the masks of the individual filaments,
+#    access to start and end points, etc.
 #  - sanity/type checks
 
 __all__ = [

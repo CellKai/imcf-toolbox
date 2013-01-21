@@ -5,9 +5,6 @@ Imaris via the XT/Matlab interface.
 """
 
 # TODO:
-#  - create a class for filaments, containing the coordinates list,
-#    the distance matrix, the masks of the individual filaments,
-#    access to start and end points, etc.
 #  - move the 3d plotting stuff somewhere else, especially the imports!
 
 import sys
@@ -25,17 +22,14 @@ def plot3d_prep():
     fig = plt.figure()
     return fig.gca(projection='3d')
 
-
 def plot3d_show():
     plt.show()
-
 
 def plot3d_scatter(plot, points, color, lw=1):
     from numpy import asarray
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
-
 
 def plot3d_line(plot, points, color, lw=1):
     from numpy import asarray
