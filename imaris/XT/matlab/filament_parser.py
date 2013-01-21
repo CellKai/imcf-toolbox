@@ -14,9 +14,7 @@ from csvtools import parse_float_tuples;
 import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
-from dist_tools import dist_matrix_euclidean, get_max_dist_pair, \
-    sort_neighbors, build_filament_mask, path_greedy, tesselate, remove_first_last
-
+from volpy import *
 
 def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
