@@ -380,5 +380,15 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
     return edges
 
+def vprint(v_set, v_cur, message):
+    """ Helper function to allow for verbosity-level dependent message
+    printing. Takes a verbosity level setting, a verbosity level for the
+    current message, and a messate string.
+
+    Prints the string iff v_set >= v_cur.
+    """
+    if (v_set >= v_cur):
+        print message
+
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."
