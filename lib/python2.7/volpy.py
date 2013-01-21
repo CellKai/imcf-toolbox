@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
+""" Discrete volumetric data tools.
+
+Provides distance, area, mesh-related calculations on spots
+in three dimensional space."""
+
 # TODO:
 #  - sanity/type checks
-#  - rename into filament_tools?
 
 import math
 def calc_dist_xyz(p1, p2):
