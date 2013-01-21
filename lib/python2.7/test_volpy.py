@@ -2,7 +2,7 @@
 
 '''Test script for "volpy" module.
 
-Use like this:
+Example:
 ./test_volpy.py -i __testdata/fil_manual.csv > result_volpy_fil_manual.txt
 
 '''
