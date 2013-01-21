@@ -8,6 +8,25 @@ in three dimensional space."""
 # TODO:
 #  - sanity/type checks
 
+__all__ = [
+    'build_filament_mask',
+    'build_tuple_seq',
+    'dist_matrix_euclidean',
+    'get_max_dist_pair',
+    'path_greedy',
+    'remove_first_last',
+    'sort_neighbors',
+    'tesselate',
+    'vprint'
+    # 'calc_dist_xyz',
+    # 'dist',
+    # 'largest_dist_idx',
+    # 'find_neighbor',
+    # 'elastic_bands',
+    # 'gen_mask',
+    # 'gen_unmask',
+]
+
 import math
 def calc_dist_xyz(p1, p2):
     """Calculates the euclidean distance between two points in 3D.
@@ -298,6 +317,31 @@ def elastic_bands(pl1, mask2, dist_mat):
         else:
             bands.add((neigh, cur))
     return bands
+
+def build_tuple_seq(sequence, cyclic=False):
+    """Convert a sequence into a list of 2-tuples.
+
+    Takes a sequence (list) and returns a list of 2-tuples where
+    each tuple consists of the previous list entry and the current one,
+    starting with the entry (last, 1st), then (1st, 2nd) and so on.
+
+    The optional parameter "cyclic" states whether the sequnce should
+    by cyclic or acyclic, meaning the last and the first element will
+    be connected or not.
+    """
+    # print sequence
+    tuples = []
+    for i, elt in enumerate(sequence):
+        if i == 0:
+            if cyclic:
+                # use the last element as the predecessor of the first:
+                prev = sequence[len(sequence) - 1]
+            else:
+                prev = elt
+                continue
+        tuples.append((prev, elt))
+        prev = elt
+    return tuples
 
 def gen_mask(pointlist, masklength):
     """Generates a binary mask given by a list of indices.
