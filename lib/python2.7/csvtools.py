@@ -10,7 +10,7 @@ def parse_float_tuples(fname):
     being a n-tuple holding the values of a single line from the CSV.
 
     Args:
-        fname: A filename of a CSV file.
+        fname: The opened filehandle of a CSV file.
 
     Returns:
         A list of n-tuples, one tuple for each line in the CSV, for
