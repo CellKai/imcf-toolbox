@@ -8,6 +8,7 @@ Imaris via the XT/Matlab interface.
 #  - create a class for filaments, containing the coordinates list,
 #    the distance matrix, the masks of the individual filaments,
 #    access to start and end points, etc.
+#  - move the 3d plotting stuff somewhere else, especially the imports!
 
 import sys
 from csvtools import parse_float_tuples;
@@ -15,6 +16,7 @@ import argparse
 import matplotlib.pyplot as plt
 from numpy import ma
 from volpy import *
+import pprint
 
 def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
@@ -83,6 +85,8 @@ def main():
     except IOError as e:
         argparser.error(str(e))
 
+    pp = pprint.PrettyPrinter(indent=4)
+
     data = parse_float_tuples(args.infile)
     distance_matrix = dist_matrix_euclidean(data)
     maxdist_pair = get_max_dist_pair(distance_matrix)
@@ -98,7 +102,11 @@ def main():
     print '---------------------------------------------------'
 
     if args.showmatrix:
-        print distance_matrix
+        vprint(2, 2, pp.pprint(data))
+        # pp.pprint(data[1])
+        # pp.pprint(data[2])
+        # print distance_matrix
+        vprint(2, 2, pp.pprint(distance_matrix))
 
     adjacent = sort_neighbors(distance_matrix)
     # print adjacent
