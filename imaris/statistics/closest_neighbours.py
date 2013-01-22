@@ -29,6 +29,7 @@ class ClosestNeighbours(object):
     def _parse(self):
         self.out('Processing file: ' + str(self.ref.name) + "\n")
         self.XMLref = ImarisXML(self.ref)
+        # for more verbosity, add 'debug=2' to the ImarisXML call
         self.out('Processing file: ' + str(self.cand.name) + "\n")
         self.XMLcnd = ImarisXML(self.cand)
 
@@ -51,7 +52,7 @@ class ClosestNeighbours(object):
         ''' "_r" denote the reference spot, "_n" the closest neighbour '''
         id_n_orig = id_n - count_r
         self.out('\nCalculating closest neighbour.\n')
-        self.out('Original spot:  [%s] %s\nNeighbour spot: [%s] %s\n' %
+        self.out('Reference: \t\t[%s]\t%s\nClosest neighbour: \t[%s]\t%s\n' %
             (id_r, coord_r, id_n_orig, self.spots_c[id_n_orig]))
         self.out('Distance: %s\n' % self.dist_mat[id_r, id_n])
 
