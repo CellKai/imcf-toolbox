@@ -92,7 +92,9 @@ def dist_matrix_euclidean(pts):
     """Calculates the euclidean distance matrix for a set of points.
 
     Args:
-        pts: a list of n-dimensional coordinates, e.g.
+        pts: a two-dimensional numpy.ndarray, e.g.
+             pts = array([-1.0399, -0.594 , -0.54  ])
+             or a list of n-dimensional coordinates, e.g.
              pts = [ [1, 2], [4, 6] ]
 
     Details:

@@ -11,7 +11,7 @@ import sys
 from csvtools import parse_float_tuples;
 import argparse
 import matplotlib.pyplot as plt
-from numpy import ma
+from numpy import ma, loadtxt
 from volpy import *
 import pprint
 
@@ -55,7 +55,9 @@ def main():
 
     pp = pprint.PrettyPrinter(indent=4)
 
-    data = parse_float_tuples(args.infile)
+    # loadtxt() expects float numbers and complains otherwise
+    data = loadtxt(args.infile, delimiter=',')
+
     distance_matrix = dist_matrix_euclidean(data)
     maxdist_pair = get_max_dist_pair(distance_matrix)
 
