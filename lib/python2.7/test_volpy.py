@@ -1,11 +1,6 @@
 #!/usr/bin/python
 
-'''Test script for "volpy" module.
-
-Example:
-./test_volpy.py -i __testdata/fil_manual.csv > result_volpy_fil_manual.txt
-
-'''
+'''Test script for the "volpy" module.'''
 
 from csvtools import parse_float_tuples;
 from volpy import dist_matrix_euclidean;
