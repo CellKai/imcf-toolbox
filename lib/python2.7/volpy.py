@@ -9,6 +9,8 @@ in three dimensional space."""
 #  - create a class for filaments, containing the coordinates list,
 #    the distance matrix, the masks of the individual filaments,
 #    access to start and end points, etc.
+#  - collect import statements
+#  - PEP8 compliance!
 #  - sanity/type checks
 #  - move vprint() to separate module
 
@@ -282,13 +284,14 @@ def build_filament_mask(adjacent, delimiters):
         if point == delimiters[1]:
             maskval = not(maskval)
             # check if we need to invert the mask:
-            if not(found_first): invert = True
+            if not(found_first):
+                invert = True
         mask[point] = maskval
         mask_adj[i] = maskval
     if invert:
         # print 'inverting mask.'
-        mask = [ not(x) for x in mask ]
-        mask_adj = [ not(x) for x in mask_adj ]
+        mask = [not(x) for x in mask]
+        mask_adj = [not(x) for x in mask_adj]
     # print mask
     return (mask, mask_adj)
 
@@ -404,12 +407,12 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
             for rem in pl2:
                 # FIXME: move to separate function to control verbosity
                 # print "edge: (%s, %s)" % (cur1, rem)
-                edges.append( (cur1, rem) )
+                edges.append((cur1, rem))
             break
         if len(pl2) == 1:
             for rem in pl1:
                 # print "edge: (%s, %s)" % (cur2, rem)
-                edges.append( (cur2, rem) )
+                edges.append((cur2, rem))
             break
         nxt1 = pl1[1]
         nxt2 = pl2[1]
@@ -419,13 +422,13 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         # print "d2 (%s, %s): %s" % (cur1, nxt2, e2)
         if e1 < e2:
             # print "edge: (%s, %s)" % (nxt1, cur2)
-            edges.append( (nxt1, cur2) )
+            edges.append((nxt1, cur2))
             if len(pl1) > 1:
                 # print "remove first element from pl1 ",
                 pl1.pop(0)
         else:
             # print "edge: (%s, %s)" % (cur1, nxt2)
-            edges.append( (cur1, nxt2) )
+            edges.append((cur1, nxt2))
             if len(pl2) > 1:
                 # print "remove first element from pl2 ",
                 pl2.pop(0)
