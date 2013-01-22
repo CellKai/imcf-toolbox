@@ -14,7 +14,7 @@ file with the closest distance to the one from the first file.
 import argparse
 import sys
 from ImsXMLlib import ImarisXML
-from dist_tools import dist_matrix_euclidean, find_neighbor
+from volpy import dist_matrix_euclidean, find_neighbor
 
 
 class ClosestNeighbours(object):
