@@ -22,7 +22,8 @@ from volpy import dist_matrix_euclidean, find_neighbor
 class ClosestNeighbours(object):
 
     def __init__(self, file_ref, file_cand, file_out):
-        self.out = file_out.write
+        self.out = sys.stdout.write
+        self.csv = csv.writer(file_out)
         self.ref = file_ref
         self.cand = file_cand
         self._parse()
@@ -42,6 +43,10 @@ class ClosestNeighbours(object):
 
     def _process(self):
         self.dist_mat = dist_matrix_euclidean(self.spots_r + self.spots_c)
+        print len(self.spots_r)
+        print len(self.spots_c)
+        for line in self.dist_mat:
+            self.csv.writerow(line)
 
         ref_mask = [1] * len(self.spots_r) + [0] * len(self.spots_c)
 
