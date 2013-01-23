@@ -14,6 +14,7 @@ file with the closest distance to the one from the first file.
 
 import argparse
 import sys
+import csv
 from ImsXMLlib import ImarisXML
 from volpy import dist_matrix_euclidean, find_neighbor
 
@@ -69,6 +70,8 @@ def main():
         help='Imaris Excel XML export containing candidate spots.')
     argparser.add_argument('-o', '--outfile', default=sys.stdout,
         type=argparse.FileType('w'), help='File to store the results.')
+    argparser.add_argument('-v', '--verbose', dest='v',
+        action='count', default=0)
     try:
         args = argparser.parse_args()
     except IOError as e:
