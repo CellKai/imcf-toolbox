@@ -48,10 +48,14 @@ def main():
     argparser.add_argument('--showmatrix', dest='showmatrix',
         action='store_const', const=True, default=False,
         help='show the distance matrix and the longest distance pair')
+    argparser.add_argument('-v', '--verbose', dest='verbosity',
+        action='count', default=0)
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
+
+    _v = args.verbosity
 
     pp = pprint.PrettyPrinter(indent=4)
 
@@ -61,22 +65,19 @@ def main():
     distance_matrix = dist_matrix_euclidean(data)
     maxdist_pair = get_max_dist_pair(distance_matrix)
 
+    vprint(_v, 2, pp.pformat(data))
+    vprint(_v, 1, pp.pformat(distance_matrix))
+
     maxdist_points = []
     for point in maxdist_pair:
         maxdist_points.append(data[point])
 
-    print '---------------------------------------------------'
-    print 'points with largest distance: ' + str(maxdist_pair)
-    print '   corresponding coordinates: ' + str(maxdist_points)
-    print '      corresponding distance: ' + str(distance_matrix[maxdist_pair])
+    print '------------ largest distance results -------------'
+    print 'idx numbers:\t' + pp.pformat(maxdist_pair)
+    print 'coordinates:\t' + pp.pformat(maxdist_points)
+    print 'distance:\t' + pp.pformat(distance_matrix[maxdist_pair])
     print '---------------------------------------------------'
 
-    if args.showmatrix:
-        vprint(2, 2, pp.pprint(data))
-        # pp.pprint(data[1])
-        # pp.pprint(data[2])
-        # print distance_matrix
-        vprint(2, 2, pp.pprint(distance_matrix))
 
     adjacent = sort_neighbors(distance_matrix)
     # print adjacent
