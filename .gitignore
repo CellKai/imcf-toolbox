@@ -1,4 +1,4 @@
-helper/tgt_hosts/
+helper/hosts/
 .*.sw?
 *.pyc
 __testdata
