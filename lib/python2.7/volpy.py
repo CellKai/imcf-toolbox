@@ -437,6 +437,18 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
     return edges
 
+from numpy import cross, linalg
+def tri_area(p1, p2, p3):
+    """Calculate the area of a triangle given by coordinates.
+
+    Uses the property of the cross product of two vectors resulting in
+    a vector that (euclidean) norm equals the area of the parallelogram
+    defined by the two vectors.
+    """
+    v1 = p2 - p1
+    v2 = p2 - p3
+    return 0.5 * linalg.norm(cross(v1, v2))
+
 def vprint(v_set, v_cur, message):
     """ Helper function to allow for verbosity-level dependent message
     printing. Takes a verbosity level setting, a verbosity level for the
