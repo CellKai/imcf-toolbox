@@ -8,7 +8,6 @@ Imaris via the XT/Matlab interface.
 #  - move the 3d plotting stuff somewhere else, especially the imports!
 
 import sys
-from csvtools import parse_float_tuples;
 import argparse
 import matplotlib.pyplot as plt
 from numpy import ma, loadtxt
@@ -80,20 +79,20 @@ def main():
 
 
     adjacent = sort_neighbors(distance_matrix)
-    # print adjacent
+    vprint(_v, 3, adjacent)
 
     # create an empty mask with the number of points:
     mask = [0] * len(distance_matrix[0])
 
     (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    print 'path1 %s: %s' % (maxdist_pair, p1)
+    vprint(_v, 2, 'path1 %s: %s' % (maxdist_pair, p1))
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    print 'path2 %s: %s' % (maxdist_pair, p2)
+    vprint(_v, 2, 'path2 %s: %s' % (maxdist_pair, p2))
 
     fil1 = remove_first_last(p1)
     fil2 = remove_first_last(p2)
     edges = tesselate(fil2, fil1, distance_matrix)
-    # print "edges: %s" % edges
+    vprint(_v, 2, "edges from tesselation: %s" % edges)
 
     if args.plot:
         plot = plot3d_prep()
