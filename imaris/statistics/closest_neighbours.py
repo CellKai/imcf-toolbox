@@ -17,13 +17,17 @@ import sys
 import csv
 from ImsXMLlib import ImarisXML
 from volpy import dist_matrix_euclidean, find_neighbor
+from numpy import delete
 
 
 class ClosestNeighbours(object):
 
     def __init__(self, file_ref, file_cand, file_out):
         self.out = sys.stdout.write
-        self.csv = csv.writer(file_out)
+        self.csvout = False
+        if (file_out.name != '<stdout>'):
+            self.csv = csv.writer(file_out)
+            self.csvout = True
         self.ref = file_ref
         self.cand = file_cand
         self._parse()
@@ -43,10 +47,17 @@ class ClosestNeighbours(object):
 
     def _process(self):
         self.dist_mat = dist_matrix_euclidean(self.spots_r + self.spots_c)
-        print len(self.spots_r)
-        print len(self.spots_c)
-        for line in self.dist_mat:
-            self.csv.writerow(line)
+        self.out("Reference objects: %s\n" % len(self.spots_r))
+        self.out("Candidate objects: %s\n" % len(self.spots_c))
+        dists_to_ref = self.dist_mat[:][0]
+        dists_to_ref = delete(dists_to_ref, 0, 0)
+        if (self.csvout):
+            # print dists_to_ref
+            self.out('Writing CSV...\n')
+            for i, line in enumerate(dists_to_ref):
+                # output = "%i,%f" % (i, line)
+                # print output
+                self.csv.writerow([i, line])
 
         ref_mask = [1] * len(self.spots_r) + [0] * len(self.spots_c)
 
@@ -73,8 +84,10 @@ def main():
         help='Imaris Excel XML export containing reference spots.')
     argparser.add_argument('-c', '--candidate', required=True, type=file,
         help='Imaris Excel XML export containing candidate spots.')
-    argparser.add_argument('-o', '--outfile', default=sys.stdout,
-        type=argparse.FileType('w'), help='File to store the results.')
+    # argparser.add_argument('-o', '--outfile', default=sys.stdout,
+        # type=argparse.FileType('w'), help='File to store the results.')
+    argparser.add_argument('--csv', default=sys.stdout,
+        type=argparse.FileType('w'), help='CSV-file to store the results.')
     argparser.add_argument('-v', '--verbose', dest='v',
         action='count', default=0)
     try:
@@ -83,7 +96,7 @@ def main():
         argparser.error(str(e))
 
     neighbours = ClosestNeighbours(args.reference, args.candidate,
-        args.outfile)
+        args.csv)
 
 # see http://www.artima.com/weblogs/viewpost.jsp?thread=4829
 # for this nice way to handle the sys.exit()/return() calls
