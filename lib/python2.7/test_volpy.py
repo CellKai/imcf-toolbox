@@ -2,24 +2,21 @@
 
 '''Test script for the "volpy" module.'''
 
-from csvtools import parse_float_tuples;
-from volpy import dist_matrix_euclidean;
-import argparse
-import pprint
+from volpy import dist_matrix_euclidean
+from numpy import loadtxt, array_str, set_printoptions
 
-argparser = argparse.ArgumentParser(description=__doc__)
-argparser.add_argument('-i', '--infile', required=True, type=file,
-    help='CSV file containing filament coordinates')
-# use redirection for the moment, so disable 'outfile'
-# argparser.add_argument('-o', '--outfile', required=True, type=file,
-#     help='file to place results in')
-try:
-    args = argparser.parse_args()
-except IOError as e:
-    argparser.error(str(e))
+basedir = 'TESTDATA/filaments/'
+infile = basedir + 'testdata-filaments.csv'
+outfile = basedir + 'result_volpy_fil_detailed.txt'
 
-tuples_list = parse_float_tuples(args.infile)
-distance_matrix = dist_matrix_euclidean(tuples_list)
+data = loadtxt(open(infile, 'r'), delimiter=',')
+dist_mat = dist_matrix_euclidean(data)
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(distance_matrix)
+set_printoptions(threshold=999999)
+outstr = array_str(dist_mat, max_line_width=999999)
+output = open(outfile, 'w')
+output.write(outstr)
+
+print 'Parsed %i points from "%s"' % \
+    (len(data), infile)
+print('Written distance matrix to "%s"' % outfile)
