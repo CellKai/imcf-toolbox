@@ -2,4 +2,4 @@
 
 from filaments import Filament
 
-flmnt = Filament(open('__testdata/small.csv'), debug=1)
+flmnt = Filament(open('TESTDATA/filaments/testdata-filaments-small.csv'), debug=1)

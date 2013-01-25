@@ -2,5 +2,5 @@
 
 from ImsXMLlib import ImarisXML
 
-XML = ImarisXML('__testdata/spots_red_multi_ws-all.xml', debug=1)
+XML = ImarisXML('TESTDATA/spots_distances/spots_red_multi_ws-all.xml', debug=1)
 XML.celldata('Position')
