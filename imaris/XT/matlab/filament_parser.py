@@ -6,6 +6,7 @@ Imaris via the XT/Matlab interface.
 
 # TODO:
 #  - move the 3d plotting stuff somewhere else, especially the imports!
+#  - merge the "filaments" and "volpy" modules, then use Filament objects
 
 import sys
 import argparse

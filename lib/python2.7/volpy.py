@@ -6,13 +6,14 @@ Provides distance, area, mesh-related calculations on spots
 in three dimensional space."""
 
 # TODO:
-#  - create a class for filaments, containing the coordinates list,
-#    the distance matrix, the masks of the individual filaments,
-#    access to start and end points, etc.
-#  - collect import statements
-#  - PEP8 compliance!
-#  - sanity/type checks
-#  - move vprint() to separate module
+
+# - join the "filaments" module with this one, extend the Filament class to
+#   be able to return the coordinates list, the distance matrix, the masks of
+#   the individual filaments, access to start and end points, etc.
+# - collect import statements
+# - PEP8 compliance!
+# - sanity/type checks
+# - move vprint() to separate module
 
 __all__ = [
     'build_filament_mask',
