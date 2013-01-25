@@ -8,8 +8,8 @@ in three dimensional space."""
 # TODO:
 
 # - join the "filaments" module with this one, extend the Filament class to
-#   be able to return the coordinates list, the distance matrix, the masks of
-#   the individual filaments, access to start and end points, etc.
+#   be able to return the distance matrix, the masks of the individual
+#   filaments, access to start and end points, etc.
 # - collect import statements
 # - PEP8 compliance!
 # - sanity/type checks
