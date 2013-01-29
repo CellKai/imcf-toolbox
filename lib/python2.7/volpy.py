@@ -385,7 +385,11 @@ def volpy_verbosity(level):
     log.setLevel(level)
 
 def vappend(lst, val, desc="list"):
-    """Append to a list and log a message according to the loglevel."""
+    """Append to a list and log a message according to the loglevel.
+
+    Note: this works only as lists are mutable and we're operating on the
+    given list directly.
+    """
     log.info("appending to %s: %s" % (desc, str(val)))
     lst.append(val)
 
@@ -463,7 +467,7 @@ def tri_area(p1, p2, p3):
 
     Uses the property of the cross product of two vectors resulting in
     a vector that (euclidean) norm equals the area of the parallelogram
-    defined by the two vectors.
+    defined by the two vectors (and so is double the triangle area)
     """
     v1 = p2 - p1
     v2 = p2 - p3
