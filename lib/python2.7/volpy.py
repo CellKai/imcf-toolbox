@@ -384,6 +384,11 @@ log.addHandler(ch)
 def volpy_verbosity(level):
     log.setLevel(level)
 
+def vappend(lst, val, desc="list"):
+    """Append to a list and log a message according to the loglevel."""
+    log.info("appending to %s: %s" % (desc, str(val)))
+    lst.append(val)
+
 def tesselate(pl1_ref, pl2_ref, dist_mat):
     """Calculates a polygonal partition of a surface in space.
 
@@ -409,7 +414,7 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     pl2 = remove_first_last(pl2_ref)
 
     # the first edge is obvious (otherwise the pointlists are wrong!)
-    edges.append((pl1[0], pl2[0]))
+    vappend(edges, (pl1[0], pl2[0]), 'edges')
 
     # FIXME: add documentation!!
     while True:
@@ -418,14 +423,11 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         cur2 = pl2[0]
         if len(pl1) == 1:
             for rem in pl2:
-                # FIXME: move to separate function to control verbosity
-                # print "edge: (%s, %s)" % (cur1, rem)
-                edges.append((cur1, rem))
+                vappend(edges, (cur1, rem), 'edges')
             break
         if len(pl2) == 1:
             for rem in pl1:
-                # print "edge: (%s, %s)" % (cur2, rem)
-                edges.append((cur2, rem))
+                vappend(edges, (cur2, rem), 'edges')
             break
         nxt1 = pl1[1]
         nxt2 = pl2[1]
@@ -434,14 +436,12 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         # print "d1 (%s, %s): %s" % (nxt1, cur2, e1)
         # print "d2 (%s, %s): %s" % (cur1, nxt2, e2)
         if e1 < e2:
-            # print "edge: (%s, %s)" % (nxt1, cur2)
-            edges.append((nxt1, cur2))
+            vappend(edges, (nxt1, cur2), 'edges')
             if len(pl1) > 1:
                 # print "remove first element from pl1 ",
                 pl1.pop(0)
         else:
-            # print "edge: (%s, %s)" % (cur1, nxt2)
-            edges.append((cur1, nxt2))
+            vappend(edges, (cur1, nxt2), 'edges')
             if len(pl2) > 1:
                 # print "remove first element from pl2 ",
                 pl2.pop(0)
