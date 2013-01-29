@@ -422,15 +422,19 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
     # FIXME: add documentation!!
     while True:
-        # print "pl1: %s\npl2: %s" % (pl1, pl2)
+        log.info("----------------\npl1: %s\npl2: %s" % (pl1, pl2))
         cur1 = pl1[0]
         cur2 = pl2[0]
         if len(pl1) == 1:
+            log.info("--------\npl1 is empty, processing remainder of pl2")
+            log.debug("pop(0) from pl2 (already processed): %s" % cur2)
             pl2.pop(0)
             for rem in pl2:
                 vappend(edges, (cur1, rem), 'edges')
             break
         if len(pl2) == 1:
+            log.info("--------\npl2 is empty, processing remainder of pl1")
+            log.debug("pop(0) from pl1 (already processed): %s" % cur1)
             pl1.pop(0)
             for rem in pl1:
                 vappend(edges, (cur2, rem), 'edges')
