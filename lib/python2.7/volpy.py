@@ -445,12 +445,12 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         # lists is down to a single entry and then exit the loop.
         if e1 < e2:
             vappend(edges, (nxt1, cur2), 'edges')
-            tmp = pl1.pop(0)
-            log.debug("pop 1st elt from pl1: %s" % tmp)
+            pl1.pop(0)
+            log.debug("pop 1st elt from pl1: %s" % cur1)
         else:
             vappend(edges, (cur1, nxt2), 'edges')
-            tmp = pl2.pop(0)
-            log.debug("pop 1st elt from pl2: %s" % tmp)
+            pl2.pop(0)
+            log.debug("pop 1st elt from pl2: %s" % cur2)
 
     log.debug("edges from tesselation: %s" % edges)
     return edges
