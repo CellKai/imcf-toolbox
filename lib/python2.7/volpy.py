@@ -22,6 +22,7 @@ __all__ = [
     'path_greedy',
     'remove_first_last',
     'sort_neighbors',
+    'tri_area',
     'tesselate',
     'volpy_verbosity'
     # 'calc_dist_xyz',
