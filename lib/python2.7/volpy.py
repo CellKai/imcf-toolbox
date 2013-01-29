@@ -13,7 +13,6 @@ in three dimensional space."""
 # - collect import statements
 # - PEP8 compliance!
 # - sanity/type checks
-# - move vprint() to separate module
 
 __all__ = [
     'build_filament_mask',
@@ -24,7 +23,7 @@ __all__ = [
     'remove_first_last',
     'sort_neighbors',
     'tesselate',
-    'vprint'
+    'volpy_verbosity'
     # 'calc_dist_xyz',
     # 'dist',
     # 'largest_dist_idx',
@@ -375,6 +374,15 @@ def gen_unmask(pointlist, masklength):
         mask[point] = 0
     return mask
 
+import logging
+log = logging.getLogger(__name__)
+# create console handler and add it to the logger
+ch = logging.StreamHandler()
+log.addHandler(ch)
+
+def volpy_verbosity(level):
+    log.setLevel(level)
+
 def tesselate(pl1_ref, pl2_ref, dist_mat):
     """Calculates a polygonal partition of a surface in space.
 
@@ -449,16 +457,6 @@ def tri_area(p1, p2, p3):
     v1 = p2 - p1
     v2 = p2 - p3
     return 0.5 * linalg.norm(cross(v1, v2))
-
-def vprint(v_set, v_cur, message):
-    """ Helper function to allow for verbosity-level dependent message
-    printing. Takes a verbosity level setting, a verbosity level for the
-    current message, and a messate string.
-
-    Prints the string iff v_set >= v_cur.
-    """
-    if (v_set >= v_cur):
-        print message
 
 if __name__ == "__main__":
     print "This module provides just functions, no direct interface."

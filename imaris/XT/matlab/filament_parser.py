@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from numpy import ma, loadtxt
 from volpy import *
 import pprint
+import logging
 
 
 def plot3d_prep():
@@ -55,7 +56,16 @@ def main():
     except IOError as e:
         argparser.error(str(e))
 
-    _v = args.verbosity
+    # default loglevel is 30 while 20 and 10 show more details
+    loglevel = (3 - args.verbosity) * 10
+
+    log = logging.getLogger(__name__)
+    # create console handler and add it to the logger
+    ch = logging.StreamHandler()
+    log.addHandler(ch)
+    log.setLevel(loglevel)
+
+    volpy_verbosity(loglevel)
 
     pp = pprint.PrettyPrinter(indent=4)
 
@@ -65,8 +75,8 @@ def main():
     distance_matrix = dist_matrix_euclidean(data)
     maxdist_pair = get_max_dist_pair(distance_matrix)
 
-    vprint(_v, 2, pp.pformat(data))
-    vprint(_v, 1, pp.pformat(distance_matrix))
+    log.debug(pp.pformat(data))
+    log.info(pp.pformat(distance_matrix))
 
     maxdist_points = []
     for point in maxdist_pair:
@@ -80,20 +90,20 @@ def main():
 
 
     adjacent = sort_neighbors(distance_matrix)
-    vprint(_v, 3, adjacent)
+    log.debug(adjacent)
 
     # create an empty mask with the number of points:
     mask = [0] * len(distance_matrix[0])
 
     (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    vprint(_v, 2, 'path1 %s: %s' % (maxdist_pair, p1))
+    log.debug('path1 %s: %s' % (maxdist_pair, p1))
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    vprint(_v, 2, 'path2 %s: %s' % (maxdist_pair, p2))
+    log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
     fil1 = remove_first_last(p1)
     fil2 = remove_first_last(p2)
     edges = tesselate(fil2, fil1, distance_matrix)
-    vprint(_v, 2, "edges from tesselation: %s" % edges)
+    log.debug("edges from tesselation: %s" % edges)
 
     if args.plot:
         plot = plot3d_prep()
