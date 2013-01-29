@@ -435,16 +435,22 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         e2 = dist_mat[cur1][nxt2]
         # print "d1 (%s, %s): %s" % (nxt1, cur2, e1)
         # print "d2 (%s, %s): %s" % (cur1, nxt2, e2)
+
+        # Finally add the shorter edge to the list and shift the lists so the
+        # points used in this edge are the first ones then. This is done by
+        # removing either pl1[0] or pl2[0].
+        # NOTE: We can safely pop(0) as the stopping criteria from above will
+        # prevent us from applying a pop() to an empty list since it will
+        # trigger the processing of the remaining points as soon as one of the
+        # lists is down to a single entry and then exit the loop.
         if e1 < e2:
             vappend(edges, (nxt1, cur2), 'edges')
-            if len(pl1) > 1:
-                # print "remove first element from pl1 ",
-                pl1.pop(0)
+            tmp = pl1.pop(0)
+            log.debug("pop 1st elt from pl1: %s" % tmp)
         else:
             vappend(edges, (cur1, nxt2), 'edges')
-            if len(pl2) > 1:
-                # print "remove first element from pl2 ",
-                pl2.pop(0)
+            tmp = pl2.pop(0)
+            log.debug("pop 1st elt from pl2: %s" % tmp)
 
     log.debug("edges from tesselation: %s" % edges)
     return edges
