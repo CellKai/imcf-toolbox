@@ -446,6 +446,7 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
                 # print "remove first element from pl2 ",
                 pl2.pop(0)
 
+    log.debug("edges from tesselation: %s" % edges)
     return edges
 
 from numpy import cross, linalg

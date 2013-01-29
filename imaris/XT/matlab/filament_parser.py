@@ -101,7 +101,6 @@ def main():
     log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
     edges = tesselate(p2, p1, distance_matrix)
-    log.debug("edges from tesselation: %s" % edges)
 
     if args.plot:
         plot = plot3d_prep()
