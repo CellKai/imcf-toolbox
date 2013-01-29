@@ -403,9 +403,10 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     """
     edges = []
 
-    # we're using the pointlists as a stacks, so copy them first:
-    pl1 = pl1_ref[:]
-    pl2 = pl2_ref[:]
+    # remove first and last item of the pointlists (note that this returns
+    # copies of the lists, so we don't change the original (mutable) lists)
+    pl1 = remove_first_last(pl1_ref)
+    pl2 = remove_first_last(pl2_ref)
 
     # the first edge is obvious (otherwise the pointlists are wrong!)
     edges.append((pl1[0], pl2[0]))

@@ -100,9 +100,7 @@ def main():
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
     log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
-    fil1 = remove_first_last(p1)
-    fil2 = remove_first_last(p2)
-    edges = tesselate(fil2, fil1, distance_matrix)
+    edges = tesselate(p2, p1, distance_matrix)
     log.debug("edges from tesselation: %s" % edges)
 
     if args.plot:
