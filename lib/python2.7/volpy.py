@@ -422,7 +422,7 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     vappend(edges, (list_A[0], list_B[0]), 'edges')
 
     # Walk over pointlists A and B simultaneously and determine the shorter
-    # edge of A1-B2 and B1-A2. Add this to the edgelist and remove B1 resp. A1
+    # edge of A0-B1 and B0-A1. Add this to the edgelist and remove B0 resp. A0
     # from the pointlist. Terminate the loop as soon as one of the lists is
     # down to a single entry (so we don't pop(0) on an empty list).
     while len(list_A) > 1 and len(list_B) > 1:
