@@ -415,7 +415,6 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     Returns:
         edges: list of tuples with index numbers denoting the edges
     """
-    edges = []
 
     # remove first and last items and get copies of the remaining pointlists
     (start_A, end_A, list_A) = cut_extrema(pl1_ref)
@@ -423,8 +422,11 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     if start_A != start_B or end_A != end_B:
         raise Exception('Pointlist mismatch.')
 
-    # the first edge is obvious (otherwise the pointlists are wrong!)
+    # initialize lists
+    edges = []
+    triangles = []
     vappend(edges, (list_A[0], list_B[0]), 'edges')
+    vappend(triangles, (list_A[0], list_B[0], start_A), 'triangles')
 
     # Process pointlists A and B simultaneously and determine the distances of
     # A0-B1 and B0-A1. Remove the first element from the list where the
@@ -446,7 +448,11 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
             else:
                 out = list_B.pop(0)
         vappend(edges, (list_A[0], list_B[0]), 'edges')
+        vappend(triangles, (list_A[0], list_B[0], out), 'triangles')
         log.debug("removed 1st element from list: %s" % out)
+
+    # finally add the last triangle containing the endpoint
+    vappend(triangles, (list_A[0], list_B[0], end_A), 'triangles')
 
     log.debug("edges from tesselation: %s" % edges)
     return edges
