@@ -428,15 +428,12 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     while len(list_A) > 1 and len(list_B) > 1:
         log.info("-------- tesselating --------")
         log.info("list_A: %s\nlist_B: %s" % (list_A, list_B))
-        # label edges by starting point (so list_A[0] is in edge1, etc.)
+        # calculate the distances of A0-B1 and B0-A1
         dist_A0_B1 = dist_mat[ list_A[0], list_B[1] ]
         dist_B0_A1 = dist_mat[ list_B[0], list_A[1] ]
-        # log.debug("d1 (%s, %s): %s" % (list_A[0], list_B[1], edge1))
-        # log.debug("d2 (%s, %s): %s" % (list_B[0], list_A[1], edge2))
 
-        # Add the shorter edge to the list and shift the lists so the points
-        # used in this edge are the first ones then. This is done by removing
-        # either list_A[0] or list_B[0].
+        # Add the shorter edge to the edgelist and remove that one of list_A[0]
+        # and list_B[0] that is not used in this new edge.
         if dist_B0_A1 < dist_A0_B1:
             vappend(edges, (list_A[1], list_B[0]), 'edges')
             log.debug("pop 1st elt from list_A: %s" % list_A[0])
@@ -446,9 +443,7 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
             log.debug("pop 1st elt from list_B: %s" % list_B[0])
             list_B.pop(0)
 
-    # Now one of the lists has just its last element left.
-    log.info("--> done with one list\n---------------")
-
+    log.info("--> reached last element in one list, processing remainders")
     # Find out which list has more than one point left, then add edges from all
     # these points to the leftover point from the other list.
     if len(list_A) > 1:
