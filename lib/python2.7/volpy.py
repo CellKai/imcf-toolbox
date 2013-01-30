@@ -426,27 +426,24 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     # from the pointlist. Terminate the loop as soon as one of the lists is
     # down to a single entry (so we don't pop(0) on an empty list).
     while len(list_A) > 1 and len(list_B) > 1:
-        log.info("----------------\nlist_A: %s\nlist_B: %s" % (list_A, list_B))
-        cur1 = list_A[0]
-        cur2 = list_B[0]
-        nxt1 = list_A[1]
-        nxt2 = list_B[1]
-        # label edges by starting point (so cur1 is in edge1, etc.)
-        edge1 = dist_mat[cur1][nxt2]
-        edge2 = dist_mat[cur2][nxt1]
-        # log.debug("d1 (%s, %s): %s" % (cur1, nxt2, edge1))
-        # log.debug("d2 (%s, %s): %s" % (cur2, nxt1, edge2))
+        log.info("-------- tesselating --------")
+        log.info("list_A: %s\nlist_B: %s" % (list_A, list_B))
+        # label edges by starting point (so list_A[0] is in edge1, etc.)
+        edge1 = dist_mat[ list_A[0], list_B[1] ]
+        edge2 = dist_mat[ list_B[0], list_A[1] ]
+        # log.debug("d1 (%s, %s): %s" % (list_A[0], list_B[1], edge1))
+        # log.debug("d2 (%s, %s): %s" % (list_B[0], list_A[1], edge2))
 
         # Add the shorter edge to the list and shift the lists so the points
         # used in this edge are the first ones then. This is done by removing
         # either list_A[0] or list_B[0].
         if edge2 < edge1:
-            vappend(edges, (nxt1, cur2), 'edges')
-            log.debug("pop 1st elt from list_A: %s" % cur1)
+            vappend(edges, (list_A[1], list_B[0]), 'edges')
+            log.debug("pop 1st elt from list_A: %s" % list_A[0])
             list_A.pop(0)
         else:
-            vappend(edges, (cur1, nxt2), 'edges')
-            log.debug("pop 1st elt from list_B: %s" % cur2)
+            vappend(edges, (list_A[0], list_B[1]), 'edges')
+            log.debug("pop 1st elt from list_B: %s" % list_B[0])
             list_B.pop(0)
 
     # Now one of the lists has just its last element left.
