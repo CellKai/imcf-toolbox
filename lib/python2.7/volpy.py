@@ -421,41 +421,27 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     # the first edge is obvious (otherwise the pointlists are wrong!)
     vappend(edges, (list_A[0], list_B[0]), 'edges')
 
-    # Walk over pointlists A and B simultaneously and determine the shorter
-    # edge of A0-B1 and B0-A1. Add this to the edgelist and remove B0 resp. A0
-    # from the pointlist. Terminate the loop as soon as one of the lists is
-    # down to a single entry (so we don't pop(0) on an empty list).
-    while len(list_A) > 1 and len(list_B) > 1:
-        log.info("-------- tesselating --------")
-        log.info("list_A: %s\nlist_B: %s" % (list_A, list_B))
-        # calculate the distances of A0-B1 and B0-A1
-        dist_A0_B1 = dist_mat[ list_A[0], list_B[1] ]
-        dist_B0_A1 = dist_mat[ list_B[0], list_A[1] ]
-
-        # The shorter edge ends either at A1 or B1. Just pop the first element
-        # from that list (store it for later) and add A0-B0 to the edgelist.
-        if dist_B0_A1 < dist_A0_B1:
+    # Process pointlists A and B simultaneously and determine the distances of
+    # A0-B1 and B0-A1. Remove the first element from the list where the
+    # shorter edge ends (B0 in case of A0-B1 etc.) and then add the edge A0-B0
+    # to the edgelist. If one list reaches its last element, always pop the
+    # first element of the other one until both lists have length 1.
+    while len(list_A) > 1 or len(list_B) > 1:
+        log.info("-------------\nlist_A: %s\nlist_B: %s" % (list_A, list_B))
+        if len(list_A) == 1:
+            out = list_B.pop(0)
+        elif len(list_B) == 1:
             out = list_A.pop(0)
         else:
-            out = list_B.pop(0)
+            # calculate the distances of A0-B1 and B0-A1
+            dist_A0_B1 = dist_mat[ list_A[0], list_B[1] ]
+            dist_B0_A1 = dist_mat[ list_B[0], list_A[1] ]
+            if dist_B0_A1 < dist_A0_B1:
+                out = list_A.pop(0)
+            else:
+                out = list_B.pop(0)
         vappend(edges, (list_A[0], list_B[0]), 'edges')
         log.debug("removed 1st element from list: %s" % out)
-
-    log.info("--> reached last element in one list, processing remainders")
-    # Find out which list has more than one point left, then add edges from all
-    # these points to the leftover point from the other list.
-    if len(list_A) > 1:
-        single = list_B.pop(0)
-        multi = list_A
-    else:
-        single = list_A.pop(0)
-        multi = list_B
-
-    tmp = multi.pop(0)
-    log.debug("pop(0) from remainder (already processed): %s" % tmp)
-    log.info("add edges from [%s] to remaining points: %s" % (single, multi))
-    for remainder in multi:
-        vappend(edges, (single, remainder), 'edges')
 
     log.debug("edges from tesselation: %s" % edges)
     return edges
