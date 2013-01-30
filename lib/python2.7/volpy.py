@@ -421,7 +421,10 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     # the first edge is obvious (otherwise the pointlists are wrong!)
     vappend(edges, (pl1[0], pl2[0]), 'edges')
 
-    # FIXME: add documentation!!
+    # Walk over pointlists A and B simultaneously and determine the shorter
+    # edge of A1-B2 and B1-A2. Add this to the edgelist and remove B1 resp. A1
+    # from the pointlist. Terminate the loop as soon as one of the lists is
+    # down to a single entry (so we don't pop(0) on an empty list).
     while len(pl1) > 1 and len(pl2) > 1:
         log.info("----------------\npl1: %s\npl2: %s" % (pl1, pl2))
         cur1 = pl1[0]
@@ -434,12 +437,9 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         # log.debug("d1 (%s, %s): %s" % (cur1, nxt2, edge1))
         # log.debug("d2 (%s, %s): %s" % (cur2, nxt1, edge2))
 
-        # Finally add the shorter edge to the list and shift the lists so the
-        # points used in this edge are the first ones then. This is done by
-        # removing either pl1[0] or pl2[0].
-        # NOTE: We can safely pop(0) as the stopping criteria from above will
-        # prevent us from applying a pop() to an empty list since it will exit
-        # the loop as soon as one of the lists is down to a single entry.
+        # Add the shorter edge to the list and shift the lists so the points
+        # used in this edge are the first ones then. This is done by removing
+        # either pl1[0] or pl2[0].
         if edge2 < edge1:
             vappend(edges, (nxt1, cur2), 'edges')
             log.debug("pop 1st elt from pl1: %s" % cur1)
