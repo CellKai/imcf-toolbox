@@ -415,22 +415,22 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
     # remove first and last item of the pointlists (note that this returns
     # copies of the lists, so we don't change the original (mutable) lists)
-    pl1 = remove_first_last(pl1_ref)
-    pl2 = remove_first_last(pl2_ref)
+    list_A = remove_first_last(pl1_ref)
+    list_B = remove_first_last(pl2_ref)
 
     # the first edge is obvious (otherwise the pointlists are wrong!)
-    vappend(edges, (pl1[0], pl2[0]), 'edges')
+    vappend(edges, (list_A[0], list_B[0]), 'edges')
 
     # Walk over pointlists A and B simultaneously and determine the shorter
     # edge of A1-B2 and B1-A2. Add this to the edgelist and remove B1 resp. A1
     # from the pointlist. Terminate the loop as soon as one of the lists is
     # down to a single entry (so we don't pop(0) on an empty list).
-    while len(pl1) > 1 and len(pl2) > 1:
-        log.info("----------------\npl1: %s\npl2: %s" % (pl1, pl2))
-        cur1 = pl1[0]
-        cur2 = pl2[0]
-        nxt1 = pl1[1]
-        nxt2 = pl2[1]
+    while len(list_A) > 1 and len(list_B) > 1:
+        log.info("----------------\nlist_A: %s\nlist_B: %s" % (list_A, list_B))
+        cur1 = list_A[0]
+        cur2 = list_B[0]
+        nxt1 = list_A[1]
+        nxt2 = list_B[1]
         # label edges by starting point (so cur1 is in edge1, etc.)
         edge1 = dist_mat[cur1][nxt2]
         edge2 = dist_mat[cur2][nxt1]
@@ -439,27 +439,27 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
         # Add the shorter edge to the list and shift the lists so the points
         # used in this edge are the first ones then. This is done by removing
-        # either pl1[0] or pl2[0].
+        # either list_A[0] or list_B[0].
         if edge2 < edge1:
             vappend(edges, (nxt1, cur2), 'edges')
-            log.debug("pop 1st elt from pl1: %s" % cur1)
-            pl1.pop(0)
+            log.debug("pop 1st elt from list_A: %s" % cur1)
+            list_A.pop(0)
         else:
             vappend(edges, (cur1, nxt2), 'edges')
-            log.debug("pop 1st elt from pl2: %s" % cur2)
-            pl2.pop(0)
+            log.debug("pop 1st elt from list_B: %s" % cur2)
+            list_B.pop(0)
 
     # Now one of the lists has just its last element left.
     log.info("--> done with one list\n---------------")
 
     # Find out which list has more than one point left, then add edges from all
     # these points to the leftover point from the other list.
-    if len(pl1) > 1:
-        single = pl2.pop(0)
-        multi = pl1
+    if len(list_A) > 1:
+        single = list_B.pop(0)
+        multi = list_A
     else:
-        single = pl1.pop(0)
-        multi = pl2
+        single = list_A.pop(0)
+        multi = list_B
 
     tmp = multi.pop(0)
     log.debug("pop(0) from remainder (already processed): %s" % tmp)
