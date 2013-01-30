@@ -425,19 +425,9 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         log.info("----------------\npl1: %s\npl2: %s" % (pl1, pl2))
         cur1 = pl1[0]
         cur2 = pl2[0]
-        if len(pl1) == 1:
-            log.info("--------\npl1 is empty, processing remainder of pl2")
-            log.debug("pop(0) from pl2 (already processed): %s" % cur2)
-            pl2.pop(0)
-            for rem in pl2:
-                vappend(edges, (cur1, rem), 'edges')
-            break
-        if len(pl2) == 1:
-            log.info("--------\npl2 is empty, processing remainder of pl1")
-            log.debug("pop(0) from pl1 (already processed): %s" % cur1)
-            pl1.pop(0)
-            for rem in pl1:
-                vappend(edges, (cur2, rem), 'edges')
+        # break here if one list has only one element left
+        if len(pl1) == 1 or len(pl2) == 1:
+            log.info("--> done with one list\n---------------")
             break
         nxt1 = pl1[1]
         nxt2 = pl2[1]
@@ -451,9 +441,8 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         # points used in this edge are the first ones then. This is done by
         # removing either pl1[0] or pl2[0].
         # NOTE: We can safely pop(0) as the stopping criteria from above will
-        # prevent us from applying a pop() to an empty list since it will
-        # trigger the processing of the remaining points as soon as one of the
-        # lists is down to a single entry and then exit the loop.
+        # prevent us from applying a pop() to an empty list since it will exit
+        # the loop as soon as one of the lists is down to a single entry.
         if edge2 < edge1:
             vappend(edges, (nxt1, cur2), 'edges')
             log.debug("pop 1st elt from pl1: %s" % cur1)
@@ -462,6 +451,22 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
             vappend(edges, (cur1, nxt2), 'edges')
             log.debug("pop 1st elt from pl2: %s" % cur2)
             pl2.pop(0)
+
+    # Now one of the lists has just its last element left (that's what
+    # triggered the break above). First we need to find out which one, then
+    # add edges from this point to the remaining ones in the other list.
+    if len(pl1) == 1:
+        single = pl1.pop(0)
+        multi = pl2
+    else:
+        single = pl2.pop(0)
+        multi = pl1
+
+    tmp = multi.pop(0)
+    log.debug("pop(0) from remainder (already processed): %s" % tmp)
+    log.info("add edges from [%s] to remaining points: %s" % (single, multi))
+    for remainder in multi:
+        vappend(edges, (single, remainder), 'edges')
 
     log.debug("edges from tesselation: %s" % edges)
     return edges
