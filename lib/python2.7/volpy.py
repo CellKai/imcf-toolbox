@@ -422,14 +422,10 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     vappend(edges, (pl1[0], pl2[0]), 'edges')
 
     # FIXME: add documentation!!
-    while True:
+    while len(pl1) > 1 and len(pl2) > 1:
         log.info("----------------\npl1: %s\npl2: %s" % (pl1, pl2))
         cur1 = pl1[0]
         cur2 = pl2[0]
-        # break here if one list has only one element left
-        if len(pl1) == 1 or len(pl2) == 1:
-            log.info("--> done with one list\n---------------")
-            break
         nxt1 = pl1[1]
         nxt2 = pl2[1]
         # label edges by starting point (so cur1 is in edge1, etc.)
@@ -453,9 +449,11 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
             log.debug("pop 1st elt from pl2: %s" % cur2)
             pl2.pop(0)
 
-    # Now one of the lists has just its last element left (that's what
-    # triggered the break above). First we need to find out which one, then
-    # add edges from this point to the remaining ones in the other list.
+    # Now one of the lists has just its last element left.
+    log.info("--> done with one list\n---------------")
+
+    # Find out which list has more than one point left, then add edges from all
+    # these points to the leftover point from the other list.
     if len(pl1) == 1:
         single = pl1.pop(0)
         multi = pl2
