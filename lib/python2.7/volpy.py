@@ -20,7 +20,7 @@ __all__ = [
     'dist_matrix_euclidean',
     'get_max_dist_pair',
     'path_greedy',
-    'remove_first_last',
+    'cut_extrema',
     'sort_neighbors',
     'tri_area',
     'tesselate',
@@ -213,14 +213,18 @@ def path_greedy(dist_mat, mask_ref, pair):
     # print 'path (%s->%s): %s' % (pair[0], pair[1], sequence)
     return (sequence, mask)
 
-def remove_first_last(pointlist):
-    # copy the pointlist
-    cropped = pointlist[:]
-    cropped.pop()
-    cropped.reverse()
-    cropped.pop()
-    cropped.reverse()
-    return cropped
+def cut_extrema(lst):
+    """Returns the first & last element and the rest of a list (copied)."""
+    # initialize
+    first = []
+    last = []
+    # copy the list
+    listcopy = lst[:]
+    if len(lst) > 0:
+        first = listcopy.pop(0)
+    if len(lst) > 0:
+        last = listcopy.pop(-1)
+    return (first, last, listcopy)
 
 def sort_neighbors(dist_mat):
     """Sorts a list of indices to minimize the distance between elements.
@@ -413,10 +417,9 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     """
     edges = []
 
-    # remove first and last item of the pointlists (note that this returns
-    # copies of the lists, so we don't change the original (mutable) lists)
-    list_A = remove_first_last(pl1_ref)
-    list_B = remove_first_last(pl2_ref)
+    # remove first and last items and get copies of the remaining pointlists
+    (start_A, end_A, list_A) = cut_extrema(pl1_ref)
+    (start_B, end_B, list_B) = cut_extrema(pl2_ref)
 
     # the first edge is obvious (otherwise the pointlists are wrong!)
     vappend(edges, (list_A[0], list_B[0]), 'edges')
