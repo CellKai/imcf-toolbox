@@ -454,12 +454,12 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
     # Find out which list has more than one point left, then add edges from all
     # these points to the leftover point from the other list.
-    if len(pl1) == 1:
-        single = pl1.pop(0)
-        multi = pl2
-    else:
+    if len(pl1) > 1:
         single = pl2.pop(0)
         multi = pl1
+    else:
+        single = pl1.pop(0)
+        multi = pl2
 
     tmp = multi.pop(0)
     log.debug("pop(0) from remainder (already processed): %s" % tmp)
