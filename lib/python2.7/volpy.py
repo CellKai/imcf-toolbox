@@ -420,6 +420,8 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
     # remove first and last items and get copies of the remaining pointlists
     (start_A, end_A, list_A) = cut_extrema(pl1_ref)
     (start_B, end_B, list_B) = cut_extrema(pl2_ref)
+    if start_A != start_B or end_A != end_B:
+        raise Exception('Pointlist mismatch.')
 
     # the first edge is obvious (otherwise the pointlists are wrong!)
     vappend(edges, (list_A[0], list_B[0]), 'edges')
