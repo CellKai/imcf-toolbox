@@ -61,7 +61,7 @@ def main():
 
     log = logging.getLogger(__name__)
     # create console handler and add it to the logger
-    ch = logging.StreamHandler()
+    ch = logging.StreamHandler(sys.stdout)
     log.addHandler(ch)
     log.setLevel(loglevel)
 

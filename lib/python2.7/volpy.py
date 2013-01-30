@@ -376,9 +376,10 @@ def gen_unmask(pointlist, masklength):
     return mask
 
 import logging
+import sys
 log = logging.getLogger(__name__)
 # create console handler and add it to the logger
-ch = logging.StreamHandler()
+ch = logging.StreamHandler(sys.stdout)
 log.addHandler(ch)
 
 def volpy_verbosity(level):
