@@ -126,7 +126,6 @@ def main():
         #     coords = [data[p[0]], data[p[1]]]
         #     plot3d_line(plot, coords, 'b')
 
-        print "edges (blue):  %s" % edges
         for p in edges:
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(plot, coords, 'b')
