@@ -429,15 +429,15 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         log.info("-------- tesselating --------")
         log.info("list_A: %s\nlist_B: %s" % (list_A, list_B))
         # label edges by starting point (so list_A[0] is in edge1, etc.)
-        edge1 = dist_mat[ list_A[0], list_B[1] ]
-        edge2 = dist_mat[ list_B[0], list_A[1] ]
+        dist_A0_B1 = dist_mat[ list_A[0], list_B[1] ]
+        dist_B0_A1 = dist_mat[ list_B[0], list_A[1] ]
         # log.debug("d1 (%s, %s): %s" % (list_A[0], list_B[1], edge1))
         # log.debug("d2 (%s, %s): %s" % (list_B[0], list_A[1], edge2))
 
         # Add the shorter edge to the list and shift the lists so the points
         # used in this edge are the first ones then. This is done by removing
         # either list_A[0] or list_B[0].
-        if edge2 < edge1:
+        if dist_B0_A1 < dist_A0_B1:
             vappend(edges, (list_A[1], list_B[0]), 'edges')
             log.debug("pop 1st elt from list_A: %s" % list_A[0])
             list_A.pop(0)
