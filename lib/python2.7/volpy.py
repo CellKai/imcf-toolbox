@@ -432,16 +432,14 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
         dist_A0_B1 = dist_mat[ list_A[0], list_B[1] ]
         dist_B0_A1 = dist_mat[ list_B[0], list_A[1] ]
 
-        # Add the shorter edge to the edgelist and remove that one of list_A[0]
-        # and list_B[0] that is not used in this new edge.
+        # The shorter edge ends either at A1 or B1. Just pop the first element
+        # from that list (store it for later) and add A0-B0 to the edgelist.
         if dist_B0_A1 < dist_A0_B1:
-            vappend(edges, (list_A[1], list_B[0]), 'edges')
-            log.debug("pop 1st elt from list_A: %s" % list_A[0])
-            list_A.pop(0)
+            out = list_A.pop(0)
         else:
-            vappend(edges, (list_A[0], list_B[1]), 'edges')
-            log.debug("pop 1st elt from list_B: %s" % list_B[0])
-            list_B.pop(0)
+            out = list_B.pop(0)
+        vappend(edges, (list_A[0], list_B[0]), 'edges')
+        log.debug("removed 1st element from list: %s" % out)
 
     log.info("--> reached last element in one list, processing remainders")
     # Find out which list has more than one point left, then add edges from all
