@@ -103,6 +103,8 @@ def main():
     (edges, triangles) = tesselate(p2, p1, distance_matrix)
 
     if args.plot:
+        # define some colors to cycle through:
+        colors = ['r', 'b', 'y', 'm', 'g']
         plot = plot3d_prep()
         plot3d_scatter(plot, data, 'w')
         plot3d_scatter(plot, maxdist_points, 'r', lw=18)
@@ -126,9 +128,10 @@ def main():
         #     coords = [data[p[0]], data[p[1]]]
         #     plot3d_line(plot, coords, 'b')
 
-        for p in edges:
+        for i, p in enumerate(edges):
             coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'b')
+            curcol = colors[i % 5]
+            plot3d_line(plot, coords, curcol)
 
         plot3d_show()
 
