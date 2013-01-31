@@ -100,7 +100,7 @@ def main():
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
     log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
-    edges = tesselate(p2, p1, distance_matrix)
+    (edges, triangles) = tesselate(p2, p1, distance_matrix)
 
     if args.plot:
         plot = plot3d_prep()

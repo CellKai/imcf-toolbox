@@ -453,7 +453,7 @@ def tesselate(pl1, pl2, dist):
     vappend(triangles, (list_A[0], list_B[0], end_A), 'triangles')
 
     log.debug("edges from tesselation: %s" % edges)
-    return edges
+    return (edges, triangles)
 
 from numpy import cross, linalg
 def tri_area(p1, p2, p3):
