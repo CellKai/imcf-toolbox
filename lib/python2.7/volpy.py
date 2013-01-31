@@ -398,7 +398,7 @@ def vappend(lst, val, desc="list"):
     log.info("appending to %s: %s" % (desc, str(val)))
     lst.append(val)
 
-def tesselate(pl1_ref, pl2_ref, dist_mat):
+def tesselate(pl1, pl2, dist):
     """Calculates a polygonal partition of a surface in space.
 
     Takes a distance matrix and two lists of indices (describing sequences
@@ -410,15 +410,15 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
 
     Args:
         pl1, pl2: pointlists (ids of points)
-        dist_mat: euclidean distance matrix
+        dist: euclidean distance matrix
 
     Returns:
         edges: list of tuples with index numbers denoting the edges
     """
 
     # remove first and last items and get copies of the remaining pointlists
-    (start_A, end_A, list_A) = cut_extrema(pl1_ref)
-    (start_B, end_B, list_B) = cut_extrema(pl2_ref)
+    (start_A, end_A, list_A) = cut_extrema(pl1)
+    (start_B, end_B, list_B) = cut_extrema(pl2)
     if start_A != start_B or end_A != end_B:
         raise Exception('Pointlist mismatch.')
 
@@ -441,8 +441,8 @@ def tesselate(pl1_ref, pl2_ref, dist_mat):
             out = list_A.pop(0)
         else:
             # calculate the distances of A0-B1 and B0-A1
-            dist_A0_B1 = dist_mat[ list_A[0], list_B[1] ]
-            dist_B0_A1 = dist_mat[ list_B[0], list_A[1] ]
+            dist_A0_B1 = dist[ list_A[0], list_B[1] ]
+            dist_B0_A1 = dist[ list_B[0], list_A[1] ]
             if dist_B0_A1 < dist_A0_B1:
                 out = list_A.pop(0)
             else:
