@@ -434,7 +434,7 @@ def tesselate(pl1, pl2, dist):
     # to the edgelist. If one list reaches its last element, always pop the
     # first element of the other one until both lists have length 1.
     while len(list_A) > 1 or len(list_B) > 1:
-        log.info("-------------\nlist_A: %s\nlist_B: %s" % (list_A, list_B))
+        log.debug("-------------\nlist_A: %s\nlist_B: %s" % (list_A, list_B))
         if len(list_A) == 1:
             out = list_B.pop(0)
         elif len(list_B) == 1:
@@ -452,7 +452,8 @@ def tesselate(pl1, pl2, dist):
     # finally add the last triangle containing the endpoint
     vappend(triangles, (list_A[0], list_B[0], end_A), 'triangles')
 
-    log.debug("edges from tesselation: %s" % edges)
+    log.info("edges from tesselation: %s" % edges)
+    log.debug("triangles from tesselation: %s" % triangles)
     return (edges, triangles)
 
 from numpy import cross, linalg
