@@ -102,6 +102,14 @@ def main():
 
     (edges, triangles) = tesselate(p2, p1, distance_matrix)
 
+    poly = 0
+    for (vrtx1, vrtx2, vrtx3) in triangles:
+        tri = tri_area(data[vrtx1], data[vrtx2], data[vrtx3])
+        # print tri
+        poly += tri
+    print "overall: %s" % poly
+
+
     if args.plot:
         # define some colors to cycle through:
         colors = ['r', 'b', 'y', 'm', 'g']
@@ -132,6 +140,20 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             curcol = colors[i % 5]
             plot3d_line(plot, coords, curcol)
+
+        # TODO: create plot3d_triangle(), use plot_trisurf():
+        ## from mpl_toolkits.mplot3d import Axes3D
+        ## from matplotlib import cm
+        ## import matplotlib.pyplot as plt
+        ## import numpy as np
+        ## x = np.array([4.78777777,-6.25000000, 2.99267625])
+        ## y = np.array([2.8777777,-4.5000000, 1.267625])
+        ## z = np.sin(-x*y)
+        ## fig = plt.figure()
+        ## ax = fig.gca(projection='3d')
+        ## ax.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=0.2)
+        ## plt.show()
+
 
         plot3d_show()
 
