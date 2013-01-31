@@ -440,10 +440,8 @@ def tesselate(pl1, pl2, dist):
         elif len(list_B) == 1:
             out = list_A.pop(0)
         else:
-            # calculate the distances of A0-B1 and B0-A1
-            dist_A0_B1 = dist[ list_A[0], list_B[1] ]
-            dist_B0_A1 = dist[ list_B[0], list_A[1] ]
-            if dist_B0_A1 < dist_A0_B1:
+            # check distances of A0-B1 and B0-A1
+            if dist[list_A[0], list_B[1]] > dist[list_B[0], list_A[1]]:
                 out = list_A.pop(0)
             else:
                 out = list_B.pop(0)
