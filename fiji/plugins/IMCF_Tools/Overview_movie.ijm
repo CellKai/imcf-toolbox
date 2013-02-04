@@ -20,6 +20,8 @@ bf_options=" color_mode=Composite specify_range stack_order=XYCZT";
 bf_options+=" z_begin=" + slice + " z_end=" + slice + " t_begin=1 t_step=" + stepping;
 setBatchMode(true);
 run("Bio-Formats Importer", "open=" + infile + bf_options);
+origname = getTitle();
+// note: "create" is required, otherwise we get black borders
 run("Scale...", "x=0.5 y=0.5 interpolation=Bilinear average create");
 getDimensions(im_width, im_height, im_channels, im_slices, im_frames);
 // channels numbers start with 1
@@ -32,6 +34,8 @@ run("RGB Color", "frames");
 run("AVI... ", "compression=JPEG frame=5");
 // disable the close() call if the result should get displayed after the macro
 // terminates
+close();
+selectWindow(origname);
 close();
 setBatchMode(false);
 
