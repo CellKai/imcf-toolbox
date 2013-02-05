@@ -36,6 +36,10 @@ def plot3d_line(plot, points, color, lw=1):
     x, y, z = asarray(zip(*points))
     plot.plot(x, y, z, zdir='z', c=color)
 
+def plot3d_triangle(plot, points, lw=0.2):
+    x, y, z = asarray(zip(*points))
+    plot.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=lw)
+
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -138,19 +142,6 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             curcol = colors[i % 5]
             plot3d_line(plot, coords, curcol)
-
-        # TODO: create plot3d_triangle(), use plot_trisurf():
-        ## from mpl_toolkits.mplot3d import Axes3D
-        ## from matplotlib import cm
-        ## import matplotlib.pyplot as plt
-        ## import numpy as np
-        ## x = np.array([4.78777777,-6.25000000, 2.99267625])
-        ## y = np.array([2.8777777,-4.5000000, 1.267625])
-        ## z = np.sin(-x*y)
-        ## fig = plt.figure()
-        ## ax = fig.gca(projection='3d')
-        ## ax.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=0.2)
-        ## plt.show()
 
 
         plot3d_show()
