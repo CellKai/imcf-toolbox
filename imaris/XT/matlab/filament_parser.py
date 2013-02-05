@@ -11,6 +11,8 @@ Imaris via the XT/Matlab interface.
 import sys
 import argparse
 import matplotlib.pyplot as plt
+# stuff required for matplotlib:
+from mpl_toolkits.mplot3d import Axes3D
 from numpy import ma, loadtxt, asarray
 from volpy import *
 import pprint
@@ -18,8 +20,6 @@ import logging
 
 
 def plot3d_prep():
-    # stuff required for matplotlib:
-    from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
     return fig.gca(projection='3d')
 
