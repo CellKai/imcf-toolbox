@@ -11,7 +11,7 @@ Imaris via the XT/Matlab interface.
 import sys
 import argparse
 import matplotlib.pyplot as plt
-from numpy import ma, loadtxt
+from numpy import ma, loadtxt, asarray
 from volpy import *
 import pprint
 import logging
@@ -27,13 +27,11 @@ def plot3d_show():
     plt.show()
 
 def plot3d_scatter(plot, points, color, lw=1):
-    from numpy import asarray
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
 
 def plot3d_line(plot, points, color, lw=1):
-    from numpy import asarray
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.plot(x, y, z, zdir='z', c=color)
