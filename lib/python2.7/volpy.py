@@ -425,8 +425,10 @@ def tesselate(pl1, pl2, dist):
     # initialize lists
     edges = []
     triangles = []
+    vertices = []
     vappend(edges, (list_A[0], list_B[0]), 'edges')
     vappend(triangles, (list_A[0], list_B[0], start_A), 'triangles')
+    vappend(vertices, start_A, 'vertices')
 
     # Process pointlists A and B simultaneously and determine the distances of
     # A0-B1 and B0-A1. Remove the first element from the list where the
@@ -447,14 +449,18 @@ def tesselate(pl1, pl2, dist):
                 out = list_B.pop(0)
         vappend(edges, (list_A[0], list_B[0]), 'edges')
         vappend(triangles, (list_A[0], list_B[0], out), 'triangles')
+        vappend(vertices, out, 'vertices')
         log.debug("removed 1st element from list: %s" % out)
 
     # finally add the last triangle containing the endpoint
     vappend(triangles, (list_A[0], list_B[0], end_A), 'triangles')
+    vappend(vertices, list_A[0], 'vertices')
+    vappend(vertices, list_B[0], 'vertices')
+    vappend(vertices, end_A, 'vertices')
 
     log.info("edges from tesselation: %s" % edges)
     log.debug("triangles from tesselation: %s" % triangles)
-    return (edges, triangles)
+    return (edges, triangles, vertices)
 
 from numpy import cross, linalg
 def tri_area(p1, p2, p3):

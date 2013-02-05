@@ -102,7 +102,8 @@ def main():
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
     log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
-    (edges, triangles) = tesselate(p2, p1, distance_matrix)
+    (edges, triangles, vertices) = tesselate(p2, p1, distance_matrix)
+    print "vertices: %s" % vertices
 
     poly = 0
     for (vrtx1, vrtx2, vrtx3) in triangles:
