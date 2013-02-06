@@ -1,5 +1,5 @@
 /* currently this macro just asks for a file, opens this file via the
- * bio-formats reader, only using a selected slice and a given stepping, then
+ * Bio-Formats reader, only using a selected slice and a given stepping, then
  * scales it to half its size, runs the auto-contrast for each channel,
  * converts it to RGB and finally stores it as a JPEG-compressed avi
  */
@@ -29,12 +29,13 @@ function mk_overview_movie(infile, stepping, mip, slice) {
 // TODO: add MIP projection code:
 // run("Z Project...", "start=1 stop=5 projection=[Max Intensity] all");
 // assemble the Bio-Formats options in advance as the string gets very long
-bf_options=" color_mode=Composite specify_range stack_order=XYCZT";
-bf_options+=" z_begin=" + slice + " z_end=" + slice + " t_begin=1 t_step=" + stepping;
+bf_options =  " color_mode=Composite specify_range stack_order=XYCZT";
+bf_options += " z_begin=" + slice + " z_end=" + slice;
+bf_options += " t_begin=1 t_step=" + stepping;
 setBatchMode(true);
 run("Bio-Formats Importer", "open=" + infile + bf_options);
 origname = getTitle();
-// note: "create" is required, otherwise we get black borders
+// "create" is required, otherwise "scale" adds black borders
 run("Scale...", "x=0.5 y=0.5 interpolation=Bilinear average create");
 getDimensions(im_width, im_height, im_channels, im_slices, im_frames);
 // channels numbers start with 1
