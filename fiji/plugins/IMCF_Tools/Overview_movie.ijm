@@ -5,30 +5,26 @@
  * and finally stores the RGB converted variant as a JPEG-compressed AVI movie.
  */
 
-/*
-Dialog.create("input dialog");
-Dialog.addMessage("my description");
-Dialog.addNumber("value 1:", 0);
-Dialog.addNumber("value 2:", 0);
-Dialog.addCheckbox("really?", true);
-Dialog.show;
-val1 = Dialog.getNumber();
-val2 = Dialog.getNumber();
-really = Dialog.getCheckbox();
-*/
-
 infile = File.openDialog("Select file");
-
 // exit cleanly if the user clicks on cancel:
 if (infile == '') {
     exit;
 }
 
-msg = "Set the step size for creating the movie:";
-stepping = getNumber(msg, 10);
+Dialog.create("Create overview movie options");
+msg = "Choose a stepsize to use every N-th timeframe of the dataset.\n";
+msg+= "(This can significantly speed up the file reading).";
+Dialog.addMessage(msg);
+Dialog.addNumber("stepsize:", 10);
 
-msg = "Use Maximum Intensity Projection for stacks?";
-mip = getBoolean(msg);
+msg = "Do a Z-projection (maximum intensity) for stacks?";
+Dialog.addMessage(msg);
+Dialog.addCheckbox("projection?", true);
+
+Dialog.show;
+stepping = Dialog.getNumber();
+mip = Dialog.getCheckbox();
+
 if (!mip) {
 	msg = "Set slice number to use for the movie:";
 	slice = getNumber(msg, 15);
