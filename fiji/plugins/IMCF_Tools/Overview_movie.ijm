@@ -11,10 +11,23 @@ if (infile == '') {
     exit;
 }
 
-// this should be asked via a dialog:
-slice=15;
-stepping=10;
+msg = "Set the step size for creating the movie:";
+stepping = getNumber(msg, 10);
 
+msg = "Use Maximum Intensity Projection for stacks?";
+mip = getBoolean(msg);
+if (!mip) {
+	msg = "Set slice number to use for the movie:";
+	slice = getNumber(msg, 15);
+} else {
+	slice = 0;
+}
+
+mk_overview_movie(infile, stepping, mip, slice);
+
+function mk_overview_movie(infile, stepping, mip, slice) {
+// TODO: add MIP projection code:
+// run("Z Project...", "start=1 stop=5 projection=[Max Intensity] all");
 // assemble the Bio-Formats options in advance as the string gets very long
 bf_options=" color_mode=Composite specify_range stack_order=XYCZT";
 bf_options+=" z_begin=" + slice + " z_end=" + slice + " t_begin=1 t_step=" + stepping;
@@ -38,4 +51,4 @@ close();
 selectWindow(origname);
 close();
 setBatchMode(false);
-
+}
