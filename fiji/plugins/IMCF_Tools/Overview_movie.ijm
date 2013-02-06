@@ -4,6 +4,18 @@
  * converts it to RGB and finally stores it as a JPEG-compressed avi
  */
 
+/*
+Dialog.create("input dialog");
+Dialog.addMessage("my description");
+Dialog.addNumber("value 1:", 0);
+Dialog.addNumber("value 2:", 0);
+Dialog.addCheckbox("really?", true);
+Dialog.show;
+val1 = Dialog.getNumber();
+val2 = Dialog.getNumber();
+really = Dialog.getCheckbox();
+*/
+
 infile = File.openDialog("Select file");
 
 // exit cleanly if the user clicks on cancel:
