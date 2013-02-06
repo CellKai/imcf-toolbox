@@ -21,9 +21,14 @@ msg = "Do a Z-projection (maximum intensity) for stacks?";
 Dialog.addMessage(msg);
 Dialog.addCheckbox("projection?", true);
 
+msg = "Choose a scaling factor:";
+Dialog.addMessage(msg);
+Dialog.addNumber("scale:", 1);
+
 Dialog.show;
 stepping = Dialog.getNumber();
 mip = Dialog.getCheckbox();
+scale = Dialog.getNumber();
 
 if (!mip) {
 	msg = "Set slice number to use for the movie:";
@@ -32,7 +37,7 @@ if (!mip) {
 	slice = 0;
 }
 
-mk_overview_movie(infile, stepping, mip, slice);
+mk_overview_movie(infile, stepping, mip, slice, scale);
 
 function update_focus_close_old(title) {
     curfocus = getTitle();
@@ -42,7 +47,7 @@ function update_focus_close_old(title) {
     return curfocus;
 }
 
-function mk_overview_movie(infile, stepping, mip, slice) {
+function mk_overview_movie(infile, stepping, mip, slice, scale) {
     // assemble the Bio-Formats options in advance as the string gets very long
     bf_options =  " color_mode=Composite specify_range stack_order=XYCZT";
     if (!mip) {
@@ -60,8 +65,12 @@ function mk_overview_movie(infile, stepping, mip, slice) {
     }
 
     // "create" is required, otherwise "scale" adds black borders
-    run("Scale...", "x=0.5 y=0.5 interpolation=Bilinear average create");
-    focused = update_focus_close_old(focused);
+    if (scale != 1) {
+        scaleopts  = "x=" + scale + " y=" + scale;
+        scaleopts += " interpolation=Bilinear average create";
+        run("Scale...", scaleopts);
+        focused = update_focus_close_old(focused);
+    }
     getDimensions(im_width, im_height, im_channels, im_slices, im_frames);
     // channels numbers start with 1
     for (c=1; c<=im_channels; c++) {
