@@ -1,7 +1,8 @@
-/* currently this macro just asks for a file, opens this file via the
- * Bio-Formats reader, only using a selected slice and a given stepping, then
- * scales it to half its size, runs the auto-contrast for each channel,
- * converts it to RGB and finally stores it as a JPEG-compressed avi
+/* This macro asks for a file, a step-size, whether to do a maximum intensity
+ * projection or what slice to use otherwise, and a scaling factor. Then it
+ * opens the file using the Bio-Formats reader and does the projection or
+ * selects the desired slice, scales it, runs auto-contrast for each channel
+ * and finally stores the RGB converted variant as a JPEG-compressed AVI movie.
  */
 
 /*
