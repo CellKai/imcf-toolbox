@@ -70,14 +70,16 @@ for row in parsedata:
 
 log.info("maximum tile number: %s" % tilemax)
 
-# construct a list of tuples with tile positions indexed by tile number
+# construct a list of tuples with tile positions indexed by tile number, so the
+# position of tile number 17 is accessible as e.g. tilepos[17] = (4,2)
 tilepos = [()] * tilemax
 # print tilepos
 for coord_y, line in enumerate(data):
     for coord_x, tile in enumerate(line):
         if not tile is None:
             tilepos[tile - 1] = (coord_y, coord_x)
-print tilepos
+log.info("list of indexed tile positions:")
+log.info(tilepos)
 
 
 # parse xuv project file, get tile size etc.
@@ -98,17 +100,19 @@ for line in args.infile:
             size_px.append(int(size))
 args.infile.close()
 
-print size_um
-print size_px
+log.warn("size in um: %s" % size_um)
+log.warn("size in px: %s" % size_px)
 
-
+log.info("generating new xuv project file")
 # generate new xuv file content
 for line in xuvdata_orig:
     line_elt = line.rstrip().rsplit('=')
     # scan for lines holding tile coordinates
     if line_elt[0].endswith('abs_pos_um'):
         prefix = line_elt[0].split('_', 1)[0]
+        log.debug(prefix)
         tileno = int(prefix[4:8])
+        log.debug(tileno)
         ## now calculate the new tile position
         coord_y = tilepos[tileno - 1][0] * (1 - args.overlap)
         coord_x = tilepos[tileno - 1][1] * (1 - args.overlap)
