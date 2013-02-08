@@ -25,6 +25,8 @@ argparser.add_argument('-i', '--infile', required=True, type=file,
     help='Xuv input project file')
 argparser.add_argument('-o', '--outfile', type=argparse.FileType('w', 0),
     help='Xuv input project file', required=True)
+argparser.add_argument('-k', '--keeplast', action='store_const', const=True,
+    default=False, help="keep last value in each CSV line", required=False)
 argparser.add_argument('-v', '--verbose', dest='verbosity',
     action='count', default=0)
 try:
@@ -65,8 +67,11 @@ for row in parsedata:
             log.debug("non-digit: %s" % num)
             row_num.append(None)
     log.debug("numerical rowdata: %s" % row_num)
-    # the last entry holds the maxval of this line, we discard it:
-    data.append(row_num[0:-1])
+    if args.keeplast:
+        data.append(row_num[:])
+    else:
+        # the last entry holds the maxval of this line, we discard it:
+        data.append(row_num[0:-1])
 
 log.info("maximum tile number: %s" % tilemax)
 
