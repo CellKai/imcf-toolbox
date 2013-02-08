@@ -13,6 +13,8 @@ this information.
 import csv
 import sys
 import argparse
+import pprint
+import logging
 
 argparser = argparse.ArgumentParser(description=__doc__)
 argparser.add_argument('-p', '--overlap', type=float, default='0.15',
@@ -23,15 +25,27 @@ argparser.add_argument('-i', '--infile', required=True, type=file,
     help='Xuv input project file')
 argparser.add_argument('-o', '--outfile', type=argparse.FileType('w', 0),
     help='Xuv input project file', required=True)
+argparser.add_argument('-v', '--verbose', dest='verbosity',
+    action='count', default=0)
 try:
     args = argparser.parse_args()
 except IOError as e:
     argparser.error(str(e))
 
-# print args.__contains__
-# print type(args)
-# print args.infile
-# print args.outfile
+pp = pprint.PrettyPrinter(indent=4)
+
+# default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
+loglevel = (3 - args.verbosity) * 10
+
+log = logging.getLogger(__name__)
+# create console handler and add it to the logger
+log.addHandler(logging.StreamHandler(sys.stdout))
+log.setLevel(loglevel)
+
+log.debug(pp.pformat(args.__contains__))
+log.debug(pp.pformat(type(args)))
+log.debug("Infile: %s" % args.infile)
+log.debug("Outfile: %s" % args.outfile)
 
 data = [] # the 2D-list holding our tile numbers
 tilemax = 0
@@ -39,19 +53,22 @@ tilemax = 0
 # parse elements of the row and discard all non-numerical ones:
 parsedata = csv.reader(args.tiles, delimiter=';')
 for row in parsedata:
+    log.debug(pp.pformat(row))
     row_num = [] # holds the converted numerical values
     for num in row:
         if num.isdigit():
+            log.debug("adding digit: %s" % num)
             tile = int(num)
             row_num.append(tile)
             tilemax = max(tilemax, tile)
         else:
+            log.debug("non-digit: %s" % num)
             row_num.append(None)
+    log.debug("numerical rowdata: %s" % row_num)
     # the last entry holds the maxval of this line, we discard it:
     data.append(row_num[0:-1])
 
-# print data
-# print tilemax
+log.info("maximum tile number: %s" % tilemax)
 
 # construct a list of tuples with tile positions indexed by tile number
 tilepos = [()] * tilemax
