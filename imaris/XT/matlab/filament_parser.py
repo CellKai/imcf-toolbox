@@ -110,8 +110,8 @@ def main():
         vtxlist.append([tuple(data[vrtx1]),
             tuple(data[vrtx2]), tuple(data[vrtx3])])
         polyarea += tri_area(data[vrtx1], data[vrtx2], data[vrtx3])
-    print "overall area: %s" % polyarea
-    print "vtxlist: %s" % vtxlist
+    log.warn("overall area: %s" % polyarea)
+    log.debug("vtxlist: %s" % vtxlist)
 
 
     if args.plot:
@@ -119,11 +119,16 @@ def main():
         colors = ['r', 'g', 'b', 'y', 'c', 'm']
         cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
 
+        # prepare the figure
         fig = plt.figure()
         ax = Axes3D(fig)
+        # draw the raw filament points:
         plot3d_scatter(ax, data, 'w')
+        # draw the maxdist pair and a connecting line:
         plot3d_scatter(ax, maxdist_points, 'r', lw=18)
         plot3d_line(ax, maxdist_points, 'y')
+
+        # draw connection along filament lists:
         for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(ax, coords, 'm')
