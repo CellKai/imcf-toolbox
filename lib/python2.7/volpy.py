@@ -72,7 +72,7 @@ def dist_matrix_euclidean(pts):
         array([ 0, 25, 25,  0])
     Finally the square root is taken for each element:
         array([ 0.,  5.,  5.,  0.])
-    To transform the list into a distance matrix, we use reshape():
+    To transform the list into a distance matrix reshape() is used.
     """
     dist_mat = sqrt(
                     sum(
