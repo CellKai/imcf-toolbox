@@ -21,13 +21,6 @@ import pprint
 import logging
 
 
-def plot3d_prep():
-    fig = plt.figure()
-    return (fig.gca(projection='3d'), Axes3D(fig))
-
-def plot3d_show():
-    plt.show()
-
 def plot3d_scatter(plot, points, color, lw=1):
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
@@ -120,13 +113,14 @@ def main():
     if args.plot:
         # define some colors to cycle through:
         colors = ['r', 'b', 'y', 'm', 'g']
-        plot, ax = plot3d_prep()
-        plot3d_scatter(plot, data, 'w')
-        plot3d_scatter(plot, maxdist_points, 'r', lw=18)
-        plot3d_line(plot, maxdist_points, 'y')
+        fig = plt.figure()
+        ax = Axes3D(fig)
+        plot3d_scatter(ax, data, 'w')
+        plot3d_scatter(ax, maxdist_points, 'r', lw=18)
+        plot3d_line(ax, maxdist_points, 'y')
         for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
-            plot3d_line(plot, coords, 'm')
+            plot3d_line(ax, coords, 'm')
 
         for vtx in vtxlist:
             tri = Poly3DCollection([vtx])
@@ -150,10 +144,10 @@ def main():
         for i, p in enumerate(edges):
             coords = [data[p[0]], data[p[1]]]
             curcol = colors[i % 5]
-            plot3d_line(plot, coords, curcol)
+            plot3d_line(ax, coords, curcol)
 
 
-        plot3d_show()
+        plt.show()
 
 
 if __name__ == "__main__":
