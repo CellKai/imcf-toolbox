@@ -129,6 +129,19 @@ def main():
         # prepare the figure
         fig = plt.figure()
         ax = Axes3D(fig)
+
+        # determine min and max coordinates and set limits:
+        cmin = data.min(axis=0)
+        cmax = data.max(axis=0)
+        ax.set_xlim3d(cmin[0], cmax[0])
+        ax.set_ylim3d(cmin[1], cmax[1])
+        ax.set_zlim3d(cmin[2], cmax[2])
+
+        # draw axis lables
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+
         # draw the raw filament points:
         # TODO: add commandline switch to enable this!
         # plot3d_scatter(ax, data, 'w')
