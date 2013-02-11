@@ -49,7 +49,12 @@ def dist_matrix_euclidean(pts):
              or a list of n-dimensional coordinates, e.g.
              pts = [ [1, 2], [4, 6] ]
 
-    Details:
+    Returns: the distance matrix as 2d ndarray, e.g.
+        array( [ [ 0.,  5.],
+                 [ 5.,  0.] ] )
+    """
+    """
+    Implementation Details:
     Uses two auxiliary matrixes to easily calculate the distance from
     each point to every other point in the list using this approach:
     (1) aux matrixes:
@@ -67,11 +72,7 @@ def dist_matrix_euclidean(pts):
         array([ 0, 25, 25,  0])
     Finally the square root is taken for each element:
         array([ 0.,  5.,  5.,  0.])
-
-    Returns:
-        To transform the list into a distance matrix, we use reshape():
-        array( [ [ 0.,  5.],
-                 [ 5.,  0.] ] )
+    To transform the list into a distance matrix, we use reshape():
     """
     dist_mat = sqrt(
                     sum(
