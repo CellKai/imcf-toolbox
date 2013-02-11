@@ -6,7 +6,7 @@ Provides distance, area, mesh-related calculations on spots
 in three dimensional space."""
 
 from scipy import reshape, sqrt
-from numpy import linalg
+from numpy import linalg, ma
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
@@ -107,7 +107,6 @@ def get_max_dist_pair(matrix):
             # print pair
     return pair
 
-from numpy import ma
 def find_neighbor(pid, dist_mat, mask):
     """Finds the closest neighbor in a given distance matrix.
 
