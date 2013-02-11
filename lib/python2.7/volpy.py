@@ -25,7 +25,6 @@ __all__ = [
     'tri_area',
     'tesselate',
     'volpy_verbosity'
-    # 'calc_dist_xyz',
     # 'dist',
     # 'largest_dist_idx',
     # 'find_neighbor',
@@ -33,23 +32,6 @@ __all__ = [
     # 'gen_mask',
     # 'gen_unmask',
 ]
-
-import math
-def calc_dist_xyz(p1, p2):
-    """Calculates the euclidean distance between two points in 3D.
-
-    Args:
-        p1, p2: lists with 3 numerical elements each
-
-    Returns:
-        dist: float containing euclidean distance
-    """
-    print "WARN: usage of calc_dist_xyz() is deprecated!"
-    dx = abs(p2[0] - p1[0])
-    dy = abs(p2[1] - p1[1])
-    dz = abs(p2[2] - p1[2])
-    dist = math.sqrt(dx**2 + dy**2 + dz**2)
-    return(dist)
 
 from numpy import array, linalg
 def dist(p1, p2):
