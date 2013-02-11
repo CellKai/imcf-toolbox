@@ -5,6 +5,8 @@
 Provides distance, area, mesh-related calculations on spots
 in three dimensional space."""
 
+from numpy import linalg
+
 # TODO:
 
 # - join the "filaments" module with this one, extend the Filament class to
@@ -25,7 +27,6 @@ __all__ = [
     'tri_area',
     'tesselate',
     'volpy_verbosity'
-    # 'dist',
     # 'largest_dist_idx',
     # 'find_neighbor',
     # 'elastic_bands',
@@ -33,19 +34,10 @@ __all__ = [
     # 'gen_unmask',
 ]
 
-from numpy import array, linalg
-def dist(p1, p2):
-    """Calculates the euclidean distance of two points (N dimensional).
-
-    Args:
-        p1, p2: lists with an equal nr of numerical elements
-
-    Returns:
-        dist: float containing euclidean distance
-    """
-    point1 = array(p1)
-    point2 = array(p2)
-    return(linalg.norm(point1 - point2))
+# def dist(p1, p2) ### REMOVED ###
+# if there is really a shortcut required for calculating the norm, this can
+# easily be done via a lambda function:
+# d = lambda p1, p2: linalg.norm(p1 - p2)
 
 def largest_dist_idx(point, pointlist):
     """Find the point with the largest distance to a marked point.
@@ -65,7 +57,7 @@ def largest_dist_idx(point, pointlist):
     # print pointlist
     distances = [()] * len(pointlist)
     for i, cand in enumerate(pointlist):
-        distances[i] = dist(point, cand)
+        distances[i] = linalg.norm(point - cand)
     # print distances
     maxdist = max(distances)
     return([distances.index(maxdist), maxdist])
