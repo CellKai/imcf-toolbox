@@ -19,7 +19,7 @@ from matplotlib.colors import colorConverter
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from numpy import ma, loadtxt, asarray
+from numpy import ma, loadtxt, asarray, linalg
 from volpy import *
 import pprint
 import logging
@@ -45,7 +45,12 @@ def plot3d_maxdist(ax, maxdist_points):
         ax.text(*maxdist_points[i], color='blue',
             s='   (%s | %s | %s)' % (maxdist_points[i][0],
             maxdist_points[i][1], maxdist_points[i][2]))
+    # draw connection line between points:
     plot3d_line(ax, maxdist_points, 'y')
+    # calculate length and add label:
+    pos = maxdist_points[1] + ((maxdist_points[0]-maxdist_points[1])/2)
+    dist = linalg.norm(maxdist_points[0]-maxdist_points[1])
+    ax.text(*pos, color='blue', s='%s' % dist)
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
