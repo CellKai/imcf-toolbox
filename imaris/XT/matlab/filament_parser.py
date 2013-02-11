@@ -117,6 +117,14 @@ def main():
     log.debug("vertices: %s" % vertices)
     log.debug("edges: %s" % edges)
 
+    maxedgelen = 0
+    for (p1, p2) in edges:
+        curlen = distance_matrix[p1, p2]
+        if curlen > maxedgelen:
+            maxedgelen = curlen
+            maxedge = data[p1]  # store coordinates for label
+    log.warn("longest edge from tesselation: %s" % maxedgelen)
+
 
     polyarea = 0
     vtxlist = []
