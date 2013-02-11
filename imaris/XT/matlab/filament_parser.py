@@ -154,11 +154,13 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(ax, coords, 'm')
 
+        # draw edges from tesselation:
         for i, p in enumerate(edges):
             coords = [data[p[0]], data[p[1]]]
             curcol = colors[i % 6]
             plot3d_line(ax, coords, curcol)
 
+        # draw triangles from tesselation as filled polygons:
         for i, vtx in enumerate(vtxlist):
             curcol = colors[i % 6]
             tri = Poly3DCollection([vtx], facecolors=cc(curcol))
