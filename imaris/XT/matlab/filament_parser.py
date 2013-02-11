@@ -154,6 +154,11 @@ def main():
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(ax, coords, 'm')
 
+        for i, p in enumerate(edges):
+            coords = [data[p[0]], data[p[1]]]
+            curcol = colors[i % 6]
+            plot3d_line(ax, coords, curcol)
+
         for i, vtx in enumerate(vtxlist):
             curcol = colors[i % 6]
             tri = Poly3DCollection([vtx], facecolors=cc(curcol))
@@ -174,12 +179,6 @@ def main():
         # for p in build_tuple_seq(filpnts2):
         #     coords = [data[p[0]], data[p[1]]]
         #     plot3d_line(plot, coords, 'b')
-
-        for i, p in enumerate(edges):
-            coords = [data[p[0]], data[p[1]]]
-            curcol = colors[i % 6]
-            plot3d_line(ax, coords, curcol)
-
 
         plt.show()
 
