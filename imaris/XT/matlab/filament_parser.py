@@ -157,6 +157,10 @@ def main():
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
 
+        # print overall area and maximum tesselation edge length:
+        ax.text(*cmin, s='  overall area: %s' % polyarea, color='blue')
+        ax.text(*maxedge, s='  longest edge: %s' % maxedgelen, color='blue')
+
         # draw the raw filament points:
         # TODO: add commandline switch to enable this!
         # plot3d_scatter(ax, data, 'w')
