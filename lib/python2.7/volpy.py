@@ -27,7 +27,6 @@ __all__ = [
     'tri_area',
     'tesselate',
     'volpy_verbosity'
-    # 'largest_dist_idx',
     # 'find_neighbor',
     # 'elastic_bands',
     # 'gen_mask',
@@ -38,29 +37,6 @@ __all__ = [
 # if there is really a shortcut required for calculating the norm, this can
 # easily be done via a lambda function:
 # d = lambda p1, p2: linalg.norm(p1 - p2)
-
-def largest_dist_idx(point, pointlist):
-    """Find the point with the largest distance to a marked point.
-
-    Takes a point (euclidean coordinates) and a list of points,
-    calculates the distance of the single point to all points in the
-    list and returns the index and the distance of the marked one.
-
-    Args:
-        point: n-tuple of euclidean coordinates
-        pointlist: list of n-tuples of euclidean coordinates
-
-    Returns:
-        [index, distance]: integer with index, float with distance
-    """
-    # print point
-    # print pointlist
-    distances = [()] * len(pointlist)
-    for i, cand in enumerate(pointlist):
-        distances[i] = linalg.norm(point - cand)
-    # print distances
-    maxdist = max(distances)
-    return([distances.index(maxdist), maxdist])
 
 from scipy import reshape, sqrt
 from numpy.matlib import repmat, repeat, sum, where
