@@ -94,6 +94,7 @@ def get_max_dist_pair(matrix):
     Returns:
         (i1, i2): tuple of index numbers of the largest distance pair.
     """
+    # FIXME: this can be done with argmax()!
     maxdist = 0
     pair = (-1, -1)
     for row_num, row in enumerate(matrix):
