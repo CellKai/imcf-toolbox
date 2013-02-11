@@ -24,7 +24,6 @@ __all__ = [
     'dist_matrix',
     'get_max_dist_pair',
     'path_greedy',
-    'cut_extrema',
     'sort_neighbors',
     'tri_area',
     'tesselate',
