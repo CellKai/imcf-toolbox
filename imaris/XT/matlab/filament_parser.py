@@ -130,7 +130,9 @@ def main():
         fig = plt.figure()
         ax = Axes3D(fig)
         # draw the raw filament points:
-        plot3d_scatter(ax, data, 'w')
+        # TODO: add commandline switch to enable this!
+        # plot3d_scatter(ax, data, 'w')
+
         # draw the maxdist pair and a connecting line + labels:
         plot3d_maxdist(ax, maxdist_points)
 
