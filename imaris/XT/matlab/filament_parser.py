@@ -95,11 +95,11 @@ def main():
     for point in maxdist_pair:
         maxdist_points.append(data[point])
 
-    print '------------ largest distance results -------------'
-    print 'idx numbers:\t' + pp.pformat(maxdist_pair)
-    print 'coordinates:\t' + pp.pformat(maxdist_points)
-    print 'distance:\t' + pp.pformat(distance_matrix[maxdist_pair])
-    print '---------------------------------------------------'
+    log.warn('------------ largest distance results -------------')
+    log.warn('idx numbers:\t' + pp.pformat(maxdist_pair))
+    log.warn('coordinates:\t' + pp.pformat(maxdist_points))
+    log.warn('distance:\t' + pp.pformat(distance_matrix[maxdist_pair]))
+    log.warn('---------------------------------------------------')
 
 
     adjacent = sort_neighbors(distance_matrix)
@@ -114,7 +114,9 @@ def main():
     log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
     (edges, triangles, vertices) = tesselate(p2, p1, distance_matrix)
-    print "vertices: %s" % vertices
+    log.debug("vertices: %s" % vertices)
+    log.debug("edges: %s" % edges)
+
 
     polyarea = 0
     vtxlist = []
