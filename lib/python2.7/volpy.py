@@ -5,7 +5,9 @@
 Provides distance, area, mesh-related calculations on spots
 in three dimensional space."""
 
+from scipy import reshape, sqrt
 from numpy import linalg
+from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
 
@@ -38,8 +40,6 @@ __all__ = [
 # easily be done via a lambda function:
 # d = lambda p1, p2: linalg.norm(p1 - p2)
 
-from scipy import reshape, sqrt
-from numpy.matlib import repmat, repeat, sum, where
 def dist_matrix_euclidean(pts):
     """Calculates the euclidean distance matrix for a set of points.
 
