@@ -12,9 +12,13 @@ import sys
 import argparse
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib.colors import colorConverter
+# http://matplotlib.org/api/colors_api.html
+
 # stuff required for matplotlib:
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
 from numpy import ma, loadtxt, asarray
 from volpy import *
 import pprint
@@ -112,7 +116,9 @@ def main():
 
     if args.plot:
         # define some colors to cycle through:
-        colors = ['r', 'b', 'y', 'm', 'g']
+        colors = ['r', 'g', 'b', 'y', 'c', 'm']
+        cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
+
         fig = plt.figure()
         ax = Axes3D(fig)
         plot3d_scatter(ax, data, 'w')
@@ -143,7 +149,7 @@ def main():
 
         for i, p in enumerate(edges):
             coords = [data[p[0]], data[p[1]]]
-            curcol = colors[i % 5]
+            curcol = colors[i % 6]
             plot3d_line(ax, coords, curcol)
 
 
