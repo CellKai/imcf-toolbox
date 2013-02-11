@@ -149,13 +149,15 @@ def main():
         # draw the maxdist pair and a connecting line + labels:
         plot3d_maxdist(ax, maxdist_points)
 
-        # draw connection along filament lists:
+        # draw connections along filament lists:
         for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(ax, coords, 'm')
 
-        for vtx in vtxlist:
-            tri = Poly3DCollection([vtx])
+        for i, vtx in enumerate(vtxlist):
+            curcol = colors[i % 6]
+            tri = Poly3DCollection([vtx], facecolors=cc(curcol))
+            tri.set_alpha(0.8)
             ax.add_collection3d(tri)
 
         fm1, fma1 = build_filament_mask(adjacent, maxdist_pair)
