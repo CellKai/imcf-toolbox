@@ -16,7 +16,7 @@ import argparse
 import sys
 import csv
 from ImsXMLlib import ImarisXML
-from volpy import dist_matrix_euclidean, find_neighbor
+from volpy import dist_matrix, find_neighbor
 from numpy import delete
 
 
@@ -46,7 +46,7 @@ class ClosestNeighbours(object):
         self.spots_c = self.XMLcnd.coordinates('Position')
 
     def _process(self):
-        self.dist_mat = dist_matrix_euclidean(self.spots_r + self.spots_c)
+        self.dist_mat = dist_matrix(self.spots_r + self.spots_c)
         self.out("Reference objects: %s\n" % len(self.spots_r))
         self.out("Candidate objects: %s\n" % len(self.spots_c))
         dists_to_ref = self.dist_mat[:][0]

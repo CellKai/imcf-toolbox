@@ -85,7 +85,7 @@ def main():
     # loadtxt() expects float numbers and complains otherwise
     data = loadtxt(args.infile, delimiter=',')
 
-    distance_matrix = dist_matrix_euclidean(data)
+    distance_matrix = dist_matrix(data)
     maxdist_pair = get_max_dist_pair(distance_matrix)
 
     log.debug(pp.pformat(data))

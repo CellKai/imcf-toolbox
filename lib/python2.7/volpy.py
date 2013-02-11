@@ -21,7 +21,7 @@ from numpy.matlib import repmat, repeat, sum, where
 __all__ = [
     'build_filament_mask',
     'build_tuple_seq',
-    'dist_matrix_euclidean',
+    'dist_matrix',
     'get_max_dist_pair',
     'path_greedy',
     'cut_extrema',
@@ -40,7 +40,7 @@ __all__ = [
 # easily be done via a lambda function:
 # d = lambda p1, p2: linalg.norm(p1 - p2)
 
-def dist_matrix_euclidean(pts):
+def dist_matrix(pts):
     """Calculates the euclidean distance matrix for a set of points.
 
     Args:
