@@ -39,6 +39,13 @@ def plot3d_triangle(plot, points, lw=0.2):
     x, y, z = asarray(zip(*points))
     plot.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=lw)
 
+def plot3d_maxdist(ax, maxdist_points):
+    plot3d_scatter(ax, maxdist_points, 'r', lw=18)
+    for i in (0,1):
+        ax.text(*maxdist_points[i], color='blue',
+            s='   (%s | %s | %s)' % (maxdist_points[i][0],
+            maxdist_points[i][1], maxdist_points[i][2]))
+    plot3d_line(ax, maxdist_points, 'y')
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -124,9 +131,8 @@ def main():
         ax = Axes3D(fig)
         # draw the raw filament points:
         plot3d_scatter(ax, data, 'w')
-        # draw the maxdist pair and a connecting line:
-        plot3d_scatter(ax, maxdist_points, 'r', lw=18)
-        plot3d_line(ax, maxdist_points, 'y')
+        # draw the maxdist pair and a connecting line + labels:
+        plot3d_maxdist(ax, maxdist_points)
 
         # draw connection along filament lists:
         for p in build_tuple_seq(adjacent, cyclic=True):
