@@ -44,6 +44,7 @@ def calc_dist_xyz(p1, p2):
     Returns:
         dist: float containing euclidean distance
     """
+    print "WARN: usage of calc_dist_xyz() is deprecated!"
     dx = abs(p2[0] - p1[0])
     dy = abs(p2[1] - p1[1])
     dz = abs(p2[2] - p1[2])
