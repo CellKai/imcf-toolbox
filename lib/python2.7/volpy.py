@@ -29,7 +29,6 @@ __all__ = [
     'tesselate',
     'volpy_verbosity'
     # 'find_neighbor',
-    # 'elastic_bands',
     # 'gen_mask',
     # 'gen_unmask',
 ]
@@ -252,36 +251,6 @@ def build_filament_mask(adjacent, delimiters):
         mask_adj = [not(x) for x in mask_adj]
     # print mask
     return (mask, mask_adj)
-
-def elastic_bands(pl1, mask2, dist_mat):
-    """Calculates minimal connections between two filament pointsets.
-
-    FIXME: update documentation, the mask is masking the points in the
-    distance matrix that are not in pointlist now!
-
-    Takes two pointlists (the filaments), the corresponding masks, and a
-    distance matrix. Iterates over the pointlists and calculates the
-    closest point from the other set (think of elastic bands of minimal
-    energy connecting them, hence the name). Builds a set of tuples
-    representing the bands of the form (id1, id2) where id1 < id2 to make
-    sure we don't add "inverted" duplicates.
-
-    Args:
-        pl1: pointlist (ids of points)
-        mask2: corresponding array mask
-        dist_mat: euclidean distance matrix
-
-    Returns:
-        bands: a set of tuples (id_a, id_b) where id_a < id_b
-    """
-    bands = set()
-    for cur in pl1:
-        neigh = find_neighbor(cur, dist_mat, mask2)
-        if cur < neigh:
-            bands.add((cur, neigh))
-        else:
-            bands.add((neigh, cur))
-    return bands
 
 def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
