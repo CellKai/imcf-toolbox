@@ -289,17 +289,6 @@ def gen_mask(pointlist, masklength):
         mask[point] = 1
     return mask
 
-def gen_unmask(pointlist, masklength):
-    """Generates a binary mask given by a list of indices.
-
-    Takes a list of indices and a length parameter, generates a mask with
-    that given length, masking everything but the indices in the given list.
-    """
-    mask = [1] * masklength
-    for point in pointlist:
-        mask[point] = 0
-    return mask
-
 import logging
 import sys
 log = logging.getLogger(__name__)
