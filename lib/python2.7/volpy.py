@@ -294,7 +294,7 @@ def vappend(lst, val, desc="list"):
     Note: this works only as lists are mutable and we're operating on the
     given list directly.
     """
-    log.info("appending to %s: %s" % (desc, str(val)))
+    log.debug("appending to %s: %s" % (desc, str(val)))
     lst.append(val)
 
 def tesselate(pl1, pl2, dist):
