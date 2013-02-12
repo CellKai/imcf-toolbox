@@ -263,6 +263,7 @@ def build_tuple_seq(sequence, cyclic=False):
     by cyclic or acyclic, meaning the last and the first element will
     be connected or not.
     """
+    # TODO: check if this could be done using a clever lambda function
     # print sequence
     tuples = []
     for i, elt in enumerate(sequence):
