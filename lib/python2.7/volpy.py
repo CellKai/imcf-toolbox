@@ -7,7 +7,7 @@ in three dimensional space."""
 
 from log import log
 from scipy import reshape, sqrt
-from numpy import linalg, ma
+from numpy import cross, linalg, ma
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
@@ -15,7 +15,6 @@ from numpy.matlib import repmat, repeat, sum, where
 # - join the "filaments" module with this one, extend the Filament class to
 #   be able to return the distance matrix, the masks of the individual
 #   filaments, access to start and end points, etc.
-# - collect import statements
 # - PEP8 compliance!
 # - sanity/type checks
 
@@ -362,7 +361,6 @@ def tesselate(pl1, pl2, dist):
     log.debug("triangles from tesselation: %s" % triangles)
     return (edges, triangles, vertices)
 
-from numpy import cross, linalg
 def tri_area(p1, p2, p3):
     """Calculate the area of a triangle given by coordinates.
 
@@ -373,6 +371,3 @@ def tri_area(p1, p2, p3):
     v1 = p2 - p1
     v2 = p2 - p3
     return 0.5 * linalg.norm(cross(v1, v2))
-
-if __name__ == "__main__":
-    print "This module provides just functions, no direct interface."
