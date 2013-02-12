@@ -22,8 +22,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from numpy import ma, loadtxt, asarray, linalg
 from volpy import *
 import pprint
-import logging
-
+from log import log
 
 def plot3d_scatter(plot, points, color, lw=1):
     # we need to have the coordinates as 3 ndarrays (x,y,z):
@@ -71,14 +70,7 @@ def main():
 
     # default loglevel is 30 while 20 and 10 show more details
     loglevel = (3 - args.verbosity) * 10
-
-    log = logging.getLogger(__name__)
-    # create console handler and add it to the logger
-    ch = logging.StreamHandler(sys.stdout)
-    log.addHandler(ch)
     log.setLevel(loglevel)
-
-    volpy_verbosity(loglevel)
 
     pp = pprint.PrettyPrinter(indent=4)
 

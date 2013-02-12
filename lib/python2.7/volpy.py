@@ -5,6 +5,7 @@
 Provides distance, area, mesh-related calculations on spots
 in three dimensional space."""
 
+from log import log
 from scipy import reshape, sqrt
 from numpy import linalg, ma
 from numpy.matlib import repmat, repeat, sum, where
@@ -27,7 +28,6 @@ __all__ = [
     'sort_neighbors',
     'tri_area',
     'tesselate',
-    'volpy_verbosity'
     # 'find_neighbor',
     # 'gen_mask',
     # 'gen_unmask',
@@ -288,16 +288,6 @@ def gen_mask(pointlist, masklength):
     for point in pointlist:
         mask[point] = 1
     return mask
-
-import logging
-import sys
-log = logging.getLogger(__name__)
-# create console handler and add it to the logger
-ch = logging.StreamHandler(sys.stdout)
-log.addHandler(ch)
-
-def volpy_verbosity(level):
-    log.setLevel(level)
 
 def vappend(lst, val, desc="list"):
     """Append to a list and log a message according to the loglevel.
