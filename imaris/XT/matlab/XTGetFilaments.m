@@ -1,26 +1,34 @@
 %
-%  Filaments Sandbox for Imaris 7 by Niko Ehrenfeuchter
+%  Filaments Exporter for Imaris 7 by Niko Ehrenfeuchter
 %
 %  Requirements:
 %    - IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
 %
 
-function XTGetFilaments()
-	ver = 28;
-	
-	% start Imaris and set up the connection
-	conn = IceImarisConnector();
-	conn.startImaris();
+function IceXTFilamentsExporter(mImarisApplication)
+    % internal version number
+    ver = 29;
 
-	% wait until the connection is ready and the user has selected some data
-	ans = questdlg('Click "OK" to continue after opening a dataset and selecting a Filament object.', 'Waiting for Imaris...', 'OK', 'Cancel', 'OK')
-	switch ans
-		case 'OK'
-			extractFilaments(conn.mImarisApplication);
-	end
+    if nargin == 1
+        conn = IceImarisConnector(mImarisApplication);
+    else
+        % start Imaris and set up the connection
+        conn = IceImarisConnector();
+        conn.startImaris();
+
+        % wait until the connection is ready and some data is selected
+        msg = ['Click "OK" to continue after opening a dataset and ', ...
+            'selecting a Filament object.'];
+        ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
+        if strcmp(ans, 'Cancel')
+            return;
+        end
+    end
+
+    exportFilaments(conn.mImarisApplication);
 end
 
-function extractFilaments(vImApp)
+function exportFilaments(vImApp)
 	vFactory = vImApp.GetFactory;
 	vFilaments = vFactory.ToFilaments(vImApp.GetSurpassSelection);
 	vSurpassScene = vImApp.GetSurpassScene;
