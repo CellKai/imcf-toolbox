@@ -4,6 +4,24 @@
 %  Requirements:
 %    - IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
 %
+%%% Imaris meta information %%%
+% <CustomTools>
+%  <Menu>
+%   <Submenu name="Filaments Functions">
+%    <Item name="Filaments Exporter" icon="Matlab"
+%       tooltip="Export points of selected Filaments to CSV.">
+%      <Command>MatlabXT::IceXTFilamentsExporter(%i)</Command>
+%    </Item>
+%   </Submenu>
+%  </Menu>
+%  <SurpassTab>
+%    <SurpassComponent name="bpFilaments">
+%      <Item name="Export Filaments to CSV">
+%        <Command>MatlabXT::IceXTFilamentsExporter(%i)</Command>
+%      </Item>
+%    </SurpassComponent>
+%  </SurpassTab>
+% </CustomTools>
 
 function IceXTFilamentsExporter(mImarisApplication)
     % internal version number
