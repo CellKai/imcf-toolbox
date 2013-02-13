@@ -2,48 +2,48 @@
 %  Filaments Exporter for Imaris 7 by Niko Ehrenfeuchter
 %
 %  Requirements:
-%    - IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
+%	- IceImarisConnector (https://github.com/aarpon/IceImarisConnector)
 %
 %%% Imaris meta information %%%
 % <CustomTools>
 %  <Menu>
 %   <Submenu name="Filaments Functions">
-%    <Item name="Filaments Exporter" icon="Matlab"
-%       tooltip="Export points of selected Filaments to CSV.">
-%      <Command>MatlabXT::IceXTFilamentsExporter(%i)</Command>
-%    </Item>
+%	<Item name="Filaments Exporter" icon="Matlab"
+%	   tooltip="Export points of selected Filaments to CSV.">
+%	  <Command>MatlabXT::IceXTFilamentsExporter(%i)</Command>
+%	</Item>
 %   </Submenu>
 %  </Menu>
 %  <SurpassTab>
-%    <SurpassComponent name="bpFilaments">
-%      <Item name="Export Filaments to CSV">
-%        <Command>MatlabXT::IceXTFilamentsExporter(%i)</Command>
-%      </Item>
-%    </SurpassComponent>
+%	<SurpassComponent name="bpFilaments">
+%	  <Item name="Export Filaments to CSV">
+%		<Command>MatlabXT::IceXTFilamentsExporter(%i)</Command>
+%	  </Item>
+%	</SurpassComponent>
 %  </SurpassTab>
 % </CustomTools>
 
 function IceXTFilamentsExporter(mImarisApplication)
-    % internal version number
-    ver = 29;
+	% internal version number
+	ver = 29;
 
-    if nargin == 1
-        conn = IceImarisConnector(mImarisApplication);
-    else
-        % start Imaris and set up the connection
-        conn = IceImarisConnector();
-        conn.startImaris();
+	if nargin == 1
+		conn = IceImarisConnector(mImarisApplication);
+	else
+		% start Imaris and set up the connection
+		conn = IceImarisConnector();
+		conn.startImaris();
 
-        % wait until the connection is ready and some data is selected
-        msg = ['Click "OK" to continue after opening a dataset and ', ...
-            'selecting a Filament object.'];
-        ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
-        if strcmp(ans, 'Cancel')
-            return;
-        end
-    end
+		% wait until the connection is ready and some data is selected
+		msg = ['Click "OK" to continue after opening a dataset and ', ...
+			'selecting a Filament object.'];
+		ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
+		if strcmp(ans, 'Cancel')
+			return;
+		end
+	end
 
-    exportFilaments(conn.mImarisApplication);
+	exportFilaments(conn.mImarisApplication);
 end
 
 function exportFilaments(vImApp)
@@ -67,7 +67,7 @@ function exportFilaments(vImApp)
 		end
 	end
 		
-    % extract positions of filament points for each and store them
+	% extract positions of filament points for each and store them
 	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
 		vFilamentsXYZ = vFilaments.GetPositionsXYZ(FilamentID);
 		% fname = sprintf('filaments-%d.csv', FilamentID);
