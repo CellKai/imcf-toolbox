@@ -67,12 +67,16 @@ function exportFilaments(vImApp)
 		end
 	end
 		
+	% FIXME: this works only on windows
+	home = getenv('USERPROFILE')
+	cd(home)
+
 	% extract positions of filament points for each and store them
 	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
 		vFilamentsXYZ = vFilaments.GetPositionsXYZ(FilamentID);
-		% fname = sprintf('filaments-%d.csv', FilamentID);
-		fname = uiputfile
-		csvwrite(fname, vFilamentsXYZ)
+		fname = sprintf('filaments-%d.csv', FilamentID);
+		[fname, fpath] = uiputfile(fname, 'Save Filament as CSV file');
+		csvwrite(fullfile(fpath, fname), vFilamentsXYZ);
 	end
 
 end
