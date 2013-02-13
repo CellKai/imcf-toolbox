@@ -70,7 +70,8 @@ function exportFilaments(vImApp)
     % extract positions of filament points for each and store them
 	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
 		vFilamentsXYZ = vFilaments.GetPositionsXYZ(FilamentID);
-		fname = sprintf('filaments-%d.csv', FilamentID);
+		% fname = sprintf('filaments-%d.csv', FilamentID);
+		fname = uiputfile
 		csvwrite(fname, vFilamentsXYZ)
 	end
 
