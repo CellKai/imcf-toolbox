@@ -96,6 +96,7 @@ def main():
     # create an empty mask with the number of points:
     mask = [0] * len(distance_matrix[0])
 
+    # FIXME: path generation should be done in tesselate()
     (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
     log.debug('path1 %s: %s' % (maxdist_pair, p1))
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
@@ -115,6 +116,7 @@ def main():
 
 
     polyarea = 0
+    # vtxlist is a list of lists of 3-tuples of coordinates
     vtxlist = []
     for (vrtx1, vrtx2, vrtx3) in triangles:
         vtxlist.append([tuple(data[vrtx1]),
