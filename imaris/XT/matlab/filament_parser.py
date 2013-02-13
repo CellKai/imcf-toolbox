@@ -93,10 +93,6 @@ def main():
     log.warn('distance:\t' + pp.pformat(distance_matrix[maxdist_pair]))
     log.warn('---------------------------------------------------')
 
-
-    adjacent = sort_neighbors(distance_matrix)
-    log.debug(adjacent)
-
     # create an empty mask with the number of points:
     mask = [0] * len(distance_matrix[0])
 
@@ -161,6 +157,8 @@ def main():
         plot3d_maxdist(ax, maxdist_points)
 
         # draw connections along filament lists:
+        adjacent = sort_neighbors(distance_matrix)
+        log.debug(adjacent)
         for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(ax, coords, 'm')
