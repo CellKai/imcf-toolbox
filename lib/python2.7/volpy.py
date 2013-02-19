@@ -134,7 +134,7 @@ def path_greedy(dist_mat, mask_ref, pair):
 
     Args:
         dist_mat: the euclidean distance matrix of all points
-        mask_ref: array mask (a binary list)
+        mask_ref: array mask (a binary list) or 'None'
         pair: tuple of index numbers for dist_mat
 
     Returns: (sequence, mask)
@@ -143,9 +143,14 @@ def path_greedy(dist_mat, mask_ref, pair):
     """
     sequence = []
 
-    # 'list' is a mutable type, so we explicitly copy it and return a new
-    # mask at the end, to avoid silently modifying the reference (bad style)
-    mask = mask_ref[:]
+    if mask_ref is None:
+        # create an empty mask with the number of points:
+        mask = [0] * len(dist_mat[0])
+    else:
+        # 'list' is a mutable type, so we explicitly copy it and return a new
+        # mask at the end, to avoid silently modifying the reference
+        mask = mask_ref[:]
+
     # make sure the end point is unmasked, otherwise we'll loop endlessly:
     mask[pair[1]] = 0
 
