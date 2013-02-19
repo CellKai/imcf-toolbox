@@ -9,6 +9,7 @@ Imaris via the XT/Matlab interface.
 #  - merge the "filaments" and "volpy" modules, then use Filament objects
 
 import sys
+import csv
 import argparse
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -55,6 +56,8 @@ def main():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-i', '--infile', required=True, type=file,
         help='CSV file containing filament coordinates')
+    argparser.add_argument('-o', '--outfile', type=argparse.FileType('w'),
+        help='CSV file to store the results')
     argparser.add_argument('--plot', dest='plot', action='store_const',
         const=True, default=False,
         help='plot parsed filament data')
@@ -125,6 +128,21 @@ def main():
     log.warn("overall area: %s" % polyarea)
     log.debug("vtxlist: %s" % vtxlist)
 
+
+    if args.outfile:
+        out = csv.writer(args.outfile)
+        out.writerow(['input filename', args.infile.name])
+        out.writerow([])
+        out.writerow(['distance results'])
+        out.writerow(['largest distance points (index numbers)', str(maxdist_pair)])
+        out.writerow(['largest distance points (coordinates)',
+            str(maxdist_points[0]), str(maxdist_points[1])])
+        out.writerow(['distance', str(distance_matrix[maxdist_pair])])
+        out.writerow([])
+        out.writerow(['area results calculated by triangular tesselation'])
+        out.writerow(['longest transversal edge', maxedgelen])
+        out.writerow(['overall area', polyarea])
+        # TODO: perimeter
 
     if args.plot:
         # define some colors to cycle through:
