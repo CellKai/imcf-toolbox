@@ -101,9 +101,7 @@ def main():
 
     # FIXME: path generation should be done in tesselate()
     (p1, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    log.debug('path1 %s: %s' % (maxdist_pair, p1))
     (p2, mask) = path_greedy(distance_matrix, mask, maxdist_pair)
-    log.debug('path2 %s: %s' % (maxdist_pair, p2))
 
     (edges, triangles, vertices) = tesselate(p2, p1, distance_matrix)
     log.debug("vertices: %s" % vertices)

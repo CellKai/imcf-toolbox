@@ -130,7 +130,7 @@ def path_greedy(dist_mat, mask_ref, pair):
     Takes a euclidean distance matrix, a mask and a tuple denoting the start
     and stop index, calculates a path from first to last using the greedy
     approach by always taking the closest element next that has not yet been
-    processed.
+    processed. Processed points will be disabled in the mask.
 
     Args:
         dist_mat: the euclidean distance matrix of all points
@@ -159,7 +159,7 @@ def path_greedy(dist_mat, mask_ref, pair):
             mask[closest] = 1
             break
         cur = closest
-    # print 'path (%s->%s): %s' % (pair[0], pair[1], sequence)
+    log.info('path (%s->%s): %s' % (pair[0], pair[1], sequence))
     return (sequence, mask)
 
 def cut_extrema(lst):
