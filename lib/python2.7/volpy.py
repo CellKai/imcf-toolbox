@@ -140,8 +140,10 @@ def path_greedy(dist_mat, mask_ref, pair):
     Returns: (sequence, mask)
         sequence: list of indices denoting the greedy path
         mask: the mask of the above sequence
+        plen: the overall length of the path
     """
     sequence = []
+    plen = 0
 
     if mask_ref is None:
         # create an empty mask with the number of points:
@@ -159,13 +161,16 @@ def path_greedy(dist_mat, mask_ref, pair):
         sequence.append(cur)
         mask[cur] = 1
         closest = find_neighbor(cur, dist_mat, mask)
+        plen += dist_mat[cur, closest]
+        log.debug('accumulated path length: %s' % plen)
         if closest == pair[1]:
             sequence.append(pair[1])
             mask[closest] = 1
             break
         cur = closest
+    log.info('path length: %s' % plen)
     log.info('path (%s->%s): %s' % (pair[0], pair[1], sequence))
-    return (sequence, mask)
+    return (sequence, mask, plen)
 
 def cut_extrema(lst):
     """Returns the first & last element and the rest of a list (copied)."""
