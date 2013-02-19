@@ -121,6 +121,7 @@ def main():
             tuple(data[vrtx2]), tuple(data[vrtx3])])
         polyarea += tri_area(data[vrtx1], data[vrtx2], data[vrtx3])
     log.warn("overall area: %s" % polyarea)
+    log.warn("perimeter: %s" % (p1_len + p2_len))
     log.debug("vtxlist: %s" % vtxlist)
 
 
@@ -139,7 +140,7 @@ def main():
         out.writerow(['area results calculated by triangular tesselation'])
         out.writerow(['longest transversal edge', maxedgelen])
         out.writerow(['overall area', polyarea])
-        # TODO: perimeter
+        out.writerow(['perimeter', (p1_len + p2_len)])
 
     if args.plot:
         # define some colors to cycle through:
