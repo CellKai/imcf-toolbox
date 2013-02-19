@@ -129,9 +129,11 @@ def main():
         out.writerow(['input filename', args.infile.name])
         out.writerow([])
         out.writerow(['distance results'])
-        out.writerow(['largest distance points (index numbers)', str(maxdist_pair)])
-        out.writerow(['largest distance points (coordinates)',
-            str(maxdist_points[0]), str(maxdist_points[1])])
+        out.writerow(['largest distance points (indices)', str(maxdist_pair)])
+        out.writerow(['coordinates of point %s' % maxdist_pair[0],
+            maxdist_points[0]])
+        out.writerow(['coordinates of point %s' % maxdist_pair[1],
+            maxdist_points[1]])
         out.writerow(['distance', str(distance_matrix[maxdist_pair])])
         out.writerow([])
         out.writerow(['area results calculated by triangular tesselation'])
