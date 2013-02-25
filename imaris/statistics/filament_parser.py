@@ -126,7 +126,7 @@ def main():
 
 
     if args.outfile:
-        out = csv.writer(args.outfile)
+        out = csv.writer(args.outfile, dialect='excel', delimiter=';')
         out.writerow(['input filename', args.infile.name])
         out.writerow([])
         out.writerow(['distance results'])
