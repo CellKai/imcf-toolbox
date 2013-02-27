@@ -58,14 +58,15 @@ class My_UI_Window(Ui_MainWindow):
     def set_cell_status(self, row, col):
         item = self.tableWidget.item(row, col)
         cols = self.tableWidget.columnCount()
-        print item
+        # print item
         if item is None:
             # print "not existing: %s %s" % (row, col)
             cell = QtGui.QTableWidgetItem("%s" % ((cols * row) + col))
             cell.setCheckState(QtCore.Qt.Checked)
             self.tableWidget.setItem(row, col, cell)
         else:
-            print row, col
+            # print row, col
+            item.setText("%s" % ((cols * row) + col))
 
     def change_table_size(self):
         rows = self.tableWidget.rowCount()
@@ -73,9 +74,6 @@ class My_UI_Window(Ui_MainWindow):
         for r in range(rows):
             for c in range(cols):
                 self.set_cell_status(r, c)
-                #cell = QtGui.QTableWidgetItem("%s" % ((cols * r) + c))
-                #cell.setCheckState(QtCore.Qt.Checked)
-                #self.tableWidget.setItem(r, c, cell)
 
     def update_table(self):
         rows = self.tableWidget.rowCount()
