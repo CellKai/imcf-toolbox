@@ -2,96 +2,160 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import numpy as np
 from qt_table_widget import *
 
 class My_UI_Window(Ui_MainWindow):
+    def __init__(self):
+        self.clist = []
+        # self.update_cellslist = self.order_ls_tb
+        self.update_cellslist = self.order_ls_bt
+        self.rows = 0
+        self.cols = 0
+
     def setupUi(self, MainWindow):
         super(My_UI_Window, self).setupUi(MainWindow)
         MainWindow.setWindowTitle("Grid Aligner")
-        self.change_table_size()
         QtCore.QObject.connect(self.sb_h, QtCore.SIGNAL("valueChanged(int)"), self.set_cols)
         QtCore.QObject.connect(self.sb_v, QtCore.SIGNAL("valueChanged(int)"), self.set_rows)
         QtCore.QObject.connect(self.pb_inc_h, QtCore.SIGNAL("clicked()"), self.inc_cols)
         QtCore.QObject.connect(self.pb_dec_h, QtCore.SIGNAL("clicked()"), self.dec_cols)
         QtCore.QObject.connect(self.pb_inc_v, QtCore.SIGNAL("clicked()"), self.inc_rows)
         QtCore.QObject.connect(self.pb_dec_v, QtCore.SIGNAL("clicked()"), self.dec_rows)
-        QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.foo)
+        QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.update_cell_status)
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.change_table_size(2, 2)
 
-    def foo(self, x, y):
-        print x, y
+    def foo(self, item):
+        print 'this is foo(%s)' % item
 
     def inc_cols(self):
-        self.tableWidget.insertColumn(0)
-        self.change_table_size()
+        self.change_table_size(self.rows, self.cols + 1)
 
     def dec_cols(self):
-        self.tableWidget.removeColumn(0)
-        self.change_table_size()
+        self.change_table_size(self.rows, self.cols - 1)
 
-    def set_cols(self, val):
-        delta = val - self.tableWidget.columnCount()
-        # print delta
-        for i in range(delta):
-            self.tableWidget.insertColumn(0)
-        for i in range(delta * -1):
-            self.tableWidget.removeColumn(0)
-        self.change_table_size()
+    def set_cols(self, ncols):
+        self.change_table_size(self.rows, ncols)
 
     def inc_rows(self):
-        self.tableWidget.insertRow(0)
-        self.change_table_size()
+        self.change_table_size(self.rows + 1, self.cols)
 
     def dec_rows(self):
-        self.tableWidget.removeRow(0)
-        self.change_table_size()
+        self.change_table_size(self.rows - 1, self.cols)
 
-    def set_rows(self, val):
-        delta = val - self.tableWidget.rowCount()
-        # print delta
-        for i in range(delta):
-            self.tableWidget.insertRow(0)
-        for i in range(delta * -1):
-            self.tableWidget.removeRow(0)
-        self.change_table_size()
+    def set_rows(self, nrows):
+        self.change_table_size(nrows, self.cols)
 
-    def set_cell_status(self, row, col):
+    def order_ls_tb(self):
+        '''Fill the cellslist with the (row,col) tuples in the appropriate
+        order, each line from left to right (ls = linescan), from top to
+        bottom (tb).'''
+        cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
+        self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
+        for row in range(self.rows):
+            for col in range(self.cols):
+                cells[(row * self.cols) + col] = [row, col]
+        self.clist = np.ma.array(cells, mask=[0])
+        # to retrieve the index of a given tuple from the masked_array, use:
+        # ma.compress_rows(thearray).tolist().index([thetuple])
+
+    def order_ls_bt(self):
+        '''Fill the cellslist with the (row,col) tuples in the appropriate
+        order, each line from left to right (ls = linescan), from bottom to
+        top (bt).'''
+        cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
+        self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
+        # print len(cells)
+        # print self.rows
+        for row in range(self.rows):
+            line = (self.rows - 1) * (self.cols) - (row * self.cols)
+            for col in range(self.cols):
+                cells[(line) + col] = [row, col]
+        self.clist = np.ma.array(cells, mask=[0])
+
+    def unmasked_idx(self, row, col):
+        # print self.clist.data.tolist()
+        return self.clist.data.tolist().index([row, col])
+
+    def masked_idx(self, row, col):
+        # print self.clist.data.tolist()
+        return np.ma.compress_rows(self.clist).tolist().index([row, col])
+
+    def cell_enable(self, row, col):
+        self.clist.mask[self.unmasked_idx(row, col)] = False
+        return self.masked_idx(row, col)
+
+    def cell_disable(self, row, col):
+        '''Here we need to look up the masked index before disabling the
+        cell, otherwise it can't be found anymore.'''
+        idx = self.masked_idx(row, col)
+        self.clist.mask[self.unmasked_idx(row, col)] = True
+        return idx
+
+    def is_enabled(self, row, col):
+        try:
+            self.clist.tolist().index([row, col])
+        except ValueError:
+            return False
+        return True
+
+    def update_cell_status(self, row, col):
+        # print 'this is update_cell_status %s %s' % (row, col)
         item = self.tableWidget.item(row, col)
-        cols = self.tableWidget.columnCount()
         # print item
         if item is None:
-            # print "not existing: %s %s" % (row, col)
-            cell = QtGui.QTableWidgetItem("%s" % ((cols * row) + col))
+            idx = self.masked_idx(row, col)
+            cell = QtGui.QTableWidgetItem(str(idx))
             cell.setCheckState(QtCore.Qt.Checked)
             self.tableWidget.setItem(row, col, cell)
         else:
-            # print row, col
-            item.setText("%s" % ((cols * row) + col))
+            # the new status is defined by the checkbox
+            newstat = item.checkState()
+            curstat = self.is_enabled(row, col) * 2
+            if (curstat != newstat):
+                if newstat == 2:
+                    idx = self.cell_enable(row, col)
+                    item.setText(str(idx))
+                else:
+                    idx = self.cell_disable(row, col)
+                    item.setText('--')
+                for i in range(idx, len(np.ma.compress_rows(self.clist))):
+                    [trow, tcol] = np.ma.compress_rows(self.clist)[i]
+                    titem = self.tableWidget.item(trow, tcol)
+                    titem.setText(str(i))
+                    # print "%s %s: %s" % (trow, tcol, i)
+        return item
 
-    def change_table_size(self):
-        rows = self.tableWidget.rowCount()
-        cols = self.tableWidget.columnCount()
-        for r in range(rows):
-            for c in range(cols):
-                self.set_cell_status(r, c)
-
-    def update_table(self):
-        rows = self.tableWidget.rowCount()
-        cols = self.tableWidget.columnCount()
-        self.sb_v.setValue(rows)
-        self.sb_v.setValue(rows)
-        self.sb_h.setValue(cols)
-        self.sb_h.setValue(cols)
-        cur = 0
-        for r in range(rows):
-            for c in range(cols):
-                item = self.tableWidget.item(r, c)
-                curstat = item.checkState()
-                item.setText("%s" % ((cols * r) + c))
-                print "%s %s %s" % (r, c, curstat)
-                # cell = QtGui.QTableWidgetItem("%s" % ((cols * r) + c))
-                # cell.setCheckState(QtCore.Qt.Checked)
-                # self.tableWidget.setItem(r, c, cell)
+    def change_table_size(self, nrows, ncols):
+        if nrows < 1:
+            nrows = 1
+        if ncols < 1:
+            ncols = 1
+        dcols = ncols - self.cols
+        drows = nrows - self.rows
+        if drows + dcols == 0:
+            return
+        print 'change_table_size from (%s, %s) to (%s, %s)' % \
+            (self.rows, self.cols, nrows, ncols)
+        # adjust number of columns:
+        for i in range(dcols):
+            self.tableWidget.insertColumn(0)
+        for i in range(dcols * -1):
+            self.tableWidget.removeColumn(0)
+        # adjust number of rows:
+        for i in range(drows):
+            self.tableWidget.insertRow(0)
+        for i in range(drows * -1):
+            self.tableWidget.removeRow(0)
+        self.rows = self.tableWidget.rowCount()
+        self.cols = self.tableWidget.columnCount()
+        self.sb_v.setValue(self.rows)
+        self.sb_h.setValue(self.cols)
+        self.update_cellslist()
+        # update cell contents:
+        for (row, col) in self.clist:
+            self.update_cell_status(row, col)
 
 
 if __name__ == "__main__":
