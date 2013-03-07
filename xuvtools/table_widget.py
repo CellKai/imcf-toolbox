@@ -9,7 +9,10 @@ class My_UI_Window(Ui_MainWindow):
     def __init__(self):
         self.clist = []
         # self.update_cellslist = self.order_ls_tb
-        self.update_cellslist = self.order_ls_bt
+        # self.update_cellslist = self.order_ls_bt
+        # self.update_cellslist = self.order_snakeline_topleft
+        # self.update_cellslist = self.order_snakeline_topright
+        self.update_cellslist = self.order_topbottom_leftright
         self.rows = 0
         self.cols = 0
 
@@ -57,8 +60,6 @@ class My_UI_Window(Ui_MainWindow):
             for col in range(self.cols):
                 cells[(row * self.cols) + col] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
-        # to retrieve the index of a given tuple from the masked_array, use:
-        # ma.compress_rows(thearray).tolist().index([thetuple])
 
     def order_ls_bt(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
@@ -66,12 +67,54 @@ class My_UI_Window(Ui_MainWindow):
         top (bt).'''
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
-        # print len(cells)
-        # print self.rows
         for row in range(self.rows):
             line = (self.rows - 1) * (self.cols) - (row * self.cols)
             for col in range(self.cols):
                 cells[(line) + col] = [row, col]
+        self.clist = np.ma.array(cells, mask=[0])
+
+    def order_topbottom_leftright(self):
+        '''Fill the cellslist with the (row,col) tuples in the appropriate
+        order, each row from top to bottom, from left to right.'''
+        cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
+        self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
+        for col in range(self.cols):
+            for row in range(self.rows):
+                cells[(col * self.rows) + row] = [row, col]
+        self.clist = np.ma.array(cells, mask=[0])
+
+    def order_topbottom_leftright(self):
+        '''Fill the cellslist with the (row,col) tuples in the appropriate
+        order, each row from top to bottom, from left to right.'''
+        cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
+        self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
+        for col in range(self.cols):
+            for row in range(self.rows):
+                cells[(col * self.rows) + row] = [row, col]
+        self.clist = np.ma.array(cells, mask=[0])
+
+    def order_snakeline_topleft(self):
+        cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
+        self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
+        for row in range(self.rows):
+            line = row * self.cols
+            for col in range(self.cols):
+                if (row % 2) == 0:
+                    cells[line + col] = [row, col]
+                else:
+                    cells[(line + self.cols - 1) - col] = [row, col]
+        self.clist = np.ma.array(cells, mask=[0])
+
+    def order_snakeline_topright(self):
+        cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
+        self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
+        for row in range(self.rows):
+            line = row * self.cols
+            for col in range(self.cols):
+                if (row % 2) == 0:
+                    cells[(line + self.cols - 1) - col] = [row, col]
+                else:
+                    cells[line + col] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
 
     def unmasked_idx(self, row, col):
