@@ -8,8 +8,8 @@ from qt_table_widget import *
 class My_UI_Window(Ui_MainWindow):
     def __init__(self):
         self.clist = []
-        # self.update_cellslist = self.order_ls_tb
-        # self.update_cellslist = self.order_ls_bt
+        # self.update_cellslist = self.order_leftright_topbottom
+        # self.update_cellslist = self.order_leftright_bottomtop
         # self.update_cellslist = self.order_snakeline_topleft
         # self.update_cellslist = self.order_snakeline_topright
         self.update_cellslist = self.order_topbottom_leftright
@@ -50,7 +50,7 @@ class My_UI_Window(Ui_MainWindow):
     def set_rows(self, nrows):
         self.change_table_size(nrows, self.cols)
 
-    def order_ls_tb(self):
+    def order_leftright_topbottom(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
         order, each line from left to right (ls = linescan), from top to
         bottom (tb).'''
@@ -61,7 +61,7 @@ class My_UI_Window(Ui_MainWindow):
                 cells[(row * self.cols) + col] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
 
-    def order_ls_bt(self):
+    def order_leftright_bottomtop(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
         order, each line from left to right (ls = linescan), from bottom to
         top (bt).'''
