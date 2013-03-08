@@ -93,14 +93,15 @@ class My_UI_Window(Ui_MainWindow):
                 cells[(col * self.rows) + row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
 
-    def order_topbottom_leftright(self):
+    def order_bottomtop_leftright(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
-        order, each row from top to bottom, from left to right.'''
+        order, each row from bottom to top, from left to right.'''
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
-        for col in range(self.cols):
-            for row in range(self.rows):
-                cells[(col * self.rows) + row] = [row, col]
+        for row in range(self.rows):
+            for col in range(self.cols):
+                # print "%s: [%s, %s]" % (self.rows - 1 + (col * self.rows) - row, row, col)
+                cells[self.rows - 1 + (col * self.rows) - row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
 
     def order_snakeline_topleft(self):
