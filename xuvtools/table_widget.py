@@ -8,11 +8,15 @@ from qt_table_widget import *
 class My_UI_Window(Ui_MainWindow):
     def __init__(self):
         self.clist = []
-        # self.update_cellslist = self.order_leftright_topbottom
-        # self.update_cellslist = self.order_leftright_bottomtop
-        # self.update_cellslist = self.order_snakeline_topleft
-        # self.update_cellslist = self.order_snakeline_topright
-        self.update_cellslist = self.order_topbottom_leftright
+        self.orderings = [
+            self.order_topbottom_leftright,
+            self.order_bottomtop_leftright,
+            self.order_leftright_topbottom,
+            self.order_leftright_bottomtop,
+            self.order_snakeline_topleft,
+            self.order_snakeline_topright
+        ]
+        self.update_cellslist = self.orderings[0]
         self.rows = 0
         self.cols = 0
 
@@ -26,11 +30,17 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.connect(self.pb_inc_v, QtCore.SIGNAL("clicked()"), self.inc_rows)
         QtCore.QObject.connect(self.pb_dec_v, QtCore.SIGNAL("clicked()"), self.dec_rows)
         QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.update_cell_status)
+        QtCore.QObject.connect(self.cb_ordering, QtCore.SIGNAL("currentIndexChanged(int)"), self.set_ordering)
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.change_table_size(2, 2)
 
     def foo(self, item):
         print 'this is foo(%s)' % item
+
+    def set_ordering(self, idx):
+        print 'this is set_ordering(%s)' % idx
+        self.update_cellslist = self.orderings[idx]
+        self.update_cellslist()
 
     def inc_cols(self):
         self.change_table_size(self.rows, self.cols + 1)

@@ -24,7 +24,7 @@
     <property name="sizeConstraint">
      <enum>QLayout::SetMinimumSize</enum>
     </property>
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QTableWidget" name="tableWidget">
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
@@ -52,7 +52,7 @@
       <column/>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="1" column="1">
      <widget class="QWidget" name="widget" native="true">
       <property name="enabled">
        <bool>true</bool>
@@ -142,7 +142,7 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QWidget" name="widget_2" native="true">
       <property name="minimumSize">
        <size>
@@ -197,6 +197,20 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QComboBox" name="cb_ordering">
+      <item>
+       <property name="text">
+        <string notr="true">column-wise from top to bottom, starting on the left side</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">column-wise from bottom to top, starting on the left side</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'table_widget.ui'
 #
-# Created: Wed Feb 27 15:13:18 2013
+# Created: Fri Mar  8 09:34:36 2013
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,11 +26,12 @@ class Ui_MainWindow(object):
         self.gridLayout.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.tableWidget = QtGui.QTableWidget(self.centralwidget)
+        self.tableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setRowCount(10)
         self.tableWidget.setColumnCount(2)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.gridLayout.addWidget(self.tableWidget, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.tableWidget, 1, 0, 1, 1)
         self.widget = QtGui.QWidget(self.centralwidget)
         self.widget.setEnabled(True)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
@@ -66,7 +67,7 @@ class Ui_MainWindow(object):
         self.pb_dec_h.setText(_fromUtf8("-"))
         self.pb_dec_h.setObjectName(_fromUtf8("pb_dec_h"))
         self.formLayout.setWidget(2, QtGui.QFormLayout.LabelRole, self.pb_dec_h)
-        self.gridLayout.addWidget(self.widget, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.widget, 1, 1, 1, 1)
         self.widget_2 = QtGui.QWidget(self.centralwidget)
         self.widget_2.setMinimumSize(QtCore.QSize(0, 33))
         self.widget_2.setMaximumSize(QtCore.QSize(200, 16777215))
@@ -89,7 +90,14 @@ class Ui_MainWindow(object):
         self.sb_v.setProperty("value", 10)
         self.sb_v.setObjectName(_fromUtf8("sb_v"))
         self.gridLayout_2.addWidget(self.sb_v, 0, 1, 1, 1)
-        self.gridLayout.addWidget(self.widget_2, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.widget_2, 2, 0, 1, 1)
+        self.cb_ordering = QtGui.QComboBox(self.centralwidget)
+        self.cb_ordering.setObjectName(_fromUtf8("cb_ordering"))
+        self.cb_ordering.addItem(_fromUtf8(""))
+        self.cb_ordering.setItemText(0, _fromUtf8("column-wise from top to bottom, starting on the left side"))
+        self.cb_ordering.addItem(_fromUtf8(""))
+        self.cb_ordering.setItemText(1, _fromUtf8("column-wise from bottom to top, starting on the left side"))
+        self.gridLayout.addWidget(self.cb_ordering, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
