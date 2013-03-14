@@ -24,13 +24,15 @@
 % </CustomTools>
 
 function IceXTFilamentsExporter(mImarisApplication)
-	% internal version number
-	ver = 29;
-
+	ver = 31;	% internal version number
+	
 	if nargin == 1
+        javaaddpath ImarisLib.jar;
+		% mImarisApplication
 		conn = IceImarisConnector(mImarisApplication);
-	else
-		% start Imaris and set up the connection
+    else
+        % fprintf('No ImarisID given, trying to start the application\n');
+        % start Imaris and set up the connection
 		conn = IceImarisConnector();
 		conn.startImaris();
 
