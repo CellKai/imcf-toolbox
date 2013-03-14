@@ -9,10 +9,10 @@ class My_UI_Window(Ui_MainWindow):
     def __init__(self):
         self.clist = []
         self.orderings = [
-            self.order_topbottom_leftright,
-            self.order_bottomtop_leftright,
             self.order_leftright_topbottom,
             self.order_leftright_bottomtop,
+            self.order_topbottom_leftright,
+            self.order_bottomtop_leftright,
             self.order_snakeline_topleft,
             self.order_snakeline_topright
         ]

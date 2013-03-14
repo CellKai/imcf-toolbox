@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'table_widget.ui'
 #
-# Created: Fri Mar  8 09:34:36 2013
+# Created: Fri Mar  8 14:00:56 2013
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -94,9 +94,17 @@ class Ui_MainWindow(object):
         self.cb_ordering = QtGui.QComboBox(self.centralwidget)
         self.cb_ordering.setObjectName(_fromUtf8("cb_ordering"))
         self.cb_ordering.addItem(_fromUtf8(""))
-        self.cb_ordering.setItemText(0, _fromUtf8("column-wise from top to bottom, starting on the left side"))
+        self.cb_ordering.setItemText(0, _fromUtf8("line-wise from left to right, from top to bottom"))
         self.cb_ordering.addItem(_fromUtf8(""))
-        self.cb_ordering.setItemText(1, _fromUtf8("column-wise from bottom to top, starting on the left side"))
+        self.cb_ordering.setItemText(1, _fromUtf8("line-wise from left to right, from bottom to top"))
+        self.cb_ordering.addItem(_fromUtf8(""))
+        self.cb_ordering.setItemText(2, _fromUtf8("column-wise from top to bottom, starting on the left side"))
+        self.cb_ordering.addItem(_fromUtf8(""))
+        self.cb_ordering.setItemText(3, _fromUtf8("column-wise from bottom to top, starting on the left side"))
+        self.cb_ordering.addItem(_fromUtf8(""))
+        self.cb_ordering.setItemText(4, _fromUtf8("snake-lines starting at top-left corner, going right"))
+        self.cb_ordering.addItem(_fromUtf8(""))
+        self.cb_ordering.setItemText(5, _fromUtf8("snake-lines starting at top-right corner, going left"))
         self.gridLayout.addWidget(self.cb_ordering, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 

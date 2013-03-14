@@ -203,12 +203,32 @@
      <widget class="QComboBox" name="cb_ordering">
       <item>
        <property name="text">
+        <string notr="true">line-wise from left to right, from top to bottom</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">line-wise from left to right, from bottom to top</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string notr="true">column-wise from top to bottom, starting on the left side</string>
        </property>
       </item>
       <item>
        <property name="text">
         <string notr="true">column-wise from bottom to top, starting on the left side</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">snake-lines starting at top-left corner, going right</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">snake-lines starting at top-right corner, going left</string>
        </property>
       </item>
      </widget>
