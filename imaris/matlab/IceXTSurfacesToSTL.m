@@ -60,6 +60,10 @@ function exportSurfacesToSTL(vImApp)
 
 	fprintf('extracted %i individual triangles\n', length(vTri));
 
+	% notification steps in percentage
+	psteps = [ 5 10 25 50];
+	nsteps = psteps * round(length(vTri) / 100);
+
 	fname = 'surface.stl';
 	[fname, fpath] = uiputfile(fname, 'Select a file name for the surface export');
 	if fname == 0
@@ -70,6 +74,11 @@ function exportSurfacesToSTL(vImApp)
 	fid = fopen([fpath fname], 'w');
 	fprintf(fid, 'solid imssurface\n');
 	for tri = 1:length(vTri)
+		% nid is the index of the current triangle in the nsteps array
+		nid = find(nsteps == tri);
+		if nid
+			fprintf('%i%% completed (%i triangles)...\n', psteps(nid), tri)
+		end
 		vi = vTri(tri,:) + 1;
 		fn = sum(vNormals(vi,:));
 		fn = fn / norm(fn);
