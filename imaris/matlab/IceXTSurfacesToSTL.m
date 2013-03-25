@@ -52,6 +52,7 @@ function exportSurfacesToSTL(vImApp)
 
 	% vFactory.IsSurfaces(vSurfaces)
 	% vSurfaces.GetNumberOfSurfaces
+	% FIXME: iterate over all surfaces!
 
 	vTri = vSurfaces.GetTriangles(0);
 	vNormals = vSurfaces.GetNormals(0);
