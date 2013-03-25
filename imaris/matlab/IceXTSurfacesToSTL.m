@@ -62,6 +62,10 @@ function exportSurfacesToSTL(vImApp)
 
 	fname = 'surface.stl';
 	[fname, fpath] = uiputfile(fname, 'Select a file name for the surface export');
+	if fname == 0
+		fprintf('aborting due to user request\n');
+		return;
+	end
 	fprintf('writing STL format to "%s"\n', [fpath fname]);
 	fid = fopen([fpath fname], 'w');
 	fprintf(fid, 'solid imssurface\n');
