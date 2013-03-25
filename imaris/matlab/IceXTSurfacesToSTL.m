@@ -76,6 +76,7 @@ function exportSurfacesToSTL(vImApp)
 	for tri = 1:length(vTri)
 		% nid is the index of the current triangle in the nsteps array
 		nid = find(nsteps == tri);
+		% TODO: measure time and give an ETA
 		if nid
 			fprintf('%i%% completed (%i triangles)...\n', psteps(nid), tri)
 		end
