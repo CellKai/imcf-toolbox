@@ -58,8 +58,11 @@ function exportSurfacesToSTL(vImApp)
 	vNormals = vSurfaces.GetNormals(0);
 	vVertices = vSurfaces.GetVertices(0);
 
+	fprintf('extracted %i individual triangles\n', length(vTri));
+
 	fname = 'surface.stl';
 	[fname, fpath] = uiputfile(fname, 'Select a file name for the surface export');
+	fprintf('writing STL format to "%s"\n', [fpath fname]);
 	fid = fopen([fpath fname], 'w');
 	fprintf(fid, 'solid imssurface\n');
 	for tri = 1:length(vTri)
