@@ -61,24 +61,26 @@ function exportSurfacesToSTL(vImApp)
 	fprintf('extracted %i individual triangles\n', length(vTri));
 
 	% notification steps in percentage
-	psteps = [ 5 10 25 50];
+	psteps = [ 1 5 10 25 50 75 ];
 	nsteps = psteps * round(length(vTri) / 100);
 
 	fname = 'surface.stl';
-	[fname, fpath] = uiputfile(fname, 'Select a file name for the surface export');
+	[fname, fpath] = uiputfile(fname, 'File name for the surface export');
 	if fname == 0
 		fprintf('aborting due to user request\n');
 		return;
 	end
 	fprintf('writing STL format to "%s"\n', [fpath fname]);
+	t0 = tic;
 	fid = fopen([fpath fname], 'w');
 	fprintf(fid, 'solid imssurface\n');
 	for tri = 1:length(vTri)
 		% nid is the index of the current triangle in the nsteps array
 		nid = find(nsteps == tri);
-		% TODO: measure time and give an ETA
 		if nid
-			fprintf('%i%% completed (%i triangles)...\n', psteps(nid), tri)
+			fprintf('%i%% completed: %i triangles, ', psteps(nid), tri);
+			to_go = toc(t0) * (100 / psteps(nid) - 1);
+			fprintf('est. time remaining: %.1fs\n', to_go);
 		end
 		vi = vTri(tri,:) + 1;
 		fn = sum(vNormals(vi,:));
@@ -94,6 +96,7 @@ function exportSurfacesToSTL(vImApp)
 	end
 	fprintf(fid, 'endsolid imssurface\n');
 	fclose(fid);
+	fprintf('completed: %i triangles, overall time: %.1fs\n', tri, toc(t0));
 end % exportSurfacesToSTL
 
 % % tri=1
