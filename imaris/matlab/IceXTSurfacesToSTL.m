@@ -71,8 +71,9 @@ function exportSurfacesToSTL(vImApp)
 		return;
 	end
 	fprintf('writing STL format to "%s"\n', [fpath fname]);
-	t0 = tic;
 	fid = fopen([fpath fname], 'w');
+
+	t0 = tic;
 	fprintf(fid, 'solid imssurface\n');
 	for tri = 1:length(vTri)
 		% nid is the index of the current triangle in the nsteps array
