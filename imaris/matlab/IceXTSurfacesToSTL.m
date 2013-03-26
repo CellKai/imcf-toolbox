@@ -72,7 +72,7 @@ function exportSurfacesToSTL(vImApp)
 
 	fprintf('extracted %i individual triangles\n', length(vTri));
 
-	% calculate the index numbers of this surface for the given percentages
+	% calculate the index numbers for the given percentages
 	nsteps = psteps * round(length(vTri) / 100);
 
 	t0 = tic;
@@ -98,6 +98,6 @@ function exportSurfacesToSTL(vImApp)
 		'  endfacet\n']);
 	end
 	fprintf(fid, 'endsolid imssurface\n');
-	fclose(fid);
 	fprintf('completed: %i triangles, overall time: %.1fs\n', tri, toc(t0));
+	fclose(fid);
 end % exportSurfacesToSTL
