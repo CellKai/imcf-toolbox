@@ -54,15 +54,8 @@ function exportSurfacesToSTL(vImApp)
 	% vSurfaces.GetNumberOfSurfaces
 	% FIXME: iterate over all surfaces!
 
-	vTri = vSurfaces.GetTriangles(0);
-	vNormals = vSurfaces.GetNormals(0);
-	vVertices = vSurfaces.GetVertices(0);
-
-	fprintf('extracted %i individual triangles\n', length(vTri));
-
 	% notification steps in percentage
 	psteps = [ 1 5 10 25 50 75 ];
-	nsteps = psteps * round(length(vTri) / 100);
 
 	fname = 'surface.stl';
 	[fname, fpath] = uiputfile(fname, 'File name for the surface export');
@@ -72,6 +65,15 @@ function exportSurfacesToSTL(vImApp)
 	end
 	fprintf('writing STL format to "%s"\n', [fpath fname]);
 	fid = fopen([fpath fname], 'w');
+
+	vTri = vSurfaces.GetTriangles(0);
+	vNormals = vSurfaces.GetNormals(0);
+	vVertices = vSurfaces.GetVertices(0);
+
+	fprintf('extracted %i individual triangles\n', length(vTri));
+
+	% calculate the index numbers of this surface for the given percentages
+	nsteps = psteps * round(length(vTri) / 100);
 
 	t0 = tic;
 	fprintf(fid, 'solid imssurface\n');
