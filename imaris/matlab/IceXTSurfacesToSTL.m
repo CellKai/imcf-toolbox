@@ -59,11 +59,10 @@ end
 function exportSurfacesToSTL(vImApp)
 	vFactory = vImApp.GetFactory;
 	vSurfaces = vFactory.ToSurfaces(vImApp.GetSurpassSelection);
-	vFileName = vImApp.GetCurrentFileName;
-
 	% notification steps in percentage
 	psteps = [ 1 5 10 25 50 75 ];
 
+	vFileName = vImApp.GetCurrentFileName;
 	[fpath, fname, ext] = fileparts(char(vFileName));
 	[fname, fpath] = uiputfile(fullfile(fpath, ...
 		[fname '-surfaces.stl']), ...
