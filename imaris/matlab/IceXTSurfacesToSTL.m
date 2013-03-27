@@ -47,6 +47,11 @@ function IceXTSurfacesToSTL(mImarisApplication)
 		end
 	end
 
+	if ~conn.isAlive
+		fprintf('Error: no connection to Imaris!\n');
+		return;
+	end
+
 	exportSurfacesToSTL(conn.mImarisApplication);
 end
 
