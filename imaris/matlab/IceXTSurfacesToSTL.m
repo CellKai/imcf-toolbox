@@ -97,10 +97,11 @@ function exportSurfacesToSTL(vImApp)
 				to_go = toc(t0) * (100 / psteps(nid) - 1);
 				fprintf('est. time remaining: %.1fs\n', to_go);
 			end
-			vi = vTri(tri,:) + 1;
+			vi = vTri(tri,:) + 1; % indices of vertices
+			% calculate the facet normal (fn):
 			fn = sum(vNormals(vi,:));
 			fn = fn / norm(fn);
-			tv = vVertices(vi,:);
+			tv = vVertices(vi,:); % triangle vertices
 			fprintf(fid, ['  facet normal ' num2str(fn, '%e %e %e') '\n' ...
 			'    outer loop\n' ...
 			'      vertex ' num2str(tv(1,:), '%e %e %e') '\n' ...
