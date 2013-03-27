@@ -36,7 +36,7 @@ function IceXTSurfacesToSTL(mImarisApplication)
 		conn.startImaris();
 
 		vImApp = conn.mImarisApplication;
-		fprintf('connection ID: %s\n', vImApp);
+		fprintf('connection ID: %s\n', char(vImApp));
 		while ~vImApp.GetFactory.IsSurfaces(vImApp.GetSurpassSelection)
 			msg = 'Select a SURFACE object in Imaris!';
 			title = 'Selection required';
