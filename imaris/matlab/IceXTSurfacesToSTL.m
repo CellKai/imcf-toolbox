@@ -34,11 +34,16 @@ function IceXTSurfacesToSTL(mImarisApplication)
         % start Imaris and set up the connection
 		conn = IceImarisConnector();
 		conn.startImaris();
-		msg = ['Click "OK" to continue after opening a dataset and ', ...
-					'selecting a Surface object.'];
-		ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
-		if strcmp(ans, 'Cancel')
-			return;
+
+		vImApp = conn.mImarisApplication;
+		fprintf('connection ID: %s\n', vImApp);
+		while ~vImApp.GetFactory.IsSurfaces(vImApp.GetSurpassSelection)
+			msg = 'Select a SURFACE object in Imaris!';
+			title = 'Selection required';
+			ans = questdlg(msg, title, 'OK', 'Cancel', 'OK');
+			if strcmp(ans, 'Cancel')
+				return;
+			end
 		end
 	end
 
@@ -49,8 +54,6 @@ end
 function exportSurfacesToSTL(vImApp)
 	vFactory = vImApp.GetFactory;
 	vSurfaces = vFactory.ToSurfaces(vImApp.GetSurpassSelection);
-
-	% vFactory.IsSurfaces(vSurfaces)
 
 	% notification steps in percentage
 	psteps = [ 1 5 10 25 50 75 ];
