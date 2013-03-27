@@ -24,13 +24,15 @@
 % </CustomTools>
 
 function IceXTFilamentsExporter(mImarisApplication)
-	% internal version number
-	ver = 29;
-
+	ver = 32;	% internal version number
+	
 	if nargin == 1
+        javaaddpath ImarisLib.jar;
+		% mImarisApplication
 		conn = IceImarisConnector(mImarisApplication);
-	else
-		% start Imaris and set up the connection
+    else
+        % fprintf('No ImarisID given, trying to start the application\n');
+        % start Imaris and set up the connection
 		conn = IceImarisConnector();
 		conn.startImaris();
 
@@ -68,8 +70,8 @@ function exportFilaments(vImApp)
 	end
 		
 	% FIXME: this works only on windows
-	home = getenv('USERPROFILE')
-	cd(home)
+	home = getenv('USERPROFILE');
+	oldpwd = cd(home);
 
 	% extract positions of filament points for each and store them
 	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
@@ -78,5 +80,7 @@ function exportFilaments(vImApp)
 		[fname, fpath] = uiputfile(fname, 'Save Filament as CSV file');
 		csvwrite(fullfile(fpath, fname), vFilamentsXYZ);
 	end
+	
+	cd(oldpwd);
 
 end
