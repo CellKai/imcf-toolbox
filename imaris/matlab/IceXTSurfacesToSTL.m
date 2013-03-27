@@ -51,8 +51,6 @@ function exportSurfacesToSTL(vImApp)
 	vSurfaces = vFactory.ToSurfaces(vImApp.GetSurpassSelection);
 
 	% vFactory.IsSurfaces(vSurfaces)
-	% vSurfaces.GetNumberOfSurfaces
-	% FIXME: iterate over all surfaces!
 
 	% notification steps in percentage
 	psteps = [ 1 5 10 25 50 75 ];
@@ -66,38 +64,40 @@ function exportSurfacesToSTL(vImApp)
 	fprintf('writing STL format to "%s"\n', [fpath fname]);
 	fid = fopen([fpath fname], 'w');
 
-	vTri = vSurfaces.GetTriangles(0);
-	vNormals = vSurfaces.GetNormals(0);
-	vVertices = vSurfaces.GetVertices(0);
+	for SurfaceID = 0:(vSurfaces.GetNumberOfSurfaces - 1)
+		vTri = vSurfaces.GetTriangles(SurfaceID);
+		vNormals = vSurfaces.GetNormals(SurfaceID);
+		vVertices = vSurfaces.GetVertices(SurfaceID);
 
-	fprintf('extracted %i individual triangles\n', length(vTri));
+		fprintf('extracted %i individual triangles\n', length(vTri));
 
-	% calculate the index numbers for the given percentages
-	nsteps = psteps * round(length(vTri) / 100);
+		% calculate the index numbers for the given percentages
+		nsteps = psteps * round(length(vTri) / 100);
 
-	t0 = tic;
-	fprintf(fid, 'solid imssurface\n');
-	for tri = 1:length(vTri)
-		% nid is the index of the current triangle in the nsteps array
-		nid = find(nsteps == tri);
-		if nid
-			fprintf('%i%% completed: %i triangles, ', psteps(nid), tri);
-			to_go = toc(t0) * (100 / psteps(nid) - 1);
-			fprintf('est. time remaining: %.1fs\n', to_go);
+		t0 = tic;
+		fprintf(fid, 'solid imssurface-%i\n', SurfaceID);
+		for tri = 1:length(vTri)
+			% nid is the index of the current triangle in the nsteps array
+			nid = find(nsteps == tri);
+			if nid
+				fprintf('%i%% completed: %i triangles, ', psteps(nid), tri);
+				to_go = toc(t0) * (100 / psteps(nid) - 1);
+				fprintf('est. time remaining: %.1fs\n', to_go);
+			end
+			vi = vTri(tri,:) + 1;
+			fn = sum(vNormals(vi,:));
+			fn = fn / norm(fn);
+			tv = vVertices(vi,:);
+			fprintf(fid, ['  facet normal ' num2str(fn, '%e %e %e') '\n' ...
+			'    outer loop\n' ...
+			'      vertex ' num2str(tv(1,:), '%e %e %e') '\n' ...
+			'      vertex ' num2str(tv(2,:), '%e %e %e') '\n' ...
+			'      vertex ' num2str(tv(3,:), '%e %e %e') '\n' ...
+			'    endloop\n' ...
+			'  endfacet\n']);
 		end
-		vi = vTri(tri,:) + 1;
-		fn = sum(vNormals(vi,:));
-		fn = fn / norm(fn);
-		tv = vVertices(vi,:);
-		fprintf(fid, ['  facet normal ' num2str(fn, '%e %e %e') '\n' ...
-		'    outer loop\n' ...
-		'      vertex ' num2str(tv(1,:), '%e %e %e') '\n' ...
-		'      vertex ' num2str(tv(2,:), '%e %e %e') '\n' ...
-		'      vertex ' num2str(tv(3,:), '%e %e %e') '\n' ...
-		'    endloop\n' ...
-		'  endfacet\n']);
-	end
-	fprintf(fid, 'endsolid imssurface\n');
-	fprintf('completed: %i triangles, overall time: %.1fs\n', tri, toc(t0));
+		fprintf(fid, 'endsolid imssurface-%i\n', SurfaceID);
+		fprintf('completed: %i triangles, overall time: %.1fs\n', tri, toc(t0));
+	end % for SurfaceID
 	fclose(fid);
 end % exportSurfacesToSTL
