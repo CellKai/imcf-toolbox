@@ -34,19 +34,20 @@ function IceXTSurfacesToSTL(mImarisApplication)
         % start Imaris and set up the connection
 		conn = IceImarisConnector();
 		conn.startImaris();
-
-		vImApp = conn.mImarisApplication;
-		fprintf('connection ID: %s\n', char(vImApp));
-		while ~vImApp.GetFactory.IsSurfaces(vImApp.GetSurpassSelection)
-			msg = 'Select a SURFACE object in Imaris!';
-			title = 'Selection required';
-			ans = questdlg(msg, title, 'OK', 'Cancel', 'OK');
-			if strcmp(ans, 'Cancel')
-				return;
-			end
-		end
 	end
 
+	% if called from matlab using an existing connection (useful for
+	% debugging), it is better to do some sanity checks first:
+	vImApp = conn.mImarisApplication;
+	fprintf('connection ID: %s\n', char(vImApp));
+	while ~vImApp.GetFactory.IsSurfaces(vImApp.GetSurpassSelection)
+		msg = 'Select a SURFACE object in Imaris!';
+		title = 'Selection required';
+		ans = questdlg(msg, title, 'OK', 'Cancel', 'OK');
+		if strcmp(ans, 'Cancel')
+			return;
+		end
+	end
 	if ~conn.isAlive
 		fprintf('Error: no connection to Imaris!\n');
 		return;
