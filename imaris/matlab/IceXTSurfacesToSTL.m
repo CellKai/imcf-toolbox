@@ -72,15 +72,17 @@ function exportSurfacesToSTL(vImApp)
 		fprintf('aborting due to user request\n');
 		return;
 	end
-	fprintf('writing STL format to "%s"\n', [fpath fname]);
+	fprintf('writing STL format to "%s"\n\n', [fpath fname]);
 	fid = fopen([fpath fname], 'w');
 
+	t_all = tic;
 	for SurfaceID = 0:(vSurfaces.GetNumberOfSurfaces - 1)
 		vTri = vSurfaces.GetTriangles(SurfaceID);
 		vNormals = vSurfaces.GetNormals(SurfaceID);
 		vVertices = vSurfaces.GetVertices(SurfaceID);
 
-		fprintf('extracted %i individual triangles\n', length(vTri));
+		fprintf('--> processing surface %i (%i triangles)\n', ...
+			SurfaceID, length(vTri));
 
 		% calculate the index numbers for the given percentages
 		nsteps = psteps * round(length(vTri) / 100);
@@ -108,7 +110,9 @@ function exportSurfacesToSTL(vImApp)
 			'  endfacet\n']);
 		end
 		fprintf(fid, 'endsolid imssurface-%i\n', SurfaceID);
-		fprintf('completed: %i triangles, overall time: %.1fs\n', tri, toc(t0));
+		fprintf('surface %i done, time: %.1fs\n', SurfaceID, toc(t0));
 	end % for SurfaceID
 	fclose(fid);
+	fprintf('\n==> done exporting %i surfaces in %.1fs\n', ...
+		vSurfaces.GetNumberOfSurfaces, toc(t_all));
 end % exportSurfacesToSTL
