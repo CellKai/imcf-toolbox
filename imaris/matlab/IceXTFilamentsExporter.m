@@ -31,11 +31,17 @@ function IceXTFilamentsExporter(mImarisApplication)
 		% mImarisApplication
 		conn = IceImarisConnector(mImarisApplication);
     else
-        % fprintf('No ImarisID given, trying to start the application\n');
         % start Imaris and set up the connection
 		conn = IceImarisConnector();
 		conn.startImaris();
+	end
 
+	% if called from matlab using an existing connection (useful for
+	% debugging), it is better to do some sanity checks first:
+	if ~conn.isAlive
+		fprintf('Error: no connection to Imaris!\n');
+		return;
+	end
 		% wait until the connection is ready and some data is selected
 		msg = ['Click "OK" to continue after opening a dataset and ', ...
 			'selecting a Filament object.'];
