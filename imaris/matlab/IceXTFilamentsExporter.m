@@ -42,10 +42,12 @@ function IceXTFilamentsExporter(mImarisApplication)
 		fprintf('Error: no connection to Imaris!\n');
 		return;
 	end
-		% wait until the connection is ready and some data is selected
-		msg = ['Click "OK" to continue after opening a dataset and ', ...
-			'selecting a Filament object.'];
-		ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
+	vImApp = conn.mImarisApplication;
+	fprintf('connection ID: %s\n', char(vImApp));
+	while ~vImApp.GetFactory.IsFilaments(vImApp.GetSurpassSelection)
+		msg = 'Select a FILAMENTS object in Imaris!';
+		title = 'Selection required';
+		ans = questdlg(msg, title, 'OK', 'Cancel', 'OK');
 		if strcmp(ans, 'Cancel')
 			return;
 		end
@@ -59,21 +61,6 @@ function exportFilaments(vImApp)
 	vFilaments = vFactory.ToFilaments(vImApp.GetSurpassSelection);
 	vSurpassScene = vImApp.GetSurpassScene;
 
-	if ~vFactory.IsFilaments(vFilaments)
-		for vChildIndex = 1:vSurpassScene.GetNumberOfChildren
-			vDataItem = vSurpassScene.GetChild(vChildIndex - 1);
-			if vFactory.IsFilaments(vDataItem)
-				vFilaments = vFactory.ToFilaments(vDataItem);
-				break;
-			end
-		end
-		
-		% check if there was a filament at all
-		if isequal(vFilaments, [])
-			msgbox('Could not find any Filaments!');
-			return;
-		end
-	end
 		
 	% FIXME: this works only on windows
 	home = getenv('USERPROFILE');
