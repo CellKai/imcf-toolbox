@@ -61,19 +61,20 @@ function exportFilaments(vImApp)
 	vFilaments = vFactory.ToFilaments(vImApp.GetSurpassSelection);
 	vSurpassScene = vImApp.GetSurpassScene;
 
-		
-	% FIXME: this works only on windows
-	home = getenv('USERPROFILE');
-	oldpwd = cd(home);
-
 	% extract positions of filament points for each and store them
 	for FilamentID = 0:(vFilaments.GetNumberOfFilaments - 1)
+		vFileName = vImApp.GetCurrentFileName;
+		[fpath, fname, ext] = fileparts(char(vFileName));
+		fname = sprintf('%s-filaments-%d.csv', fname, FilamentID);
+		[fname, fpath] = uiputfile(fullfile(fpath, fname), ...
+			'File name for the filaments export');
+		if fname == 0
+			fprintf('aborting due to user request\n');
+			return;
+		end
+		fprintf('writing filament format to "%s"\n\n', [fpath fname]);
+
 		vFilamentsXYZ = vFilaments.GetPositionsXYZ(FilamentID);
-		fname = sprintf('filaments-%d.csv', FilamentID);
-		[fname, fpath] = uiputfile(fname, 'Save Filament as CSV file');
 		csvwrite(fullfile(fpath, fname), vFilamentsXYZ);
 	end
-	
-	cd(oldpwd);
-
 end
