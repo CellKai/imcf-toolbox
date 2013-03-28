@@ -38,6 +38,10 @@ function IceXTSurfacesToSTL(mImarisApplication)
 
 	% if called from matlab using an existing connection (useful for
 	% debugging), it is better to do some sanity checks first:
+	if ~conn.isAlive
+		fprintf('Error: no connection to Imaris!\n');
+		return;
+	end
 	vImApp = conn.mImarisApplication;
 	fprintf('connection ID: %s\n', char(vImApp));
 	while ~vImApp.GetFactory.IsSurfaces(vImApp.GetSurpassSelection)
@@ -47,10 +51,6 @@ function IceXTSurfacesToSTL(mImarisApplication)
 		if strcmp(ans, 'Cancel')
 			return;
 		end
-	end
-	if ~conn.isAlive
-		fprintf('Error: no connection to Imaris!\n');
-		return;
 	end
 
 	exportSurfacesToSTL(conn.mImarisApplication);
