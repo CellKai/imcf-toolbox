@@ -25,19 +25,30 @@
 
 function IceXTSurfacesConvexHull(mImarisApplication)
 	% internal version number
-	ver = 4;
+	ver = 5;
 
 	if nargin == 1
+        javaaddpath ImarisLib.jar;
+		% mImarisApplication
 		conn = IceImarisConnector(mImarisApplication);
 	else
 		% start Imaris and set up the connection
 		conn = IceImarisConnector();
 		conn.startImaris();
+	end
 
-		% wait until the connection is ready and some data is selected
-		msg = ['Click "OK" to continue after opening a dataset and ', ...
-			'selecting a Surface object.'];
-		ans = questdlg(msg, 'Waiting for Imaris...', 'OK', 'Cancel', 'OK');
+	% if called from matlab using an existing connection (useful for
+	% debugging), it is better to do some sanity checks first:
+	if ~conn.isAlive
+		fprintf('Error: no connection to Imaris!\n');
+		return;
+	end
+	vImApp = conn.mImarisApplication;
+	fprintf('connection ID: %s\n', char(vImApp));
+	while ~vImApp.GetFactory.IsSurfaces(vImApp.GetSurpassSelection)
+		msg = 'Select a SURFACE object in Imaris!';
+		title = 'Selection required';
+		ans = questdlg(msg, title, 'OK', 'Cancel', 'OK');
 		if strcmp(ans, 'Cancel')
 			return;
 		end
@@ -51,24 +62,6 @@ function calculateSurfacesConvexHull(vImApp)
 	vSurfaces = vFactory.ToSurfaces(vImApp.GetSurpassSelection);
 	vSurpassScene = vImApp.GetSurpassScene;
 
-	% check if a surface was selected in imaris:
-	if ~vFactory.IsSurfaces(vSurfaces)
-		% otherwise try all elements and take the first surface object:
-		for vChildIndex = 1:vSurpassScene.GetNumberOfChildren
-			vDataItem = vSurpassScene.GetChild(vChildIndex - 1);
-			if vFactory.IsSurfaces(vDataItem)
-				vSurfaces = vFactory.ToSurfaces(vDataItem);
-				break;
-			end
-		end
-		
-		% check if there was a surface at all
-		if isequal(vSurfaces, [])
-			msgbox('Could not find any Surface!');
-			return;
-		end
-	end
-	
 	% create a new surfaces object:
 	vSurfaceHull = vFactory.CreateSurfaces;
 	
