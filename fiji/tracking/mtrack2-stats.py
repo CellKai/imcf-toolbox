@@ -51,6 +51,7 @@ for row in csvreader:
 # last N lines are the stats per track
 trackstats = []
 while True:
+    # pop returns the last element if no index is given
     cur = data.pop()
     if cur[0].strip() == 'Track':
         # remove one more line (empty), then we're done
@@ -58,3 +59,6 @@ while True:
         break
     else:
         trackstats.append(cur)
+# as we parsed from the last element, we need to reverse the list
+trackstats.reverse()
+
