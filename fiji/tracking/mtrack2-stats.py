@@ -48,6 +48,16 @@ csvreader = csv.reader(args.infile, delimiter='	')
 for row in csvreader:
     data.append(row)
 
+# start parsing the header
+header = []
+header.append(data.pop(0))
+header.append(data.pop(0))
+if not header[0][0] == 'Frame':
+    # exit because file is broken...
+    sys.exit('Unable to find correct header, stopping.')
+# second line is 'Tracks 1 to N', so we can read the total number there:
+trackmax = int(header[1][0].split(' ')[3])
+
 # last N lines are the stats per track
 trackstats = []
 while True:
