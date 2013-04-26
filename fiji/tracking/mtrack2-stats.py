@@ -42,8 +42,8 @@ log.debug("Outfile: %s" % args.outfile)
 data = []
 
 # parse elements of the row and discard all non-numerical ones:
-parsedata = csv.reader(args.infile, delimiter='	')
-for row in parsedata:
+csvreader = csv.reader(args.infile, delimiter='	')
+for row in csvreader:
     data.append(row)
 
 # last N lines are the stats per track
