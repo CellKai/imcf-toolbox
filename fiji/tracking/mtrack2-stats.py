@@ -43,6 +43,8 @@ data = []
 
 # parse elements of the row and discard all non-numerical ones:
 csvreader = csv.reader(args.infile, delimiter='	')
+# NOTE: this is bad if the files get too large, but we haven't seen result
+# files from MTrack2 that are bigger than a couple of MB.
 for row in csvreader:
     data.append(row)
 
