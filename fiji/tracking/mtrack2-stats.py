@@ -55,8 +55,11 @@ header.append(data.pop(0))
 if not header[0][0] == 'Frame':
     # exit because file is broken...
     sys.exit('Unable to find correct header, stopping.')
+log.info("Header:\n%s\n" % pp.pformat(header))
+
 # second line is 'Tracks 1 to N', so we can read the total number there:
 trackmax = int(header[1][0].split(' ')[3])
+log.info("Total number of tracks: %s" % pp.pformat(trackmax))
 
 # last N lines are the stats per track
 trackstats = []
@@ -71,4 +74,4 @@ while True:
         trackstats.append(cur)
 # as we parsed from the last element, we need to reverse the list
 trackstats.reverse()
-
+log.info("Track statistics:\n%s" % pp.pformat(trackstats))
