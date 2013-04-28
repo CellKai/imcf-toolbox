@@ -69,7 +69,7 @@ while True:
     cur = data.pop()
     if cur[0].strip() == 'Track':
         # remove one more line (empty), then we're done
-        data.pop()
+        cur = data.pop()
         break
     else:
         trackstats.append(cur)
