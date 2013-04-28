@@ -41,12 +41,13 @@ log.debug("Outfile: %s" % args.outfile)
 
 data = []
 
-# parse elements of the row and discard all non-numerical ones:
-csvreader = csv.reader(args.infile, delimiter='	')
+csvreader = csv.reader(args.infile, delimiter='\t')
+# parse all lines into memory
 # NOTE: this is bad if the files get too large, but we haven't seen result
 # files from MTrack2 that are bigger than a couple of MB.
 for row in csvreader:
     data.append(row)
+
 
 # start parsing the header
 header = []
@@ -75,3 +76,5 @@ while True:
 # as we parsed from the last element, we need to reverse the list
 trackstats.reverse()
 log.info("Track statistics:\n%s" % pp.pformat(trackstats))
+
+
