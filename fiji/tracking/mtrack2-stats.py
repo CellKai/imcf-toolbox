@@ -10,6 +10,22 @@ import argparse
 import pprint
 import logging
 
+# we need to distinguish at least three possibilities, cells can be empty,
+# strings or float numbers, so a more sohpisticated parsing is required:
+def parse_cell(x):
+    retval = 0
+    # flag columns can contain '*', which we currently ignore
+    if x == '*':
+        return retval
+    if x != "":
+        try:
+            retval = float(x)
+        except ValueError:
+            retval = str(x).strip()
+            if retval == "":
+                retval = 0
+    return retval
+
 argparser = argparse.ArgumentParser(description=__doc__)
 # argparser.add_argument('-p', '--overlap', type=float, default='0.15',
 #     help='tile overlap (default 0.15)')
@@ -46,8 +62,8 @@ csvreader = csv.reader(args.infile, delimiter='\t')
 # NOTE: this is bad if the files get too large, but we haven't seen result
 # files from MTrack2 that are bigger than a couple of MB.
 for row in csvreader:
-    data.append(row)
-
+    data.append([parse_cell(x) for x in row])
+    # data.append(row)
 
 # start parsing the header
 header = []
@@ -67,7 +83,7 @@ trackstats = []
 while True:
     # pop returns the last element if no index is given
     cur = data.pop()
-    if cur[0].strip() == 'Track':
+    if cur[0] == 'Track':
         # remove one more line (empty), then we're done
         cur = data.pop()
         break
