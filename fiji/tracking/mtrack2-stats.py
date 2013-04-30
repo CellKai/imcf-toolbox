@@ -52,7 +52,7 @@ log.setLevel(loglevel)
 
 log.debug(pp.pformat(args.__contains__))
 log.debug(pp.pformat(type(args)))
-log.debug("Infile: %s" % args.infile)
+log.warn("Infile: %s" % args.infile)
 log.debug("Outfile: %s" % args.outfile)
 
 data = []
@@ -72,7 +72,7 @@ header.append(data.pop(0))
 if not header[0][0] == 'Frame':
     # exit because file is broken...
     sys.exit('Unable to find correct header, stopping.')
-log.info("Header:\n%s\n" % pp.pformat(header))
+log.debug("Header:\n%s\n" % pp.pformat(header))
 
 # second line is 'Tracks 1 to N', so we can read the total number there:
 trackmax = int(header[1][0].split(' ')[3])
@@ -91,6 +91,6 @@ while True:
         trackstats.append(cur)
 # as we parsed from the last element, we need to reverse the list
 trackstats.reverse()
-log.info("Track statistics:\n%s" % pp.pformat(trackstats))
+log.warn("Track statistics:\n%s" % pp.pformat(trackstats))
 
 
