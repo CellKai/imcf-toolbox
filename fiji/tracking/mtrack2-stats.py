@@ -57,6 +57,9 @@ log.debug("Outfile: %s" % args.outfile)
 
 data = []
 
+# TODO: parsing can be done in a nicer way be reading the header lines via
+# csvreader.next(), checking for the expected values and the number of tracks
+# and then directly reading the trackpoints into a numpy ndarray...
 csvreader = csv.reader(args.infile, delimiter='\t')
 # parse all lines into memory
 # NOTE: this is bad if the files get too large, but we haven't seen result
@@ -92,5 +95,13 @@ while True:
 # as we parsed from the last element, we need to reverse the list
 trackstats.reverse()
 log.warn("Track statistics:\n%s" % pp.pformat(trackstats))
+
+# this code can help debugging problematic files:
+# for row in data:
+#     try:
+#         np.array(row, dtype='float')
+#     except ValueError:
+#         print row
+#         sys.exit()
 
 
