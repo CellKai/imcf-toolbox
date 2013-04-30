@@ -9,6 +9,8 @@ import sys
 import argparse
 import pprint
 import logging
+import numpy as np
+import math
 
 # we need to distinguish at least three possibilities, cells can be empty,
 # strings or float numbers, so a more sohpisticated parsing is required:
@@ -25,6 +27,16 @@ def parse_cell(x):
             if retval == "":
                 retval = 0
     return retval
+
+def angle(v1u, v2u):
+    ''' Calculates the angle between unit vectors (in degrees). '''
+    rad = np.arccos(np.dot(v1u, v2u))
+    if math.isnan(rad):
+        if (v1u == v2u).all():
+            rad = 0.0
+        else:
+            rad = np.pi
+    return rad * (180/np.pi)
 
 argparser = argparse.ArgumentParser(description=__doc__)
 # argparser.add_argument('-p', '--overlap', type=float, default='0.15',
@@ -104,4 +116,50 @@ log.warn("Track statistics:\n%s" % pp.pformat(trackstats))
 #         print row
 #         sys.exit()
 
+# remove column 0 (indices), and every third one (flags)
+todelete= range(0, (trackmax+1)*3, 3)
+npdata = np.delete(data, todelete, axis=1)
+npdata_bool = npdata > 0
 
+tracklen = [0] * trackmax
+t_overlap = npdata_bool[:,0]
+for track in range(trackmax):
+    tracklen[track] = sum(npdata_bool[:,track*2])
+    t_overlap = t_overlap * npdata_bool[:,track*2]
+
+if trackmax > 1 and sum(t_overlap) > 0:
+    sys.exit("*** WARNING: Found overlapping tracks! ***")
+
+t_combined = np.zeros((npdata.shape[0],2))
+for track in range(trackmax):
+    t_combined += npdata[:,track*2:(track+1)*2]
+
+comb_mask = np.zeros(t_combined.shape[0])
+for i, row in enumerate(t_combined):
+    if (row == [0., 0.]).all():
+        # print 'row %i is zerooooo' % i
+        comb_mask[i] = True
+
+t_masked = np.ma.array(t_combined, mask=np.repeat(comb_mask, 2))
+t_combined = np.ma.compress_rows(t_masked)
+
+# calculate the movement vectors:
+movement_v = t_combined[1:] - t_combined[0:-1]
+movement_v = np.insert(movement_v, 0, [0.,0.], axis=0)
+# movement vector normals:
+movement_n = np.zeros((movement_v.shape[0], 1))
+for p in range(1, movement_n.shape[0]):
+    movement_n[p] = np.linalg.norm(movement_v[p])
+
+rotation = np.zeros((movement_n.shape[0], 1))
+for p in range(1, rotation.shape[0]-1):
+    # print movement_v[p-1]
+    # print movement_n[p-1]
+    rotation[p+1] = angle(movement_v[p-1]/movement_n[p-1],
+                        movement_v[p]/movement_n[p])
+
+
+combined = np.hstack((t_combined, movement_v, movement_n, rotation))
+csvwriter = csv.writer(args.outfile, delimiter='\t')
+for row in np.ma.compress_rows(combined):
+    csvwriter.writerow(row)
