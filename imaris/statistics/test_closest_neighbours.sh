@@ -6,5 +6,4 @@ CAND="${BASEDIR}/spots_red_multi_ws-all.xml"
 
 RES="${BASEDIR}/result_closest_neighbours.txt"
 
-# This is currently broken due to the changes in closest_neighbours.py!
-./closest_neighbours.py --reference $REFS --candidate $CAND --outfile $RES
+./closest_neighbours.py --reference $REFS --candidate $CAND > $RES
