@@ -1,14 +1,29 @@
 """A convenience module to set up logging with some default values across
 multiple modules.
 
-To use it, just add this line to your python code:
----
-from log import log
----
+Example
+-------
+>>> from log import log
+
 From there on a logger is available for usage with e.g. log.warn(), even if the
 import statement from above happens in multiple places across modules, it will
-always use the same logger instance (that functionality is built into the
-logging module, we just do the setup here). This can easily be check by looking at the log handlers in the different modules.
+always use the same logger instance (that "singleton" functionality is built
+into the logging module, we just do the setup here). This can easily be check
+by looking at the log handlers in the different modules.
+
+The logging levels, in increasing order of importance, are:
+
+DEBUG
+INFO
+WARN
+ERROR
+CRITICAL
+
+To set the verbosity level when you're e.g. using argparse to count the number
+of occurences of '-v' from the commandline into a variable 'verbosity', this
+code can be used:
+>>> loglevel = (3 - args.verbosity) * 10
+>>> log.setLevel(loglevel)
 """
 
 import logging
