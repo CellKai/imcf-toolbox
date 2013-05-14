@@ -5,6 +5,7 @@
 #  - evaluate datatypes from XML cells
 
 import xml.etree.ElementTree as etree
+from log import log
 
 
 class ImsXMLError(Exception):
@@ -24,7 +25,7 @@ class ImarisXML(object):
     >>> positions = xmldata.celldata('Position')
     """
 
-    def __init__(self, xmlfile, ns='', debug=0):
+    def __init__(self, xmlfile, ns=''):
         """Create a new Imaris-XML object from a file.
 
         Parameters
@@ -34,12 +35,9 @@ class ImarisXML(object):
         ns : string, optional
             A string denoting the namespace expected in the XML file,
             defaults to the one used by MS Excel in its XML format.
-        debug : int, optional
         """
-        # TODO: use the logging module instead of the stupid debug param
         self.tree = None
         self.cells = {}
-        self.debug = debug
         # by default, we expect the namespace of Excel XML:
         self.namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
         if ns:
@@ -52,11 +50,9 @@ class ImarisXML(object):
 
         Just an auxiliary function for debugging statements.
         """
-        # TODO: use the logging module instead!
-        if self.debug:
-            print "Processing file: " + infile.name
+        log.info("Parsing XML file: %s" % infile.name)
         self.tree = etree.parse(infile)
-        if self.debug > 1: print "Done parsing XML: " + str(self.tree)
+        log.info("Done parsing XML: %s" % self.tree)
 
     def _check_namespace(self):
         """Check if an XML tree has a certain namespace.
@@ -67,9 +63,8 @@ class ImarisXML(object):
         """
         real_ns = self.tree.getroot().tag[1:].split("}")[0]
         if not real_ns == self.namespace:
-            if self.debug:
-                print "ERROR, couldn't find the expected XML namespace!"
-                print "Namespace parsed from XML: '" + real_ns + "'"
+            log.critical("ERROR, couldn't find the expected XML namespace!")
+            log.critical("Namespace parsed from XML: '%s'" % real_ns)
             raise(ImsXMLError)
 
     def _worksheet(self, pattern):
@@ -91,7 +86,7 @@ class ImarisXML(object):
         # identical names and just return the first one (should be safe):
         worksheet = self.tree.findall(pattern)[0]
         # TODO: error handling (worksheet not found, ...)!!!
-        if self.debug > 1: print "Found worksheet: " + str(worksheet)
+        log.info("Found worksheet: %s" % worksheet)
         return(worksheet)
 
     def _parse_cells(self, ws):
@@ -116,13 +111,12 @@ class ImarisXML(object):
                 continue
             for cell in row:
                 content.append(cell[0].text)
-            if self.debug > 2:
-                print str(len(row))
-                print content
+            log.debug('length of row: %i' % len(row))
+            log.debug(content)
             cells.append(content)
         self.cells[ws] = cells
-        if self.debug: print self.cells
-        if self.debug: print "Parsed rows: " + str(len(self.cells))
+        log.debug("--- cells ---\n%s\n--- cells ---" % self.cells)
+        log.info("Parsed rows: %i" % len(self.cells))
 
     def celldata(self, ws):
         """Provide access to the cell contents.
@@ -173,5 +167,5 @@ class ImarisXML(object):
             y = float(cell[1])
             z = float(cell[2])
             coords.insert(id, (x, y, z))
-        if self.debug > 1: print "Parsed coordinates:", str(len(coords))
+        log.debug("Parsed coordinates: %i" % len(coords))
         return(coords)

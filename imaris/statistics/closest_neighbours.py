@@ -36,7 +36,6 @@ class ClosestNeighbours(object):
     def _parse(self):
         log.warn('References file: %s' % self.ref.name)
         self.XMLref = ImarisXML(self.ref)
-        # for more verbosity, add 'debug=2' to the ImarisXML call
         log.warn('Candidates file: %s' % self.cand.name)
         self.XMLcnd = ImarisXML(self.cand)
 
