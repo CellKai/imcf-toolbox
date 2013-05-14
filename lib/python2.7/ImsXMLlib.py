@@ -21,6 +21,7 @@ class ImarisXML(object):
     >>> import ImsXMLlib
     >>> fh = open('/path/to/file.xml', 'r')
     >>> xmldata = ImsXMLlib.ImarisXML(fh)
+    >>> positions = xmldata.celldata('Position')
     """
 
     def __init__(self, xmlfile, ns='', debug=0):
