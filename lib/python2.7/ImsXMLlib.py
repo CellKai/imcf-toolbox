@@ -94,30 +94,6 @@ class ImarisXML(object):
         if self.debug > 1: print "Found worksheet: " + str(worksheet)
         return(worksheet)
 
-    def celldata(self, ws):
-        """Provide access to the cell contents.
-
-        Automatically calls the parser if the selected worksheet
-        has not yet been processed before.
-
-        Parameters
-        ----------
-        ws : string
-            The name of the desired worksheet.
-
-        Returns
-        -------
-        out : [[]], rows x cols
-            List of lists containing the table cell's data, e.g.
-            [ [r1c1, r1c2, r1c3, ...],
-              [r2c1, r2c2, r2c3, ...],
-              [r3c1, r3c2, r3c3, ...],
-              ...                      ]
-        """
-        if not ws in self.cells:
-            self._parse_cells(ws)
-        return(self.cells[ws])
-
     def _parse_cells(self, ws):
         """Parse the cell-contents of a worksheet into a 2D array.
 
@@ -147,6 +123,30 @@ class ImarisXML(object):
         self.cells[ws] = cells
         if self.debug: print self.cells
         if self.debug: print "Parsed rows: " + str(len(self.cells))
+
+    def celldata(self, ws):
+        """Provide access to the cell contents.
+
+        Automatically calls the parser if the selected worksheet
+        has not yet been processed before.
+
+        Parameters
+        ----------
+        ws : string
+            The name of the desired worksheet.
+
+        Returns
+        -------
+        out : [[]], rows x cols
+            List of lists containing the table cell's data, e.g.
+            [ [r1c1, r1c2, r1c3, ...],
+              [r2c1, r2c2, r2c3, ...],
+              [r3c1, r3c2, r3c3, ...],
+              ...                      ]
+        """
+        if not ws in self.cells:
+            self._parse_cells(ws)
+        return(self.cells[ws])
 
     def coordinates(self, ws):
         """Extract coordinates and ID's from a list of worksheet-cells.
