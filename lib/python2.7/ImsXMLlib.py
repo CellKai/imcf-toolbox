@@ -44,10 +44,10 @@ class ImarisXML(object):
         self.namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
         if ns:
             self.namespace = ns
-        self.parse_xml(xmlfile)
-        self.check_namespace()
+        self._parse_xml(xmlfile)
+        self._check_namespace()
 
-    def parse_xml(self, infile):
+    def _parse_xml(self, infile):
         """Aux function to call the etree parser.
 
         Just an auxiliary function for debugging statements.
@@ -58,7 +58,7 @@ class ImarisXML(object):
         self.tree = etree.parse(infile)
         if self.debug > 1: print "Done parsing XML: " + str(self.tree)
 
-    def check_namespace(self):
+    def _check_namespace(self):
         """Check if an XML tree has a certain namespace.
 
         Takes an XML etree object and a string denoting the expected
@@ -72,7 +72,7 @@ class ImarisXML(object):
                 print "Namespace parsed from XML: '" + real_ns + "'"
             raise(ImsXMLError)
 
-    def worksheet(self, pattern):
+    def _worksheet(self, pattern):
         """Look up a certain worksheet in the Excel XML tree.
 
         Parameters
@@ -115,11 +115,10 @@ class ImarisXML(object):
               ...                      ]
         """
         if not ws in self.cells:
-            self.parse_cells(ws)
+            self._parse_cells(ws)
         return(self.cells[ws])
 
-    def parse_cells(self, ws):
-        # TODO: should be non-public
+    def _parse_cells(self, ws):
         """Parse the cell-contents of a worksheet into a 2D array.
 
         After parsing the contents, they are added to the global
@@ -130,7 +129,7 @@ class ImarisXML(object):
         ws : string
             The name of the worksheet to process.
         """
-        rows = self.worksheet(ws).findall('.//{%s}Row' % self.namespace)
+        rows = self._worksheet(ws).findall('.//{%s}Row' % self.namespace)
         cells = []
         for row in rows:
             content = []
@@ -166,7 +165,7 @@ class ImarisXML(object):
         coords = []
         # make sure the cells were already parsed:
         if not ws in self.cells:
-            self.parse_cells(ws)
+            self._parse_cells(ws)
         # extract positions and ID:
         for cell in self.cells[ws]:
             id = int(cell[7])
