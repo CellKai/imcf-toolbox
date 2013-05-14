@@ -18,12 +18,12 @@ import csv
 from ImsXMLlib import ImarisXML
 from volpy import dist_matrix, find_neighbor
 from numpy import delete
+from log import log
 
 
 class ClosestNeighbours(object):
 
     def __init__(self, file_ref, file_cand, file_out):
-        self.out = sys.stdout.write
         self.csvout = False
         if (file_out.name != '<stdout>'):
             self.csv = csv.writer(file_out)
@@ -34,10 +34,10 @@ class ClosestNeighbours(object):
         self._process()
 
     def _parse(self):
-        self.out('Processing file: ' + str(self.ref.name) + "\n")
+        log.warn('References file: %s' % self.ref.name)
         self.XMLref = ImarisXML(self.ref)
         # for more verbosity, add 'debug=2' to the ImarisXML call
-        self.out('Processing file: ' + str(self.cand.name) + "\n")
+        log.warn('Candidates file: %s' % self.cand.name)
         self.XMLcnd = ImarisXML(self.cand)
 
         # spots_r are taken as the base to find the closest ones
@@ -47,13 +47,13 @@ class ClosestNeighbours(object):
 
     def _process(self):
         self.dist_mat = dist_matrix(self.spots_r + self.spots_c)
-        self.out("Reference objects: %s\n" % len(self.spots_r))
-        self.out("Candidate objects: %s\n" % len(self.spots_c))
+        log.warn("Reference objects: %s" % len(self.spots_r))
+        log.warn("Candidate objects: %s" % len(self.spots_c))
         dists_to_ref = self.dist_mat[:][0]
         dists_to_ref = delete(dists_to_ref, 0, 0)
         if (self.csvout):
-            # print dists_to_ref
-            self.out('Writing CSV...\n')
+            log.info("Distances to reference: %s" % dists_to_ref)
+            log.warn('Writing CSV...')
             for i, line in enumerate(dists_to_ref):
                 # output = "%i,%f" % (i, line)
                 # print output
@@ -70,10 +70,10 @@ class ClosestNeighbours(object):
     def write_output(self, id_r, coord_r, count_r, id_n):
         ''' "_r" denote the reference spot, "_n" the closest neighbour '''
         id_n_orig = id_n - count_r
-        self.out('\nCalculating closest neighbour.\n')
-        self.out('Reference: \t\t[%s]\t%s\nClosest neighbour: \t[%s]\t%s\n' %
+        log.warn('\nCalculating closest neighbour.')
+        log.warn('Reference: \t\t[%s]\t%s\nClosest neighbour: \t[%s]\t%s' %
             (id_r, coord_r, id_n_orig, self.spots_c[id_n_orig]))
-        self.out('Distance: %s\n' % self.dist_mat[id_r, id_n])
+        log.warn('Distance: %s' % self.dist_mat[id_r, id_n])
 
 
 def main():
@@ -88,12 +88,16 @@ def main():
         # type=argparse.FileType('w'), help='File to store the results.')
     argparser.add_argument('--csv', default=sys.stdout,
         type=argparse.FileType('w'), help='CSV-file to store the results.')
-    argparser.add_argument('-v', '--verbose', dest='v',
+    argparser.add_argument('-v', '--verbosity', dest='verbosity',
         action='count', default=0)
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
+
+    # default loglevel is 30 while 20 and 10 show more details
+    loglevel = (3 - args.verbosity) * 10
+    log.setLevel(loglevel)
 
     neighbours = ClosestNeighbours(args.reference, args.candidate,
         args.csv)
