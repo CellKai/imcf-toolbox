@@ -9,33 +9,28 @@ import numpy as np
 import volpy as vp
 import ImsXMLlib
 
-xmldata = ImsXMLlib.ImarisXML(open('wt1.xml', 'r'))
-wingpoints = xmldata.coordinates('Position')
-# <type 'list'>
-
+# read in the WingJ CSV files
 file_ap = open('structure_A-P.txt', 'r')
 file_vd = open('structure_V-D.txt', 'r')
 file_cnt = open('structure_contour.txt', 'r')
-
 structure_ap = np.loadtxt(file_ap, delimiter='\t')
 structure_vd = np.loadtxt(file_vd, delimiter='\t')
 structure_cnt = np.loadtxt(file_cnt, delimiter='\t')
 # structure_XX.shape (N, 2)
 
-wingpoints_nd = np.array(wingpoints)
-# we're working on a projection, so we need to remove the third dimension that
-# comes from the Imaris output
-wingpoints_2d = np.delete(wingpoints_nd, 2, 1)
-# wingpoints_2d.shape (M, 2)
+xmldata = ImsXMLlib.ImarisXML(open('wt1.xml', 'r'))
+wingpoints = np.array(xmldata.coordinates('Position'))
+# we're working on a projection, so we need to remove the third dimension/column
+wingpoints_2d = np.delete(wingpoints, 2, 1)
+# number of object coordinates from Imaris
+wp_nr = wingpoints_2d.shape[0]
+# wp_nr = M
 
 # calculate the distance matrices for all combinations
 dists_ap = vp.dist_matrix(np.vstack([wingpoints_2d, structure_ap]))
 dists_vd = vp.dist_matrix(np.vstack([wingpoints_2d, structure_vd]))
 dists_cnt = vp.dist_matrix(np.vstack([wingpoints_2d, structure_cnt]))
 # dists_XX.shape (N+M, N+M)
-
-# number of object coordinates from Imaris
-wp_nr = wingpoints_2d.shape[0]
 
 # slice the desired parts from the distance matrices: just the rows for all
 # Imaris points ([:wp_nr,:]) and the columns for the WingJ points ([:,wp_nr:])
