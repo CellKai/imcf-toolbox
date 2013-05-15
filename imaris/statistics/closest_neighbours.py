@@ -49,9 +49,9 @@ class ClosestNeighbours(object):
         log.warn("Reference objects: %s" % len(self.spots_r))
         log.warn("Candidate objects: %s" % len(self.spots_c))
         dists_to_ref = self.dist_mat[:][0]
+        log.info("Distances to reference:\n%s" % dists_to_ref)
         dists_to_ref = delete(dists_to_ref, 0, 0)
         if (self.csvout):
-            log.info("Distances to reference: %s" % dists_to_ref)
             log.warn('Writing CSV...')
             for i, line in enumerate(dists_to_ref):
                 # output = "%i,%f" % (i, line)
