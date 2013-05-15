@@ -26,6 +26,12 @@ wingpoints_2d = np.delete(wingpoints, 2, 1)
 wp_nr = wingpoints_2d.shape[0]
 # wp_nr = M
 
+# calibrate WingJ data
+px_size = 0.378
+structure_ap *= px_size
+structure_vd *= px_size
+structure_cnt *= px_size
+
 # calculate the distance matrices for all combinations
 dists_ap = vp.dist_matrix(np.vstack([wingpoints_2d, structure_ap]))
 dists_vd = vp.dist_matrix(np.vstack([wingpoints_2d, structure_vd]))
