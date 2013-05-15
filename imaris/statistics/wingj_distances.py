@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+'''
+Process results of WingJ (http://www.tschaffter.ch/) with Imaris objects
+(exported from the statistics part to XML) to do distance calculations.
+'''
+
 import numpy as np
 import volpy as vp
 import ImsXMLlib
