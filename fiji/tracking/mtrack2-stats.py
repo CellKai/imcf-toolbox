@@ -38,6 +38,11 @@ def angle(v1u, v2u):
             rad = np.pi
     return rad * (180/np.pi)
 
+def movement_vectors(coords, step=1):
+    ret = np.zeros(coords.shape)
+    ret[step:] = coords[step:] - coords[0:-step]
+    return ret
+
 argparser = argparse.ArgumentParser(description=__doc__)
 # argparser.add_argument('-p', '--overlap', type=float, default='0.15',
 #     help='tile overlap (default 0.15)')
