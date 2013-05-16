@@ -145,8 +145,8 @@ for i, row in enumerate(t_combined):
         # print 'row %i is zerooooo' % i
         comb_mask[i] = True
 
-t_masked = np.ma.array(t_combined, mask=np.repeat(comb_mask, 2))
-t_combined = np.ma.compress_rows(t_masked)
+t_combined = np.ma.compress_rows(np.ma.array(t_combined,
+        mask=np.repeat(comb_mask, 2)))
 
 # calculate the movement vectors:
 movement_v = t_combined[1:] - t_combined[0:-1]
