@@ -171,7 +171,7 @@ for p in range(5, rotation5.shape[0]-1):
     rotation5[p+1] = angle(movement5_v[p-1]/movement5_n[p-1],
                         movement5_v[p]/movement5_n[p])
 
-combined = np.hstack((t_combined, movement_v, movement_n, rotation))
+combined = np.hstack((t_combined, movement_v, movement_n, rotation, movement5_n, rotation5))
 csvwriter = csv.writer(args.outfile, delimiter='\t')
 for row in np.ma.compress_rows(combined):
     csvwriter.writerow(row)
