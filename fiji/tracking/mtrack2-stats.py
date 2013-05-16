@@ -149,12 +149,15 @@ t_combined = np.ma.compress_rows(np.ma.array(t_combined,
         mask=np.repeat(comb_mask, 2)))
 
 # calculate the movement vectors:
-movement_v = t_combined[1:] - t_combined[0:-1]
-movement_v = np.insert(movement_v, 0, [0.,0.], axis=0)
+movement_v = movement_vectors(t_combined, 1)
+movement5_v = movement_vectors(t_combined, 5)
+
 # movement vector normals:
 movement_n = np.zeros((movement_v.shape[0], 1))
+movement5_n = np.zeros((movement5_v.shape[0], 1))
 for p in range(1, movement_n.shape[0]):
     movement_n[p] = np.linalg.norm(movement_v[p])
+    movement5_n[p] = np.linalg.norm(movement5_v[p])
 
 rotation = np.zeros((movement_n.shape[0], 1))
 for p in range(1, rotation.shape[0]-1):
