@@ -13,6 +13,28 @@ import sys
 import argparse
 
 def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml, px_size):
+    '''Calculate distances from WingJ structures to Imaris objects.
+
+    Takes the three structure files exported from WingJ containing the A-P,
+    the V-D, and the contour line separation coordinates plus an XML file
+    generated with Imaris containing objects with coordinates (the "Position"
+    table) and calculates the closest distance from any Imaris object to each
+    of the WingJ structures.
+
+    Parameters
+    ----------
+    file_ap, file_vd, file_cnt : file object
+        Open file handles for the three WingJ structure files.
+    file_xml : file object
+        An open file handle to the Imaris XML export.
+    px_size : float
+        The size of one pixel to correct WingJ coordinates with.
+
+    Returns
+    -------
+    Nothing, currently results are written to CSV directly.
+    TODO: check for existing files, ask for filenames to export to.
+    '''
     # read in the WingJ CSV files
     structure_ap = np.loadtxt(file_ap, delimiter='\t')
     structure_vd = np.loadtxt(file_vd, delimiter='\t')
