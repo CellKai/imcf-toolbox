@@ -172,6 +172,7 @@ for p in range(5, rotation5.shape[0]-1):
                         movement5_v[p]/movement5_n[p])
 
 combined = np.hstack((t_combined, movement_v, movement_n, rotation, movement5_n, rotation5))
-csvwriter = csv.writer(args.outfile, delimiter='\t')
-for row in np.ma.compress_rows(combined):
-    csvwriter.writerow(row)
+# this requires numpy v1.7.0 or later:
+# csvhdr = 'x\ty\tdx\tdy\tdist\tangle\tdist5\tangle5'
+# np.savetxt(args.outfile, combined, fmt='%.5f', header=csvhdr, delimiter='\t')
+np.savetxt(args.outfile, combined, fmt='%.5f', delimiter='\t')
