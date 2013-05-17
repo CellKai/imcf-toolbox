@@ -12,7 +12,8 @@ import ImsXMLlib
 import sys
 import argparse
 
-def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml, px_size):
+def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml,
+    px_size=1.0):
     '''Calculate distances from WingJ structures to Imaris objects.
 
     Takes the three structure files exported from WingJ containing the A-P,
@@ -24,10 +25,10 @@ def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml, px_size):
     Parameters
     ----------
     file_ap, file_vd, file_cnt : file object
-        Open file handles for the three WingJ structure files.
+        File handles for the three WingJ structure files.
     file_xml : file object
         An open file handle to the Imaris XML export.
-    px_size : float
+    px_size : float, optional
         The size of one pixel to correct WingJ coordinates with.
 
     Returns
