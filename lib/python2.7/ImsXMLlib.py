@@ -156,6 +156,7 @@ class ImarisXML(object):
             A list of 3-tuples (floats) using the ID as index, representing the
             coordinates in (x, y, z) order.
         """
+        # TODO: use a numpy ndarray for the return structure
         coords = []
         # make sure the cells were already parsed:
         if not ws in self.cells:
