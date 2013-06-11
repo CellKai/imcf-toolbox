@@ -71,22 +71,15 @@ run("Analyze Particles...",
     + " show=Nothing exclude clear add");
 //close();
 
-selectImage(names[0]);
-roiManager("Show None");
-roiManager("Show All");
-run("Set Measurements...", "area mean min "
-	+ " redirect=" + names[0]
-	+ " decimal=10");
-roiManager("Measure");
-IJ.renameResults("Results-" + names[0]);
-
-selectImage(names[1]);
-roiManager("Show None");
-roiManager("Show All");
-run("Set Measurements...", "area mean min "
-	+ " redirect=" + names[1]
-	+ " decimal=10");
-roiManager("Measure");
-IJ.renameResults("Results-" + names[1]);
+for(i=0; i<2; i++) {
+    selectImage(names[i]);
+    roiManager("Show None");
+    roiManager("Show All");
+    run("Set Measurements...", "area mean min "
+        + " redirect=" + names[i]
+        + " decimal=10");
+    roiManager("Measure");
+    IJ.renameResults("Results-" + names[i]);
+}
 
 setBatchMode(false);
