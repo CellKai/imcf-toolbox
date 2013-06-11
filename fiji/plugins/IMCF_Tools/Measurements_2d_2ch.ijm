@@ -1,4 +1,8 @@
-//def get_open_images():
+if (nImages < 2) {
+    msg = "Requires at least 2 open images.";
+    showMessage("Error", msg);
+    exit;
+}
 
 print("number of images: " + nImages);
 names = newArray(nImages);
