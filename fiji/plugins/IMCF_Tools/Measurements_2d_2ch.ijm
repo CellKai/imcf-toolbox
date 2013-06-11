@@ -27,6 +27,7 @@ methods = getList("threshold.methods");
 Dialog.addChoice("threshold method:", methods, "RenyiEntropy");
 Dialog.show();
 
+
 ch_red = Dialog.getChoice();
 ch_grn = Dialog.getChoice();
 thr_method = Dialog.getChoice();
@@ -37,6 +38,7 @@ print(ch_red);
 print(ch_grn);
 */
 
+setBatchMode(true);
 // make sure the ROI Manager is empty
 roiManager("reset");
 
@@ -49,9 +51,12 @@ setAutoThreshold(thr_method + " dark");
 run("Convert to Mask");
 run("Fill Holes");
 run("Watershed");
+//close();
+
 
 /* TODO:
  *  size : 100-infinity
  *  circularity: 0.5-1
  */
 
+setBatchMode(false);
