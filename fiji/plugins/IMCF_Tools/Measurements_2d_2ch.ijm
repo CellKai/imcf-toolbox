@@ -36,8 +36,7 @@ print(ch_red);
 print(ch_grn);
 
 // make sure the ROI Manager is empty
-roiManager("Deselect"); // select nothing
-roiManager("Delete"); // removes all entries if nothing is selected
+roiManager("reset");
 
 // duplicate the red channel to create the mask
 selectImage(ch_red);
