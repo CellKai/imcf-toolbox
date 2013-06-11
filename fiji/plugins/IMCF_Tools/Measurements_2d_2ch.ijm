@@ -29,6 +29,7 @@ Dialog.addNumber("size min: ", 100);
 Dialog.addNumber("size max (0 for infinity): ", 0);
 Dialog.addSlider("circularity min:", 0, 1, 0.5);
 Dialog.addSlider("circularity max:", 0, 1, 1);
+Dialog.addNumber("decimal places:", 0);
 Dialog.show();
 
 
@@ -41,6 +42,7 @@ if(size_max == 0)
     size_max = "Infinity";
 circ_min = Dialog.getNumber();
 circ_max = Dialog.getNumber();
+decimal = Dialog.getNumber();
 // ***** USER INPUT DIALOG ***** //
 
 /*
@@ -77,7 +79,7 @@ for(i=0; i<2; i++) {
     roiManager("Show All");
     run("Set Measurements...", "area mean min "
         + " redirect=" + names[i]
-        + " decimal=10");
+        + " decimal=" + decimal);
     roiManager("Measure");
     // the select command is required, otherwise IJ renames
     // the first "Results" window again - bug?
