@@ -4,12 +4,12 @@ if (nImages < 2) {
     exit;
 }
 
-print("number of images: " + nImages);
+// print("number of images: " + nImages);
 names = newArray(nImages);
 for (i=0; i < nImages; i++){
     selectImage(i+1);
     names[i] = getTitle();
-    print(names[i]);
+    // print(names[i]);
 }
 
 // sort the names array so we can try to pre-assign the correct
@@ -32,8 +32,10 @@ ch_grn = Dialog.getChoice();
 thr_method = Dialog.getChoice();
 // ***** USER INPUT DIALOG ***** //
 
+/*
 print(ch_red);
 print(ch_grn);
+*/
 
 // make sure the ROI Manager is empty
 roiManager("reset");
