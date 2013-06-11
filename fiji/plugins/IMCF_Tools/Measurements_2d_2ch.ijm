@@ -79,6 +79,9 @@ for(i=0; i<2; i++) {
         + " redirect=" + names[i]
         + " decimal=10");
     roiManager("Measure");
+    // the select command is required, otherwise IJ renames
+    // the first "Results" window again - bug?
+    selectWindow("Results");
     IJ.renameResults("Results-" + names[i]);
 }
 
