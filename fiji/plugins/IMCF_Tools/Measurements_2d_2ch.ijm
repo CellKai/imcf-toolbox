@@ -20,8 +20,8 @@ Array.sort(names);
 Dialog.create("Thresholded Measurements / 2Ch, single slices");
 msg = "Assign images to channels:";
 Dialog.addMessage(msg);
-Dialog.addChoice("red channel:", names, names[0]);
-Dialog.addChoice("green channel:", names, names[1]);
+Dialog.addChoice("RED channel:", names, names[0]);
+Dialog.addChoice("GREEN channel:", names, names[1]);
 // threshold method selection
 methods = getList("threshold.methods");
 Dialog.addChoice("threshold method:", methods, "RenyiEntropy");
