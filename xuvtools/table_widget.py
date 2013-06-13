@@ -211,6 +211,35 @@ class My_UI_Window(Ui_MainWindow):
                     # print "%s %s: %s" % (trow, tcol, i)
         return item
 
+    def upd_celltext(self, start=0, end=0):
+        '''Update the contents (index numbers) for a range of cells.
+
+        Updates the value shown in a cell (representing its position
+        in the consecutive list) for a specified range of clist index
+        numbers.
+
+        Parameters
+        ----------
+        start, end : int, optional
+            The range of clist index numbers to update.
+        '''
+        self.block_table_signals(True)
+        if end == 0:
+            end = len(np.ma.compress_rows(self.clist))
+        print "this is upd_celltext(%s, %s)" % (start, end)
+        print np.ma.compress_rows(self.clist)
+        for i in range(start, end):
+            try:
+                [trow, tcol] = np.ma.compress_rows(self.clist)[i]
+                print "%s: (%s, %s)" % (i, trow, tcol)
+            except IndexError:
+                print "%s: not in clist" % i
+                pass
+            # print "ctx (%s, %s): %s" % (trow, tcol, i)
+            titem = self.tableWidget.item(trow, tcol)
+            titem.setText(str(i))
+        self.block_table_signals(False)
+
     def change_table_size(self, nrows, ncols):
         if nrows < 1:
             nrows = 1
