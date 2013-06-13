@@ -36,8 +36,14 @@ class My_UI_Window(Ui_MainWindow):
         self.rows = self.tableWidget.rowCount()
         self.change_table_size(2, 2)
 
-    def foo(self, item):
-        print 'this is foo(%s)' % item
+    def block_table_signals(self, b):
+        '''Blocks/unblocks signal from the table.
+
+        Parameters
+        ----------
+        b : bool
+        '''
+        QtCore.QObject.blockSignals(self.tableWidget, b)
 
     def set_ordering(self, idx):
         print 'this is set_ordering(%s)' % idx
