@@ -32,6 +32,8 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.update_cell_status)
         QtCore.QObject.connect(self.cb_ordering, QtCore.SIGNAL("currentIndexChanged(int)"), self.set_ordering)
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.cols = self.tableWidget.columnCount()
+        self.rows = self.tableWidget.rowCount()
         self.change_table_size(2, 2)
 
     def foo(self, item):
