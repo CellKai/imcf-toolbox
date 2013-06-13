@@ -144,6 +144,23 @@ class My_UI_Window(Ui_MainWindow):
         # print self.clist.data.tolist()
         return np.ma.compress_rows(self.clist).tolist().index([row, col])
 
+    def gen_cell(self, row, col, text=''):
+        '''Create and assign a new table cell.
+
+        Creates the content widget for a cell, assigns the default state
+        (checked) and puts the item at the given place in the table.
+
+        Parameters
+        ----------
+        row, col : int
+            The location of the new cell in the table.
+        text : string
+            The text to be shown in the cell.
+        '''
+        cell = QtGui.QTableWidgetItem(text)
+        cell.setCheckState(QtCore.Qt.Checked)
+        self.tableWidget.setItem(row, col, cell)
+
     def cell_enable(self, row, col):
         self.clist.mask[self.unmasked_idx(row, col)] = False
         return self.masked_idx(row, col)
