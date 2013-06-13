@@ -71,7 +71,7 @@ run("Analyze Particles...",
     "size=" + size_min + "-" + size_max + " pixel"
     + " circularity=" + circ_min + "-" + circ_max
     + " show=Nothing exclude clear add");
-//close();
+// close(); // not required in batch mode
 
 for(i=0; i<2; i++) {
     selectImage(names[i]);
@@ -81,10 +81,11 @@ for(i=0; i<2; i++) {
         + " redirect=" + names[i]
         + " decimal=" + decimal);
     roiManager("Measure");
-    // the select command is required, otherwise IJ renames
-    // the first "Results" window again - bug?
+    // the select command is required, otherwise IJ renames the first
+    // "Results" window again on the second iteration - bug?
     selectWindow("Results");
     IJ.renameResults("Results-" + names[i]);
 }
+
 
 setBatchMode(false);
