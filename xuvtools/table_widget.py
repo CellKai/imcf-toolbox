@@ -51,7 +51,6 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.blockSignals(self.tableWidget, b)
 
     def set_ordering(self, idx):
-        print 'this is set_ordering(%s)' % idx
         self.update_cellslist = self.orderings[idx]
         self.update_cellslist()
 
@@ -82,6 +81,8 @@ class My_UI_Window(Ui_MainWindow):
         for row in range(self.rows):
             for col in range(self.cols):
                 cells[(row * self.cols) + col] = [row, col]
+        # FIXME: the clist must be filled with the correct values representing
+        # the current checked/unchecked status!!
         self.clist = np.ma.array(cells, mask=[0])
 
     def order_leftright_bottomtop(self):
@@ -94,6 +95,7 @@ class My_UI_Window(Ui_MainWindow):
             line = (self.rows - 1) * (self.cols) - (row * self.cols)
             for col in range(self.cols):
                 cells[(line) + col] = [row, col]
+                # print "%s: [%s, %s]" % (line + col, row, col)
         self.clist = np.ma.array(cells, mask=[0])
 
     def order_topbottom_leftright(self):
@@ -103,6 +105,7 @@ class My_UI_Window(Ui_MainWindow):
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for col in range(self.cols):
             for row in range(self.rows):
+                # print "%s: [%s, %s]" % ((col * self.rows) + row, row, col)
                 cells[(col * self.rows) + row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
 
@@ -142,11 +145,9 @@ class My_UI_Window(Ui_MainWindow):
         self.clist = np.ma.array(cells, mask=[0])
 
     def unmasked_idx(self, row, col):
-        # print self.clist.data.tolist()
         return self.clist.data.tolist().index([row, col])
 
     def masked_idx(self, row, col):
-        # print self.clist.data.tolist()
         return np.ma.compress_rows(self.clist).tolist().index([row, col])
 
     def gen_cell(self, row, col, text=''):
@@ -187,14 +188,15 @@ class My_UI_Window(Ui_MainWindow):
     def update_cell_status(self, row, col):
         # print 'this is update_cell_status %s %s' % (row, col)
         item = self.tableWidget.item(row, col)
-        # print item
         if item is None:
+            # print "item at (%s, %s) is None, creating one" % (row, col)
             idx = self.masked_idx(row, col)
             cell = QtGui.QTableWidgetItem(str(idx))
             cell.setCheckState(QtCore.Qt.Checked)
             self.tableWidget.setItem(row, col, cell)
         else:
             # the new status is defined by the checkbox
+            # print "item at (%s, %s) exists" % (row, col)
             newstat = item.checkState()
             curstat = self.is_enabled(row, col) * 2
             if (curstat != newstat):
@@ -208,7 +210,6 @@ class My_UI_Window(Ui_MainWindow):
                     [trow, tcol] = np.ma.compress_rows(self.clist)[i]
                     titem = self.tableWidget.item(trow, tcol)
                     titem.setText(str(i))
-                    # print "%s %s: %s" % (trow, tcol, i)
         return item
 
     def upd_celltext(self, start=0, end=0):
@@ -266,6 +267,7 @@ class My_UI_Window(Ui_MainWindow):
         self.sb_v.setValue(self.rows)
         self.sb_h.setValue(self.cols)
         self.update_cellslist()
+        # print self.clist
         # update cell contents:
         for (row, col) in self.clist:
             self.update_cell_status(row, col)
@@ -279,6 +281,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
-
-
