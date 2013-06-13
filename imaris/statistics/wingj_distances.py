@@ -12,8 +12,8 @@ import ImsXMLlib
 import sys
 import argparse
 
-def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml,
-    px_size=1.0):
+def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
+    out_ap, out_vd, out_cnt, px_size=1.0):
     '''Calculate distances from WingJ structures to Imaris objects.
 
     Takes the three structure files exported from WingJ containing the A-P,
@@ -24,7 +24,7 @@ def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml,
 
     Parameters
     ----------
-    file_ap, file_vd, file_cnt : file object
+    in_ap, in_vd, in_cnt : file object
         File handles for the three WingJ structure files.
     file_xml : file object
         An open file handle to the Imaris XML export.
@@ -34,12 +34,10 @@ def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml,
     Returns
     -------
     Nothing, currently results are written to CSV directly.
-    TODO: check for existing files, ask for filenames to export to.
     '''
-    # read in the WingJ CSV files
-    structure_ap = np.loadtxt(file_ap, delimiter='\t')
-    structure_vd = np.loadtxt(file_vd, delimiter='\t')
-    structure_cnt = np.loadtxt(file_cnt, delimiter='\t')
+    structure_ap = np.loadtxt(in_ap, delimiter='\t')
+    structure_vd = np.loadtxt(in_vd, delimiter='\t')
+    structure_cnt = np.loadtxt(in_cnt, delimiter='\t')
     # structure_XX.shape (N, 2)
 
     xmldata = ImsXMLlib.ImarisXML(file_xml)
@@ -80,9 +78,9 @@ def wingj_dist_to_surfaces(file_ap, file_vd, file_cnt, file_xml,
         wp_to_cnt_min[i] = wp_to_cnt[i].min()
 
     # export the results as CSV files
-    np.savetxt('wt1-to-AP.csv', wp_to_ap_min, delimiter=',')
-    np.savetxt('wt1-to-VD.csv', wp_to_vd_min, delimiter=',')
-    np.savetxt('wt1-to-contour.csv', wp_to_cnt_min, delimiter=',')
+    np.savetxt(out_ap, wp_to_ap_min, delimiter=',')
+    np.savetxt(out_vd, wp_to_vd_min, delimiter=',')
+    np.savetxt(out_cnt, wp_to_cnt_min, delimiter=',')
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -90,10 +88,16 @@ def main():
         help='WingJ structure file for the A-P separation.')
     argparser.add_argument('--vd', required=True, type=file,
         help='WingJ structure file for the V-D separation.')
-    argparser.add_argument('--contour', required=True, type=file,
+    argparser.add_argument('--cnt', required=True, type=file,
         help='WingJ structure file for the contour line.')
     argparser.add_argument('--imsxml', required=True, type=file,
         help='Imaris Excel XML export containing a "Position" sheet.')
+    argparser.add_argument('--apout', type=argparse.FileType('w'),
+        required=True, help='Output CSV file for distances to A-P line.')
+    argparser.add_argument('--vdout', type=argparse.FileType('w'),
+        required=True, help='Output CSV file for distances to V-D line.')
+    argparser.add_argument('--cntout', type=argparse.FileType('w'),
+        required=True, help='Output CSV file for distances to contour line.')
     argparser.add_argument('-p', '--pixelsize', required=False, type=float,
         default=1.0, help='Pixel size to calibrate WingJ data.')
     argparser.add_argument('-v', '--verbosity', dest='verbosity',
@@ -107,8 +111,8 @@ def main():
     loglevel = (3 - args.verbosity) * 10
     log.setLevel(loglevel)
 
-    wingj_dist_to_surfaces(args.ap, args.vd,
-        args.contour, args.imsxml, args.pixelsize)
+    wingj_dist_to_surfaces(args.ap, args.vd, args.cnt, args.imsxml,
+        args.apout, args.vdout, args.cntout, args.pixelsize)
 
 
 if __name__ == "__main__":
