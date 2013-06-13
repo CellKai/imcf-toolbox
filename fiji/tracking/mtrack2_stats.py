@@ -45,8 +45,8 @@ def movement_vectors(coords, step=1):
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
-    # argparser.add_argument('-p', '--overlap', type=float, default='0.15',
-    #     help='tile overlap (default 0.15)')
+    argparser.add_argument('-l', '--label', action='store_const', const=True,
+        default=False, help='add column labels (requires numpy >= 1.7)')
     argparser.add_argument('-i', '--infile', required=True, type=file,
         help='CSV file containing track positions')
     argparser.add_argument('-o', '--outfile', type=argparse.FileType('w', 0),
@@ -172,11 +172,15 @@ def main():
         rotation5[p+1] = angle(movement5_v[p-1]/movement5_n[p-1],
                             movement5_v[p]/movement5_n[p])
     
-    combined = np.hstack((t_combined, movement_v, movement_n, rotation, movement5_n, rotation5))
-    # this requires numpy v1.7.0 or later:
-    # csvhdr = 'x\ty\tdx\tdy\tdist\tangle\tdist5\tangle5'
-    # np.savetxt(args.outfile, combined, fmt='%.5f', header=csvhdr, delimiter='\t')
-    np.savetxt(args.outfile, combined, fmt='%.5f', delimiter='\t')
+    comb = np.hstack((t_combined, movement_v, movement_n, rotation,
+        movement5_n, rotation5))
+
+    if args.label:
+        # this requires np.__version__ >= 1.7.0:
+        lbl = 'x\ty\tdx\tdy\tdist\tangle\tdist5\tangle5'
+        np.savetxt(args.outfile, comb, fmt='%.5f', header=lbl, delimiter='\t')
+    else:
+        np.savetxt(args.outfile, comb, fmt='%.5f', delimiter='\t')
 
 if __name__ == "__main__":
     sys.exit(main())
