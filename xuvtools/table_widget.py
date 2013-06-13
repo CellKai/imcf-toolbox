@@ -7,7 +7,12 @@ from qt_table_widget import *
 
 class My_UI_Window(Ui_MainWindow):
     def __init__(self):
+        '''This list contains the list of cells in logical order, which
+        represent the positions in consecutive order. Values are tuples of
+        the form [row, col].
+        '''
         self.clist = []
+        # define the list of available orderings:
         self.orderings = [
             self.order_leftright_topbottom,
             self.order_leftright_bottomtop,
