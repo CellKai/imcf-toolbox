@@ -35,9 +35,11 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     -------
     Nothing, currently results are written to CSV directly.
     '''
+    log.info('Reading WingJ CSV files...')
     structure_ap = np.loadtxt(in_ap, delimiter='\t')
     structure_vd = np.loadtxt(in_vd, delimiter='\t')
     structure_cnt = np.loadtxt(in_cnt, delimiter='\t')
+    log.info('Done.')
     # structure_XX.shape (N, 2)
 
     xmldata = ImsXMLlib.ImarisXML(file_xml)
@@ -54,11 +56,12 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     structure_vd *= px_size
     structure_cnt *= px_size
 
-    # calculate the distance matrices for all combinations
+    log.info('Calculating distance matrices for all objects...')
     dists_ap = vp.dist_matrix(np.vstack([wingpoints_2d, structure_ap]))
     dists_vd = vp.dist_matrix(np.vstack([wingpoints_2d, structure_vd]))
     dists_cnt = vp.dist_matrix(np.vstack([wingpoints_2d, structure_cnt]))
     # dists_XX.shape (N+M, N+M)
+    log.info('Done.')
 
     # slice the desired parts from the distance matrices: just the rows for all
     # Imaris points ([:wp_nr,:]) and the columns for the WingJ points ([:,wp_nr:])
@@ -69,6 +72,7 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
 
     # now we can just iterate through all rows finding the minimum and we get the
     # shortest distance for each point to one of the WingJ structures:
+    log.info('Finding shortest distances...')
     wp_to_ap_min = np.zeros((wp_nr))
     wp_to_vd_min = np.zeros((wp_nr))
     wp_to_cnt_min = np.zeros((wp_nr))
@@ -76,10 +80,14 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
         wp_to_ap_min[i] = wp_to_ap[i].min()
         wp_to_vd_min[i] = wp_to_vd[i].min()
         wp_to_cnt_min[i] = wp_to_cnt[i].min()
+    log.info('Done.')
 
     # export the results as CSV files
+    log.info('Writing %s.' % out_ap.name)
     np.savetxt(out_ap, wp_to_ap_min, delimiter=',')
+    log.info('Writing %s.' % out_vd.name)
     np.savetxt(out_vd, wp_to_vd_min, delimiter=',')
+    log.info('Writing %s.' % out_cnt.name)
     np.savetxt(out_cnt, wp_to_cnt_min, delimiter=',')
 
 def main():
