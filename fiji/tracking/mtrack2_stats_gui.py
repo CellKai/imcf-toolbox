@@ -42,6 +42,9 @@ class My_UI_Window(Ui_MainWindow):
             sys.argv.append('-v')
         # print sys.argv
         mtrack2_stats.main()
+        # TODO: should we exit after the work's done? -> ask user!
+        # sys.exit()
+
 
 if __name__ == "__main__":
     # instantiate a QApplication object
