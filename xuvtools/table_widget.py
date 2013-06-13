@@ -34,7 +34,7 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.connect(self.pb_dec_h, QtCore.SIGNAL("clicked()"), self.dec_cols)
         QtCore.QObject.connect(self.pb_inc_v, QtCore.SIGNAL("clicked()"), self.inc_rows)
         QtCore.QObject.connect(self.pb_dec_v, QtCore.SIGNAL("clicked()"), self.dec_rows)
-        QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.update_cell_status)
+        QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.upd_cell)
         QtCore.QObject.connect(self.cb_ordering, QtCore.SIGNAL("currentIndexChanged(int)"), self.set_ordering)
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.cols = self.tableWidget.columnCount()
@@ -185,8 +185,8 @@ class My_UI_Window(Ui_MainWindow):
             return False
         return True
 
-    def update_cell_status(self, row, col):
-        # print 'this is update_cell_status %s %s' % (row, col)
+    def upd_cell(self, row, col):
+        print 'this is upd_cell %s %s' % (row, col)
         item = self.tableWidget.item(row, col)
         if item is None:
             # print "item at (%s, %s) is None, creating one" % (row, col)
@@ -270,7 +270,7 @@ class My_UI_Window(Ui_MainWindow):
         # print self.clist
         # update cell contents:
         for (row, col) in self.clist:
-            self.update_cell_status(row, col)
+            self.upd_cell(row, col)
 
 
 if __name__ == "__main__":
