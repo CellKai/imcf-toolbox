@@ -10,7 +10,7 @@ class My_UI_Window(Ui_MainWindow):
         super(My_UI_Window, self).setupUi(MainWindow)
         MainWindow.setWindowTitle("MTrack2 statistics")
         self.label.setText("MTrack2 results analyzer")
-        self.le_infile.setPlaceholderText("Input CSV File containing MTrack2 results (Ctrl+O)")
+        self.le_infile.setPlaceholderText("Input TXT File containing MTrack2 results (Ctrl+O)")
         self.cb_plot.setText("Combine tracks.")
         self.cb_plot.setDisabled(True)
         MainWindow.addAction(self.sc_ctrl_w)
