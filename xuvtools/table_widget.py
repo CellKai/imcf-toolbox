@@ -191,9 +191,7 @@ class My_UI_Window(Ui_MainWindow):
         if item is None:
             # print "item at (%s, %s) is None, creating one" % (row, col)
             idx = self.masked_idx(row, col)
-            cell = QtGui.QTableWidgetItem(str(idx))
-            cell.setCheckState(QtCore.Qt.Checked)
-            self.tableWidget.setItem(row, col, cell)
+            self.gen_cell(row, col)
         else:
             # the new status is defined by the checkbox
             # print "item at (%s, %s) exists" % (row, col)
