@@ -53,6 +53,7 @@ class My_UI_Window(Ui_MainWindow):
     def set_ordering(self, idx):
         self.update_cellslist = self.orderings[idx]
         self.update_cellslist()
+        self.upd_celltext()
 
     def inc_cols(self):
         self.change_table_size(self.rows, self.cols + 1)
@@ -205,10 +206,7 @@ class My_UI_Window(Ui_MainWindow):
                 else:
                     idx = self.cell_disable(row, col)
                     item.setText('--')
-                for i in range(idx, len(np.ma.compress_rows(self.clist))):
-                    [trow, tcol] = np.ma.compress_rows(self.clist)[i]
-                    titem = self.tableWidget.item(trow, tcol)
-                    titem.setText(str(i))
+                self.upd_celltext(idx)
         self.block_table_signals(False)
         return item
 
@@ -272,6 +270,7 @@ class My_UI_Window(Ui_MainWindow):
         # update cell contents:
         for (row, col) in self.clist:
             self.upd_cell(row, col)
+        self.upd_celltext()
         self.block_table_signals(False)
 
 
