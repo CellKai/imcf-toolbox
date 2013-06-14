@@ -45,7 +45,7 @@ class My_UI_Window(Ui_MainWindow):
 
     def block_table_signals(self, b):
         '''Blocks/unblocks signal from the table.
-
+        .
         Parameters
         ----------
         b : bool
@@ -177,16 +177,16 @@ class My_UI_Window(Ui_MainWindow):
 
     def unmasked_idx(self, row, col):
         '''Get the index of a cell in the unmasked clist.
-
+        .
         Returns the position of a cell inside the unmasked cellslist, which
         corresponds to the "real" position in that list, taking both, masked
         and unmasked cells into account.
-
+        .
         Parameters
         ----------
         row, col : int
             The cell position from the grid perspective.
-
+        .
         Returns
         ----------
         idx : int
@@ -215,10 +215,10 @@ class My_UI_Window(Ui_MainWindow):
 
     def gen_cell(self, row, col, text=''):
         '''Create and assign a new table cell.
-
+        .
         Creates the content widget for a cell, assigns the default state
         (checked) and puts the item at the given place in the table.
-
+        .
         Parameters
         ----------
         row, col : int
@@ -274,11 +274,11 @@ class My_UI_Window(Ui_MainWindow):
 
     def upd_celltext(self, start=0, end=0):
         '''Update the contents (index numbers) for a range of cells.
-
+        .
         Updates the value shown in a cell (representing its position
         in the consecutive list) for a specified range of clist index
         numbers.
-
+        .
         Parameters
         ----------
         start, end : int, optional
