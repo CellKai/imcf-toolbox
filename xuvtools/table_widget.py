@@ -87,6 +87,7 @@ class My_UI_Window(Ui_MainWindow):
         # FIXME: the clist must be filled with the correct values representing
         # the current checked/unchecked status!!
         self.clist = np.ma.array(cells, mask=[0])
+        self.upd_clistmask()
 
     def order_leftright_bottomtop(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
@@ -100,6 +101,7 @@ class My_UI_Window(Ui_MainWindow):
                 cells[(line) + col] = [row, col]
                 # print "%s: [%s, %s]" % (line + col, row, col)
         self.clist = np.ma.array(cells, mask=[0])
+        self.upd_clistmask()
 
     def order_topbottom_leftright(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
@@ -111,6 +113,7 @@ class My_UI_Window(Ui_MainWindow):
                 # print "%s: [%s, %s]" % ((col * self.rows) + row, row, col)
                 cells[(col * self.rows) + row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
+        self.upd_clistmask()
 
     def order_bottomtop_leftright(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
@@ -122,6 +125,7 @@ class My_UI_Window(Ui_MainWindow):
                 # print "%s: [%s, %s]" % (self.rows - 1 + (col * self.rows) - row, row, col)
                 cells[self.rows - 1 + (col * self.rows) - row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
+        self.upd_clistmask()
 
     def order_snakeline_topleft(self):
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
@@ -134,6 +138,7 @@ class My_UI_Window(Ui_MainWindow):
                 else:
                     cells[(line + self.cols - 1) - col] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
+        self.upd_clistmask()
 
     def order_snakeline_topright(self):
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
@@ -146,6 +151,7 @@ class My_UI_Window(Ui_MainWindow):
                 else:
                     cells[line + col] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
+        self.upd_clistmask()
 
     def upd_clistmask(self):
         '''Update the cellslist mask according to the checked state of cells.
