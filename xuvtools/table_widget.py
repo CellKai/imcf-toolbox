@@ -186,6 +186,7 @@ class My_UI_Window(Ui_MainWindow):
         return True
 
     def upd_cell(self, row, col):
+        self.block_table_signals(True)
         print 'this is upd_cell %s %s' % (row, col)
         item = self.tableWidget.item(row, col)
         if item is None:
@@ -208,6 +209,7 @@ class My_UI_Window(Ui_MainWindow):
                     [trow, tcol] = np.ma.compress_rows(self.clist)[i]
                     titem = self.tableWidget.item(trow, tcol)
                     titem.setText(str(i))
+        self.block_table_signals(False)
         return item
 
     def upd_celltext(self, start=0, end=0):
@@ -240,6 +242,7 @@ class My_UI_Window(Ui_MainWindow):
         self.block_table_signals(False)
 
     def change_table_size(self, nrows, ncols):
+        self.block_table_signals(True)
         if nrows < 1:
             nrows = 1
         if ncols < 1:
@@ -269,6 +272,7 @@ class My_UI_Window(Ui_MainWindow):
         # update cell contents:
         for (row, col) in self.clist:
             self.upd_cell(row, col)
+        self.block_table_signals(False)
 
 
 if __name__ == "__main__":
