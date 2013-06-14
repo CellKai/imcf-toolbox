@@ -165,6 +165,22 @@ class My_UI_Window(Ui_MainWindow):
         return self.clist.data.tolist().index([row, col])
 
     def masked_idx(self, row, col):
+        '''Get the index of a cell in the masked clist.
+
+        Returns the position of a cell inside the masked cellslist, which
+        corresponds to the "virtual" position in that list, taking only the
+        active (=unmasked) cells into account.
+
+        Parameters
+        ----------
+        row, col : int
+            The cell position from the grid perspective.
+
+        Returns
+        ----------
+        idx : int
+            The index number in the masked clist.
+        '''
         return np.ma.compress_rows(self.clist).tolist().index([row, col])
 
     def gen_cell(self, row, col, text=''):
