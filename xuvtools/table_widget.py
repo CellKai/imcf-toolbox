@@ -309,10 +309,12 @@ class My_UI_Window(Ui_MainWindow):
 
     def change_table_size(self, nrows, ncols):
         self.block_table_signals(True)
+        # make sure we have at least on row and column:
         if nrows < 1:
             nrows = 1
         if ncols < 1:
             ncols = 1
+        # calculate the deltas for rows and cols:
         dcols = ncols - self.cols
         drows = nrows - self.rows
         if drows + dcols == 0:
@@ -343,13 +345,18 @@ class My_UI_Window(Ui_MainWindow):
         for i in range(drows * -1):
             self.tableWidget.removeRow(self.rows - 1)
             self.rows = self.tableWidget.rowCount()
+
+        # update the spin buttons with the new values, this is required
+        # e.g. if the plus/minus buttons were used:
         self.sb_v.setValue(self.rows)
         self.sb_h.setValue(self.cols)
+        # call the selected ordering function to update the clist:
         self.update_cellslist()
         # print self.clist
         # update cell contents:
         for (row, col) in self.clist:
             self.upd_cell(row, col)
+        # finally update the text contents of all active cells:
         self.upd_celltext()
         self.block_table_signals(False)
 
