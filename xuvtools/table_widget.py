@@ -23,6 +23,7 @@ class My_UI_Window(Ui_MainWindow):
             self.order_snakeline_topleft,
             self.order_snakeline_topright
         ]
+        # set the default ordering:
         self.update_cellslist = self.orderings[0]
         self.rows = 0
         self.cols = 0
@@ -53,6 +54,8 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.blockSignals(self.tableWidget, b)
 
     def set_ordering(self, idx):
+        '''Select the ordering function that defines the cell sequence.
+        '''
         self.update_cellslist = self.orderings[idx]
         self.update_cellslist()
         self.upd_celltext()
