@@ -57,24 +57,6 @@ class My_UI_Window(Ui_MainWindow):
         self.update_cellslist()
         self.upd_celltext()
 
-    def inc_cols(self):
-        self.change_table_size(self.rows, self.cols + 1)
-
-    def dec_cols(self):
-        self.change_table_size(self.rows, self.cols - 1)
-
-    def set_cols(self, ncols):
-        self.change_table_size(self.rows, ncols)
-
-    def inc_rows(self):
-        self.change_table_size(self.rows + 1, self.cols)
-
-    def dec_rows(self):
-        self.change_table_size(self.rows - 1, self.cols)
-
-    def set_rows(self, nrows):
-        self.change_table_size(nrows, self.cols)
-
     def order_leftright_topbottom(self):
         '''Fill the cellslist with the (row,col) tuples in the appropriate
         order, each line from left to right (ls = linescan), from top to
@@ -306,6 +288,24 @@ class My_UI_Window(Ui_MainWindow):
             titem = self.tableWidget.item(trow, tcol)
             titem.setText(str(i))
         self.block_table_signals(False)
+
+    def inc_cols(self):
+        self.change_table_size(self.rows, self.cols + 1)
+
+    def dec_cols(self):
+        self.change_table_size(self.rows, self.cols - 1)
+
+    def set_cols(self, ncols):
+        self.change_table_size(self.rows, ncols)
+
+    def inc_rows(self):
+        self.change_table_size(self.rows + 1, self.cols)
+
+    def dec_rows(self):
+        self.change_table_size(self.rows - 1, self.cols)
+
+    def set_rows(self, nrows):
+        self.change_table_size(nrows, self.cols)
 
     def change_table_size(self, nrows, ncols):
         self.block_table_signals(True)
