@@ -147,6 +147,34 @@ class My_UI_Window(Ui_MainWindow):
                     cells[line + col] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
 
+    def upd_clistmask(self):
+        '''Update the cellslist mask according to the checked state of cells.
+        .
+        Iterates over all entries in the (unmasked) cellslist, examines
+        whether the corresponding cell is checked or unchecked in the GUI
+        and sets the clist mask entries accordingly.
+        .
+        Parameters
+        ----------
+        None
+        .
+        Returns
+        -------
+        void
+        '''
+        for i, (row, col) in enumerate(self.clist):
+            item = self.tableWidget.item(row, col)
+            try:
+                if item.checkState() == 2:
+                    # self.cell_disable(row, col)
+                    self.clist.mask[i] = False
+                else:
+                    self.clist.mask[i] = True
+            # an AttributeError occurs when the item was not yet initialized,
+            # e.g. when the table was just created
+            except AttributeError:
+                pass
+
     def unmasked_idx(self, row, col):
         '''Get the index of a cell in the unmasked clist.
 
