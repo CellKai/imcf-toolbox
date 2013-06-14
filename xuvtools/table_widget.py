@@ -98,7 +98,7 @@ class My_UI_Window(Ui_MainWindow):
         for row in range(self.rows):
             line = (self.rows - 1) * (self.cols) - (row * self.cols)
             for col in range(self.cols):
-                cells[(line) + col] = [row, col]
+                cells[line + col] = [row, col]
                 # print "%s: [%s, %s]" % (line + col, row, col)
         self.clist = np.ma.array(cells, mask=[0])
         self.upd_clistmask()
