@@ -325,22 +325,24 @@ class My_UI_Window(Ui_MainWindow):
         # instead, it would be done at the left/top):
         for i in range(dcols):
             self.tableWidget.insertColumn(self.cols)
+            self.cols = self.tableWidget.columnCount()
             # initialize the new column of cells:
             for row in range(self.rows):
                 self.gen_cell(row, self.cols)
         for i in range(dcols * -1):
             self.tableWidget.removeColumn(self.cols - 1)
+            self.cols = self.tableWidget.columnCount()
 
         # now adjust the rows at the bottom of the table (see above):
         for i in range(drows):
             self.tableWidget.insertRow(self.rows)
+            self.rows = self.tableWidget.rowCount()
             # initialize the new row of cells:
             for col in range(self.cols):
                 self.gen_cell(self.rows, col)
         for i in range(drows * -1):
             self.tableWidget.removeRow(self.rows - 1)
-        self.rows = self.tableWidget.rowCount()
-        self.cols = self.tableWidget.columnCount()
+            self.rows = self.tableWidget.rowCount()
         self.sb_v.setValue(self.rows)
         self.sb_h.setValue(self.cols)
         self.update_cellslist()
