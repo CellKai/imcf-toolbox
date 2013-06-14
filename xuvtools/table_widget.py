@@ -7,9 +7,11 @@ from qt_table_widget import *
 
 class My_UI_Window(Ui_MainWindow):
     def __init__(self):
-        '''This list contains the list of cells in logical order, which
+        '''The clist contains the list of cells in logical order, which
         represent the positions in consecutive order. Values are tuples of
         the form [row, col].
+        Note: this is just a placeholder, the list will be initialized
+        later and has the type np.ma.array (numpy masked array).
         '''
         self.clist = []
         # define the list of available orderings:
