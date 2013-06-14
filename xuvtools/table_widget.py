@@ -168,7 +168,9 @@ class My_UI_Window(Ui_MainWindow):
         .
         Returns the position of a cell inside the unmasked cellslist, which
         corresponds to the "real" position in that list, taking both, masked
-        and unmasked cells into account.
+        and unmasked cells into account. This is the position of the cell in
+        the sequence defined by the selected ordering, ignoring the
+        enabled/disabled states.
         .
         Parameters
         ----------
@@ -184,16 +186,18 @@ class My_UI_Window(Ui_MainWindow):
 
     def masked_idx(self, row, col):
         '''Get the index of a cell in the masked clist.
-
+        .
         Returns the position of a cell inside the masked cellslist, which
         corresponds to the "virtual" position in that list, taking only the
-        active (=unmasked) cells into account.
-
+        active (=unmasked) cells into account. This is the sequential position
+        of the cell given the selected ordering and the enabled/disabled
+        states.
+        .
         Parameters
         ----------
         row, col : int
             The cell position from the grid perspective.
-
+        .
         Returns
         ----------
         idx : int
@@ -219,18 +223,61 @@ class My_UI_Window(Ui_MainWindow):
         self.tableWidget.setItem(row, col, cell)
 
     def cell_enable(self, row, col):
+        '''Enables (unmasks) the cell at (row, col).
+        .
+        Enables the cell at the given location by setting the corresponding
+        entry in the mask to False (i.e. "not masked").
+        .
+        Parameters
+        ----------
+        row, col : int
+            The location of the cell in the table.
+        .
+        Returns
+        ----------
+        idx : int
+            The index number of this cell in the masked clist.
+        '''
         self.clist.mask[self.unmasked_idx(row, col)] = False
         return self.masked_idx(row, col)
 
     def cell_disable(self, row, col):
-        '''Here we need to look up the masked index before disabling the
-        cell, otherwise it can't be found anymore.'''
+        '''Disables (masks) the cell at (row, col).
+        .
+        Disables the cell at the given location by setting the corresponding
+        entry in the mask to True (i.e. "masked").
+        .
+        Parameters
+        ----------
+        row, col : int
+            The location of the cell in the table.
+        .
+        Returns
+        ----------
+        idx : int
+            The index number of this cell in the masked clist *BEFORE*
+            it was disabled.
+        '''
+        # look up the index first, won't work once the cell is disabled:
         idx = self.masked_idx(row, col)
         self.clist.mask[self.unmasked_idx(row, col)] = True
         return idx
 
     def is_enabled(self, row, col):
+        '''Check if a given cell is enabled or disabled.
+        .
+        Parameters
+        ----------
+        row, col : int
+            The location of the cell in the table.
+        .
+        Returns
+        ----------
+        state : bool
+            The state of the cell, True meaning active/unmasked.
+        '''
         try:
+            # tolist() replaces masked entries by default with 'None'.
             self.clist.tolist().index([row, col])
         except ValueError:
             return False
