@@ -4,6 +4,7 @@
 import sys
 import numpy as np
 from qt_table_widget import *
+from log import log
 
 class My_UI_Window(Ui_MainWindow):
     def __init__(self):
@@ -84,7 +85,7 @@ class My_UI_Window(Ui_MainWindow):
             line = (self.rows - 1) * (self.cols) - (row * self.cols)
             for col in range(self.cols):
                 cells[line + col] = [row, col]
-                # print "%s: [%s, %s]" % (line + col, row, col)
+                log.debug("%s: [%s, %s]" % (line + col, row, col))
         self.clist = np.ma.array(cells, mask=[0])
         self.upd_clistmask()
 
@@ -95,7 +96,7 @@ class My_UI_Window(Ui_MainWindow):
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for col in range(self.cols):
             for row in range(self.rows):
-                # print "%s: [%s, %s]" % ((col * self.rows) + row, row, col)
+                log.debug("%s: [%s, %s]" % ((col * self.rows) + row, row, col))
                 cells[(col * self.rows) + row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
         self.upd_clistmask()
@@ -107,7 +108,7 @@ class My_UI_Window(Ui_MainWindow):
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
             for col in range(self.cols):
-                # print "%s: [%s, %s]" % (self.rows - 1 + (col * self.rows) - row, row, col)
+                log.debug("%s: [%s, %s]" % (self.rows - 1 + (col * self.rows) - row, row, col))
                 cells[self.rows - 1 + (col * self.rows) - row] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
         self.upd_clistmask()
@@ -221,6 +222,7 @@ class My_UI_Window(Ui_MainWindow):
         text : string
             The text to be shown in the cell.
         '''
+        log.warn('this is gen_cell(%s, %s, "%s")' % (row, col, text))
         cell = QtGui.QTableWidgetItem(text)
         cell.setCheckState(QtCore.Qt.Checked)
         self.tableWidget.setItem(row, col, cell)
@@ -288,18 +290,21 @@ class My_UI_Window(Ui_MainWindow):
 
     def upd_cell(self, row, col):
         self.block_table_signals(True)
-        print 'this is upd_cell %s %s' % (row, col)
+        log.debug('this is upd_cell(%s, %s)' % (row, col))
+
         item = self.tableWidget.item(row, col)
+        log.debug(type(item))
         if item is None:
-            # print "item at (%s, %s) is None, creating one" % (row, col)
+            log.warn("item at (%s, %s) is None, creating one" % (row, col))
             idx = self.masked_idx(row, col)
             self.gen_cell(row, col)
         else:
             # the new status is defined by the checkbox
-            # print "item at (%s, %s) exists" % (row, col)
+            log.warn("item at (%s, %s) exists" % (row, col))
             newstat = item.checkState()
             curstat = self.is_enabled(row, col) * 2
             if (curstat != newstat):
+                log.debug("setting new state %s" % newstat)
                 if newstat == 2:
                     idx = self.cell_enable(row, col)
                     item.setText(str(idx))
@@ -325,16 +330,16 @@ class My_UI_Window(Ui_MainWindow):
         self.block_table_signals(True)
         if end == 0:
             end = len(np.ma.compress_rows(self.clist))
-        print "this is upd_celltext(%s, %s)" % (start, end)
-        print np.ma.compress_rows(self.clist)
+        log.warn("this is upd_celltext(%s, %s)" % (start, end))
+        log.warn(np.ma.compress_rows(self.clist))
         for i in range(start, end):
             try:
                 [trow, tcol] = np.ma.compress_rows(self.clist)[i]
-                print "%s: (%s, %s)" % (i, trow, tcol)
+                log.warn("%s: (%s, %s)" % (i, trow, tcol))
             except IndexError:
-                print "%s: not in clist" % i
+                log.warn("%s: not in clist" % i)
                 pass
-            # print "ctx (%s, %s): %s" % (trow, tcol, i)
+            log.debug("ctx (%s, %s): %s" % (trow, tcol, i))
             titem = self.tableWidget.item(trow, tcol)
             titem.setText(str(i))
         self.block_table_signals(False)
@@ -369,8 +374,8 @@ class My_UI_Window(Ui_MainWindow):
         drows = nrows - self.rows
         if drows + dcols == 0:
             return
-        print 'change_table_size from (%s, %s) to (%s, %s)' % \
-            (self.rows, self.cols, nrows, ncols)
+        log.warn('change_table_size from (%s, %s) to (%s, %s)' % \
+            (self.rows, self.cols, nrows, ncols))
         # adjust number of columns. note that columns and rows are
         # added and removed at the right resp. bottom of the table
         # (this is done via the self.cols/self.rows, if we used 0
@@ -402,7 +407,7 @@ class My_UI_Window(Ui_MainWindow):
         self.sb_h.setValue(self.cols)
         # call the selected ordering function to update the clist:
         self.update_cellslist()
-        # print self.clist
+        log.debug(self.clist)
         # update cell contents:
         for (row, col) in self.clist:
             self.upd_cell(row, col)
