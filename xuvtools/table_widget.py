@@ -146,6 +146,22 @@ class My_UI_Window(Ui_MainWindow):
         self.clist = np.ma.array(cells, mask=[0])
 
     def unmasked_idx(self, row, col):
+        '''Get the index of a cell in the unmasked clist.
+
+        Returns the position of a cell inside the unmasked cellslist, which
+        corresponds to the "real" position in that list, taking both, masked
+        and unmasked cells into account.
+
+        Parameters
+        ----------
+        row, col : int
+            The cell position from the grid perspective.
+
+        Returns
+        ----------
+        idx : int
+            The index number in the clist.
+        '''
         return self.clist.data.tolist().index([row, col])
 
     def masked_idx(self, row, col):
