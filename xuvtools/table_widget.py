@@ -319,16 +319,20 @@ class My_UI_Window(Ui_MainWindow):
             return
         print 'change_table_size from (%s, %s) to (%s, %s)' % \
             (self.rows, self.cols, nrows, ncols)
-        # adjust number of columns:
+        # adjust number of columns. note that columns and rows are
+        # added and removed at the right resp. bottom of the table
+        # (this is done via the self.cols/self.rows, if we used 0
+        # instead, it would be done at the left/top):
         for i in range(dcols):
-            self.tableWidget.insertColumn(0)
+            self.tableWidget.insertColumn(self.cols)
         for i in range(dcols * -1):
-            self.tableWidget.removeColumn(0)
-        # adjust number of rows:
+            self.tableWidget.removeColumn(self.cols - 1)
+
+        # now adjust the rows at the bottom of the table (see above):
         for i in range(drows):
-            self.tableWidget.insertRow(0)
+            self.tableWidget.insertRow(self.rows)
         for i in range(drows * -1):
-            self.tableWidget.removeRow(0)
+            self.tableWidget.removeRow(self.rows - 1)
         self.rows = self.tableWidget.rowCount()
         self.cols = self.tableWidget.columnCount()
         self.sb_v.setValue(self.rows)
