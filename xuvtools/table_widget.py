@@ -269,7 +269,7 @@ class My_UI_Window(Ui_MainWindow):
         return idx
 
     def is_enabled(self, row, col):
-        '''Check if a given cell is enabled or disabled.
+        '''Check if a given cell is enabled or disabled in the clist.
         .
         Parameters
         ----------
@@ -279,7 +279,7 @@ class My_UI_Window(Ui_MainWindow):
         Returns
         ----------
         state : bool
-            The state of the cell, True meaning active/unmasked.
+            The state of the cell in clist, True meaning active/unmasked.
         '''
         try:
             # tolist() replaces masked entries by default with 'None'.
@@ -289,12 +289,29 @@ class My_UI_Window(Ui_MainWindow):
         return True
 
     def upd_cell(self, row, col):
+        '''Update a given cell according to its state.
+        .
+        Checks the state of the given cell and compares it with the state
+        in the clist. If they differ a cell has been changed via the GUI.
+        In this case the clist and the cell's text label needs to be updated.
+        .
+        Parameters
+        ----------
+        row, col : int
+            The location of the cell in the table.
+        .
+        Returns
+        ----------
+        item : QtGui.QTableWidgetItem
+            The widget item (the content) of the cell, or None.
+        '''
         self.block_table_signals(True)
         log.debug('this is upd_cell(%s, %s)' % (row, col))
 
         item = self.tableWidget.item(row, col)
         log.debug(type(item))
         if item is None:
+            # this means the cell's content was not yet initialized
             log.warn("item at (%s, %s) is None, creating one" % (row, col))
             idx = self.masked_idx(row, col)
             self.gen_cell(row, col)
