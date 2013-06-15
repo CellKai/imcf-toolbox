@@ -307,6 +307,11 @@ class My_UI_Window(Ui_MainWindow):
         '''
         self.block_table_signals(True)
         log.debug('this is upd_cell(%s, %s)' % (row, col))
+        if ((type(row) == np.ma.core.MaskedConstant) or
+            (type(row) == np.ma.core.MaskedConstant)):
+            # in this case this cell is masked, so we ignore it
+            log.debug('cell is masked, ignoring')
+            return None
 
         item = self.tableWidget.item(row, col)
         log.debug(type(item))
