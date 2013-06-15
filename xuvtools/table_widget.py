@@ -402,7 +402,7 @@ class My_UI_Window(Ui_MainWindow):
             self.cols = self.tableWidget.columnCount()
             # initialize the new column of cells:
             for row in range(self.rows):
-                self.gen_cell(row, self.cols)
+                self.gen_cell(row, self.cols - 1)
         for i in range(dcols * -1):
             self.tableWidget.removeColumn(self.cols - 1)
             self.cols = self.tableWidget.columnCount()
@@ -413,7 +413,7 @@ class My_UI_Window(Ui_MainWindow):
             self.rows = self.tableWidget.rowCount()
             # initialize the new row of cells:
             for col in range(self.cols):
-                self.gen_cell(self.rows, col)
+                self.gen_cell(self.rows - 1, col)
         for i in range(drows * -1):
             self.tableWidget.removeRow(self.rows - 1)
             self.rows = self.tableWidget.rowCount()
