@@ -4,6 +4,11 @@
 by the "MTrack2" plugin for ImageJ/FiJi.
 """
 
+# TODO:
+#  - rewrite this code so it can be imported in other scripts
+#  - then import it into the GUI script instead of "calling" it from there
+#  - check which functions should go into a central module
+
 import csv
 import sys
 import argparse
