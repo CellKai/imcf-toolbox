@@ -3,8 +3,7 @@
 
 import sys
 import filament_parser
-# TODO: switch to ui_generic_in_out_opt module
-from generic_in_out_opt import *
+from ui_generic_in_out_opt import *
 
 class My_UI_Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
@@ -12,7 +11,7 @@ class My_UI_Window(Ui_MainWindow):
         MainWindow.setWindowTitle("Junction Statistics")
         self.label.setText("Junction Statistics")
         self.le_infile.setPlaceholderText("Input CSV File containing Filament points (Ctrl+O)")
-        self.cb_plot.setText("Show a 3D plot of the calculated data.")
+        self.cb_option.setText("Show a 3D plot of the calculated data.")
         MainWindow.addAction(self.sc_ctrl_w)
         MainWindow.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"), self.selectInfile)
@@ -39,7 +38,7 @@ class My_UI_Window(Ui_MainWindow):
         outfile = str(self.le_outfile.text())
         sys.argv += ['-o', outfile]
         plot = None
-        if (self.cb_plot.checkState() == 2):
+        if (self.cb_option.checkState() == 2):
             plot = '--plot'
         if plot:
             sys.argv.append(plot)
