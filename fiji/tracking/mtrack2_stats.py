@@ -5,7 +5,6 @@ by the "MTrack2" plugin for ImageJ/FiJi.
 """
 
 # TODO:
-#  - then import it into the GUI script instead of "calling" it from there
 #  - check which functions should go into a central module
 #  - move check_filehandle() ASAP!
 

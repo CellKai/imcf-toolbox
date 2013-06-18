@@ -33,20 +33,13 @@ class My_UI_Window(Ui_MainWindow):
         self.le_outfile.setText(QtGui.QFileDialog.getOpenFileName())
 
     def runTool(self):
-        sys.argv = ['./mtrack2_stats.py']
         infile = str(self.le_infile.text())
-        sys.argv += ['-i', infile]
         outfile = str(self.le_outfile.text())
-        sys.argv += ['-o', outfile]
-        label = None
+        label = False
         if (self.cb_option.checkState() == 2):
-            label = '--label'
-        if label:
-            sys.argv.append(label)
-        for inc_verbosity in range(0, self.sl_verbosity.value()):
-            sys.argv.append('-v')
-        # print sys.argv
-        mtrack2_stats.main()
+            label = True
+        verbosity = self.sl_verbosity.value()
+        mtrack2_stats.gen_stats(infile, outfile, label, verbosity)
         # TODO: should we exit after the work's done? -> ask user!
         # sys.exit()
 
