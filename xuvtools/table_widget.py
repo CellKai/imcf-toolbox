@@ -385,6 +385,7 @@ class My_UI_Window(Ui_MainWindow):
         self.change_table_size(nrows, self.cols)
 
     def change_table_size(self, nrows, ncols):
+        '''FIXME: add function description!'''
         self.block_table_signals(True)
         # make sure we have at least on row and column:
         if nrows < 1:
