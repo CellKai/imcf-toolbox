@@ -11,6 +11,7 @@ import pprint
 import logging
 import numpy as np
 import math
+from log import log
 
 # we need to distinguish at least three possibilities, cells can be empty,
 # strings or float numbers, so a more sohpisticated parsing is required:
@@ -62,10 +63,6 @@ def main():
     
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
     loglevel = (3 - args.verbosity) * 10
-    
-    log = logging.getLogger(__name__)
-    # create console handler and add it to the logger
-    log.addHandler(logging.StreamHandler(sys.stdout))
     log.setLevel(loglevel)
     
     log.debug(pp.pformat(args.__contains__))
