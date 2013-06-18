@@ -3,7 +3,7 @@
 
 import sys
 import numpy as np
-from qt_table_widget import *
+from ui_table_widget import *
 from log import log
 
 
