@@ -112,7 +112,7 @@
      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
     </property>
    </widget>
-   <widget class="QCheckBox" name="cb_plot">
+   <widget class="QCheckBox" name="cb_option">
     <property name="geometry">
      <rect>
       <x>10</x>
