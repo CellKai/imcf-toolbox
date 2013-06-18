@@ -3,7 +3,7 @@
 
 import sys
 import mtrack2_stats
-from generic_in_out_opt import *
+from ui_generic_in_out_opt import *
 
 class My_UI_Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
@@ -11,8 +11,8 @@ class My_UI_Window(Ui_MainWindow):
         MainWindow.setWindowTitle("MTrack2 statistics")
         self.label.setText("MTrack2 results analyzer")
         self.le_infile.setPlaceholderText("Input TXT File containing MTrack2 results (Ctrl+O)")
-        self.cb_plot.setText("Write column labels into CSV file.")
-        # self.cb_plot.setDisabled(True)
+        self.cb_option.setText("Write column labels into CSV file.")
+        # self.cb_option.setDisabled(True)
         MainWindow.addAction(self.sc_ctrl_w)
         MainWindow.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"), self.selectInfile)
@@ -39,7 +39,7 @@ class My_UI_Window(Ui_MainWindow):
         outfile = str(self.le_outfile.text())
         sys.argv += ['-o', outfile]
         label = None
-        if (self.cb_plot.checkState() == 2):
+        if (self.cb_option.checkState() == 2):
             label = '--label'
         if label:
             sys.argv.append(label)
