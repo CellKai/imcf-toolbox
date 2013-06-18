@@ -91,8 +91,6 @@ def main():
     loglevel = (3 - args.verbosity) * 10
     log.setLevel(loglevel)
     
-    log.debug(pp.pformat(args.__contains__))
-    log.debug(pp.pformat(type(args)))
     log.warn("Infile: %s" % args.infile)
     log.debug("Outfile: %s" % args.outfile)
     
