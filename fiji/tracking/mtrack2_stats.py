@@ -44,6 +44,27 @@ def movement_vectors(coords, step=1):
     ret[step:] = coords[step:] - coords[0:-step]
     return ret
 
+def save_results_labeled(f_out, data, lbl):
+    try:
+        np.savetxt(f_out, data, fmt='%.5f', header=lbl, delimiter='\t')
+        log.info("Finished writing CSV.")
+    except TypeError:
+        log.warn("Could not write column labels, most likely your numpy " +
+            "version is too old (requires at least 1.7.0), falling back " +
+            "to unlabeled CSV format.")
+        save_results_unlabeled(f_out, data)
+
+def save_results_unlabeled(f_out, data):
+    np.savetxt(f_out, data, fmt='%.5f', delimiter='\t')
+    log.info("Finished writing CSV.")
+
+def save_results(f_out, data, labeled=False):
+    lbl = 'x\ty\tdx\tdy\tdist\tangle\tdist5\tangle5'
+    if labeled:
+        save_results_labeled(f_out, data, lbl)
+    else:
+        save_results_unlabeled(f_out, data)
+
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-l', '--label', action='store_const', const=True,
@@ -172,12 +193,10 @@ def main():
     comb = np.hstack((t_combined, movement_v, movement_n, rotation,
         movement5_n, rotation5))
 
+    label = False
     if args.label:
-        # this requires np.__version__ >= 1.7.0:
-        lbl = 'x\ty\tdx\tdy\tdist\tangle\tdist5\tangle5'
-        np.savetxt(args.outfile, comb, fmt='%.5f', header=lbl, delimiter='\t')
-    else:
-        np.savetxt(args.outfile, comb, fmt='%.5f', delimiter='\t')
+        label = True
+    save_results(args.outfile, comb, label)
 
 if __name__ == "__main__":
     sys.exit(main())
