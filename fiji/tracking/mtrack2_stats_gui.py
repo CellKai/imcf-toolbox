@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import mtrack2_stats
+from mtrack2_stats import gen_stats
 from ui_generic_in_out_opt import *
 
 class My_UI_Window(Ui_MainWindow):
@@ -39,7 +39,7 @@ class My_UI_Window(Ui_MainWindow):
         if (self.cb_option.checkState() == 2):
             label = True
         verbosity = self.sl_verbosity.value()
-        mtrack2_stats.gen_stats(infile, outfile, label, verbosity)
+        gen_stats(infile, outfile, label, verbosity)
         # TODO: should we exit after the work's done? -> ask user!
         # sys.exit()
 
