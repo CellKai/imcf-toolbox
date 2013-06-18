@@ -1,2 +1,2 @@
 @echo off
-C:\Python27\python.exe junction_statistics.py
+C:\Python27\pythonw.exe junction_statistics_gui.py
