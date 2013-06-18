@@ -3,6 +3,7 @@
 
 import sys
 import filament_parser
+# TODO: switch to ui_generic_in_out_opt module
 from generic_in_out_opt import *
 
 class My_UI_Window(Ui_MainWindow):
