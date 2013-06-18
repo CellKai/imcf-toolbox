@@ -7,6 +7,8 @@ Imaris via the XT/Matlab interface.
 # TODO:
 #  - move the 3d plotting stuff somewhere else, especially the imports!
 #  - merge the "filaments" and "volpy" modules, then use Filament objects
+#  - rewrite this code so it can be imported in other scripts
+#  - then import it into the GUI script instead of "calling" it from there
 
 import sys
 import csv
