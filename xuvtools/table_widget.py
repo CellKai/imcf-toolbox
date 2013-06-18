@@ -6,6 +6,7 @@ import numpy as np
 from qt_table_widget import *
 from log import log
 
+
 class My_UI_Window(Ui_MainWindow):
     def __init__(self):
         '''The clist contains the list of cells in logical order, which
@@ -32,14 +33,22 @@ class My_UI_Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super(My_UI_Window, self).setupUi(MainWindow)
         MainWindow.setWindowTitle("Grid Aligner")
-        QtCore.QObject.connect(self.sb_h, QtCore.SIGNAL("valueChanged(int)"), self.set_cols)
-        QtCore.QObject.connect(self.sb_v, QtCore.SIGNAL("valueChanged(int)"), self.set_rows)
-        QtCore.QObject.connect(self.pb_inc_h, QtCore.SIGNAL("clicked()"), self.inc_cols)
-        QtCore.QObject.connect(self.pb_dec_h, QtCore.SIGNAL("clicked()"), self.dec_cols)
-        QtCore.QObject.connect(self.pb_inc_v, QtCore.SIGNAL("clicked()"), self.inc_rows)
-        QtCore.QObject.connect(self.pb_dec_v, QtCore.SIGNAL("clicked()"), self.dec_rows)
-        QtCore.QObject.connect(self.tableWidget, QtCore.SIGNAL("cellChanged(int, int)"), self.upd_cell)
-        QtCore.QObject.connect(self.cb_ordering, QtCore.SIGNAL("currentIndexChanged(int)"), self.set_ordering)
+        QtCore.QObject.connect(self.sb_h,
+            QtCore.SIGNAL("valueChanged(int)"), self.set_cols)
+        QtCore.QObject.connect(self.sb_v,
+            QtCore.SIGNAL("valueChanged(int)"), self.set_rows)
+        QtCore.QObject.connect(self.pb_inc_h,
+            QtCore.SIGNAL("clicked()"), self.inc_cols)
+        QtCore.QObject.connect(self.pb_dec_h,
+            QtCore.SIGNAL("clicked()"), self.dec_cols)
+        QtCore.QObject.connect(self.pb_inc_v,
+            QtCore.SIGNAL("clicked()"), self.inc_rows)
+        QtCore.QObject.connect(self.pb_dec_v,
+            QtCore.SIGNAL("clicked()"), self.dec_rows)
+        QtCore.QObject.connect(self.tableWidget,
+            QtCore.SIGNAL("cellChanged(int, int)"), self.upd_cell)
+        QtCore.QObject.connect(self.cb_ordering,
+            QtCore.SIGNAL("currentIndexChanged(int)"), self.set_ordering)
         # QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.cols = self.tableWidget.columnCount()
         self.rows = self.tableWidget.rowCount()
@@ -108,8 +117,9 @@ class My_UI_Window(Ui_MainWindow):
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
             for col in range(self.cols):
-                log.debug("%s: [%s, %s]" % (self.rows - 1 + (col * self.rows) - row, row, col))
-                cells[self.rows - 1 + (col * self.rows) - row] = [row, col]
+                cid = self.rows - 1 + (col * self.rows) - row
+                log.debug("%s: [%s, %s]" % (cid, row, col))
+                cells[cid] = [row, col]
         self.clist = np.ma.array(cells, mask=[0])
         self.upd_clistmask()
 
