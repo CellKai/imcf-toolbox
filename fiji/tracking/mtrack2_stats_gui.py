@@ -5,23 +5,32 @@ import sys
 from mtrack2_stats import gen_stats
 from ui_generic_in_out_opt import *
 
+
 class My_UI_Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super(My_UI_Window, self).setupUi(MainWindow)
         MainWindow.setWindowTitle("MTrack2 statistics")
         self.label.setText("MTrack2 results analyzer")
-        self.le_infile.setPlaceholderText("Input TXT File containing MTrack2 results (Ctrl+O)")
+        txt = "Input TXT File containing MTrack2 results (Ctrl+O)"
+        self.le_infile.setPlaceholderText(txt)
         self.cb_option.setText("Write column labels into CSV file.")
         # self.cb_option.setDisabled(True)
         MainWindow.addAction(self.sc_ctrl_w)
         MainWindow.addAction(self.sc_ctrl_q)
-        QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"), self.selectInfile)
-        QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"), self.selectOutfile)
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"), MainWindow.close)
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"), self.runTool)
-        QtCore.QObject.connect(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"), MainWindow.close)
-        QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"), MainWindow.close)
-        QtCore.QObject.connect(self.sl_verbosity, QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
+        QtCore.QObject.connect(self.pb_infile,
+            QtCore.SIGNAL("clicked()"), self.selectInfile)
+        QtCore.QObject.connect(self.pb_outfile,
+            QtCore.SIGNAL("clicked()"), self.selectOutfile)
+        QtCore.QObject.connect(self.bb_ok_cancel,
+            QtCore.SIGNAL("rejected()"), MainWindow.close)
+        QtCore.QObject.connect(self.bb_ok_cancel,
+            QtCore.SIGNAL("accepted()"), self.runTool)
+        QtCore.QObject.connect(self.sc_ctrl_w,
+            QtCore.SIGNAL("triggered()"), MainWindow.close)
+        QtCore.QObject.connect(self.sc_ctrl_q,
+            QtCore.SIGNAL("triggered()"), MainWindow.close)
+        QtCore.QObject.connect(self.sl_verbosity,
+            QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def selectInfile(self):
