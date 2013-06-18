@@ -124,25 +124,24 @@ def main():
     gen_stats(args.infile, args.outfile, args.label, args.verbosity)
 
 def gen_stats(f_in, f_out, label=False, verbosity=0):
-    pp = pprint.PrettyPrinter(indent=4)
-
-    mtrack2_file = check_filehandle(f_in, 'r')
-    
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
     log.warn("Infile: %s" % f_in)
     log.debug("Outfile: %s" % f_out)
     
-    data = []
+    pp = pprint.PrettyPrinter(indent=4)
     
     # TODO: parsing can be done in a nicer way be reading the header lines via
     # csvreader.next(), checking for the expected values and the number of tracks
     # and then directly reading the trackpoints into a numpy ndarray...
+    mtrack2_file = check_filehandle(f_in, 'r')
     csvreader = csv.reader(mtrack2_file, delimiter='\t')
+
     # parse all lines into memory
     # NOTE: this is bad if the files get too large, but we haven't seen result
     # files from MTrack2 that are bigger than a couple of MB.
+    data = []
     for row in csvreader:
         data.append([parse_cell(x) for x in row])
         # data.append(row)
