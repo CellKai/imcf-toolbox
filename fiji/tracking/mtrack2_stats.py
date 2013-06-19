@@ -33,8 +33,12 @@ def parse_cell(x):
                 retval = 0
     return retval
 
-def angle(v1u, v2u):
-    ''' Calculates the angle between unit vectors (in degrees). '''
+def angle(v1u, v2u, normalize=False):
+    # TODO: should go into the volpy module
+    ''' Calculates the angle between vectors (in arc degrees).'''
+    if normalize:
+        v1u = v1u / np.linalg.norm(v1u)
+        v2u = v2u / np.linalg.norm(v2u)
     rad = np.arccos(np.dot(v1u, v2u))
     if math.isnan(rad):
         if (v1u == v2u).all():
