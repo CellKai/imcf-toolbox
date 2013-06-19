@@ -11,7 +11,6 @@ import csv
 import sys
 import argparse
 import pprint
-import logging
 import numpy as np
 import volpy as vp
 from log import log
