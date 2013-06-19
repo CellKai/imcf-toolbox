@@ -104,7 +104,7 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
     header.append(data.pop(0))
     if not header[0][0] == 'Frame':
         # exit because file is broken...
-        sys.exit('Unable to find correct header, stopping.')
+        raise SystemExit('Unable to find correct header, stopping.')
     log.debug("Header:\n%s\n" % pp.pformat(header))
     
     # second line is 'Tracks 1 to N', so we can read the total number there:
@@ -131,8 +131,7 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
     #     try:
     #         np.array(row, dtype='float')
     #     except ValueError:
-    #         print row
-    #         sys.exit()
+    #         raise SystemExit(row)
     
     # remove column 0 (indices), and every third one (flags)
     todelete= range(0, (trackmax+1)*3, 3)
@@ -146,7 +145,7 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
         t_overlap = t_overlap * npdata_bool[:,track*2]
     
     if trackmax > 1 and sum(t_overlap) > 0:
-        sys.exit("*** WARNING: Found overlapping tracks! ***")
+        raise SystemExit("*** WARNING: Found overlapping tracks! ***")
     
     t_combined = np.zeros((npdata.shape[0],2))
     for track in range(trackmax):
