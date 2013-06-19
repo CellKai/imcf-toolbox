@@ -35,7 +35,37 @@ def parse_cell(x):
 
 def angle(v1u, v2u, normalize=False):
     # TODO: should go into the volpy module
-    ''' Calculates the angle between vectors (in arc degrees).'''
+    ''' Calculates the angle between vectors (in arc degrees).
+    .
+    Calculates the angle in degrees given to n-dimensional unit vectors given
+    as np.ndarrays. The normalization can be done by the function if desired.
+    Note that when calculating angles between large number of vectors, it is
+    most likely more efficient to normalize them in advance.
+    .
+    Parameters
+    ----------
+    v1u, v2u : np.ndarray
+        The vectors to compare.
+    normalize : bool
+        Defines whether we should normalize the given vectors. Otherwise they
+        need to be normalized already.
+    .
+    Returns
+    -------
+    rad : float
+        The angle between the vectors in arc degrees.
+    .
+    Example
+    -------
+    >>> import numpy as np
+    >>> x = np.array([[1,0,0],[1,0,1]])
+    >>> angle(x[0], x[1], normalize=True)
+    45.000000000000007
+    >>> x = np.array([[1,2,3],[1,2,1]])
+    >>> angle(x[0], x[1], normalize=True)
+    29.205932247399399
+    '''
+    # print(v1u.shape)
     if normalize:
         v1u = v1u / np.linalg.norm(v1u)
         v2u = v2u / np.linalg.norm(v2u)
