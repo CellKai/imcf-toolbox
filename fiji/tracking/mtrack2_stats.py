@@ -13,7 +13,7 @@ import argparse
 import pprint
 import logging
 import numpy as np
-import math
+import volpy as vp
 from log import log
 from aux import check_filehandle
 
@@ -32,50 +32,6 @@ def parse_cell(x):
             if retval == "":
                 retval = 0
     return retval
-
-def angle(v1u, v2u, normalize=False):
-    # TODO: should go into the volpy module
-    ''' Calculates the angle between vectors (in arc degrees).
-    .
-    Calculates the angle in degrees given to n-dimensional unit vectors given
-    as np.ndarrays. The normalization can be done by the function if desired.
-    Note that when calculating angles between large number of vectors, it is
-    most likely more efficient to normalize them in advance.
-    .
-    Parameters
-    ----------
-    v1u, v2u : np.ndarray
-        The vectors to compare.
-    normalize : bool
-        Defines whether we should normalize the given vectors. Otherwise they
-        need to be normalized already.
-    .
-    Returns
-    -------
-    rad : float
-        The angle between the vectors in arc degrees.
-    .
-    Example
-    -------
-    >>> import numpy as np
-    >>> x = np.array([[1,0,0],[1,0,1]])
-    >>> angle(x[0], x[1], normalize=True)
-    45.000000000000007
-    >>> x = np.array([[1,2,3],[1,2,1]])
-    >>> angle(x[0], x[1], normalize=True)
-    29.205932247399399
-    '''
-    # print(v1u.shape)
-    if normalize:
-        v1u = v1u / np.linalg.norm(v1u)
-        v2u = v2u / np.linalg.norm(v2u)
-    rad = np.arccos(np.dot(v1u, v2u))
-    if math.isnan(rad):
-        if (v1u == v2u).all():
-            rad = 0.0
-        else:
-            rad = np.pi
-    return rad * (180/np.pi)
 
 def movement_vectors(coords, step=1):
     ret = np.zeros(coords.shape)
@@ -221,12 +177,12 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
     for p in range(1, rotation.shape[0]-1):
         # print movement_v[p-1]
         # print movement_n[p-1]
-        rotation[p+1] = angle(movement_v[p-1]/movement_n[p-1],
+        rotation[p+1] = vp.angle(movement_v[p-1]/movement_n[p-1],
                             movement_v[p]/movement_n[p])
     
     rotation5 = np.zeros((movement5_n.shape[0], 1))
     for p in range(5, rotation5.shape[0]-1):
-        rotation5[p+1] = angle(movement5_v[p-1]/movement5_n[p-1],
+        rotation5[p+1] = vp.angle(movement5_v[p-1]/movement5_n[p-1],
                             movement5_v[p]/movement5_n[p])
     
     comb = np.hstack((t_combined, movement_v, movement_n, rotation,

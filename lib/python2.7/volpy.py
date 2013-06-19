@@ -8,10 +8,13 @@ in three dimensional space."""
 from log import log
 from scipy import reshape, sqrt
 from numpy import cross, linalg, ma
+import numpy as np
+import math
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
 
+# - consolidate the np.function vs "from numpy import ..." usage
 # - join the "filaments" module with this one, extend the Filament class to
 #   be able to return the distance matrix, the masks of the individual
 #   filaments, access to start and end points, etc.
@@ -381,3 +384,46 @@ def tri_area(p1, p2, p3):
     v1 = p2 - p1
     v2 = p2 - p3
     return 0.5 * linalg.norm(cross(v1, v2))
+
+def angle(v1u, v2u, normalize=False):
+    ''' Calculates the angle between vectors (in arc degrees).
+    .
+    Calculates the angle in degrees given to n-dimensional unit vectors given
+    as np.ndarrays. The normalization can be done by the function if desired.
+    Note that when calculating angles between large number of vectors, it is
+    most likely more efficient to normalize them in advance.
+    .
+    Parameters
+    ----------
+    v1u, v2u : np.ndarray
+        The vectors to compare.
+    normalize : bool
+        Defines whether we should normalize the given vectors. Otherwise they
+        need to be normalized already.
+    .
+    Returns
+    -------
+    rad : float
+        The angle between the vectors in arc degrees.
+    .
+    Example
+    -------
+    >>> import numpy as np
+    >>> x = np.array([[1,0,0],[1,0,1]])
+    >>> angle(x[0], x[1], normalize=True)
+    45.000000000000007
+    >>> x = np.array([[1,2,3],[1,2,1]])
+    >>> angle(x[0], x[1], normalize=True)
+    29.205932247399399
+    '''
+    # print(v1u.shape)
+    if normalize:
+        v1u = v1u / np.linalg.norm(v1u)
+        v2u = v2u / np.linalg.norm(v2u)
+    rad = np.arccos(np.dot(v1u, v2u))
+    if math.isnan(rad):
+        if (v1u == v2u).all():
+            rad = 0.0
+        else:
+            rad = np.pi
+    return rad * (180/np.pi)
