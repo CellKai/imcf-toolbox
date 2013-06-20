@@ -62,7 +62,11 @@ def calc_rotation(deltas, normals, start):
     # TODO: add description, move to volpy
     res = np.zeros((deltas.shape[0], 1))
     for p in range(start, res.shape[0]-1):
-        res[p+1] = vp.angle(deltas[p-1], deltas[p], normalize=True)
+        # if any of the two normal vectors is zero, nothing moved
+        if (normals[p-1] * normals[p] == 0.):
+            res[p+1] = 0
+        else:
+            res[p+1] = vp.angle(deltas[p-1], deltas[p], normalize=True)
     return res
 
 def main():
