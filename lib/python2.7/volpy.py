@@ -417,6 +417,7 @@ def angle(v1u, v2u, normalize=False):
     29.205932247399399
     '''
     # print(v1u.shape)
+    # TODO: check if any vector is zero!!
     if normalize:
         v1u = v1u / np.linalg.norm(v1u)
         v2u = v2u / np.linalg.norm(v2u)
