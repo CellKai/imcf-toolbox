@@ -58,6 +58,13 @@ def save_results(f_out, data, labeled=False):
     else:
         save_results_unlabeled(f_out, data)
 
+def calc_rotation(deltas, normals, start):
+    # TODO: add description, move to volpy
+    res = np.zeros((deltas.shape[0], 1))
+    for p in range(start, res.shape[0]-1):
+        res[p+1] = vp.angle(deltas[p-1], deltas[p], normalize=True)
+    return res
+
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-l', '--label', action='store_const', const=True,
@@ -171,18 +178,10 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
         movement_n[p] = np.linalg.norm(movement_v[p])
         movement5_n[p] = np.linalg.norm(movement5_v[p])
     
-    rotation = np.zeros((movement_n.shape[0], 1))
-    for p in range(1, rotation.shape[0]-1):
-        # print movement_v[p-1]
-        # print movement_n[p-1]
-        rotation[p+1] = vp.angle(movement_v[p-1]/movement_n[p-1],
-                            movement_v[p]/movement_n[p])
-    
-    rotation5 = np.zeros((movement5_n.shape[0], 1))
-    for p in range(5, rotation5.shape[0]-1):
-        rotation5[p+1] = vp.angle(movement5_v[p-1]/movement5_n[p-1],
-                            movement5_v[p]/movement5_n[p])
-    
+
+    rotation = calc_rotation(movement_v, movement_n, 1)
+    rotation5 = calc_rotation(movement5_v, movement5_n, 5)
+
     comb = np.hstack((t_combined, movement_v, movement_n, rotation,
         movement5_n, rotation5))
 
