@@ -388,10 +388,10 @@ def tri_area(p1, p2, p3):
 def angle(v1u, v2u, normalize=False):
     ''' Calculates the angle between vectors (in arc degrees).
     .
-    Calculates the angle in degrees given to n-dimensional unit vectors given
-    as np.ndarrays. The normalization can be done by the function if desired.
-    Note that when calculating angles between large number of vectors, it is
-    most likely more efficient to normalize them in advance.
+    Calculates the angle in degrees between two n-dimensional unit vectors
+    given as np.ndarrays. The normalization can be done by the function if
+    desired. Note that when calculating angles between large number of vectors,
+    it is most likely more efficient to normalize them in advance.
     .
     Parameters
     ----------
