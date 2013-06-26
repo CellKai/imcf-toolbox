@@ -190,6 +190,7 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
         movement5_n, rotation5))
 
     save_results(f_out, comb, label)
+    log.warn("Wrote results to '%s'" % f_out.name)
 
 if __name__ == "__main__":
     sys.exit(main())
