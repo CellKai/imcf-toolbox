@@ -66,7 +66,7 @@ def calc_rotation(deltas, normals, start):
         if (normals[p-1] * normals[p] == 0.):
             res[p+1] = 0
         else:
-            res[p+1] = vp.angle(deltas[p-1], deltas[p], normalize=True)
+            res[p+1] = vp.angle2D(deltas[p-1], deltas[p])
     return res
 
 def main():
