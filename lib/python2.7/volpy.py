@@ -431,3 +431,45 @@ def angle(v1u, v2u, normalize=False):
         else:
             rad = np.pi
     return rad * (180/np.pi)
+
+def angle2D(v1, v2):
+    ''' Calculates the relative angle between vectors in 2D.
+    .
+    Calculates the relative angle in degrees between two 2-dimensional vectors
+    given as np.ndarrays. Positive numbers correspond to a "right turn", while
+    negative numbers correspond to a "left turn".
+    .
+    Parameters
+    ----------
+    v1, v2 : np.ndarray
+        The vectors to compare.
+    .
+    Returns
+    -------
+    rad : float
+        The angle between the vectors in arc degrees [-180,180].
+    .
+    Example
+    -------
+    >>> import numpy as np
+    >>> x = np.array([[1,1],[1,-11]])
+    >>> angle2D(x[0], x[1])
+    45.0
+    >>> x = np.array([[-3,-0.1],[1.,6.]])
+    >>> angle(x[0], x[1])
+    101.371474641
+    '''
+    if (v1.shape != (2,) or v2.shape != (2,)):
+        raise TypeError('Can handle only 2-D vectors!')
+    x_coords = np.array([v1[0], v2[0]])
+    y_coords = np.array([v1[1], v2[1]])
+    # arctan2() gives the angles between (1,0) and the vector defined by the
+    # coordinates, and it takes Y coords first, then X...
+    angles = np.arctan2(y_coords, x_coords)
+    log.debug(math.degrees(angles[0]))
+    log.debug(math.degrees(angles[1]))
+    delta = math.degrees(angles[1] - angles[0])
+    # we need to compensate a possible "overflow" manually:
+    if (abs(delta) > 180):
+        delta = 360 - abs(delta)
+    return delta
