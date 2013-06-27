@@ -86,7 +86,7 @@ def main():
     # after successful argument-parsing, we can call the "real" main function:
     gen_stats(args.infile, args.outfile, args.label, verbosity=args.verbosity)
 
-def gen_stats(f_in, f_out, label=False, verbosity=0):
+def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
@@ -171,23 +171,21 @@ def gen_stats(f_in, f_out, label=False, verbosity=0):
     t_combined = np.ma.compress_rows(np.ma.array(t_combined,
             mask=np.repeat(comb_mask, 2)))
     
-    # calculate the movement vectors:
-    movement_v = movement_vectors(t_combined, 1)
-    movement5_v = movement_vectors(t_combined, 5)
-    
-    # movement vector normals:
-    movement_n = np.zeros((movement_v.shape[0], 1))
-    movement5_n = np.zeros((movement5_v.shape[0], 1))
-    for p in range(1, movement_n.shape[0]):
-        movement_n[p] = np.linalg.norm(movement_v[p])
-        movement5_n[p] = np.linalg.norm(movement5_v[p])
-    
+    mv = {}
+    mn = {}
+    rot = {}
+    for step in (1, delta):
+        # calculate movement vectors (mv):
+        mv[step] = movement_vectors(t_combined, step)
+        # calculate vector normals (mn):
+        mn[step] = np.zeros((mv[step].shape[0], 1))
+        for p in range(1, mn[step].shape[0]):
+            mn[step][p] = np.linalg.norm(mv[step][p])
+        # calculate rotation:
+        rot[step] = calc_rotation(mv[step], mn[step], step)
 
-    rotation = calc_rotation(movement_v, movement_n, 1)
-    rotation5 = calc_rotation(movement5_v, movement5_n, 5)
-
-    comb = np.hstack((t_combined, movement_v, movement_n, rotation,
-        movement5_n, rotation5))
+    comb = np.hstack((t_combined, mv[1], mn[1], rot[1],
+        mn[delta], rot[delta]))
 
     save_results(f_out, comb, label)
     log.warn("Wrote results to '%s'" % f_out.name)
