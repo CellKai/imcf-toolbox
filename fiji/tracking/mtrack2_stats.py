@@ -84,7 +84,7 @@ def main():
     except IOError as e:
         argparser.error(str(e))
     # after successful argument-parsing, we can call the "real" main function:
-    gen_stats(args.infile, args.outfile, args.label, args.verbosity)
+    gen_stats(args.infile, args.outfile, args.label, verbosity=args.verbosity)
 
 def gen_stats(f_in, f_out, label=False, verbosity=0):
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
