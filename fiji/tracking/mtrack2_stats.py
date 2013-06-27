@@ -184,10 +184,10 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
         # calculate rotation:
         rot[step] = calc_rotation(mv[step], mn[step], step)
 
-    comb = np.hstack((t_combined, mv[1], mn[1], rot[1],
+    outdata = np.hstack((t_combined, mv[1], mn[1], rot[1],
         mn[delta], rot[delta]))
 
-    save_results(f_out, comb, label)
+    save_results(f_out, outdata, label)
     log.warn("Wrote results to '%s'" % f_out.name)
 
 if __name__ == "__main__":
