@@ -174,6 +174,7 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     mv = {}
     mn = {}
     rot = {}
+    outdata = t_combined
     for step in (1, delta):
         # calculate movement vectors (mv):
         mv[step] = movement_vectors(t_combined, step)
@@ -183,10 +184,14 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
             mn[step][p] = np.linalg.norm(mv[step][p])
         # calculate rotation:
         rot[step] = calc_rotation(mv[step], mn[step], step)
+        # assemble data structure for output (note: for the movement vectors
+        # only the "raw" values are stored, the normals and rotation are saved
+        # with all steppings):
+        if (step == 1):
+            outdata = np.hstack((outdata, mv[1]))
+        outdata = np.hstack((outdata, mn[step], rot[step]))
 
-    outdata = np.hstack((t_combined, mv[1], mn[1], rot[1],
-        mn[delta], rot[delta]))
-
+    # FIXME: label must be generated dynamically!!
     save_results(f_out, outdata, label)
     log.warn("Wrote results to '%s'" % f_out.name)
 
