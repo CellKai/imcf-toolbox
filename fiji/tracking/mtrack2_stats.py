@@ -143,8 +143,9 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     #         np.array(row, dtype='float')
     #     except ValueError:
     #         raise SystemExit(row)
-    
-    # remove column 0 (indices), and every third one (flags)
+
+    # create the ndarray from the remaining data while removing column 0
+    # (indices), and every subsequent third column (flags)
     todelete= range(0, (trackmax+1)*3, 3)
     npdata = np.delete(data, todelete, axis=1)
     npdata_bool = npdata > 0
@@ -184,9 +185,9 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
             mn[step][p] = np.linalg.norm(mv[step][p])
         # calculate rotation:
         rot[step] = calc_rotation(mv[step], mn[step], step)
-        # assemble data structure for output (note: for the movement vectors
-        # only the "raw" values are stored, the normals and rotation are saved
-        # with all steppings):
+        # now assemble the data structure for output (note: for the movement
+        # vectors only stepping '1' makes sense, the vector normals and
+        # rotation angles are saved with all steppings):
         if (step == 1):
             outdata = np.hstack((outdata, mv[1]))
         outdata = np.hstack((outdata, mn[step], rot[step]))
