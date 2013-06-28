@@ -51,10 +51,9 @@ def save_results_unlabeled(f_out, data):
     np.savetxt(f_out, data, fmt='%.5f', delimiter='\t')
     log.info("Finished writing CSV.")
 
-def save_results(f_out, data, labeled=False):
-    lbl = 'x\ty\tdx\tdy\tdist\tangle\tdist5\tangle5'
-    if labeled:
-        save_results_labeled(f_out, data, lbl)
+def save_results(f_out, data, label=False):
+    if label:
+        save_results_labeled(f_out, data, label)
     else:
         save_results_unlabeled(f_out, data)
 
@@ -176,6 +175,8 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     mn = {}
     rot = {}
     outdata = t_combined
+    if label:
+        label = 'pos_x\tpos_y'
     for step in (1, delta):
         # calculate movement vectors (mv):
         mv[step] = movement_vectors(t_combined, step)
@@ -190,9 +191,14 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
         # rotation angles are saved with all steppings):
         if (step == 1):
             outdata = np.hstack((outdata, mv[1]))
+            if label:
+                label += '\tdelta_x\tdelta_y'
         outdata = np.hstack((outdata, mn[step], rot[step]))
+        if label:
+            label += '\tdistance_%s\tangle_%s' % (step, step)
 
-    # FIXME: label must be generated dynamically!!
+    if label:
+        log.info('label: %s' % label)
     save_results(f_out, outdata, label)
     log.warn("Wrote results to '%s'" % f_out.name)
 
