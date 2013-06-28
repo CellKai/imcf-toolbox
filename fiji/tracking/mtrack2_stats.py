@@ -6,6 +6,7 @@ by the "MTrack2" plugin for ImageJ/FiJi.
 
 # TODO:
 #  - check which functions should go into a central module
+#  - split parsing, processing and generating output into functions
 
 import csv
 import sys
@@ -93,6 +94,8 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     log.debug("Outfile: %s" % f_out)
     
     pp = pprint.PrettyPrinter(indent=4)
+
+    ######### tracks parsing #########
     
     # TODO: parsing can be done in a nicer way be reading the header lines via
     # csvreader.next(), checking for the expected values and the number of tracks
@@ -149,6 +152,8 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     npdata = np.delete(data, todelete, axis=1)
     npdata_bool = npdata > 0
     
+    ######### tracks processing (combining etc.) #########
+
     tracklen = [0] * trackmax
     t_overlap = npdata_bool[:,0]
     for track in range(trackmax):
@@ -171,6 +176,7 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     t_combined = np.ma.compress_rows(np.ma.array(t_combined,
             mask=np.repeat(comb_mask, 2)))
     
+    ######### calculations #########
     mv = {}
     mn = {}
     rot = {}
