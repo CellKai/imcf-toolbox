@@ -65,7 +65,27 @@ def save_results(f_out, data, label=False):
         save_results_unlabeled(f_out, data)
 
 def calc_rotation(deltas, normals, start):
-    # TODO: add description, move to volpy
+    '''Calculate angle between two vectors in 2D.
+    .
+    Takes two vectors in 2D euclidean space and calculates the directional
+    change from the second to the first vector in degrees. Positive values
+    correspond to right-turns, negative to left-turns.
+    .
+    Parameters
+    ----------
+    deltas : np.ndarray
+        Movement vectors.
+    normals : np.ndarray
+        Corresponding vector normals.
+    start : int
+        Optional parameter to skip a number of initial values.
+    .
+    Returns
+    -------
+    deg_rotation : float
+        The rotation angle in arc degrees [-180, 180].
+    '''
+    # TODO: move to volpy
     res = np.zeros((deltas.shape[0], 1))
     for p in range(start, res.shape[0]-1):
         # if any of the two normal vectors is zero, nothing moved
