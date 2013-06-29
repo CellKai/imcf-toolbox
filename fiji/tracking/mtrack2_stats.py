@@ -15,7 +15,7 @@ import pprint
 import numpy as np
 import volpy as vp
 from log import log
-from aux import check_filehandle
+from aux import check_filehandle, filename
 
 # we need to distinguish at least three possibilities, cells can be empty,
 # strings or float numbers, so a more sohpisticated parsing is required:
@@ -206,7 +206,7 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     if label:
         log.info('label: %s' % label)
     save_results(f_out, outdata, label)
-    log.warn("Wrote results to '%s'" % f_out.name)
+    log.warn("Wrote results to '%s'" % filename(f_out))
 
 if __name__ == "__main__":
     sys.exit(main())
