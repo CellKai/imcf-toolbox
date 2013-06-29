@@ -37,3 +37,25 @@ def check_filehandle(filename, mode):
     else:
         message = "unknown data type (expected string or filehandle): %s"
         raise SystemExit(message % type(filename))
+
+def filename(name):
+    '''Get the filename from either a filehandle or a string.
+    .
+    This is a convenience function to retrieve the filename as a string
+    given either an open filehandle or just a plain str containing the
+    name.
+    .
+    Parameters
+    ----------
+    name : str or filehandle
+    .
+    Returns
+    -------
+    name : str
+    '''
+    if isinstance(name, file):
+        return name.name
+    elif isinstance(name, str):
+        return name
+    else:
+        raise TypeError
