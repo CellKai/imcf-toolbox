@@ -74,7 +74,7 @@ def movement_vectors(coords, step=1):
     ret[step:] = coords[step:] - coords[0:-step]
     return ret
 
-def save_results_labeled(f_out, data, lbl):
+def _save_results_labeled(f_out, data, lbl):
     try:
         np.savetxt(f_out, data, fmt='%.5f', header=lbl, delimiter='\t')
         log.info("Finished writing CSV.")
@@ -82,17 +82,17 @@ def save_results_labeled(f_out, data, lbl):
         log.warn("Could not write column labels, most likely your numpy " +
             "version is too old (requires at least 1.7.0), falling back " +
             "to unlabeled CSV format.")
-        save_results_unlabeled(f_out, data)
+        _save_results_unlabeled(f_out, data)
 
-def save_results_unlabeled(f_out, data):
+def _save_results_unlabeled(f_out, data):
     np.savetxt(f_out, data, fmt='%.5f', delimiter='\t')
     log.info("Finished writing CSV.")
 
-def save_results(f_out, data, label=False):
+def _save_results(f_out, data, label=False):
     if label:
-        save_results_labeled(f_out, data, label)
+        _save_results_labeled(f_out, data, label)
     else:
-        save_results_unlabeled(f_out, data)
+        _save_results_unlabeled(f_out, data)
 
 def calc_rotation(deltas, normals, start):
     '''Calculate angle between two vectors in 2D.
@@ -269,7 +269,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], verbosity=0):
 
     if label:
         log.info('label: %s' % label)
-    save_results(f_out, outdata, label)
+    _save_results(f_out, outdata, label)
     log.warn("Wrote results to '%s'" % filename(f_out))
 
 if __name__ == "__main__":
