@@ -48,7 +48,7 @@ class My_UI_Window(Ui_MainWindow):
         if (self.cb_option.checkState() == 2):
             label = True
         verbosity = self.sl_verbosity.value()
-        gen_stats(infile, outfile, label, verbosity)
+        gen_stats(infile, outfile, label, [5], verbosity)
         # TODO: should we exit after the work's done? -> ask user!
         # sys.exit()
 

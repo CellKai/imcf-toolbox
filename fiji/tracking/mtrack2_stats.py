@@ -79,19 +79,27 @@ def main():
         dest='f_out', help='output file', required=True)
     argparser.add_argument('-v', '--verbose', action='count',
         dest='verbosity', default=0)
+    argparser.add_argument('-d', '--delta', type=int, action='append',
+        dest='deltas', help='stepping widths, can be repeated')
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
     # after successful argument-parsing, we can call the "real" main function:
-    gen_stats(args.f_in, args.f_out, args.label, args.verbosity)
+    gen_stats(args.f_in, args.f_out, args.label, args.deltas, args.verbosity)
 
-def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
+def gen_stats(f_in, f_out, label=False, deltas=[], verbosity=0):
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
+
     log.warn("Infile: %s" % f_in)
     log.debug("Outfile: %s" % f_out)
+    if deltas:
+        deltas = [1] + deltas
+    else:
+        deltas = [1]
+    log.info("Stepping width(s): %s" % deltas)
     
     pp = pprint.PrettyPrinter(indent=4)
 
@@ -183,7 +191,7 @@ def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     outdata = t_combined
     if label:
         label = 'pos_x\tpos_y'
-    for step in (1, delta):
+    for step in deltas:
         # calculate movement vectors (mv):
         mv[step] = movement_vectors(t_combined, step)
         # calculate vector normals (mn):
