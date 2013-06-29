@@ -7,6 +7,9 @@ by the "MTrack2" plugin for ImageJ/FiJi.
 # TODO:
 #  - check which functions should go into a central module
 #  - split parsing, processing and generating output into functions
+#  - provide a thresholding option for the angle columns
+#  - look for clusters in the thresholded angles by defining a maximum gap
+#    size between two adjacent / subsequent angles above the threshold
 
 import csv
 import sys
