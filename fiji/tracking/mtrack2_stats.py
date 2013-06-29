@@ -7,7 +7,6 @@ by the "MTrack2" plugin for ImageJ/FiJi.
 # TODO:
 #  - check which functions should go into a central module
 #  - split parsing, processing and generating output into functions
-#  - provide a thresholding option for the angle columns
 #  - look for clusters in the thresholded angles by defining a maximum gap
 #    size between two adjacent / subsequent angles above the threshold
 #  - check the "Knockout Mouse Phenotyping Program" (KOMP2) for behavioural
@@ -137,14 +136,17 @@ def main():
         dest='verbosity', default=0)
     argparser.add_argument('-d', '--delta', type=int, action='append',
         dest='deltas', help='stepping widths, can be repeated')
+    argparser.add_argument('-t', '--threshold', type=float, default=0,
+        dest='threshold', help='thresholding value for rotation in degrees')
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
     # after successful argument-parsing, we can call the "real" main function:
-    gen_stats(args.f_in, args.f_out, args.label, args.deltas, args.verbosity)
+    gen_stats(args.f_in, args.f_out, args.label, args.deltas,
+        args.threshold, args.verbosity)
 
-def gen_stats(f_in, f_out, label=False, deltas=[], verbosity=0):
+def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
@@ -156,6 +158,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], verbosity=0):
     else:
         deltas = [1]
     log.info("Stepping width(s): %s" % deltas)
+    log.info("Angle threshold: %s" % thresh)
     
     pp = pprint.PrettyPrinter(indent=4)
 
@@ -244,6 +247,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], verbosity=0):
     mv = {}
     mn = {}
     rot = {}
+    rot_t = {}
     outdata = t_combined
     if label:
         label = 'pos_x\tpos_y'
@@ -256,16 +260,22 @@ def gen_stats(f_in, f_out, label=False, deltas=[], verbosity=0):
             mn[step][p] = np.linalg.norm(mv[step][p])
         # calculate rotation:
         rot[step] = calc_rotation(mv[step], mn[step], step)
-        # now assemble the data structure for output (note: for the movement
-        # vectors only stepping '1' makes sense, the vector normals and
-        # rotation angles are saved with all steppings):
+        # for the movement vectors all values need to be written to the output,
+        # but it is not necessary to repeat them for every stepping, so they
+        # are only added for stepping '1':
         if (step == 1):
             outdata = np.hstack((outdata, mv[1]))
             if label:
                 label += '\tdelta_x\tdelta_y'
         outdata = np.hstack((outdata, mn[step], rot[step]))
+        # threshold rotation angles:
+        if thresh > 0:
+            rot_t[step] = np.where(abs(rot[step]) > thresh, rot[step], 0)
+            outdata = np.hstack((outdata, rot_t[step]))
         if label:
             label += '\tdistance_%s\tangle_%s' % (step, step)
+            if thresh > 0:
+                label += '\tthresholded_angle_%s' % step
 
     if label:
         log.info('label: %s' % label)
