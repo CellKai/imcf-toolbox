@@ -74,17 +74,17 @@ def main():
     argparser.add_argument('-l', '--label', action='store_const', const=True,
         default=False, help='add column labels (requires numpy >= 1.7)')
     argparser.add_argument('-i', '--infile', required=True, type=file,
-        help='CSV file containing track positions')
+        dest='f_in', help='CSV file containing track positions')
     argparser.add_argument('-o', '--outfile', type=argparse.FileType('w', 0),
-        help='output file', required=True)
-    argparser.add_argument('-v', '--verbose', dest='verbosity',
-        action='count', default=0)
+        dest='f_out', help='output file', required=True)
+    argparser.add_argument('-v', '--verbose', action='count',
+        dest='verbosity', default=0)
     try:
         args = argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
     # after successful argument-parsing, we can call the "real" main function:
-    gen_stats(args.infile, args.outfile, args.label, verbosity=args.verbosity)
+    gen_stats(args.f_in, args.f_out, args.label, args.verbosity)
 
 def gen_stats(f_in, f_out, label=False, delta=5, verbosity=0):
     # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
