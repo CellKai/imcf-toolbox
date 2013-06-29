@@ -23,11 +23,24 @@ import volpy as vp
 from log import log
 from aux import check_filehandle, filename
 
-# we need to distinguish at least three possibilities, cells can be empty,
-# strings or float numbers, so a more sohpisticated parsing is required:
 def parse_cell(x):
+    '''Parse cells of MTrack2 result files.
+    .
+    Processes individual cells coming from an MTrack2 result file. Cells can be
+    empty, contain strings or float numbers. Currently cells containing only an
+    asterisk "*" sign (used by MTrack2 to "flag" a cell) are ignored and zero
+    is returned there.
+    .
+    Parameters
+    ----------
+    x : str
+        The cell's input content.
+    .
+    Returns
+    -------
+    content : float or str
+    '''
     retval = 0
-    # flag columns can contain '*', which we currently ignore
     if x == '*':
         return retval
     if x != "":
@@ -40,6 +53,23 @@ def parse_cell(x):
     return retval
 
 def movement_vectors(coords, step=1):
+    '''Calculate the vectors between points in a given coordinate sequence.
+    .
+    Takes an n-dimensional list of coordinates and a step-width (optional)
+    and calculates the vectors between each tuple of coordinates with the
+    given stepping-distance.
+    .
+    Parameters
+    ----------
+    coords : np.ndarray
+        The sequence of coordinates.
+    .
+    Returns
+    -------
+    vectors : np.ndarray
+        The sequence of differential vectors.
+    '''
+    # TODO: move to volpy
     ret = np.zeros(coords.shape)
     ret[step:] = coords[step:] - coords[0:-step]
     return ret
@@ -73,9 +103,9 @@ def calc_rotation(deltas, normals, start):
     .
     Parameters
     ----------
-    deltas : np.ndarray
+    deltas : np.ndarray, shape = (n, 2)
         Movement vectors.
-    normals : np.ndarray
+    normals : np.ndarray, shape = (n, 1)
         Corresponding vector normals.
     start : int
         Optional parameter to skip a number of initial values.
