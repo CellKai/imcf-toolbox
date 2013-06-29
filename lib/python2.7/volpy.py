@@ -447,7 +447,7 @@ def angle2D(v1, v2):
     Returns
     -------
     rad : float
-        The angle between the vectors in arc degrees [-180,180].
+        The angle between the vectors in arc degrees [-180, 180].
     .
     Example
     -------
@@ -456,7 +456,7 @@ def angle2D(v1, v2):
     >>> angle2D(x[0], x[1])
     45.0
     >>> x = np.array([[-3,-0.1],[1.,6.]])
-    >>> angle(x[0], x[1])
+    >>> angle2D(x[0], x[1])
     101.371474641
     '''
     if (v1.shape != (2,) or v2.shape != (2,)):
