@@ -10,6 +10,9 @@ by the "MTrack2" plugin for ImageJ/FiJi.
 #  - provide a thresholding option for the angle columns
 #  - look for clusters in the thresholded angles by defining a maximum gap
 #    size between two adjacent / subsequent angles above the threshold
+#  - check the "Knockout Mouse Phenotyping Program" (KOMP2) for behavioural
+#    descriptors of our movement patterns
+#  - ideas: calculate variance, combine speed+angle?
 
 import csv
 import sys
