@@ -71,7 +71,8 @@ class My_UI_Window(Ui_MainWindow):
         out_ap = str(self.le_outfile.text())
         out_vd = str(self.le_outfile_2.text())
         out_cnt = str(self.le_outfile_3.text())
-        verbosity = self.sl_verbosity.value()
+        # TODO: set loglevel from verbosity value:
+        # verbosity = self.sl_verbosity.value()
         # FIXME: pixelsize is missing!
         wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, in_xml,
             out_ap, out_vd, out_cnt)
