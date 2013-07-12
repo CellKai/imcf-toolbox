@@ -60,11 +60,16 @@ class My_UI_Window(Ui_MainWindow):
             lambda elt=self.le_outfile_2: select_file(elt))
         QtCore.QObject.connect(self.pb_outfile_3, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_outfile_3: select_file(elt))
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"), MainWindow.close)
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"), self.runTool)
-        QtCore.QObject.connect(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"), MainWindow.close)
-        QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"), MainWindow.close)
-        QtCore.QObject.connect(self.sl_verbosity, QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
+        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
+            MainWindow.close)
+        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
+            self.runTool)
+        QtCore.QObject.connect(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"),
+            MainWindow.close)
+        QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"),
+            MainWindow.close)
+        QtCore.QObject.connect(self.sl_verbosity,
+            QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def runTool(self):
