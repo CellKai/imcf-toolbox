@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+GUI for WingJ distance calculations.
+"""
+
 import sys
 from wingj_distances import wingj_dist_to_surfaces
 from ui_generic_in4_out3_spin import *
 
 
 class My_UI_Window(Ui_MainWindow):
+    """Main Window for WingJ GUI."""
     def setupUi(self, MainWindow):
+        """Customize the generic UI to our specific case."""
         super(My_UI_Window, self).setupUi(MainWindow)
         MainWindow.setWindowTitle("WingJ Distances")
         self.label.setText("WingJ Distances")
@@ -57,6 +63,7 @@ class My_UI_Window(Ui_MainWindow):
         self.le_outfile_3.setText(QtGui.QFileDialog.getOpenFileName())
 
     def runTool(self):
+        """Collect the settings and launch the calculation."""
         in_ap = str(self.le_infile.text())
         in_vd = str(self.le_infile_2.text())
         in_cnt = str(self.le_infile_3.text())
@@ -78,6 +85,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
-
-
