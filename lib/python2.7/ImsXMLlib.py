@@ -6,6 +6,7 @@
 
 import xml.etree.ElementTree as etree
 from log import log
+from aux import filename
 
 
 class ImsXMLError(Exception):
@@ -30,8 +31,8 @@ class ImarisXML(object):
 
         Parameters
         ----------
-        xmlfile : file object
-            An open filehandle to the XML file to parse.
+        xmlfile : file or str
+            A filehandle or string for the XML file to parse.
         ns : string, optional
             A string denoting the namespace expected in the XML file,
             defaults to the one used by MS Excel in its XML format.
@@ -42,7 +43,7 @@ class ImarisXML(object):
         self.namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
         if ns:
             self.namespace = ns
-        log.info("Parsing XML file: %s" % xmlfile.name)
+        log.info("Parsing XML file: %s" % filename(xmlfile))
         self.tree = etree.parse(xmlfile)
         log.info("Done parsing XML: %s" % self.tree)
         self._check_namespace()

@@ -5,7 +5,6 @@ import sys
 from wingj_distances import wingj_dist_to_surfaces
 from ui_generic_in4_out3_spin import *
 
-# FIXME: ImsXMLlib requires a filehandle, not a string!
 
 class My_UI_Window(Ui_MainWindow):
     def setupUi(self, MainWindow):
