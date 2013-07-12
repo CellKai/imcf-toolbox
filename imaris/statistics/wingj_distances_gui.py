@@ -26,12 +26,14 @@ def select_file(element):
     element.setText(QtGui.QFileDialog.getOpenFileName())
 
 
-class My_UI_Window(Ui_MainWindow):
+class WingJMainWindow(Ui_MainWindow):
+
     """Main Window for WingJ GUI."""
-    def setupUi(self, MainWindow):
+
+    def setup_window(self, window):
         """Customize the generic UI to our specific case."""
-        super(My_UI_Window, self).setupUi(MainWindow)
-        MainWindow.setWindowTitle("WingJ Distances")
+        super(WingJMainWindow, self).setupUi(window)
+        window.setWindowTitle("WingJ Distances")
         self.label.setText("WingJ Distances")
         msg = 'WingJ structure file for the %s.'
         self.le_infile.setPlaceholderText(msg % 'A-P separation')
@@ -44,8 +46,8 @@ class My_UI_Window(Ui_MainWindow):
         self.le_outfile.setPlaceholderText(msg % 'A-P')
         self.le_outfile_2.setPlaceholderText(msg % 'V-D')
         self.le_outfile_3.setPlaceholderText(msg % 'contour')
-        MainWindow.addAction(self.sc_ctrl_w)
-        MainWindow.addAction(self.sc_ctrl_q)
+        window.addAction(self.sc_ctrl_w)
+        window.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_infile: select_file(elt))
         QtCore.QObject.connect(self.pb_infile_2, QtCore.SIGNAL("clicked()"),
@@ -61,18 +63,18 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.connect(self.pb_outfile_3, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_outfile_3: select_file(elt))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
-            MainWindow.close)
+            window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
-            self.runTool)
+            self.run_calculations)
         QtCore.QObject.connect(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"),
-            MainWindow.close)
+            window.close)
         QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"),
-            MainWindow.close)
+            window.close)
         QtCore.QObject.connect(self.sl_verbosity,
             QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(window)
 
-    def runTool(self):
+    def run_calculations(self):
         """Collect the settings and launch the calculation."""
         in_ap = str(self.le_infile.text())
         in_vd = str(self.le_infile_2.text())
@@ -88,11 +90,14 @@ class My_UI_Window(Ui_MainWindow):
             out_ap, out_vd, out_cnt)
 
 
-if __name__ == "__main__":
-    # instantiate a QApplication object
+def main():
+    """Set up the GUI window and show it."""
     app = QtGui.QApplication(sys.argv)
-    MainWindow = QtGui.QMainWindow()
-    ui = My_UI_Window()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+    main_window = QtGui.QMainWindow()
+    gui = WingJMainWindow()
+    gui.setup_window(main_window)
+    main_window.show()
+    return app.exec_()
+
+if __name__ == "__main__":
+    sys.exit(main())
