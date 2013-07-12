@@ -12,8 +12,12 @@ import ImsXMLlib
 import sys
 import argparse
 
+
+# TODO:
+#  - too many arguments (Pylint R0913)
+#  - too many local variables (Pylint R0914)
 def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
-    out_ap, out_vd, out_cnt, px_size=1.0):
+        out_ap, out_vd, out_cnt, px_size=1.0):
     '''Calculate distances from WingJ structures to Imaris objects.
     .
     Takes the three structure files exported from WingJ containing the A-P,
@@ -24,10 +28,10 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     .
     Parameters
     ----------
-    in_ap, in_vd, in_cnt : file object
-        File handles for the three WingJ structure files.
-    file_xml : file object
-        An open file handle to the Imaris XML export.
+    in_ap, in_vd, in_cnt : file handles or strings
+        File handles or strings with filenames for the WingJ structure files.
+    file_xml : file handle or string
+        A file handle or filename-string to the Imaris XML export.
     px_size : float, optional
         The size of one pixel to correct WingJ coordinates with.
     .
@@ -44,7 +48,7 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
 
     xmldata = ImsXMLlib.ImarisXML(file_xml)
     wingpoints = np.array(xmldata.coordinates('Position'))
-    # we're working on a projection, so we need to remove the third dimension/column
+    # we're working on a projection, so remove the third dimension/column
     wingpoints_2d = np.delete(wingpoints, 2, 1)
     # number of object coordinates from Imaris
     wp_nr = wingpoints_2d.shape[0]
@@ -63,15 +67,15 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     # dists_XX.shape (N+M, N+M)
     log.info('Done.')
 
-    # slice the desired parts from the distance matrices: just the rows for all
-    # Imaris points ([:wp_nr,:]) and the columns for the WingJ points ([:,wp_nr:])
+    # slice desired parts from the distance matrices: just the rows for all
+    # Imaris points ([:wp_nr,:]) and the cols for the WingJ points ([:,wp_nr:])
     wp_to_ap = dists_ap[:wp_nr, wp_nr:]
     wp_to_vd = dists_vd[:wp_nr, wp_nr:]
     wp_to_cnt = dists_cnt[:wp_nr, wp_nr:]
     #  wp_to_XX.shape (M, N)
 
-    # now we can just iterate through all rows finding the minimum and we get the
-    # shortest distance for each point to one of the WingJ structures:
+    # now we can just iterate through all rows finding the minimum and we get
+    # the shortest distance for each point to one of the WingJ structures:
     log.info('Finding shortest distances...')
     wp_to_ap_min = np.zeros((wp_nr))
     wp_to_vd_min = np.zeros((wp_nr))
@@ -90,7 +94,9 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     log.info('Writing %s.' % out_cnt.name)
     np.savetxt(out_cnt, wp_to_cnt_min, delimiter=',')
 
+
 def main():
+    """Parse commandline arguments and run distance calculations."""
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('--ap', required=True, type=file,
         help='WingJ structure file for the A-P separation.')
@@ -112,8 +118,8 @@ def main():
         action='count', default=0)
     try:
         args = argparser.parse_args()
-    except IOError as e:
-        argparser.error(str(e))
+    except IOError as err:
+        argparser.error(str(err))
 
     # default loglevel is 30 while 20 and 10 show more details
     loglevel = (3 - args.verbosity) * 10
@@ -124,4 +130,4 @@ def main():
 
 
 if __name__ == "__main__":
-        sys.exit(main())
+    sys.exit(main())
