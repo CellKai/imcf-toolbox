@@ -42,17 +42,10 @@ class ImarisXML(object):
         self.namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
         if ns:
             self.namespace = ns
-        self._parse_xml(xmlfile)
-        self._check_namespace()
-
-    def _parse_xml(self, infile):
-        """Aux function to call the etree parser.
-
-        Just an auxiliary function for debugging statements.
-        """
-        log.info("Parsing XML file: %s" % infile.name)
-        self.tree = etree.parse(infile)
+        log.info("Parsing XML file: %s" % xmlfile.name)
+        self.tree = etree.parse(xmlfile)
         log.info("Done parsing XML: %s" % self.tree)
+        self._check_namespace()
 
     def _check_namespace(self):
         """Check if an XML tree has a certain namespace.
