@@ -2,6 +2,23 @@
 
 from log import log
 
+# this is taken from numpy's iotools:
+def _is_string_like(obj):
+    """
+    Check whether obj behaves like a string.
+    .
+    Using this way of checking for a string-like object is more robust when
+    dealing with stuff that can behave like a 'str' but is not strictly an
+    instance of it (or a subclass thereof). So it's more generic than using
+    isinstance(obj, str)
+    """
+    try:
+        obj + ''
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
 def check_filehandle(filename, mode):
     '''Make sure a variable is either a filehandle or create one from it.
     .
@@ -55,7 +72,7 @@ def filename(name):
     '''
     if isinstance(name, file):
         return name.name
-    elif isinstance(name, str):
+    elif _is_string_like(name):
         return name
     else:
         raise TypeError
