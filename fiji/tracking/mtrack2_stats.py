@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """Parse one or more CSV files containing coordinates of tracklists generated
-by the "MTrack2" plugin for ImageJ/FiJi.
+by the "MTrack2" plugin for ImageJ/FiJi and generate additional statistics.
 """
 
 # TODO:
