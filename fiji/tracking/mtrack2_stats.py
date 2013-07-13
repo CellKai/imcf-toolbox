@@ -22,6 +22,7 @@ import volpy as vp
 from log import log
 from aux import check_filehandle, filename
 
+
 def parse_cell(x):
     '''Parse cells of MTrack2 result files.
     .
@@ -51,6 +52,7 @@ def parse_cell(x):
                 retval = 0
     return retval
 
+
 def movement_vectors(coords, step=1):
     '''Calculate the vectors between points in a given coordinate sequence.
     .
@@ -73,6 +75,7 @@ def movement_vectors(coords, step=1):
     ret[step:] = coords[step:] - coords[0:-step]
     return ret
 
+
 def _save_results_labeled(f_out, data, lbl):
     try:
         np.savetxt(f_out, data, fmt='%.5f', header=lbl, delimiter='\t')
@@ -83,15 +86,18 @@ def _save_results_labeled(f_out, data, lbl):
             "to unlabeled CSV format.")
         _save_results_unlabeled(f_out, data)
 
+
 def _save_results_unlabeled(f_out, data):
     np.savetxt(f_out, data, fmt='%.5f', delimiter='\t')
     log.info("Finished writing CSV.")
+
 
 def _save_results(f_out, data, label=False):
     if label:
         _save_results_labeled(f_out, data, label)
     else:
         _save_results_unlabeled(f_out, data)
+
 
 def calc_rotation(deltas, normals, start):
     '''Calculate angle between two vectors in 2D.
@@ -116,13 +122,14 @@ def calc_rotation(deltas, normals, start):
     '''
     # TODO: move to volpy
     res = np.zeros((deltas.shape[0], 1))
-    for p in range(start, res.shape[0]-1):
+    for p in range(start, res.shape[0] - 1):
         # if any of the two normal vectors is zero, nothing moved
-        if (normals[p-1] * normals[p] == 0.):
-            res[p+1] = 0
+        if (normals[p - 1] * normals[p] == 0.):
+            res[p + 1] = 0
         else:
-            res[p+1] = vp.angle2D(deltas[p-1], deltas[p])
+            res[p + 1] = vp.angle2D(deltas[p - 1], deltas[p])
     return res
+
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -146,8 +153,9 @@ def main():
     gen_stats(args.f_in, args.f_out, args.label, args.deltas,
         args.threshold, args.verbosity)
 
+
 def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
-    # default loglevel is 30 (warn) while 20 (info) and 10 (debug) show more details
+    # default loglevel is 30 while 20 and 10 show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
 
@@ -159,14 +167,14 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
         deltas = [1]
     log.info("Stepping width(s): %s" % deltas)
     log.info("Angle threshold: %s" % thresh)
-    
+
     pp = pprint.PrettyPrinter(indent=4)
 
     ######### tracks parsing #########
-    
+
     # TODO: parsing can be done in a nicer way be reading the header lines via
-    # csvreader.next(), checking for the expected values and the number of tracks
-    # and then directly reading the trackpoints into a numpy ndarray...
+    # csvreader.next(), checking for the expected values and the number of
+    # tracks and then directly reading the trackpoints into a numpy ndarray...
     mtrack2_file = check_filehandle(f_in, 'r')
     csvreader = csv.reader(mtrack2_file, delimiter='\t')
 
@@ -177,7 +185,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
     for row in csvreader:
         data.append([parse_cell(x) for x in row])
         # data.append(row)
-    
+
     # start parsing the header
     header = []
     header.append(data.pop(0))
@@ -186,11 +194,11 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
         # exit because file is broken...
         raise SystemExit('Unable to find correct header, stopping.')
     log.debug("Header:\n%s\n" % pp.pformat(header))
-    
+
     # second line is 'Tracks 1 to N', so we can read the total number there:
     trackmax = int(header[1][0].split(' ')[3])
     log.info("Total number of tracks: %s" % pp.pformat(trackmax))
-    
+
     # last N lines are the stats per track
     trackstats = []
     while True:
@@ -205,7 +213,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
     # as we parsed from the last element, we need to reverse the list
     trackstats.reverse()
     log.warn("Track statistics:\n%s" % pp.pformat(trackstats))
-    
+
     # this code can help debugging problematic files:
     # for row in data:
     #     try:
@@ -215,34 +223,34 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
 
     # create the ndarray from the remaining data while removing column 0
     # (indices), and every subsequent third column (flags)
-    todelete= range(0, (trackmax+1)*3, 3)
+    todelete = range(0, (trackmax + 1) * 3, 3)
     npdata = np.delete(data, todelete, axis=1)
     npdata_bool = npdata > 0
-    
+
     ######### tracks processing (combining etc.) #########
 
     tracklen = [0] * trackmax
-    t_overlap = npdata_bool[:,0]
+    t_overlap = npdata_bool[:, 0]
     for track in range(trackmax):
-        tracklen[track] = sum(npdata_bool[:,track*2])
-        t_overlap = t_overlap * npdata_bool[:,track*2]
-    
+        tracklen[track] = sum(npdata_bool[:, track * 2])
+        t_overlap = t_overlap * npdata_bool[:, track * 2]
+
     if trackmax > 1 and sum(t_overlap) > 0:
         raise SystemExit("*** WARNING: Found overlapping tracks! ***")
-    
-    t_combined = np.zeros((npdata.shape[0],2))
+
+    t_combined = np.zeros((npdata.shape[0], 2))
     for track in range(trackmax):
-        t_combined += npdata[:,track*2:(track+1)*2]
-    
+        t_combined += npdata[:, track * 2:(track + 1) * 2]
+
     comb_mask = np.zeros(t_combined.shape[0])
     for i, row in enumerate(t_combined):
         if (row == [0., 0.]).all():
             # print 'row %i is zerooooo' % i
             comb_mask[i] = True
-    
+
     t_combined = np.ma.compress_rows(np.ma.array(t_combined,
             mask=np.repeat(comb_mask, 2)))
-    
+
     ######### calculations #########
     mv = {}
     mn = {}
