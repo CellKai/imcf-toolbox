@@ -6,6 +6,7 @@ Process results of WingJ (http://www.tschaffter.ch/) with Imaris objects
 '''
 
 from log import log
+from aux import filename
 import numpy as np
 import volpy as vp
 import ImsXMLlib
@@ -87,12 +88,13 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     log.info('Done.')
 
     # export the results as CSV files
-    log.info('Writing %s.' % out_ap.name)
+    log.info('Writing "%s".' % filename(out_ap))
     np.savetxt(out_ap, wp_to_ap_min, delimiter=',')
-    log.info('Writing %s.' % out_vd.name)
+    log.info('Writing "%s".' % filename(out_vd))
     np.savetxt(out_vd, wp_to_vd_min, delimiter=',')
-    log.info('Writing %s.' % out_cnt.name)
+    log.info('Writing "%s".' % filename(out_cnt))
     np.savetxt(out_cnt, wp_to_cnt_min, delimiter=',')
+    log.info('Finished.')
 
 
 def main():
