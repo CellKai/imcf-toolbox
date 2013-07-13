@@ -6,8 +6,10 @@ GUI for WingJ distance calculations.
 """
 
 import sys
+from log import log
 from wingj_distances import wingj_dist_to_surfaces
 from ui_generic_in4_out3_spin import *
+
 
 def select_file(element):
     """Show file dialog and update an elements text with the result.
@@ -84,8 +86,9 @@ class WingJMainWindow(Ui_MainWindow):
         out_vd = str(self.le_outfile_2.text())
         out_cnt = str(self.le_outfile_3.text())
         px_size = self.sb_double.value()
-        # TODO: set loglevel from verbosity value:
-        # verbosity = self.sl_verbosity.value()
+        # calculate and set log level:
+        loglevel = (3 - self.sl_verbosity.value()) * 10
+        log.setLevel(loglevel)
         wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, in_xml,
             out_ap, out_vd, out_cnt, px_size)
 
