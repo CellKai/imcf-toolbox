@@ -77,6 +77,7 @@ def movement_vectors(coords, step=1):
 
 
 def _save_results_labeled(f_out, data, lbl):
+    """Save results in CSV using a header row with labels."""
     try:
         np.savetxt(f_out, data, fmt='%.5f', header=lbl, delimiter='\t')
         log.info("Finished writing CSV.")
@@ -88,11 +89,13 @@ def _save_results_labeled(f_out, data, lbl):
 
 
 def _save_results_unlabeled(f_out, data):
+    """Save results in CSV without header row."""
     np.savetxt(f_out, data, fmt='%.5f', delimiter='\t')
     log.info("Finished writing CSV.")
 
 
 def _save_results(f_out, data, label=False):
+    """Call functions to save data depending on the 'label' setting."""
     if label:
         _save_results_labeled(f_out, data, label)
     else:
@@ -132,6 +135,7 @@ def calc_rotation(deltas, normals, start):
 
 
 def main():
+    """Parse commandline arguments and run calculations."""
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-l', '--label', action='store_const', const=True,
         default=False, help='add column labels (requires numpy >= 1.7)')
@@ -155,6 +159,7 @@ def main():
 
 
 def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
+    """Parse and process tracks and calculate statistics from the data."""
     # default loglevel is 30 while 20 and 10 show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
