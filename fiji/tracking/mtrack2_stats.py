@@ -146,7 +146,7 @@ def main():
     argparser.add_argument('-v', '--verbose', action='count',
         dest='verbosity', default=0)
     argparser.add_argument('-d', '--delta', type=int, action='append',
-        dest='deltas', help='stepping widths, can be repeated')
+        dest='deltas', default=[1], help='stepping widths, can be repeated')
     argparser.add_argument('-t', '--threshold', type=float, default=0,
         dest='threshold', help='thresholding value for rotation in degrees')
     try:
@@ -158,7 +158,7 @@ def main():
         args.threshold, args.verbosity)
 
 
-def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
+def gen_stats(f_in, f_out, label=False, deltas=[1], thresh=0, verbosity=0):
     """Parse and process tracks and calculate statistics from the data."""
     # default loglevel is 30 while 20 and 10 show more details
     loglevel = (3 - verbosity) * 10
@@ -166,10 +166,6 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
 
     log.warn("Infile: %s" % f_in)
     log.debug("Outfile: %s" % f_out)
-    if deltas:
-        deltas = [1] + deltas
-    else:
-        deltas = [1]
     log.info("Stepping width(s): %s" % deltas)
     log.info("Angle threshold: %s" % thresh)
 

@@ -49,7 +49,7 @@ class My_UI_Window(Ui_MainWindow):
             label = True
         verbosity = self.sl_verbosity.value()
         gen_stats(f_in=infile, f_out=outfile, label=label,
-            deltas=[5], verbosity=verbosity)
+            deltas=[1, 5], verbosity=verbosity)
         # TODO: should we exit after the work's done? -> ask user!
         # sys.exit()
 
