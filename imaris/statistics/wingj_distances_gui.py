@@ -6,6 +6,7 @@ GUI for WingJ distance calculations.
 """
 
 import sys
+import argparse
 from log import log
 from wingj_distances import wingj_dist_to_surfaces
 from ui_generic_in4_out3_spin import *
@@ -76,6 +77,18 @@ class WingJMainWindow(Ui_MainWindow):
             QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(window)
 
+    def preset_fields(self, values):
+        """Preset field contents with supplied values."""
+        if not values:
+            return
+        self.le_infile.setText(values[0])
+        self.le_infile_2.setText(values[1])
+        self.le_infile_3.setText(values[2])
+        self.le_infile_4.setText(values[3])
+        self.le_outfile.setText(values[4])
+        self.le_outfile_2.setText(values[5])
+        self.le_outfile_3.setText(values[6])
+
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
         in_ap = str(self.le_infile.text())
@@ -93,12 +106,28 @@ class WingJMainWindow(Ui_MainWindow):
             out_ap, out_vd, out_cnt, px_size)
 
 
+def parse_arguments():
+    """Parse commandline arguments for preset values."""
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-p', '--preset', required=False,
+        help='Prefill fields with values in this list.')
+    try:
+        args = argparser.parse_args()
+    except IOError as err:
+        argparser.error(str(err))
+    if args.preset != None:
+        return args.preset.split(',')
+    else:
+        return None
+
+
 def main():
     """Set up the GUI window and show it."""
     app = QtGui.QApplication(sys.argv)
     main_window = QtGui.QMainWindow()
     gui = WingJMainWindow()
     gui.setup_window(main_window)
+    gui.preset_fields(parse_arguments())
     main_window.show()
     return app.exec_()
 
