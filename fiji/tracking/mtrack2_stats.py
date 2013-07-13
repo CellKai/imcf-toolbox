@@ -23,7 +23,7 @@ from log import log
 from aux import check_filehandle, filename
 
 
-def parse_cell(x):
+def parse_cell(cell):
     '''Parse cells of MTrack2 result files.
     .
     Processes individual cells coming from an MTrack2 result file. Cells can be
@@ -33,7 +33,7 @@ def parse_cell(x):
     .
     Parameters
     ----------
-    x : str
+    cell : str
         The cell's input content.
     .
     Returns
@@ -41,13 +41,13 @@ def parse_cell(x):
     content : float or str
     '''
     retval = 0
-    if x == '*':
+    if cell == '*':
         return retval
-    if x != "":
+    if cell != "":
         try:
-            retval = float(x)
+            retval = float(cell)
         except ValueError:
-            retval = str(x).strip()
+            retval = str(cell).strip()
             if retval == "":
                 retval = 0
     return retval
@@ -125,12 +125,12 @@ def calc_rotation(deltas, normals, start):
     '''
     # TODO: move to volpy
     res = np.zeros((deltas.shape[0], 1))
-    for p in range(start, res.shape[0] - 1):
+    for pos in range(start, res.shape[0] - 1):
         # if any of the two normal vectors is zero, nothing moved
-        if (normals[p - 1] * normals[p] == 0.):
-            res[p + 1] = 0
+        if (normals[pos - 1] * normals[pos] == 0.):
+            res[pos + 1] = 0
         else:
-            res[p + 1] = vp.angle2D(deltas[p - 1], deltas[p])
+            res[pos + 1] = vp.angle2D(deltas[pos - 1], deltas[pos])
     return res
 
 
@@ -151,8 +151,8 @@ def main():
         dest='threshold', help='thresholding value for rotation in degrees')
     try:
         args = argparser.parse_args()
-    except IOError as e:
-        argparser.error(str(e))
+    except IOError as err:
+        argparser.error(str(err))
     # after successful argument-parsing, we can call the "real" main function:
     gen_stats(args.f_in, args.f_out, args.label, args.deltas,
         args.threshold, args.verbosity)
@@ -173,7 +173,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
     log.info("Stepping width(s): %s" % deltas)
     log.info("Angle threshold: %s" % thresh)
 
-    pp = pprint.PrettyPrinter(indent=4)
+    ppr = pprint.PrettyPrinter(indent=4)
 
     ######### tracks parsing #########
 
@@ -198,11 +198,11 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
     if not header[0][0] == 'Frame':
         # exit because file is broken...
         raise SystemExit('Unable to find correct header, stopping.')
-    log.debug("Header:\n%s\n" % pp.pformat(header))
+    log.debug("Header:\n%s\n" % ppr.pformat(header))
 
     # second line is 'Tracks 1 to N', so we can read the total number there:
     trackmax = int(header[1][0].split(' ')[3])
-    log.info("Total number of tracks: %s" % pp.pformat(trackmax))
+    log.info("Total number of tracks: %s" % ppr.pformat(trackmax))
 
     # last N lines are the stats per track
     trackstats = []
@@ -217,7 +217,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
             trackstats.append(cur)
     # as we parsed from the last element, we need to reverse the list
     trackstats.reverse()
-    log.warn("Track statistics:\n%s" % pp.pformat(trackstats))
+    log.warn("Track statistics:\n%s" % ppr.pformat(trackstats))
 
     # this code can help debugging problematic files:
     # for row in data:
@@ -257,30 +257,30 @@ def gen_stats(f_in, f_out, label=False, deltas=[], thresh=0, verbosity=0):
             mask=np.repeat(comb_mask, 2)))
 
     ######### calculations #########
-    mv = {}
-    mn = {}
+    mov_v = {}
+    mov_n = {}
     rot = {}
     rot_t = {}
     outdata = t_combined
     if label:
         label = 'pos_x\tpos_y'
     for step in deltas:
-        # calculate movement vectors (mv):
-        mv[step] = movement_vectors(t_combined, step)
-        # calculate vector normals (mn):
-        mn[step] = np.zeros((mv[step].shape[0], 1))
-        for p in range(1, mn[step].shape[0]):
-            mn[step][p] = np.linalg.norm(mv[step][p])
+        # calculate movement vectors (mov_v):
+        mov_v[step] = movement_vectors(t_combined, step)
+        # calculate vector normals (mov_n):
+        mov_n[step] = np.zeros((mov_v[step].shape[0], 1))
+        for pos in range(1, mov_n[step].shape[0]):
+            mov_n[step][pos] = np.linalg.norm(mov_v[step][pos])
         # calculate rotation:
-        rot[step] = calc_rotation(mv[step], mn[step], step)
+        rot[step] = calc_rotation(mov_v[step], mov_n[step], step)
         # for the movement vectors all values need to be written to the output,
         # but it is not necessary to repeat them for every stepping, so they
         # are only added for stepping '1':
         if (step == 1):
-            outdata = np.hstack((outdata, mv[1]))
+            outdata = np.hstack((outdata, mov_v[1]))
             if label:
                 label += '\tdelta_x\tdelta_y'
-        outdata = np.hstack((outdata, mn[step], rot[step]))
+        outdata = np.hstack((outdata, mov_n[step], rot[step]))
         # threshold rotation angles:
         if thresh > 0:
             rot_t[step] = np.where(abs(rot[step]) > thresh, rot[step], 0)
