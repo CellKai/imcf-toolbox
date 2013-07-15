@@ -31,14 +31,14 @@ from aux import filename, set_loglevel
 def plot3d_scatter(plot, points, color, lw=1):
     """Do a 3D scatter plot with the given points."""
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x, y, z = asarray(zip(*points))
+    x, y, z = asarray(zip(points[0], points[1]))
     plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
 
 
 def plot3d_line(plot, points, color, lw=1):
     """Plot a line in 3D from the given points."""
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x, y, z = asarray(zip(*points))
+    x, y, z = asarray(zip(points[0], points[1]))
     plot.plot(x, y, z, zdir='z', c=color)
 
 
