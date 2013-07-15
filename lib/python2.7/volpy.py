@@ -497,13 +497,13 @@ class Filament(object):
     space that are read from a CSV file.
     """
 
-    def __init__(self, csvfile, debug=0):
-        self.debug = debug
+    def __init__(self, csvfile):
+        """Load filament points from a CSV file."""
         # np.loadtxt() returns an ndarray() of floats, complains on non-floats
         self.data = np.loadtxt(csvfile, delimiter=',')
-        if self.debug > 0:
-            print 'Parsed %i points from CSV.\n%s' % \
-                (len(self.data), str(self.data))
+        log.info('Parsed %i points from CSV.\n%s' %
+            (len(self.data), str(self.data)))
 
     def get_coords(self):
+        """Get the coordinates of this filament object."""
         return self.data
