@@ -7,6 +7,7 @@ Helper functions for PyQt related stuff.
 
 from PyQt4 import QtGui
 
+
 def select_file(element):
     """Show file dialog and update an elements text with the result.
 
