@@ -55,6 +55,7 @@ def check_filehandle(filename, mode):
         message = "unknown data type (expected string or filehandle): %s"
         raise SystemExit(message % type(filename))
 
+
 def filename(name):
     '''Get the filename from either a filehandle or a string.
     .
@@ -76,3 +77,15 @@ def filename(name):
         return name
     else:
         raise TypeError
+
+
+def set_loglevel(verbosity):
+    """Calculate the default loglevel and set it accordingly.
+
+    This is a convenience function that wraps the calculation and setting of
+    the logging level. The way our "log" module is currently built (as a
+    singleton), there is no obvious better way to have this somewhere else.
+    """
+    # default loglevel is 30 while 20 and 10 show more details
+    loglevel = (3 - verbosity) * 10
+    log.setLevel(loglevel)
