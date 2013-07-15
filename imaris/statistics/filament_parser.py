@@ -14,7 +14,6 @@ import sys
 import csv
 import argparse
 import matplotlib.pyplot as plt
-from matplotlib import cm
 from matplotlib.colors import colorConverter
 # http://matplotlib.org/api/colors_api.html
 
@@ -22,30 +21,29 @@ from matplotlib.colors import colorConverter
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from numpy import ma, loadtxt, asarray, linalg
+from numpy import loadtxt, asarray, linalg
 from volpy import *
 import pprint
 from log import log
+from aux import filename, set_loglevel
 
 
 def plot3d_scatter(plot, points, color, lw=1):
+    """Do a 3D scatter plot with the given points."""
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
 
 
 def plot3d_line(plot, points, color, lw=1):
+    """Plot a line in 3D from the given points."""
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.plot(x, y, z, zdir='z', c=color)
 
 
-def plot3d_triangle(plot, points, lw=0.2):
-    x, y, z = asarray(zip(*points))
-    plot.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=lw)
-
-
 def plot3d_maxdist(ax, maxdist_points):
+    """Plot and label the points with maximum distance."""
     plot3d_scatter(ax, maxdist_points, 'r', lw=18)
     for i in (0, 1):
         ax.text(*maxdist_points[i], color='blue',
@@ -59,7 +57,8 @@ def plot3d_maxdist(ax, maxdist_points):
     ax.text(*pos, color='blue', s='%s' % dist)
 
 
-def main():
+def parse_arguments():
+    """Parse the commandline arguments."""
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-i', '--infile', required=True, type=file,
         help='CSV file containing filament coordinates')
@@ -74,14 +73,13 @@ def main():
     argparser.add_argument('-v', '--verbose', dest='verbosity',
         action='count', default=0)
     try:
-        args = argparser.parse_args()
+        return argparser.parse_args()
     except IOError as e:
         argparser.error(str(e))
 
-    # default loglevel is 30 while 20 and 10 show more details
-    loglevel = (3 - args.verbosity) * 10
-    log.setLevel(loglevel)
-
+def main():
+    args = parse_arguments()
+    set_loglevel(args.verbosity)
     pp = pprint.PrettyPrinter(indent=4)
 
     # loadtxt() expects float numbers and complains otherwise
@@ -133,7 +131,7 @@ def main():
 
     if args.outfile:
         out = csv.writer(args.outfile, dialect='excel', delimiter=';')
-        out.writerow(['input filename', args.infile.name])
+        out.writerow(['input filename', filename(args.infile)])
         out.writerow([])
         out.writerow(['distance results'])
         out.writerow(['largest distance points (indices)', str(maxdist_pair)])
