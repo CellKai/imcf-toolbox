@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
-""" Discrete volumetric data tools.
+"""Discrete volumetric data tools.
 
 Provides distance, area, mesh-related calculations on spots
-in three dimensional space."""
+in three dimensional space.
+"""
 
 from log import log
 from scipy import reshape, sqrt
@@ -18,7 +19,7 @@ from numpy.matlib import repmat, repeat, sum, where
 # - join the "filaments" module with this one, extend the Filament class to
 #   be able to return the distance matrix, the masks of the individual
 #   filaments, access to start and end points, etc.
-# - PEP8 compliance!
+# - consolidate docstrings format
 # - sanity/type checks
 
 __all__ = [
@@ -40,8 +41,9 @@ __all__ = [
 # easily be done via a lambda function:
 # d = lambda p1, p2: linalg.norm(p1 - p2)
 
+
 def dist_matrix(pts):
-    """Calculates the euclidean distance matrix for a set of points.
+    """Calculate the euclidean distance matrix (EDM) for a set of points.
 
     Args:
         pts: a two-dimensional numpy.ndarray, e.g.
@@ -79,11 +81,12 @@ def dist_matrix(pts):
                            (
                                repmat(pts, len(pts), 1) -
                                repeat(pts, len(pts), axis=0)
-                           )**2,
+                           ) ** 2,
                            axis=1
                        )
                    )
     return dist_mat.reshape((len(pts), len(pts)))
+
 
 def get_max_dist_pair(matrix):
     """Determine points with largest distance using a distance matrix.
@@ -107,6 +110,7 @@ def get_max_dist_pair(matrix):
             # print pair
     return pair
 
+
 def find_neighbor(pid, dist_mat, mask):
     """Finds the closest neighbor in a given distance matrix.
 
@@ -126,6 +130,7 @@ def find_neighbor(pid, dist_mat, mask):
     masked_dists = ma.array(dist_mat[pid], mask=mask)
     closest = masked_dists.argmin()
     return closest
+
 
 def path_greedy(dist_mat, mask_ref, pair):
     """Uses greedy search to find a path between a pair of points.
@@ -175,6 +180,7 @@ def path_greedy(dist_mat, mask_ref, pair):
     log.info('path (%s->%s): %s' % (pair[0], pair[1], sequence))
     return (sequence, mask, plen)
 
+
 def cut_extrema(lst):
     """Returns the first & last element and the rest of a list (copied)."""
     # initialize
@@ -187,6 +193,7 @@ def cut_extrema(lst):
     if len(lst) > 0:
         last = listcopy.pop(-1)
     return (first, last, listcopy)
+
 
 def sort_neighbors(dist_mat):
     """Sorts a list of indices to minimize the distance between elements.
@@ -218,6 +225,7 @@ def sort_neighbors(dist_mat):
         # print str(cur) + ' - ' + str(closest)
         cur = closest
     return adjacents
+
 
 def build_filament_mask(adjacent, delimiters):
     """Calculates filament masks for distance matrix and adjacency lists.
@@ -264,6 +272,7 @@ def build_filament_mask(adjacent, delimiters):
     # print mask
     return (mask, mask_adj)
 
+
 def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
 
@@ -290,6 +299,7 @@ def build_tuple_seq(sequence, cyclic=False):
         prev = elt
     return tuples
 
+
 def gen_mask(pointlist, masklength):
     """Generates a binary mask given by a list of indices.
 
@@ -301,6 +311,7 @@ def gen_mask(pointlist, masklength):
         mask[point] = 1
     return mask
 
+
 def vappend(lst, val, desc="list"):
     """Append to a list and log a message according to the loglevel.
 
@@ -309,6 +320,7 @@ def vappend(lst, val, desc="list"):
     """
     log.debug("appending to %s: %s" % (desc, str(val)))
     lst.append(val)
+
 
 def tesselate(pl1, pl2, dist):
     """Calculates a polygonal partition of a surface in space.
@@ -374,6 +386,7 @@ def tesselate(pl1, pl2, dist):
     log.debug("triangles from tesselation: %s" % triangles)
     return (edges, triangles, vertices)
 
+
 def tri_area(p1, p2, p3):
     """Calculate the area of a triangle given by coordinates.
 
@@ -385,8 +398,9 @@ def tri_area(p1, p2, p3):
     v2 = p2 - p3
     return 0.5 * linalg.norm(cross(v1, v2))
 
+
 def angle(v1u, v2u, normalize=False):
-    ''' Calculates the angle between vectors (in arc degrees).
+    """Calculate the angle between vectors (in arc degrees).
     .
     Calculates the angle in degrees between two n-dimensional unit vectors
     given as np.ndarrays. The normalization can be done by the function if
@@ -415,7 +429,7 @@ def angle(v1u, v2u, normalize=False):
     >>> x = np.array([[1,2,3],[1,2,1]])
     >>> angle(x[0], x[1], normalize=True)
     29.205932247399399
-    '''
+    """
     log.debug('vector shapes: %s %s' % (v1u.shape, v2u.shape))
     if v1u.all() == 0:
         return 0.
@@ -430,10 +444,11 @@ def angle(v1u, v2u, normalize=False):
             rad = 0.0
         else:
             rad = np.pi
-    return rad * (180/np.pi)
+    return rad * (180 / np.pi)
+
 
 def angle2D(v1, v2):
-    ''' Calculates the relative angle between vectors in 2D.
+    """Calculate the relative angle between vectors in 2D.
     .
     Calculates the relative angle in degrees between two 2-dimensional vectors
     given as np.ndarrays. Positive numbers correspond to a "right turn", while
@@ -458,7 +473,7 @@ def angle2D(v1, v2):
     >>> x = np.array([[-3,-0.1],[1.,6.]])
     >>> angle2D(x[0], x[1])
     101.371474641
-    '''
+    """
     if (v1.shape != (2,) or v2.shape != (2,)):
         raise TypeError('Can handle only 2-D vectors!')
     x_coords = np.array([v1[0], v2[0]])
