@@ -77,6 +77,24 @@ def parse_arguments():
     except IOError as e:
         argparser.error(str(e))
 
+
+def write_output(fout, fin, mdpair, mdpts, edm, mtedge, area, perimeter):
+    """Assemble output file with collected results."""
+    out = csv.writer(fout, dialect='excel', delimiter=';')
+    out.writerow(['input filename', filename(fin)])
+    out.writerow([])
+    out.writerow(['distance results'])
+    out.writerow(['largest distance points (indices)', str(mdpair)])
+    out.writerow(['coordinates of point %s' % mdpair[0], mdpts[0]])
+    out.writerow(['coordinates of point %s' % mdpair[1], mdpts[1]])
+    out.writerow(['distance', str(edm[mdpair])])
+    out.writerow([])
+    out.writerow(['area results calculated by triangular tesselation'])
+    out.writerow(['longest transversal edge', mtedge])
+    out.writerow(['overall area', area])
+    out.writerow(['perimeter', perimeter])
+
+
 def main():
     args = parse_arguments()
     set_loglevel(args.verbosity)
@@ -130,21 +148,8 @@ def main():
     log.debug("vtxlist: %s" % vtxlist)
 
     if args.outfile:
-        out = csv.writer(args.outfile, dialect='excel', delimiter=';')
-        out.writerow(['input filename', filename(args.infile)])
-        out.writerow([])
-        out.writerow(['distance results'])
-        out.writerow(['largest distance points (indices)', str(maxdist_pair)])
-        out.writerow(['coordinates of point %s' % maxdist_pair[0],
-            maxdist_points[0]])
-        out.writerow(['coordinates of point %s' % maxdist_pair[1],
-            maxdist_points[1]])
-        out.writerow(['distance', str(distance_matrix[maxdist_pair])])
-        out.writerow([])
-        out.writerow(['area results calculated by triangular tesselation'])
-        out.writerow(['longest transversal edge', maxedgelen])
-        out.writerow(['overall area', polyarea])
-        out.writerow(['perimeter', (p1_len + p2_len)])
+        write_output(args.outfile, args.infile, maxdist_pair, maxdist_points,
+            distance_matrix, maxedgelen, polyarea, (p1_len + p2_len))
 
     if args.plot:
         # define some colors to cycle through:
