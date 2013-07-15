@@ -27,32 +27,37 @@ from volpy import *
 import pprint
 from log import log
 
+
 def plot3d_scatter(plot, points, color, lw=1):
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
+
 
 def plot3d_line(plot, points, color, lw=1):
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(*points))
     plot.plot(x, y, z, zdir='z', c=color)
 
+
 def plot3d_triangle(plot, points, lw=0.2):
     x, y, z = asarray(zip(*points))
     plot.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=lw)
 
+
 def plot3d_maxdist(ax, maxdist_points):
     plot3d_scatter(ax, maxdist_points, 'r', lw=18)
-    for i in (0,1):
+    for i in (0, 1):
         ax.text(*maxdist_points[i], color='blue',
             s='   (%s | %s | %s)' % (maxdist_points[i][0],
             maxdist_points[i][1], maxdist_points[i][2]))
     # draw connection line between points:
     plot3d_line(ax, maxdist_points, 'y')
     # calculate length and add label:
-    pos = maxdist_points[1] + ((maxdist_points[0]-maxdist_points[1])/2)
-    dist = linalg.norm(maxdist_points[0]-maxdist_points[1])
+    pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
+    dist = linalg.norm(maxdist_points[0] - maxdist_points[1])
     ax.text(*pos, color='blue', s='%s' % dist)
+
 
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
@@ -82,9 +87,9 @@ def main():
     # loadtxt() expects float numbers and complains otherwise
     data = loadtxt(args.infile, delimiter=',')
 
+    # calculate all distances and get the pair with the largest one
     distance_matrix = dist_matrix(data)
     maxdist_pair = get_max_dist_pair(distance_matrix)
-
     log.debug(pp.pformat(data))
     log.info(pp.pformat(distance_matrix))
 
@@ -114,7 +119,7 @@ def main():
             maxedge = data[p1]  # store coordinates for label
     log.warn("longest edge from tesselation: %s" % maxedgelen)
 
-
+    # caclulate vertex list and area:
     polyarea = 0
     # vtxlist is a list of lists of 3-tuples of coordinates
     vtxlist = []
@@ -125,7 +130,6 @@ def main():
     log.warn("overall area: %s" % polyarea)
     log.warn("perimeter: %s" % (p1_len + p2_len))
     log.debug("vtxlist: %s" % vtxlist)
-
 
     if args.outfile:
         out = csv.writer(args.outfile, dialect='excel', delimiter=';')
