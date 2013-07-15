@@ -1,12 +1,14 @@
 #!/usr/bin/python
 
-from filaments import Filament
+# FIXME: this script is generating *binary* data, which is not what we wanted!
+
+from volpy import Filament
 
 basedir = 'TESTDATA/filaments/'
 infile = basedir + 'testdata-filaments-small.csv'
 outfile = basedir + 'result_filaments-small.txt'
 
-flmnt = Filament(open(infile), debug=0)
+flmnt = Filament(infile)
 
 output = open(outfile, 'w')
 output.write(flmnt.get_coords())

@@ -14,11 +14,9 @@ import math
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
-
 # - consolidate the np.function vs "from numpy import ..." usage
-# - join the "filaments" module with this one, extend the Filament class to
-#   be able to return the distance matrix, the masks of the individual
-#   filaments, access to start and end points, etc.
+# - extend the Filament class to be able to return the distance matrix, the
+#   masks of the individual filaments, access to start and end points, etc.
 # - consolidate docstrings format
 # - sanity/type checks
 
@@ -31,6 +29,7 @@ __all__ = [
     'sort_neighbors',
     'tri_area',
     'tesselate',
+    'Filament',
     # 'find_neighbor',
     # 'gen_mask',
     # 'gen_unmask',
@@ -488,3 +487,23 @@ def angle2D(v1, v2):
     if (abs(delta) > 180):
         delta = 360 - abs(delta)
     return delta
+
+
+class Filament(object):
+
+    """Class for 3D filamentous structures (linked points).
+
+    Build connected components ("filaments") from a given set of coordinates in
+    space that are read from a CSV file.
+    """
+
+    def __init__(self, csvfile, debug=0):
+        self.debug = debug
+        # np.loadtxt() returns an ndarray() of floats, complains on non-floats
+        self.data = np.loadtxt(csvfile, delimiter=',')
+        if self.debug > 0:
+            print 'Parsed %i points from CSV.\n%s' % \
+                (len(self.data), str(self.data))
+
+    def get_coords(self):
+        return self.data
