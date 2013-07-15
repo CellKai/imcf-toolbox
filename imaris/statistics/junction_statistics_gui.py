@@ -7,6 +7,7 @@ GUI for Junction statistics calculations.
 
 import sys
 import filament_parser
+from aux_gui import select_file
 from ui_generic_in_out_opt import *
 
 
@@ -25,9 +26,9 @@ class JunctionsMainWindow(Ui_MainWindow):
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            self.selectInfile)
+            lambda elt=self.le_infile: select_file(elt))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
-            self.selectOutfile)
+            lambda elt=self.le_outfile: select_file(elt))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
             window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
@@ -39,14 +40,6 @@ class JunctionsMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self.sl_verbosity,
             QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(window)
-
-    def selectInfile(self):
-        self.le_infile.setText(QtGui.QFileDialog.getOpenFileName())
-        # when the infile is changed, reset the outfile name:
-        self.le_outfile.setText('')
-
-    def selectOutfile(self):
-        self.le_outfile.setText(QtGui.QFileDialog.getOpenFileName())
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
@@ -64,6 +57,8 @@ class JunctionsMainWindow(Ui_MainWindow):
             sys.argv.append('-v')
         # print sys.argv
         filament_parser.main()
+        # reset the outfile's name
+        self.le_outfile.setText('')
 
 
 def main():
