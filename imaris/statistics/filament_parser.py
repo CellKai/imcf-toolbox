@@ -101,54 +101,14 @@ def main():
 
     # FIXME: with the new Points3D object significant parts of the following
     # code should be refactored!
-    filament = Points3D(args.infile)
-    data = filament.get_coords()
-
-    # calculate all distances and get the pair with the largest one
-    distance_matrix = filament.get_edm()
-    maxdist_pair = filament.get_mdpair()
-    log.debug(pp.pformat(data))
-    log.info(pp.pformat(distance_matrix))
-
-    maxdist_points = filament.get_mdpair_coords()
-
-    log.warn('------------ largest distance results -------------')
-    log.warn('idx numbers:\t' + pp.pformat(maxdist_pair))
-    log.warn('coordinates:\t' + pp.pformat(maxdist_points))
-    log.warn('distance:\t' + pp.pformat(filament.get_mdpair_dist()))
-    log.warn('---------------------------------------------------')
-
-    # FIXME: path generation should be done in tesselate()
-    (p1, mask, p1_len) = path_greedy(distance_matrix, None, maxdist_pair)
-    (p2, mask, p2_len) = path_greedy(distance_matrix, mask, maxdist_pair)
-
-    (edges, triangles, vertices) = tesselate(p2, p1, distance_matrix)
-    log.debug("vertices: %s" % vertices)
-    log.debug("edges: %s" % edges)
-
-    maxedgelen = 0
-    for (p1, p2) in edges:
-        curlen = distance_matrix[p1, p2]
-        if curlen > maxedgelen:
-            maxedgelen = curlen
-            maxedge = data[p1]  # store coordinates for label
-    log.warn("longest edge from tesselation: %s" % maxedgelen)
-
-    # caclulate vertex list and area:
-    polyarea = 0
-    # vtxlist is a list of lists of 3-tuples of coordinates
-    vtxlist = []
-    for (vrtx1, vrtx2, vrtx3) in triangles:
-        vtxlist.append([tuple(data[vrtx1]),
-            tuple(data[vrtx2]), tuple(data[vrtx3])])
-        polyarea += tri_area(data[vrtx1], data[vrtx2], data[vrtx3])
-    log.warn("overall area: %s" % polyarea)
-    log.warn("perimeter: %s" % (p1_len + p2_len))
-    log.debug("vtxlist: %s" % vtxlist)
+    junction = CellJunction(args.infile)
+    data = junction.get_coords()
 
     if args.outfile:
-        write_output(args.outfile, args.infile, maxdist_pair, maxdist_points,
-            distance_matrix, maxedgelen, polyarea, (p1_len + p2_len))
+        write_output(args.outfile, args.infile, junction.get_mdpair(),
+            junction.get_mdpair_coords(), junction.get_edm(),
+            junction.get_longest_edge(), junction.get_area,
+            junction.get_perimeter())
 
     if args.plot:
         # define some colors to cycle through:
@@ -172,31 +132,32 @@ def main():
         ax.set_zlabel('Z')
 
         # print overall area and maximum tesselation edge length:
-        ax.text(*cmin, s='  overall area: %s' % polyarea, color='blue')
-        ax.text(*maxedge, s='  longest edge: %s' % maxedgelen, color='blue')
+        ax.text(*cmin, s='  overall area: %s' % junction.get_area(), color='blue')
+        ax.text(*junction.get_longest_edge_pos(), s='  longest edge: %s' % \
+            junction.get_longest_edge(), color='blue')
 
         # draw the raw filament points:
         # TODO: add commandline switch to enable this!
         # plot3d_scatter(ax, data, 'w')
 
         # draw the maxdist pair and a connecting line + labels:
-        plot3d_maxdist(ax, maxdist_points)
+        plot3d_maxdist(ax, junction.get_mdpair_coords())
 
         # draw connections along filament lists:
-        adjacent = sort_neighbors(distance_matrix)
+        adjacent = sort_neighbors(junction.get_edm())
         log.debug(adjacent)
         for p in build_tuple_seq(adjacent, cyclic=True):
             coords = [data[p[0]], data[p[1]]]
             plot3d_line(ax, coords, 'm')
 
         # draw edges from tesselation:
-        for i, p in enumerate(edges):
+        for i, p in enumerate(junction.edges):
             coords = [data[p[0]], data[p[1]]]
             curcol = colors[i % 6]
             plot3d_line(ax, coords, curcol)
 
         # draw triangles from tesselation as filled polygons:
-        for i, vtx in enumerate(vtxlist):
+        for i, vtx in enumerate(junction.get_vertices()):
             curcol = colors[i % 6]
             tri = Poly3DCollection([vtx], facecolors=cc(curcol))
             tri.set_alpha(0.8)

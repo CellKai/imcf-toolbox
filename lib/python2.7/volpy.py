@@ -32,6 +32,8 @@ __all__ = [
     'tesselate',
     'Filament',
     'Points3D',
+    'GreedyPath',
+    'CellJunction',
     # 'find_neighbor',
     # 'gen_mask',
     # 'gen_unmask',
@@ -557,3 +559,86 @@ class Points3D(object):
 class Filament(Points3D):
     """Filament objects in 3D space based on a Points3D object."""
     pass
+
+
+class GreedyPath(object):
+
+    """Construct greedy paths from points in 3D space."""
+
+    def __init__(self, points_3d, extrema, mask):
+        """Calculate the greedy path from extrema[0] to extrema[1]."""
+        (self.path, self.mask, self.length) = \
+            path_greedy(points_3d.get_edm(), mask, extrema)
+
+
+class CellJunction(Points3D):
+
+    """Class representing cell junctions (rims of touching areas)."""
+
+    def __init__(self, csvfile):
+        """Run tesselation method to calculate an area approximation.
+
+        The points with the maximum distance in the given Points3D object are
+        considered to be the extrema of the cell junction, they are used to
+        build the connecting paths and to run the tesselation algorithm.
+        """
+        super(CellJunction, self).__init__(csvfile)
+        self._te_max = 0  # longest transversal edge
+        self._te_max_pos = None  # used to place the label with matplotlib
+        self._vtxlist = [] # a list of lists of 3-tuples of coordinates
+        self._area = 0 # combined area of all tesselation polygons
+
+        # First calculate the shortest path using *all* points, then calculate
+        # the shortest path using only the remaining points. This results in
+        # two separate point lists forming a loop that can then be used for the
+        # tesselation procedure.
+        self._fil1 = GreedyPath(self, self.get_mdpair(), None)
+        self._fil2 = GreedyPath(self, self.get_mdpair(), self._fil1.mask)
+        self.perimeter = self._fil1.length + self._fil2.length
+        (self.edges, self.triangles, self.vertices) = \
+            tesselate(self._fil2.path, self._fil1.path, self.get_edm())
+        log.warn("------------ largest distance results -------------")
+        log.warn("idx numbers:\t" + ppr.pformat(self.get_mdpair()))
+        log.warn("coordinates:\t" + ppr.pformat(self.get_mdpair_coords()))
+        log.warn("distance:\t" + ppr.pformat(self.get_mdpair_dist()))
+        log.warn("---------------------------------------------------")
+        log.warn("perimeter: %s" % self.perimeter)
+        log.debug("vertices: %s" % self.vertices)
+        log.debug("edges: %s" % self.edges)
+
+    def get_longest_edge(self):
+        """Determine the longest transversal edge from the tesselation."""
+        if self._te_max == 0:
+            for edge in self.edges:
+                curlen = self.get_edm()[edge[0], edge[1]]
+                if curlen > self._te_max:
+                    self._te_max = curlen
+                    self._te_max_pos = self.data[edge[0]] # store position
+            log.warn("longest edge from tesselation: %s" % self._te_max)
+        return self._te_max
+
+    def get_longest_edge_pos(self):
+        """Look up the length of the longest transversal edge."""
+        if self._te_max_pos == None:
+            self.get_longest_edge()
+        return self._te_max_pos
+
+    def get_vertices(self):
+        """Calculate the list of vertices of the tesselation result."""
+        if self._vtxlist == []:
+            for (vtx1, vtx2, vtx3) in self.triangles:
+                self._vtxlist.append([tuple(self.data[vtx1]),
+                    tuple(self.data[vtx2]), tuple(self.data[vtx3])])
+                self._area += tri_area(self.data[vtx1],
+                    self.data[vtx2], self.data[vtx3])
+            log.debug("vtxlist: %s" % self._vtxlist)
+        return self._vtxlist
+
+    def get_area(self):
+        """Calculate the area of the tesselation result."""
+        # The actual calculation is done when creating the list of vertices, so
+        # we just check if that was already done or delegate it otherwise.
+        if self._area == 0:
+            self.get_vertices()
+            log.warn("overall area: %s" % self._area)
+        return self._area
