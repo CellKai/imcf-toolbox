@@ -12,6 +12,8 @@ from numpy import cross, linalg, ma
 import numpy as np
 import math
 import pprint
+import csv
+from aux import filename
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
@@ -642,3 +644,22 @@ class CellJunction(Points3D):
             self.get_vertices()
             log.warn("overall area: %s" % self._area)
         return self._area
+
+    def write_output(self, f_out, f_in):
+        """Assemble output file with collected results."""
+        out = csv.writer(f_out, dialect='excel', delimiter=';')
+        write = out.writerow
+        mdpair = self.get_mdpair()
+        mdpts = self.get_mdpair_coords()
+        write(['input filename', filename(f_in)])
+        write([])
+        write(['distance results'])
+        write(['largest distance points (indices)', str(mdpair)])
+        write(['coordinates of point %s' % mdpair[0], mdpts[0]])
+        write(['coordinates of point %s' % mdpair[1], mdpts[1]])
+        write(['distance', str(self.get_edm()[mdpair])])
+        write([])
+        write(['area results calculated by triangular tesselation'])
+        write(['longest transversal edge', self.get_longest_edge()])
+        write(['overall area', self.get_area()])
+        write(['perimeter', self.perimeter])

@@ -10,7 +10,6 @@ Imaris via the XT/Matlab interface.
 #  - then import it into the GUI script instead of "calling" it from there
 
 import sys
-import csv
 import argparse
 import matplotlib.pyplot as plt
 from matplotlib.colors import colorConverter
@@ -24,7 +23,7 @@ from numpy import loadtxt, asarray, linalg
 from volpy import *
 import pprint
 from log import log
-from aux import filename, set_loglevel
+from aux import set_loglevel
 
 
 def plot3d_scatter(plot, points, color, lw=1):
@@ -77,23 +76,6 @@ def parse_arguments():
         argparser.error(str(e))
 
 
-def write_output(fout, fin, mdpair, mdpts, edm, mtedge, area, perimeter):
-    """Assemble output file with collected results."""
-    out = csv.writer(fout, dialect='excel', delimiter=';')
-    out.writerow(['input filename', filename(fin)])
-    out.writerow([])
-    out.writerow(['distance results'])
-    out.writerow(['largest distance points (indices)', str(mdpair)])
-    out.writerow(['coordinates of point %s' % mdpair[0], mdpts[0]])
-    out.writerow(['coordinates of point %s' % mdpair[1], mdpts[1]])
-    out.writerow(['distance', str(edm[mdpair])])
-    out.writerow([])
-    out.writerow(['area results calculated by triangular tesselation'])
-    out.writerow(['longest transversal edge', mtedge])
-    out.writerow(['overall area', area])
-    out.writerow(['perimeter', perimeter])
-
-
 def main():
     args = parse_arguments()
     set_loglevel(args.verbosity)
@@ -105,10 +87,7 @@ def main():
     data = junction.get_coords()
 
     if args.outfile:
-        write_output(args.outfile, args.infile, junction.get_mdpair(),
-            junction.get_mdpair_coords(), junction.get_edm(),
-            junction.get_longest_edge(), junction.get_area,
-            junction.get_perimeter())
+        junction.write_output(args.outfile, args.infile)
 
     if args.plot:
         # define some colors to cycle through:
