@@ -11,6 +11,7 @@ from scipy import reshape, sqrt
 from numpy import cross, linalg, ma
 import numpy as np
 import math
+import pprint
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
@@ -35,6 +36,8 @@ __all__ = [
     # 'gen_mask',
     # 'gen_unmask',
 ]
+
+ppr = pprint.PrettyPrinter(indent=4)
 
 # def dist(p1, p2) ### REMOVED ###
 # if there is really a shortcut required for calculating the norm, this can
@@ -502,6 +505,7 @@ class Points3D(object):
         self.data = np.loadtxt(csvfile, delimiter=',')
         log.info('Parsed %i points from CSV.\n%s' %
             (len(self.data), str(self.data)))
+        log.debug(ppr.pformat(self.data))
 
     def get_coords(self):
         """Get the coordinates of this object as np.ndarray."""
@@ -512,6 +516,7 @@ class Points3D(object):
         # lazy initialization of the EDM:
         if self.edm == None:
             self.edm = dist_matrix(self.data)
+            log.info(ppr.pformat(self.edm))
         return self.edm
 
     def get_mdpair(self):
