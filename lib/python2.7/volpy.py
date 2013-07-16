@@ -15,8 +15,8 @@ from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
 # - consolidate the np.function vs "from numpy import ..." usage
-# - extend the Filament class to be able to return the distance matrix, the
-#   masks of the individual filaments, access to start and end points, etc.
+# - extend the Filament class to be able to return the masks of the individual
+#   filaments, access to start and end points, etc.
 # - consolidate docstrings format
 # - sanity/type checks
 
@@ -30,6 +30,7 @@ __all__ = [
     'tri_area',
     'tesselate',
     'Filament',
+    'Points3D',
     # 'find_neighbor',
     # 'gen_mask',
     # 'gen_unmask',
@@ -489,21 +490,65 @@ def angle2D(v1, v2):
     return delta
 
 
-class Filament(object):
+class Points3D(object):
 
-    """Class for 3D filamentous structures (linked points).
-
-    Build connected components ("filaments") from a given set of coordinates in
-    space that are read from a CSV file.
-    """
+    """Class for points in 3D space given their coordinates."""
 
     def __init__(self, csvfile):
-        """Load filament points from a CSV file."""
+        """Load point coordinates from a CSV file."""
+        self.edm = None
+        self.mdpair = None
         # np.loadtxt() returns an ndarray() of floats, complains on non-floats
         self.data = np.loadtxt(csvfile, delimiter=',')
         log.info('Parsed %i points from CSV.\n%s' %
             (len(self.data), str(self.data)))
 
     def get_coords(self):
-        """Get the coordinates of this filament object."""
+        """Get the coordinates of this object as np.ndarray."""
         return self.data
+
+    def get_edm(self):
+        """Get the euclidean distance matrix of the points."""
+        # lazy initialization of the EDM:
+        if self.edm == None:
+            self.edm = dist_matrix(self.data)
+        return self.edm
+
+    def get_mdpair(self):
+        """Get the pair of points with the maximum distance.
+
+        Returns
+        -------
+        mdpair : (int, int)
+          The tuple of index numbers for the described points.
+        """
+        # lazy initialization of the maxdistpair:
+        if self.mdpair == None:
+            self.mdpair = get_max_dist_pair(self.get_edm())
+        return self.mdpair
+
+    def get_mdpair_coords(self):
+        """Get the coordinates of the maximum distance pair.
+
+        Returns
+        -------
+        mdpair_coords : (ndarray, ndarray)
+          The tuple of coordinates for the described points.
+        """
+        # NOTE: previously this was a list, not a tuple...
+        return (self.data[self.get_mdpair()[0]],
+            self.data[self.get_mdpair()[1]])
+
+    def get_mdpair_dist(self):
+        """Get the distance of the maximum distance pair.
+
+        Returns
+        -------
+        dist : float
+        """
+        return self.get_edm()[self.get_mdpair()]
+
+
+class Filament(Points3D):
+    """Filament objects in 3D space based on a Points3D object."""
+    pass

@@ -6,7 +6,6 @@ Imaris via the XT/Matlab interface.
 
 # TODO:
 #  - move the 3d plotting stuff somewhere else, especially the imports!
-#  - merge the "filaments" and "volpy" modules, then use Filament objects
 #  - rewrite this code so it can be imported in other scripts
 #  - then import it into the GUI script instead of "calling" it from there
 
@@ -100,23 +99,23 @@ def main():
     set_loglevel(args.verbosity)
     pp = pprint.PrettyPrinter(indent=4)
 
-    # loadtxt() expects float numbers and complains otherwise
-    data = loadtxt(args.infile, delimiter=',')
+    # FIXME: with the new Points3D object significant parts of the following
+    # code should be refactored!
+    filament = Points3D(args.infile)
+    data = filament.get_coords()
 
     # calculate all distances and get the pair with the largest one
-    distance_matrix = dist_matrix(data)
-    maxdist_pair = get_max_dist_pair(distance_matrix)
+    distance_matrix = filament.get_edm()
+    maxdist_pair = filament.get_mdpair()
     log.debug(pp.pformat(data))
     log.info(pp.pformat(distance_matrix))
 
-    maxdist_points = []
-    for point in maxdist_pair:
-        maxdist_points.append(data[point])
+    maxdist_points = filament.get_mdpair_coords()
 
     log.warn('------------ largest distance results -------------')
     log.warn('idx numbers:\t' + pp.pformat(maxdist_pair))
     log.warn('coordinates:\t' + pp.pformat(maxdist_points))
-    log.warn('distance:\t' + pp.pformat(distance_matrix[maxdist_pair]))
+    log.warn('distance:\t' + pp.pformat(filament.get_mdpair_dist()))
     log.warn('---------------------------------------------------')
 
     # FIXME: path generation should be done in tesselate()
