@@ -64,6 +64,8 @@ def parse_arguments():
     argparser.add_argument('--plot', dest='plot', action='store_const',
         const=True, default=False,
         help='plot parsed filament data')
+    argparser.add_argument('--export-plot', dest='export_plot', default=False,
+        help='path to export PNG series of plotted filament data')
     argparser.add_argument('--showmatrix', dest='showmatrix',
         action='store_const', const=True, default=False,
         help='show the distance matrix and the longest distance pair')
@@ -87,7 +89,7 @@ def main():
     if args.outfile:
         junction.write_output(args.outfile, args.infile)
 
-    if args.plot:
+    if args.plot or args.export_plot:
         # define some colors to cycle through:
         colors = ['r', 'g', 'b', 'y', 'c', 'm']
         cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
@@ -141,7 +143,27 @@ def main():
             tri.set_alpha(0.8)
             ax.add_collection3d(tri)
 
-        plt.show()
+        if args.export_plot:
+            log.warn("exporting 3D plot to PNG files...")
+            for azim in range(360):
+                # we start at 60 deg, it just looks nicer:
+                ax.azim = azim + 60
+                fname = '%s/3dplot-%03d.png' % (args.export_plot, azim)
+                log.info("saving plot as %s" % fname)
+                plt.savefig(fname)
+            log.warn("done")
+
+        if args.plot:
+            plt.show()
+            # disabling the blocking mode makes the script return immediately
+            # without showing anything, unless a couple of draw() statements
+            # follow - to show an animation the following code could be used:
+            # plt.show(block=False)
+            # for azim in range(60, 420):
+            #     ax.azim = azim
+            #     plt.draw()
+            #     # to add a delay, the time module must be imported:
+            #     # time.sleep(0.025)
 
 
 if __name__ == "__main__":
