@@ -19,9 +19,8 @@ from matplotlib.colors import colorConverter
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-from numpy import loadtxt, asarray, linalg
-from volpy import *
-import pprint
+from numpy import asarray, linalg
+from volpy import CellJunction, sort_neighbors, build_tuple_seq
 from log import log
 from aux import set_loglevel
 
@@ -79,7 +78,6 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     set_loglevel(args.verbosity)
-    pp = pprint.PrettyPrinter(indent=4)
 
     # FIXME: with the new Points3D object significant parts of the following
     # code should be refactored!
@@ -111,7 +109,8 @@ def main():
         ax.set_zlabel('Z')
 
         # print overall area and maximum tesselation edge length:
-        ax.text(*cmin, s='  overall area: %s' % junction.get_area(), color='blue')
+        ax.text(*cmin, s='  overall area: %s' % junction.get_area(),
+            color='blue')
         ax.text(*junction.get_longest_edge_pos(), s='  longest edge: %s' % \
             junction.get_longest_edge(), color='blue')
 
