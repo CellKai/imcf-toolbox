@@ -17,6 +17,7 @@ from aux import filename
 from numpy.matlib import repmat, repeat, sum, where
 
 # TODO:
+# - make a real package from this and split into submodules
 # - consolidate the np.function vs "from numpy import ..." usage
 # - extend the Filament class to be able to return the masks of the individual
 #   filaments, access to start and end points, etc.
@@ -663,3 +664,140 @@ class CellJunction(Points3D):
         write(['longest transversal edge', self.get_longest_edge()])
         write(['overall area', self.get_area()])
         write(['perimeter', self.perimeter])
+
+
+### FIXME: the matplotlib stuff should go into a submodule!
+import matplotlib.pyplot as plt
+from matplotlib.colors import colorConverter
+# http://matplotlib.org/api/colors_api.html
+
+# stuff required for matplotlib:
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from numpy import asarray, linalg
+
+
+def plot3d_scatter(plot, points, color, lw=1):
+    """Do a 3D scatter plot with the given points."""
+    # we need to have the coordinates as 3 ndarrays (x,y,z):
+    x, y, z = asarray(zip(points[0], points[1]))
+    plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
+
+
+def plot3d_line(plot, points, color, lw=1):
+    """Plot a line in 3D from the given points."""
+    # we need to have the coordinates as 3 ndarrays (x,y,z):
+    x, y, z = asarray(zip(points[0], points[1]))
+    plot.plot(x, y, z, zdir='z', c=color)
+
+
+def plot3d_maxdist(ax, maxdist_points):
+    """Plot and label the points with maximum distance."""
+    plot3d_scatter(ax, maxdist_points, 'r', lw=18)
+    for i in (0, 1):
+        ax.text(*maxdist_points[i], color='blue',
+            s='   (%s | %s | %s)' % (maxdist_points[i][0],
+            maxdist_points[i][1], maxdist_points[i][2]))
+    # draw connection line between points:
+    plot3d_line(ax, maxdist_points, 'y')
+    # calculate length and add label:
+    pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
+    dist = linalg.norm(maxdist_points[0] - maxdist_points[1])
+    ax.text(*pos, color='blue', s='%s' % dist)
+
+
+def plot3d_junction(points3d_object, show, export):
+    """Set up a 3D plot of a junction object."""
+    data = points3d_object.get_coords()
+    # define some colors to cycle through:
+    colors = ['r', 'g', 'b', 'y', 'c', 'm']
+    cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
+
+    # prepare the figure
+    fig = plt.figure()
+    ax = Axes3D(fig)
+
+    # determine min and max coordinates and set limits:
+    cmin = data.min(axis=0)
+    cmax = data.max(axis=0)
+    ax.set_xlim3d(cmin[0], cmax[0])
+    ax.set_ylim3d(cmin[1], cmax[1])
+    ax.set_zlim3d(cmin[2], cmax[2])
+
+    # draw axis lables
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+    # print overall area and maximum tesselation edge length:
+    ax.text(*cmin, s='  overall area: %s' % points3d_object.get_area(),
+        color='blue')
+    ax.text(*points3d_object.get_longest_edge_pos(), s='  longest edge: %s' % \
+        points3d_object.get_longest_edge(), color='blue')
+
+    # draw the raw filament points:
+    # TODO: add commandline switch to enable this!
+    # plot3d_scatter(ax, data, 'w')
+
+    # draw the maxdist pair and a connecting line + labels:
+    plot3d_maxdist(ax, points3d_object.get_mdpair_coords())
+
+    # draw connections along filament lists:
+    adjacent = sort_neighbors(points3d_object.get_edm())
+    log.debug(adjacent)
+    for p in build_tuple_seq(adjacent, cyclic=True):
+        coords = [data[p[0]], data[p[1]]]
+        plot3d_line(ax, coords, 'm')
+
+    # draw edges from tesselation:
+    for i, p in enumerate(points3d_object.edges):
+        coords = [data[p[0]], data[p[1]]]
+        curcol = colors[i % 6]
+        plot3d_line(ax, coords, curcol)
+
+    # draw triangles from tesselation as filled polygons:
+    for i, vtx in enumerate(points3d_object.get_vertices()):
+        curcol = colors[i % 6]
+        tri = Poly3DCollection([vtx], facecolors=cc(curcol))
+        tri.set_alpha(0.8)
+        ax.add_collection3d(tri)
+
+    if export:
+        plot3d_pngseries(export, ax)
+    if show:
+        plot3d_show()
+
+
+def plot3d_pngseries(outdir, axes):
+    """Export a 3D plot as a series of PNGs, rotating in 1 deg steps.
+
+    Parameters
+    ----------
+    outdir : str
+        The path of an existing directory to store the PNGs in.
+    axes : Axes3D object
+        The axes object of the plot.
+    """
+    log.warn("exporting 3D plot to PNG files...")
+    for azimuth in range(360):
+        # we start at 60 deg, it just looks nicer:
+        axes.azimuth = azimuth + 60
+        fname = '%s/3dplot-%03d.png' % (outdir, azimuth)
+        log.info("saving plot as %s" % fname)
+        plt.savefig(fname)
+    log.warn("done")
+
+
+def plot3d_show():
+    """Show an interactive 3D plot of the data."""
+    # disabling the blocking mode makes the script return immediately
+    # without showing anything, unless a couple of draw() statements
+    # follow
+    plt.show()
+    # to show an animation the following code could be used:
+    # plt.show(block=False)
+    # for azim in range(60, 420):
+    #     ax.azim = azim
+    #     plt.draw()
+    #     # to add a delay, the time module must be imported:
+    #     # time.sleep(0.025)
