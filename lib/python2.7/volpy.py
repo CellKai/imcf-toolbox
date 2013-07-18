@@ -703,7 +703,7 @@ def plot3d_maxdist(ax, maxdist_points):
     # calculate length and add label:
     pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
     dist = linalg.norm(maxdist_points[0] - maxdist_points[1])
-    ax.text(*pos, color='blue', s='%s' % dist)
+    ax.text(*pos, color='blue', s='%.2f' % dist)
 
 
 def plot3d_junction(points3d_object, show, export):
@@ -730,10 +730,10 @@ def plot3d_junction(points3d_object, show, export):
     ax.set_zlabel('Z')
 
     # print overall area and maximum tesselation edge length:
-    ax.text(*cmin, s='  overall area: %s' % points3d_object.get_area(),
+    ax.text(*cmin, s='  overall area: %.2f' % points3d_object.get_area(),
         color='blue')
-    ax.text(*points3d_object.get_longest_edge_pos(), s='  longest edge: %s' % \
-        points3d_object.get_longest_edge(), color='blue')
+    ax.text(*points3d_object.get_longest_edge_pos(), color='blue',
+        s='  longest edge: %.2f' % points3d_object.get_longest_edge())
 
     # draw the raw filament points:
     # TODO: add commandline switch to enable this!
