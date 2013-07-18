@@ -349,46 +349,46 @@ def tesselate(pl1, pl2, dist):
     """
 
     # remove first and last items and get copies of the remaining pointlists
-    (start_A, end_A, list_A) = cut_extrema(pl1)
-    (start_B, end_B, list_B) = cut_extrema(pl2)
-    if start_A != start_B or end_A != end_B:
+    (start_a, end_a, list_a) = cut_extrema(pl1)
+    (start_b, end_b, list_b) = cut_extrema(pl2)
+    if start_a != start_b or end_a != end_b:
         raise Exception('Pointlist mismatch.')
 
     # initialize lists
     edges = []
     triangles = []
     vertices = []
-    vappend(edges, (list_A[0], list_B[0]), 'edges')
-    vappend(triangles, (list_A[0], list_B[0], start_A), 'triangles')
-    vappend(vertices, start_A, 'vertices')
+    vappend(edges, (list_a[0], list_b[0]), 'edges')
+    vappend(triangles, (list_a[0], list_b[0], start_a), 'triangles')
+    vappend(vertices, start_a, 'vertices')
 
     # Process pointlists A and B simultaneously and determine the distances of
     # A0-B1 and B0-A1. Remove the first element from the list where the
     # shorter edge ends (B0 in case of A0-B1 etc.) and then add the edge A0-B0
     # to the edgelist. If one list reaches its last element, always pop the
     # first element of the other one until both lists have length 1.
-    while len(list_A) > 1 or len(list_B) > 1:
-        log.debug("-------------\nlist_A: %s\nlist_B: %s" % (list_A, list_B))
-        if len(list_A) == 1:
-            out = list_B.pop(0)
-        elif len(list_B) == 1:
-            out = list_A.pop(0)
+    while len(list_a) > 1 or len(list_b) > 1:
+        log.debug("-------------\nlist_A: %s\nlist_B: %s" % (list_a, list_b))
+        if len(list_a) == 1:
+            out = list_b.pop(0)
+        elif len(list_b) == 1:
+            out = list_a.pop(0)
         else:
             # check distances of A0-B1 and B0-A1
-            if dist[list_A[0], list_B[1]] > dist[list_B[0], list_A[1]]:
-                out = list_A.pop(0)
+            if dist[list_a[0], list_b[1]] > dist[list_b[0], list_a[1]]:
+                out = list_a.pop(0)
             else:
-                out = list_B.pop(0)
-        vappend(edges, (list_A[0], list_B[0]), 'edges')
-        vappend(triangles, (list_A[0], list_B[0], out), 'triangles')
+                out = list_b.pop(0)
+        vappend(edges, (list_a[0], list_b[0]), 'edges')
+        vappend(triangles, (list_a[0], list_b[0], out), 'triangles')
         vappend(vertices, out, 'vertices')
         log.debug("removed 1st element from list: %s" % out)
 
     # finally add the last triangle containing the endpoint
-    vappend(triangles, (list_A[0], list_B[0], end_A), 'triangles')
-    vappend(vertices, list_A[0], 'vertices')
-    vappend(vertices, list_B[0], 'vertices')
-    vappend(vertices, end_A, 'vertices')
+    vappend(triangles, (list_a[0], list_b[0], end_a), 'triangles')
+    vappend(vertices, list_a[0], 'vertices')
+    vappend(vertices, list_b[0], 'vertices')
+    vappend(vertices, end_a, 'vertices')
 
     log.info("edges from tesselation: %s" % edges)
     log.debug("triangles from tesselation: %s" % triangles)
