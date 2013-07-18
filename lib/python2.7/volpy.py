@@ -781,9 +781,9 @@ def plot3d_pngseries(outdir, axes):
     log.warn("exporting 3D plot to PNG files...")
     for azimuth in range(360):
         # we start at 60 deg, it just looks nicer:
-        axes.azimuth = azimuth + 60
+        axes.azim = azimuth + 60
         fname = '%s/3dplot-%03d.png' % (outdir, azimuth)
-        log.info("saving plot as %s" % fname)
+        log.info("saving plot %i as '%s'" % (azimuth, fname))
         plt.savefig(fname)
     log.warn("done")
 
