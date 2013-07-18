@@ -1,9 +1,12 @@
 #!/usr/bin/python
 
-"""Parse a CSV file containing filament point coordinates extracted from
-Imaris via the XT/Matlab interface.
-"""
+"""Analyze and visualize cell junctions segmented with Imaris.
 
+Takes a CSV file exported from Imaris via the XT/Matlab interface containing
+coordinates of segmented cell junctions (via the "filaments" tool) and analyzes
+them. Optionally a 3D plot can be shown interactively or exported as a series
+of PNG files.
+"""
 
 import sys
 import argparse
@@ -31,11 +34,12 @@ def parse_arguments():
         action='count', default=0)
     try:
         return argparser.parse_args()
-    except IOError as e:
-        argparser.error(str(e))
+    except IOError as err:
+        argparser.error(str(err))
 
 
 def main():
+    """Create the junction object and do the requested tasks."""
     args = parse_arguments()
     set_loglevel(args.verbosity)
 
