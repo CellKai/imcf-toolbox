@@ -585,10 +585,10 @@ class CellJunction(Points3D):
         build the connecting paths and to run the tesselation algorithm.
         """
         super(CellJunction, self).__init__(csvfile)
-        self._te_max = 0  # longest transversal edge
-        self._te_max_pos = None  # used to place the label with matplotlib
-        self._vtxlist = [] # a list of lists of 3-tuples of coordinates
-        self._area = 0 # combined area of all tesselation polygons
+        self._te_max = 0   # longest transversal edge
+        self._te_max_pos = None   # used to place the label with matplotlib
+        self._vtxlist = []   # a list of lists of 3-tuples of coordinates
+        self._area = 0   # combined area of all tesselation polygons
 
         # First calculate the shortest path using *all* points, then calculate
         # the shortest path using only the remaining points. This results in
@@ -615,7 +615,7 @@ class CellJunction(Points3D):
                 curlen = self.get_edm()[edge[0], edge[1]]
                 if curlen > self._te_max:
                     self._te_max = curlen
-                    self._te_max_pos = self.data[edge[0]] # store position
+                    self._te_max_pos = self.data[edge[0]]   # store position
             log.warn("longest edge from tesselation: %s" % self._te_max)
         return self._te_max
 
