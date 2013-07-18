@@ -358,7 +358,12 @@ def tesselate(pl1, pl2, dist):
     edges = []
     triangles = []
     vertices = []
-    vappend(edges, (list_a[0], list_b[0]), 'edges')
+    try:
+        vappend(edges, (list_a[0], list_b[0]), 'edges')
+    except IndexError as err:
+        raise SystemExit("%s: list_a = %s -- list_b = %s" % \
+            (err, list_a, list_b))
+
     vappend(triangles, (list_a[0], list_b[0], start_a), 'triangles')
     vappend(vertices, start_a, 'vertices')
 
