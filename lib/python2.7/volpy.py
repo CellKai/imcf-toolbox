@@ -700,7 +700,20 @@ def plot3d_line(plot, points, color, linewidth=1):
 
 
 def plot3d_maxdist(axes, maxdist_points):
-    """Plot and label the points with maximum distance."""
+    """Plot and label the points with maximum distance.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    maxdist_points : tuple of np.ndarray (shape = (3,))
+
+    Example
+    -------
+    >>> axes = mpl_toolkits.mplot3d.Axes3D(fig)
+    >>> point1 = np.ndarray([ 76.123 ,  77.062 ,  -7.5684])
+    >>> point2 = np.ndarray([ 98.758 ,  36.733 ,   5.4777])
+    >>> plot3d_maxdist(axes, (point1, point2))
+    """
     plot3d_scatter(axes, maxdist_points, 'r', linewidth=18)
     for i in (0, 1):
         axes.text(*maxdist_points[i], color='blue',
