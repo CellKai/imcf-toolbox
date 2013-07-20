@@ -711,10 +711,12 @@ def plot3d_maxdist(axes, maxdist_points):
 
     Example
     -------
-    >>> axes = mpl_toolkits.mplot3d.Axes3D(fig)
-    >>> point1 = np.ndarray([ 76.123 ,  77.062 ,  -7.5684])
-    >>> point2 = np.ndarray([ 98.758 ,  36.733 ,   5.4777])
+    >>> fig = plt.figure()
+    >>> axes = Axes3D(fig)
+    >>> point1 = np.array([76.123, 77.062, -7.5684])
+    >>> point2 = np.array([98.758, 36.733, 5.4777])
     >>> plot3d_maxdist(axes, (point1, point2))
+    (array([ 87.4405 ,  56.8975 ,  -1.04535]), 48.051765744975484)
     """
     plot3d_scatter(axes, maxdist_points, 'r', linewidth=18)
     for i in (0, 1):
@@ -727,6 +729,7 @@ def plot3d_maxdist(axes, maxdist_points):
     pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
     dist = np.linalg.norm(maxdist_points[0] - maxdist_points[1])
     axes.text(pos[0], pos[1], pos[2], color='blue', s='%.2f' % dist)
+    return (pos, dist)
 
 
 def plot3d_label_axes(axes, labels):
