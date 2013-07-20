@@ -13,7 +13,7 @@ set_loglevel(2)
 flmnt = Filament(infile)
 
 output = open(outfile, 'w')
-output.write(flmnt.get_coords())
+output.write(str(flmnt.get_coords()))
 print 'Parsed %i points from "%s"' % \
     (len(flmnt.get_coords()), infile)
 print('Written results to "%s"' % outfile)
