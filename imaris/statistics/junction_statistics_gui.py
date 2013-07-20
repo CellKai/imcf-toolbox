@@ -7,13 +7,14 @@ GUI for Junction statistics calculations.
 
 import sys
 import filament_parser
+import argparse
 from aux_gui import select_file
 from ui_generic_in_out_opt import *
 
 
 class JunctionsMainWindow(Ui_MainWindow):
 
-    """Main Window for WingJ GUI."""
+    """Main Window for Junction Statistics GUI."""
 
     def setup_window(self, window):
         """Customize the generic UI to our specific case."""
@@ -41,6 +42,13 @@ class JunctionsMainWindow(Ui_MainWindow):
             QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(window)
 
+    def preset_fields(self, values):
+        """Preset field contents with supplied values."""
+        if not values:
+            return
+        self.le_infile.setText(values[0])
+        self.le_outfile.setText(values[1])
+
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
         sys.argv = ['./filament_parser.py']
@@ -61,12 +69,28 @@ class JunctionsMainWindow(Ui_MainWindow):
         self.le_outfile.setText('')
 
 
+def parse_arguments():
+    """Parse commandline arguments for preset values."""
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-p', '--preset', required=False,
+        help='Prefill fields with values in this list.')
+    try:
+        args = argparser.parse_args()
+    except IOError as err:
+        argparser.error(str(err))
+    if args.preset != None:
+        return args.preset.split(',')
+    else:
+        return None
+
+
 def main():
     """Set up the GUI window and show it."""
     app = QtGui.QApplication(sys.argv)
     main_window = QtGui.QMainWindow()
     gui = JunctionsMainWindow()
     gui.setup_window(main_window)
+    gui.preset_fields(parse_arguments())
     main_window.show()
     return app.exec_()
 
