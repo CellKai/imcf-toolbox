@@ -14,7 +14,7 @@ import math
 import pprint
 import csv
 from aux import filename
-from numpy.matlib import repmat, repeat, sum, where
+from numpy.matlib import repmat, repeat, where
 
 # TODO:
 # - make a real package from this and split into submodules
@@ -84,7 +84,7 @@ def dist_matrix(pts):
     To transform the list into a distance matrix reshape() is used.
     """
     dist_mat = sqrt(
-                    sum(
+                    np.matlib.sum(
                            (
                                repmat(pts, len(pts), 1) -
                                repeat(pts, len(pts), axis=0)
