@@ -6,9 +6,10 @@ GUI for Junction statistics calculations.
 """
 
 import sys
-import filament_parser
 import argparse
+import volpy as vp
 from aux_gui import select_file
+from aux import set_loglevel, check_filehandle
 from ui_generic_in_out_opt import *
 
 
@@ -51,22 +52,16 @@ class JunctionsMainWindow(Ui_MainWindow):
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
-        sys.argv = ['./filament_parser.py']
-        infile = str(self.le_infile.text())
-        sys.argv += ['-i', infile]
-        outfile = str(self.le_outfile.text())
-        sys.argv += ['-o', outfile]
-        plot = None
-        if (self.cb_option.checkState() == 2):
-            plot = '--plot'
-        if plot:
-            sys.argv.append(plot)
-        for _ in range(0, self.sl_verbosity.value()):
-            sys.argv.append('-v')
-        # print sys.argv
-        filament_parser.main()
+        in_csv = str(self.le_infile.text())
+        out_csv = check_filehandle(str(self.le_outfile.text()), 'w')
+        set_loglevel(self.sl_verbosity.value())
+
+        junction = vp.CellJunction(in_csv)
+        junction.write_output(out_csv, in_csv)
         # reset the outfile's name
         self.le_outfile.setText('')
+        if (self.cb_option.checkState() == 2):
+            vp.plot3d_junction(junction, True, False)
 
 
 def parse_arguments():
