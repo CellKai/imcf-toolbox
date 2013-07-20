@@ -7,18 +7,16 @@ in three dimensional space.
 """
 
 from log import log
-from scipy import reshape, sqrt
-from numpy import cross, linalg, ma
 import numpy as np
+import numpy.matlib as matlib
+import scipy
 import math
 import pprint
 import csv
 from aux import filename
-from numpy.matlib import repmat, repeat, where
 
 # TODO:
 # - make a real package from this and split into submodules
-# - consolidate the np.function vs "from numpy import ..." usage
 # - extend the Filament class to be able to return the masks of the individual
 #   filaments, access to start and end points, etc.
 # - consolidate docstrings format
@@ -83,15 +81,15 @@ def dist_matrix(pts):
         array([ 0.,  5.,  5.,  0.])
     To transform the list into a distance matrix reshape() is used.
     """
-    dist_mat = sqrt(
-                    np.matlib.sum(
-                           (
-                               repmat(pts, len(pts), 1) -
-                               repeat(pts, len(pts), axis=0)
-                           ) ** 2,
+    dist_mat = scipy.sqrt(
+        matlib.sum(
+            (
+                matlib.repmat(pts, len(pts), 1) -
+                matlib.repeat(pts, len(pts), axis=0)
+            ) ** 2,
                            axis=1
-                       )
-                   )
+        )
+    )
     return dist_mat.reshape((len(pts), len(pts)))
 
 
@@ -111,10 +109,8 @@ def get_max_dist_pair(matrix):
         row_max = max(row)
         if row_max > maxdist:
             maxdist = row_max
-            max_pos = where(row == row_max)[0][0]
+            max_pos = matlib.where(row == row_max)[0][0]
             pair = (row_num, max_pos)
-            # print [row_num] + [where(row == row_max)[0][0]] + [maxdist]
-            # print pair
     return pair
 
 
@@ -134,7 +130,7 @@ def find_neighbor(pid, dist_mat, mask):
     Returns:
         closest: index of the closest neighbor
     """
-    masked_dists = ma.array(dist_mat[pid], mask=mask)
+    masked_dists = np.ma.array(dist_mat[pid], mask=mask)
     closest = masked_dists.argmin()
     return closest
 
@@ -408,7 +404,7 @@ def tri_area(point1, point2, point3):
     """
     vec1 = point2 - point1
     vec2 = point2 - point3
-    return 0.5 * linalg.norm(cross(vec1, vec2))
+    return 0.5 * np.linalg.norm(np.cross(vec1, vec2))
 
 
 def angle(v1u, v2u, normalize=False):
@@ -678,7 +674,7 @@ from matplotlib.colors import colorConverter
 # stuff required for matplotlib:
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from numpy import asarray, linalg
+import numpy as np
 
 
 def plot3d_scatter(plot, points, color, linewidth=1):
@@ -686,7 +682,7 @@ def plot3d_scatter(plot, points, color, linewidth=1):
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x, y, z = asarray(zip(points[0], points[1]))
+    x, y, z = np.asarray(zip(points[0], points[1]))
     plot.scatter(x, y, z, zdir='z', c=color, linewidth=linewidth)
 
 
@@ -695,7 +691,7 @@ def plot3d_line(plot, points, color, linewidth=1):
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
-    x, y, z = asarray(zip(points[0], points[1]))
+    x, y, z = np.asarray(zip(points[0], points[1]))
     plot.plot(x, y, z, zdir='z', c=color, linewidth=linewidth)
 
 
@@ -723,7 +719,7 @@ def plot3d_maxdist(axes, maxdist_points):
     plot3d_line(axes, maxdist_points, 'y')
     # calculate length and add label:
     pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
-    dist = linalg.norm(maxdist_points[0] - maxdist_points[1])
+    dist = np.linalg.norm(maxdist_points[0] - maxdist_points[1])
     axes.text(pos[0], pos[1], pos[2], color='blue', s='%.2f' % dist)
 
 
