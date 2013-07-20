@@ -727,64 +727,81 @@ def plot3d_maxdist(axes, maxdist_points):
     axes.text(pos[0], pos[1], pos[2], color='blue', s='%.2f' % dist)
 
 
-def plot3d_junction(points3d_object, show, export):
-    """Set up a 3D plot of a junction object."""
+def plot3d_label_axes(axes, labels):
+    """Label the axes of a 3D plot."""
+    axes.set_xlabel(labels[0])
+    axes.set_ylabel(labels[1])
+    axes.set_zlabel(labels[2])
+
+
+def plot3d_set_minmax(axes, points3d_object):
+    """Determine min and max coordinates and set limits."""
     data = points3d_object.get_coords()
-    # define some colors to cycle through:
+    cmin = data.min(axis=0)
+    cmax = data.max(axis=0)
+    axes.set_xlim3d(cmin[0], cmax[0])
+    axes.set_ylim3d(cmin[1], cmax[1])
+    axes.set_zlim3d(cmin[2], cmax[2])
+
+
+def plot3d_filaments(axes, points3d_object):
+    """Draw edges along a filament pointlist."""
+    data = points3d_object.get_coords()
+    adjacent = sort_neighbors(points3d_object.get_edm())
+    log.debug(adjacent)
+    for pair in build_tuple_seq(adjacent, cyclic=True):
+        coords = [data[pair[0]], data[pair[1]]]
+        plot3d_line(axes, coords, 'm')
+
+
+def plot3d_tess_edges(axes, points3d_object):
+    """Draw edges from tesselation results."""
+    data = points3d_object.get_coords()
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
-    cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
+    for i, pair in enumerate(points3d_object.edges):
+        coords = [data[pair[0]], data[pair[1]]]
+        curcol = colors[i % 6]
+        plot3d_line(axes, coords, curcol)
+
+
+def plot3d_tess_tri(axes, points3d_object):
+    """Draw triangle areas from tesselation results."""
+    rgb = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
+    colors = ['r', 'g', 'b', 'y', 'c', 'm']
+    for i, vtx in enumerate(points3d_object.get_vertices()):
+        curcol = colors[i % 6]
+        tri = Poly3DCollection([vtx], facecolors=rgb(curcol), linewidth=0)
+        tri.set_alpha(0.8)
+        axes.add_collection3d(tri)
+
+
+def plot3d_junction(points3d_object, show, export):
+    """Create a 3D plot of a junction object."""
 
     # prepare the figure
     fig = plt.figure()
-    ax = Axes3D(fig)
+    axes = Axes3D(fig)
 
-    # determine min and max coordinates and set limits:
-    cmin = data.min(axis=0)
-    cmax = data.max(axis=0)
-    ax.set_xlim3d(cmin[0], cmax[0])
-    ax.set_ylim3d(cmin[1], cmax[1])
-    ax.set_zlim3d(cmin[2], cmax[2])
-
-    # draw axis lables
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
+    plot3d_set_minmax(axes, points3d_object)
+    plot3d_label_axes(axes, ('X', 'Y', 'Z'))
 
     # # print overall area and maximum tesselation edge length:
-    # ax.text(*cmin, s='  overall area: %.2f' % points3d_object.get_area(),
+    # axes.text(*cmin, s='  overall area: %.2f' % points3d_object.get_area(),
     #     color='blue')
-    # ax.text(*points3d_object.get_longest_edge_pos(), color='blue',
+    # axes.text(*points3d_object.get_longest_edge_pos(), color='blue',
     #     s='  longest edge: %.2f' % points3d_object.get_longest_edge())
 
     # draw the raw filament points:
     # TODO: add commandline switch to enable this!
-    # plot3d_scatter(ax, data, 'w')
+    # plot3d_scatter(axes, data, 'w')
 
-    # draw the maxdist pair and a connecting line + labels:
-    plot3d_maxdist(ax, points3d_object.get_mdpair_coords())
-
-    # draw connections along filament lists:
-    adjacent = sort_neighbors(points3d_object.get_edm())
-    log.debug(adjacent)
-    for p in build_tuple_seq(adjacent, cyclic=True):
-        coords = [data[p[0]], data[p[1]]]
-        plot3d_line(ax, coords, 'm')
-
-    # draw edges from tesselation:
-    for i, p in enumerate(points3d_object.edges):
-        coords = [data[p[0]], data[p[1]]]
-        curcol = colors[i % 6]
-        plot3d_line(ax, coords, curcol)
-
-    # draw triangles from tesselation as filled polygons:
-    for i, vtx in enumerate(points3d_object.get_vertices()):
-        curcol = colors[i % 6]
-        tri = Poly3DCollection([vtx], facecolors=cc(curcol))
-        tri.set_alpha(0.8)
-        ax.add_collection3d(tri)
+    plot3d_maxdist(axes, points3d_object.get_mdpair_coords())
+    plot3d_filaments(axes, points3d_object)
+    plot3d_tess_edges(axes, points3d_object)
+    plot3d_tess_tri(axes, points3d_object)
 
     if export:
-        plot3d_pngseries(export, ax)
+        plot3d_pngseries(export, axes)
     if show:
         plot3d_show()
 
@@ -818,7 +835,7 @@ def plot3d_show():
     # to show an animation the following code could be used:
     # plt.show(block=False)
     # for azim in range(60, 420):
-    #     ax.azim = azim
+    #     axes.azim = azim
     #     plt.draw()
     #     # to add a delay, the time module must be imported:
     #     # time.sleep(0.025)
