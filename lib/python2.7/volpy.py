@@ -102,7 +102,7 @@ def get_max_dist_pair(matrix):
     Returns:
         (i1, i2): tuple of index numbers of the largest distance pair.
     """
-    # FIXME: this can be done with argmax()!
+    # TODO: this can be done with argmax()
     maxdist = 0
     pair = (-1, -1)
     for row_num, row in enumerate(matrix):
@@ -481,12 +481,12 @@ def angle_2d(vec1, vec2):
     Example
     -------
     >>> import numpy as np
-    >>> x = np.array([[1,1],[1,-11]])
+    >>> x = np.array([[1,1],[1,-1]])
     >>> angle_2d(x[0], x[1])
-    45.0
+    -90.0
     >>> x = np.array([[-3,-0.1],[1.,6.]])
     >>> angle_2d(x[0], x[1])
-    101.371474641
+    101.37147464102202
     """
     if (vec1.shape != (2,) or vec2.shape != (2,)):
         raise TypeError('Can handle only 2-D vectors!')
@@ -672,7 +672,7 @@ class CellJunction(Points3D):
         write(['perimeter', self.perimeter])
 
 
-### FIXME: the matplotlib stuff should go into a submodule!
+### TODO: the matplotlib stuff should go into a submodule!
 import matplotlib.pyplot as plt
 from matplotlib.colors import colorConverter
 # http://matplotlib.org/api/colors_api.html
