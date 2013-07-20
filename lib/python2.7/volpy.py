@@ -431,17 +431,23 @@ def angle(v1u, v2u, normalize=False):
     Example
     -------
     >>> import numpy as np
-    >>> x = np.array([[1,0,0],[1,0,1]])
+    >>> x = np.array([[1,0,0], [1,0,1]])
     >>> angle(x[0], x[1], normalize=True)
     45.000000000000007
-    >>> x = np.array([[1,2,3],[1,2,1]])
+    >>> x = np.array([[1,2,3], [1,2,1]])
     >>> angle(x[0], x[1], normalize=True)
     29.205932247399399
+    >>> x = np.array([[0,0,0], [1,2,1]])
+    >>> angle(x[0], x[1], normalize=True)
+    0.0
+    >>> x = np.array([[1,2,1], [0,0,0]])
+    >>> angle(x[0], x[1], normalize=True)
+    0.0
     """
     log.debug('vector shapes: %s %s' % (v1u.shape, v2u.shape))
-    if v1u.all() == 0:
+    if not v1u.any():
         return 0.
-    if v2u.all() == 0:
+    if not v2u.any():
         return 0.
     if normalize:
         v1u = v1u / np.linalg.norm(v1u)
