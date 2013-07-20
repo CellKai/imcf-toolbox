@@ -409,12 +409,12 @@ def tri_area(point1, point2, point3):
 
 def angle(v1u, v2u, normalize=False):
     """Calculate the angle between vectors (in arc degrees).
-    .
+
     Calculates the angle in degrees between two n-dimensional unit vectors
     given as np.ndarrays. The normalization can be done by the function if
     desired. Note that when calculating angles between large number of vectors,
     it is most likely more efficient to normalize them in advance.
-    .
+
     Parameters
     ----------
     v1u, v2u : np.ndarray
@@ -422,12 +422,12 @@ def angle(v1u, v2u, normalize=False):
     normalize : bool
         Defines whether we should normalize the given vectors. Otherwise they
         need to be normalized already.
-    .
+
     Returns
     -------
     rad : float
         The angle between the vectors in arc degrees.
-    .
+
     Example
     -------
     >>> import numpy as np
@@ -455,31 +455,31 @@ def angle(v1u, v2u, normalize=False):
     return rad * (180 / np.pi)
 
 
-def angle2D(vec1, vec2):
+def angle_2d(vec1, vec2):
     """Calculate the relative angle between vectors in 2D.
-    .
+
     Calculates the relative angle in degrees between two 2-dimensional vectors
     given as np.ndarrays. Positive numbers correspond to a "right turn", while
     negative numbers correspond to a "left turn".
-    .
+
     Parameters
     ----------
     vec1, vec2 : np.ndarray
         The vectors to compare.
-    .
+
     Returns
     -------
     rad : float
         The angle between the vectors in arc degrees [-180, 180].
-    .
+
     Example
     -------
     >>> import numpy as np
     >>> x = np.array([[1,1],[1,-11]])
-    >>> angle2D(x[0], x[1])
+    >>> angle_2d(x[0], x[1])
     45.0
     >>> x = np.array([[-3,-0.1],[1.,6.]])
-    >>> angle2D(x[0], x[1])
+    >>> angle_2d(x[0], x[1])
     101.371474641
     """
     if (vec1.shape != (2,) or vec2.shape != (2,)):

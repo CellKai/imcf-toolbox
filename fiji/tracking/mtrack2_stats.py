@@ -130,7 +130,7 @@ def calc_rotation(deltas, normals, start):
         if (normals[pos - 1] * normals[pos] == 0.):
             res[pos + 1] = 0
         else:
-            res[pos + 1] = vp.angle2D(deltas[pos - 1], deltas[pos])
+            res[pos + 1] = vp.angle_2d(deltas[pos - 1], deltas[pos])
     return res
 
 
