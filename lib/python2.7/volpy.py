@@ -844,3 +844,9 @@ def plot3d_show():
     #     plt.draw()
     #     # to add a delay, the time module must be imported:
     #     # time.sleep(0.025)
+
+
+if __name__ == "__main__":
+    print('Running doctest on this module...')
+    import doctest
+    doctest.testmod()
