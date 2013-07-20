@@ -62,8 +62,7 @@ def dist_matrix(pts):
     Returns: the distance matrix as 2d ndarray, e.g.
         array( [ [ 0.,  5.],
                  [ 5.,  0.] ] )
-    """
-    """
+
     Implementation Details:
     Uses two auxiliary matrixes to easily calculate the distance from
     each point to every other point in the list using this approach:
@@ -400,16 +399,16 @@ def tesselate(pl1, pl2, dist):
     return (edges, triangles, vertices)
 
 
-def tri_area(p1, p2, p3):
+def tri_area(point1, point2, point3):
     """Calculate the area of a triangle given by coordinates.
 
     Uses the property of the cross product of two vectors resulting in
     a vector that (euclidean) norm equals the area of the parallelogram
     defined by the two vectors (and so is double the triangle area)
     """
-    v1 = p2 - p1
-    v2 = p2 - p3
-    return 0.5 * linalg.norm(cross(v1, v2))
+    vec1 = point2 - point1
+    vec2 = point2 - point3
+    return 0.5 * linalg.norm(cross(vec1, vec2))
 
 
 def angle(v1u, v2u, normalize=False):
@@ -460,7 +459,7 @@ def angle(v1u, v2u, normalize=False):
     return rad * (180 / np.pi)
 
 
-def angle2D(v1, v2):
+def angle2D(vec1, vec2):
     """Calculate the relative angle between vectors in 2D.
     .
     Calculates the relative angle in degrees between two 2-dimensional vectors
@@ -469,7 +468,7 @@ def angle2D(v1, v2):
     .
     Parameters
     ----------
-    v1, v2 : np.ndarray
+    vec1, vec2 : np.ndarray
         The vectors to compare.
     .
     Returns
@@ -487,10 +486,10 @@ def angle2D(v1, v2):
     >>> angle2D(x[0], x[1])
     101.371474641
     """
-    if (v1.shape != (2,) or v2.shape != (2,)):
+    if (vec1.shape != (2,) or vec2.shape != (2,)):
         raise TypeError('Can handle only 2-D vectors!')
-    x_coords = np.array([v1[0], v2[0]])
-    y_coords = np.array([v1[1], v2[1]])
+    x_coords = np.array([vec1[0], vec2[0]])
+    y_coords = np.array([vec1[1], vec2[1]])
     # arctan2() gives the angles between (1,0) and the vector defined by the
     # coordinates, and it takes Y coords first, then X...
     angles = np.arctan2(y_coords, x_coords)
@@ -682,37 +681,37 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from numpy import asarray, linalg
 
 
-def plot3d_scatter(plot, points, color, lw=1):
+def plot3d_scatter(plot, points, color, linewidth=1):
     """Do a 3D scatter plot with the given points."""
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(points[0], points[1]))
-    plot.scatter(x, y, z, zdir='z', c=color, linewidth=lw)
+    plot.scatter(x, y, z, zdir='z', c=color, linewidth=linewidth)
 
 
-def plot3d_line(plot, points, color, lw=1):
+def plot3d_line(plot, points, color, linewidth=1):
     """Plot a line in 3D from the given points."""
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = asarray(zip(points[0], points[1]))
-    plot.plot(x, y, z, zdir='z', c=color)
+    plot.plot(x, y, z, zdir='z', c=color, linewidth=linewidth)
 
 
-def plot3d_maxdist(ax, maxdist_points):
+def plot3d_maxdist(axes, maxdist_points):
     """Plot and label the points with maximum distance."""
-    plot3d_scatter(ax, maxdist_points, 'r', lw=18)
+    plot3d_scatter(axes, maxdist_points, 'r', linewidth=18)
     for i in (0, 1):
-        ax.text(*maxdist_points[i], color='blue',
+        axes.text(*maxdist_points[i], color='blue',
             s='   (%s | %s | %s)' % (maxdist_points[i][0],
             maxdist_points[i][1], maxdist_points[i][2]))
     # draw connection line between points:
-    plot3d_line(ax, maxdist_points, 'y')
+    plot3d_line(axes, maxdist_points, 'y')
     # calculate length and add label:
     pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
     dist = linalg.norm(maxdist_points[0] - maxdist_points[1])
-    ax.text(*pos, color='blue', s='%.2f' % dist)
+    axes.text(pos[0], pos[1], pos[2], color='blue', s='%.2f' % dist)
 
 
 def plot3d_junction(points3d_object, show, export):
