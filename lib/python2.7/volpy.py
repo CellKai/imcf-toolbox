@@ -2,8 +2,8 @@
 
 """Discrete volumetric data tools.
 
-Provides distance, area, mesh-related calculations on spots
-in three dimensional space.
+Provides distance, area, mesh-related calculations on spots in three
+dimensional space.
 """
 
 from log import log
@@ -19,7 +19,6 @@ from aux import filename
 # - make a real package from this and split into submodules
 # - extend the Filament class to be able to return the masks of the individual
 #   filaments, access to start and end points, etc.
-# - consolidate docstrings format
 # - sanity/type checks
 
 __all__ = [
@@ -41,11 +40,6 @@ __all__ = [
 ]
 
 ppr = pprint.PrettyPrinter(indent=4)
-
-# def dist(p1, p2) ### REMOVED ###
-# if there is really a shortcut required for calculating the norm, this can
-# easily be done via a lambda function:
-# d = lambda p1, p2: linalg.norm(p1 - p2)
 
 
 def dist_matrix(pts):
@@ -105,11 +99,15 @@ def dist_matrix(pts):
 def get_max_dist_pair(matrix):
     """Determine points with largest distance using a distance matrix.
 
-    Args:
-        matrix: euclidean distance matrix
+    Parameters
+    ----------
+    matrix : EDM
+        The euclidean distance matrix.
 
-    Returns:
-        (i1, i2): tuple of index numbers of the largest distance pair.
+    Returns
+    -------
+    (i1, i2) : tuple(int)
+        The tuple of index numbers of the largest distance pair.
     """
     # TODO: this can be done with argmax()
     maxdist = 0
@@ -124,20 +122,26 @@ def get_max_dist_pair(matrix):
 
 
 def find_neighbor(pid, dist_mat, mask):
-    """Finds the closest neighbor in a given distance matrix.
+    """Find the closest neighbor in a given distance matrix.
 
-    Takes a reference point and looks up the closest neighbor in a
-    masked distance matrix. The mask can be used to exclude selected
-    points in the calculation, for example when they have already been
-    processed earlier. Otherwise use a 0-mask.
+    Take a reference point and look up the closest neighbor in a masked
+    distance matrix. The mask can be used to exclude selected points in the
+    calculation, for example when they have already been processed earlier.
+    Otherwise use a 0-mask.
 
-    Args:
-        pid: the index of the reference point
-        dist_mat: the euclidean distance matrix of all points
-        mask: binary array to use as a mask
+    Parameters
+    ----------
+    pid : int
+        The index of the reference point.
+    dist_mat : EDM
+        The euclidean distance matrix of all points.
+    mask : list
+        The binary list to use as a mask.
 
-    Returns:
-        closest: index of the closest neighbor
+    Returns
+    -------
+    closest : int
+        The index of the closest neighbor.
     """
     masked_dists = np.ma.array(dist_mat[pid], mask=mask)
     closest = masked_dists.argmin()
@@ -145,22 +149,31 @@ def find_neighbor(pid, dist_mat, mask):
 
 
 def path_greedy(dist_mat, mask_ref, pair):
-    """Uses greedy search to find a path between a pair of points.
+    """Use greedy search to find a path between a pair of points.
 
-    Takes a euclidean distance matrix, a mask and a tuple denoting the start
-    and stop index, calculates a path from first to last using the greedy
-    approach by always taking the closest element next that has not yet been
-    processed. Processed points will be disabled in the mask.
+    Take a euclidean distance matrix, a mask and a tuple denoting the start and
+    stop index, calculate a path from first to last using the greedy approach
+    by always taking the closest element next that has not yet been processed.
+    Processed points will be disabled in the mask.
 
-    Args:
-        dist_mat: the euclidean distance matrix of all points
-        mask_ref: array mask (a binary list) or 'None'
-        pair: tuple of index numbers for dist_mat
+    Parameters
+    ----------
+        dist_mat : EDM
+            The euclidean distance matrix of all points.
+        mask_ref : list
+            The array mask (a binary list) or 'None'.
+        pair : tuple(int)
+            The pair of index numbers denoting start and stop.
 
-    Returns: (sequence, mask)
-        sequence: list of indices denoting the greedy path
-        mask: the mask of the above sequence
-        plen: the overall length of the path
+    Returns
+    -------
+    (sequence, mask, plen)
+        sequence : list
+            The list of indices denoting the greedy path.
+        mask : list
+            The mask of the above sequence.
+        plen : int
+            The overall length of the path.
     """
     sequence = []
     plen = 0
@@ -194,7 +207,7 @@ def path_greedy(dist_mat, mask_ref, pair):
 
 
 def cut_extrema(lst):
-    """Returns the first & last element and the rest of a list (copied)."""
+    """Return the first & last element and the rest of a list (copied)."""
     # initialize
     first = []
     last = []
@@ -208,17 +221,21 @@ def cut_extrema(lst):
 
 
 def sort_neighbors(dist_mat):
-    """Sorts a list of indices to minimize the distance between elements.
+    """Sort a list of indices to minimize the distance between elements.
 
-    Takes a euclidean distance matrix and iteratively builds a list of
-    indices where each point is followed by its closest neighbor, starting at
-    point 0 of the distance matrix.
+    Take an EDM and iteratively build a list of indices where each point is
+    followed by its closest neighbor, starting at point 0 of the distance
+    matrix.
 
-    Args:
-        dist_mat: the euclidean distance matrix of all points
+    Parameters
+    ----------
+    dist_mat : EDM
+        The euclidean distance matrix of all points.
 
-    Returns:
-        adjacents: list of indices in sorted order
+    Returns
+    -------
+    adjacents : list
+        The list of indices in sorted order.
     """
     adjacents = []
 
@@ -240,24 +257,27 @@ def sort_neighbors(dist_mat):
 
 
 def build_filament_mask(adjacent, delimiters):
-    """Calculates filament masks for distance matrix and adjacency lists.
+    """Calculate filament masks for distance matrix and adjacency lists.
 
-    Takes an ordered list of indices (adjacency list) and a tuple of
-    delimiters marking the first and the last index of the adjacency
-    list that belongs to this filament.
+    Take an ordered list of indices (adjacency list) and a tuple of delimiters
+    marking the first and the last index of the adjacency list that belongs to
+    this filament.
 
-    Calculates two arrays masking the entries that don't belong to the
-    filament denoted this way, the first mask uses the numbers given
-    in the adjacency list (to be used with the distance matrix), the
-    second mask uses the index positions of the list (for usage with
-    the adjacency list itself).
+    Calculate two arrays masking the entries that don't belong to the filament
+    denoted this way, the first mask uses the numbers given in the adjacency
+    list (to be used with the distance matrix), the second mask uses the index
+    positions of the list (for usage with the adjacency list itself).
 
-    Args:
-        adjacent: adjacency list of the filament
-        delimiters: index numbers of first and last filament entry
+    Parameters
+    ----------
+    adjacent : list
+        The adjacency list of the filament.
+    delimiters : tuple(int)
+        The index numbers of first and last filament entry.
 
-    Returns:
-        (dist_mat_mask, adjacent_mask): tuple of masks
+    Returns
+    -------
+    (dist_mat_mask, adjacent_mask) : tuple of masks
     """
     mask = [True] * len(adjacent)
     mask_adj = [True] * len(adjacent)
@@ -288,13 +308,13 @@ def build_filament_mask(adjacent, delimiters):
 def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
 
-    Takes a sequence (list) and returns a list of 2-tuples where
-    each tuple consists of the previous list entry and the current one,
-    starting with the entry (last, 1st), then (1st, 2nd) and so on.
+    Take a sequence (list) and return a list of 2-tuples where each tuple
+    consists of the previous list entry and the current one, starting with the
+    entry (last, 1st), then (1st, 2nd) and so on.
 
-    The optional parameter "cyclic" states whether the sequnce should
-    by cyclic or acyclic, meaning the last and the first element will
-    be connected or not.
+    The optional parameter "cyclic" states whether the sequnce should by cyclic
+    or acyclic, meaning the last and the first element will be connected or
+    not.
 
     Parameters
     ----------
@@ -328,10 +348,10 @@ def build_tuple_seq(sequence, cyclic=False):
 
 
 def gen_mask(pointlist, masklength):
-    """Generates a binary mask given by a list of indices.
+    """Generate a binary mask given by a list of indices. 
 
-    Takes a list of indices and a length parameter, generates a mask with
-    that given length, masking the indices in the given list.
+    Take a list of indices and a length parameter, generate a mask with that
+    given length, masking the indices in the given list.
 
     Parameters
     ----------
@@ -367,21 +387,26 @@ def vappend(lst, val, desc="list"):
 
 
 def tesselate(pl1, pl2, dist):
-    """Calculates a polygonal partition of a surface in space.
+    """Calculate a polygonal partition of a surface in space.
 
-    Takes a distance matrix and two lists of indices (describing sequences
-    of points, e.g. filament-like structures) that can be thought of the
-    border or rim of an object in space. The two index-lists are required to
-    have the same start and end point. The function calculates a partition
-    of this object into triangles (tesselation), trying to minimize the
-    overall area of all triangles.
+    Take a distance matrix and two lists of indices (describing sequences of
+    points, e.g. filament-like structures) that can be thought of the border or
+    rim of an object in space. The two index-lists are required to have the
+    same start and end point. The function calculates a partition of this
+    object into triangles (tesselation), trying to minimize the overall area of
+    all triangles.
 
-    Args:
-        pl1, pl2: pointlists (ids of points)
-        dist: euclidean distance matrix
+    Parameters
+    ----------
+    pl1, pl2 : lists
+        The pointlists (index numbers).
+    dist : EDM
+        The euclidean distance matrix.
 
-    Returns:
-        edges: list of tuples with index numbers denoting the edges
+    Returns
+    -------
+    edges : list(tuple)
+        The list of pairs of index numbers denoting the edges.
     """
 
     # remove first and last items and get copies of the remaining pointlists
@@ -439,9 +464,9 @@ def tesselate(pl1, pl2, dist):
 def tri_area(point1, point2, point3):
     """Calculate the area of a triangle given by coordinates.
 
-    Uses the property of the cross product of two vectors resulting in
-    a vector that (euclidean) norm equals the area of the parallelogram
-    defined by the two vectors (and so is double the triangle area)
+    Uses the property of the cross product of two vectors resulting in a vector
+    that (euclidean) norm equals the area of the parallelogram defined by the
+    two vectors (and so is double the triangle area)
 
     Parameters
     ----------
