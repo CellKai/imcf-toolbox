@@ -501,12 +501,15 @@ def angle_2d(vec1, vec2):
     # arctan2() gives the angles between (1,0) and the vector defined by the
     # coordinates, and it takes Y coords first, then X...
     angles = np.arctan2(y_coords, x_coords)
-    log.debug(math.degrees(angles[0]))
-    log.debug(math.degrees(angles[1]))
     delta = math.degrees(angles[1] - angles[0])
     # we need to compensate a possible "overflow" manually:
-    if (abs(delta) > 180):
+    if delta < -180:
+        log.debug('delta below -180')
         delta = 360 - abs(delta)
+    if delta > 180:
+        log.debug('delta above 180')
+        delta = -360 + abs(delta)
+    log.debug('angle_2d(%s, %s): %f' % (vec1, vec2, delta))
     return delta
 
 
