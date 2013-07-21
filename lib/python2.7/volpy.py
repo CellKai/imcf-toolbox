@@ -709,6 +709,12 @@ def plot3d_maxdist(axes, maxdist_points):
     axes : mpl_toolkits.mplot3d.Axes3D
     maxdist_points : tuple of np.ndarray (shape = (3,))
 
+    Returns
+    -------
+    (pos, dist)
+    pos : np.array
+    dist : float
+
     Example
     -------
     >>> fig = plt.figure()
@@ -740,13 +746,25 @@ def plot3d_label_axes(axes, labels):
 
 
 def plot3d_set_minmax(axes, points3d_object):
-    """Determine min and max coordinates and set limits."""
+    """Determine min and max coordinates and set limits.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    points3d_object : Points3D
+
+    Returns
+    -------
+    (cmin, cmax)
+    cmin, cmax : np.array (shape = (3,))
+    """
     data = points3d_object.get_coords()
     cmin = data.min(axis=0)
     cmax = data.max(axis=0)
     axes.set_xlim3d(cmin[0], cmax[0])
     axes.set_ylim3d(cmin[1], cmax[1])
     axes.set_zlim3d(cmin[2], cmax[2])
+    return cmin, cmax
 
 
 def plot3d_filaments(axes, points3d_object):
