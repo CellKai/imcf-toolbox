@@ -959,6 +959,6 @@ def plot3d_show():
 
 
 if __name__ == "__main__":
-    print('Running doctest on this module...')
+    print('Running doctest on file "%s".' % __file__)
     import doctest
     doctest.testmod()
