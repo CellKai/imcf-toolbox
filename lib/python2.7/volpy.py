@@ -308,6 +308,23 @@ def gen_mask(pointlist, masklength):
 
     Takes a list of indices and a length parameter, generates a mask with
     that given length, masking the indices in the given list.
+
+    Parameters
+    ----------
+    pointlist : list(int)
+        The list of indices that should be masked.
+    masklength : int
+        The length of the mask to produce.
+
+    Returns
+    -------
+    mask : list([0,1])
+        The mask with the desired indices masked.
+
+    Example
+    -------
+    >>> gen_mask([1,3,4,7,8], 11)
+    [0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0]
     """
     mask = [0] * masklength
     for point in pointlist:
