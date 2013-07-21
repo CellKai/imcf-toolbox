@@ -401,6 +401,25 @@ def tri_area(point1, point2, point3):
     Uses the property of the cross product of two vectors resulting in
     a vector that (euclidean) norm equals the area of the parallelogram
     defined by the two vectors (and so is double the triangle area)
+
+    Parameters
+    ----------
+    point1, point2, point3 : np.array
+        The vectors of the triangle's vertices.
+
+    Returns
+    -------
+    area : float
+        The area of the triangle in square units.
+
+    Example
+    -------
+    >>> import numpy as np
+    >>> tri_area(np.array([3,0,0]), np.array([0,4,0]), np.array([0,0,0]))
+    6.0
+    >>> tri_area(np.array([95.6, 66.8, 17.8]), np.array([83.8, 75.3, 28.9]),
+    ...     np.array([75.6, 46.1, 13.4]))
+    266.29388412992131
     """
     vec1 = point2 - point1
     vec2 = point2 - point3
