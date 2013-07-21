@@ -51,35 +51,44 @@ ppr = pprint.PrettyPrinter(indent=4)
 def dist_matrix(pts):
     """Calculate the euclidean distance matrix (EDM) for a set of points.
 
-    Args:
-        pts: a two-dimensional numpy.ndarray, e.g.
-             pts = array([-1.0399, -0.594 , -0.54  ])
-             or a list of n-dimensional coordinates, e.g.
-             pts = [ [1, 2], [4, 6] ]
+    Parameters
+    ----------
+    pts : np.ndarray (shape = (2,))
 
-    Returns: the distance matrix as 2d ndarray, e.g.
-        array( [ [ 0.,  5.],
-                 [ 5.,  0.] ] )
+    Returns
+    -------
+    dist_mat : np.ndarray
+        The distance matrix as 2d ndarray.
 
-    Implementation Details:
-    Uses two auxiliary matrixes to easily calculate the distance from
-    each point to every other point in the list using this approach:
+    Implementation Details
+    ----------------------
+    Uses two auxiliary matrixes to easily calculate the distance from each
+    point to every other point in the list using this approach:
     (1) aux matrixes:
-    repmat(l, n1, n2): l is repeated n1 times, along axis 1, and n2
-        times along axis 2, so repmat(pts, len(pts), 1) =
+    repmat(l, n1, n2): l is repeated n1 times, along axis 1, and n2 times along
+    axis 2, so repmat(pts, len(pts), 1) =
         array( [ [1, 2], [4, 6], [1, 2], [4, 6] ] )
-    repeat(l, n, a): each element of l is repeated n times along axis a
-        (w/o 'a' a plain list is generated), so repeat(pts, 2, 1) =
+    repeat(l, n, a): each element of l is repeated n times along axis a (w/o
+    'a' a plain list is generated), so repeat(pts, 2, 1) =
         array( [ [1, 2], [1, 2], [4, 6], [4, 6] ] )
     (2) Pythagoras:
-    Then, the element-wise difference of the generated matrixes is
-        calculated each value is squared:
+    Then, the element-wise difference of the generated matrixes is calculated
+    each value is squared:
         array( [ [ 0,  0], [ 9, 16], [ 9, 16], [ 0,  0] ] )
     These squares are then summed up (linewise) using sum(..., axis=1):
         array([ 0, 25, 25,  0])
     Finally the square root is taken for each element:
         array([ 0.,  5.,  5.,  0.])
     To transform the list into a distance matrix reshape() is used.
+
+    Example
+    -------
+    >>> dist_matrix([ [1, 2], [4, 6] ])
+    array([[ 0.,  5.],
+           [ 5.,  0.]])
+    >>> dist_matrix(np.array([[-1.4, -0.6, 0.54], [-3.7, 1.4, 5.4]]))
+    array([[ 0.        ,  5.73668894],
+           [ 5.73668894,  0.        ]])
     """
     dist_mat = scipy.sqrt(
         matlib.sum(
