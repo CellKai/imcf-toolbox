@@ -286,9 +286,24 @@ def build_tuple_seq(sequence, cyclic=False):
     The optional parameter "cyclic" states whether the sequnce should
     by cyclic or acyclic, meaning the last and the first element will
     be connected or not.
+
+    Parameters
+    ----------
+    sequence : list
+        A sequence of index numbers.
+    cyclic : bool
+
+    Returns
+    -------
+    tuples : list of tuples
+
+    Example
+    -------
+    >>> build_tuple_seq([1,3,4,7,8])
+    [(1, 3), (3, 4), (4, 7), (7, 8)]
+    >>> build_tuple_seq([1,3,4,7,8], cyclic=True)
+    [(8, 1), (1, 3), (3, 4), (4, 7), (7, 8)]
     """
-    # TODO: check if this could be done using a clever lambda function
-    # print sequence
     tuples = []
     for i, elt in enumerate(sequence):
         if i == 0:
