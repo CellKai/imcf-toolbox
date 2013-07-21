@@ -481,12 +481,18 @@ def angle_2d(vec1, vec2):
     Example
     -------
     >>> import numpy as np
-    >>> x = np.array([[1,1],[1,-1]])
-    >>> angle_2d(x[0], x[1])
+    >>> angle_2d(np.array([1,0]), np.array([1,0]))
+    0.0
+    >>> angle_2d(np.array([1,0]), np.array([0,1]))
+    90.0
+    >>> angle_2d(np.array([1,1]), np.array([1,-1]))
     -90.0
-    >>> x = np.array([[-3,-0.1],[1.,6.]])
-    >>> angle_2d(x[0], x[1])
-    101.37147464102202
+    >>> angle_2d(np.array([3,0.6]), np.array([-3,-0.0]))
+    168.69006752597977
+    >>> angle_2d(np.array([-3,-0.1]), np.array([1,6]))
+    -101.37147464102202
+    >>> angle_2d(np.array([1,0]), np.array([-1,0]))
+    180.0
     """
     if (vec1.shape != (2,) or vec2.shape != (2,)):
         raise TypeError('Can handle only 2-D vectors!')
