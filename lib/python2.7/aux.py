@@ -28,7 +28,7 @@ def _is_string_like(obj):
     return True
 
 
-def check_filehandle(filename, mode):
+def check_filehandle(fname, mode):
     """Make sure a variable is either a filehandle or create one from it.
 
     This function takes a variable and checks whether it is already a
@@ -39,7 +39,7 @@ def check_filehandle(filename, mode):
 
     Parameters
     ----------
-    filename : str or filehandle
+    fname : str or filehandle
     mode : str
         The desired mode of the filehandle.
 
@@ -48,21 +48,21 @@ def check_filehandle(filename, mode):
     A valid (open) filehandle with the given mode. Raises an IOError
     otherwise.
     """
-    log.debug(type(filename))
-    if (type(filename).__name__ == 'str'):
+    log.debug(type(fname))
+    if (type(fname).__name__ == 'str'):
         try:
-            return open(filename, mode)
+            return open(fname, mode)
         except IOError as err:
             message = "can't open '%s': %s"
-            raise SystemExit(message % (filename, err))
-    elif (type(filename).__name__ == 'file'):
-        if (filename.mode != mode):
+            raise SystemExit(message % (fname, err))
+    elif (type(fname).__name__ == 'file'):
+        if (fname.mode != mode):
             message = "mode mismatch: %s != %s"
-            raise IOError(message % (filename.mode, mode))
-        return filename
+            raise IOError(message % (fname.mode, mode))
+        return fname
     else:
         message = "unknown data type (expected string or filehandle): %s"
-        raise SystemExit(message % type(filename))
+        raise SystemExit(message % type(fname))
 
 
 def filename(name):
