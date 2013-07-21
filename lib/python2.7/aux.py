@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+"""Module providing various helper functions."""
+
 from log import log
 
 
