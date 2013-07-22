@@ -78,6 +78,13 @@ def filename(name):
     Returns
     -------
     name : str
+
+    Example
+    -------
+    >>> filename('test_file_name')
+    'test_file_name'
+    >>> filename(open('/dev/null', 'w'))
+    '/dev/null'
     """
     if isinstance(name, file):
         return name.name
