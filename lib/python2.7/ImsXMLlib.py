@@ -77,11 +77,14 @@ class ImarisXML(object):
         pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % \
             (self.namespace, self.namespace, pattern)
         # we ignore broken files that contain multiple worksheets having
-        # identical names and just return the first one (should be safe):
-        worksheet = self.tree.findall(pattern)[0]
-        # TODO: error handling (worksheet not found, ...)!!!
+        # identical names and just return the first one (blame the creator for
+        # such stupid files):
+        try:
+            worksheet = self.tree.findall(pattern)[0]
+        except IndexError:
+            return False
         log.info("Found worksheet: %s" % worksheet)
-        return(worksheet)
+        return worksheet
 
     def _parse_cells(self, ws):
         """Parse the cell-contents of a worksheet into a 2D array.
