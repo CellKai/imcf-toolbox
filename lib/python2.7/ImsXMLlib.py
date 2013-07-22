@@ -28,14 +28,14 @@ class ImarisXML(object):
     True
     """
 
-    def __init__(self, xmlfile, ns=''):
+    def __init__(self, xmlfile, namespace=''):
         """Create a new Imaris-XML object from a file.
 
         Parameters
         ----------
         xmlfile : file or str
             A filehandle or string for the XML file to parse.
-        ns : string, optional
+        namespace : string, optional
             A string denoting the namespace expected in the XML file,
             defaults to the one used by MS Excel in its XML format.
         """
@@ -43,8 +43,8 @@ class ImarisXML(object):
         self.cells = {}
         # by default, we expect the namespace of Excel XML:
         self.namespace = 'urn:schemas-microsoft-com:office:spreadsheet'
-        if ns:
-            self.namespace = ns
+        if namespace:
+            self.namespace = namespace
         log.info("Parsing XML file: %s" % filename(xmlfile))
         self.tree = etree.parse(xmlfile)
         log.info("Done parsing XML: %s" % self.tree)
@@ -88,18 +88,18 @@ class ImarisXML(object):
         log.info("Found worksheet: %s" % worksheet)
         return worksheet
 
-    def _parse_cells(self, ws):
+    def _parse_cells(self, ws_name):
         """Parse the cell-contents of a worksheet into a 2D array.
 
-        After parsing the contents, they are added to the global
-        map 'cells' using the worksheet name as the key.
+        After parsing the contents, they are added to the global map 'cells'
+        using the worksheet name as the key.
 
         Parameters
         ----------
-        ws : string
+        ws_name : string
             The name of the worksheet to process.
         """
-        rows = self._worksheet(ws).findall('.//{%s}Row' % self.namespace)
+        rows = self._worksheet(ws_name).findall('.//{%s}Row' % self.namespace)
         cells = []
         for row in rows:
             content = []
@@ -113,11 +113,11 @@ class ImarisXML(object):
             log.debug('length of row: %i' % len(row))
             log.debug(content)
             cells.append(content)
-        self.cells[ws] = cells
+        self.cells[ws_name] = cells
         log.debug("--- cells ---\n%s\n--- cells ---" % self.cells)
         log.info("Parsed rows: %i" % len(self.cells))
 
-    def celldata(self, ws):
+    def celldata(self, ws_name):
         """Provide access to the cell contents.
 
         Automatically calls the parser if the selected worksheet
@@ -125,7 +125,7 @@ class ImarisXML(object):
 
         Parameters
         ----------
-        ws : string
+        ws_name : string
             The name of the desired worksheet.
 
         Returns
@@ -137,16 +137,16 @@ class ImarisXML(object):
               [r3c1, r3c2, r3c3, ...],
               ...                      ]
         """
-        if not ws in self.cells:
-            self._parse_cells(ws)
-        return(self.cells[ws])
+        if not ws_name in self.cells:
+            self._parse_cells(ws_name)
+        return(self.cells[ws_name])
 
-    def coordinates(self, ws):
+    def coordinates(self, ws_name):
         """Extract coordinates and ID's from a list of worksheet-cells.
 
         Parameters
         ----------
-        ws : string
+        ws_name : string
             The name of the worksheet to process.
 
         Returns
@@ -158,15 +158,15 @@ class ImarisXML(object):
         # TODO: use a numpy ndarray for the return structure
         coords = []
         # make sure the cells were already parsed:
-        if not ws in self.cells:
-            self._parse_cells(ws)
+        if not ws_name in self.cells:
+            self._parse_cells(ws_name)
         # extract positions and ID:
-        for cell in self.cells[ws]:
-            id = int(cell[7])
+        for cell in self.cells[ws_name]:
+            idx = int(cell[7])
             x = float(cell[0])
             y = float(cell[1])
             z = float(cell[2])
-            coords.insert(id, (x, y, z))
+            coords.insert(idx, (x, y, z))
         log.debug("Parsed coordinates: %i" % len(coords))
         return(coords)
 
