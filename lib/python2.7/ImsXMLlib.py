@@ -23,8 +23,9 @@ class ImarisXML(object):
     >>> if xmldata._worksheet('Position') is not None:
     ...     True
     True
-    >>> xmldata._worksheet('NonExistingWorksheet')
-    False
+    >>> if xmldata._worksheet('NonExistingWorksheet') is None:
+    ...     True
+    True
     """
 
     def __init__(self, xmlfile, ns=''):
@@ -83,7 +84,7 @@ class ImarisXML(object):
         try:
             worksheet = self.tree.findall(pattern)[0]
         except IndexError:
-            return False
+            return None
         log.info("Found worksheet: %s" % worksheet)
         return worksheet
 
