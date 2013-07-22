@@ -62,12 +62,12 @@ class ImarisXML(object):
             log.critical("Namespace parsed from XML: '%s'" % real_ns)
             raise TypeError
 
-    def _worksheet(self, pattern):
+    def _worksheet(self, ws_name):
         """Look up a certain worksheet in the Excel XML tree.
 
         Parameters
         ----------
-        pattern : string
+        ws_name : string
             The name of the desired worksheet.
 
         Returns
@@ -76,7 +76,7 @@ class ImarisXML(object):
             The XML subtree pointing to the desired worksheet.
         """
         pattern = ".//{%s}Worksheet[@{%s}Name='%s']" % \
-            (self.namespace, self.namespace, pattern)
+            (self.namespace, self.namespace, ws_name)
         # we ignore broken files that contain multiple worksheets having
         # identical names and just return the first one (blame the creator for
         # such stupid files):
