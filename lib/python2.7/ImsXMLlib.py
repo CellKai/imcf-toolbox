@@ -155,6 +155,8 @@ class ImarisXML(object):
             A list of 3-tuples (floats) using the ID as index, representing the
             coordinates in (x, y, z) order.
         """
+        # x, y, z are fine in this context, so disable this pylint message here:
+        # pylint: disable-msg=C0103
         # TODO: use a numpy ndarray for the return structure
         coords = []
         # make sure the cells were already parsed:
