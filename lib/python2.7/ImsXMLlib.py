@@ -9,10 +9,6 @@ from log import log
 from aux import filename
 
 
-class ImsXMLError(Exception):
-    pass
-
-
 class ImarisXML(object):
 
     """
@@ -51,15 +47,15 @@ class ImarisXML(object):
     def _check_namespace(self):
         """Check if an XML tree has a certain namespace.
 
-        Takes an XML etree object and a string denoting the expected
-        namespace, checks if the namespace of the XML tree matches.
-        Returns the namespace if yes, exits otherwise.
+        Take an XML etree object and a string denoting the expected namespace,
+        check if the namespace of the XML tree matches. Return the namespace if
+        yes, raise a TypeError otherwise.
         """
         real_ns = self.tree.getroot().tag[1:].split("}")[0]
         if not real_ns == self.namespace:
             log.critical("ERROR, couldn't find the expected XML namespace!")
             log.critical("Namespace parsed from XML: '%s'" % real_ns)
-            raise(ImsXMLError)
+            raise TypeError
 
     def _worksheet(self, pattern):
         """Look up a certain worksheet in the Excel XML tree.
