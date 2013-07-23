@@ -8,9 +8,9 @@ GUI for Junction statistics calculations.
 import sys
 import argparse
 import volpy as vp
-from aux_gui import select_file
 from aux import set_loglevel, check_filehandle
-from ui_generic_in_out_opt import *
+from genui import select_file
+from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 
 
 class JunctionsMainWindow(Ui_MainWindow):

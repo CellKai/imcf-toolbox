@@ -8,9 +8,9 @@ GUI for WingJ distance calculations.
 import sys
 import argparse
 from log import log
-from aux_gui import select_file
+from genui import select_file
+from genui.in4_out3_spin import Ui_MainWindow, QtCore, QtGui
 from wingj_distances import wingj_dist_to_surfaces
-from ui_generic_in4_out3_spin import *
 
 
 class WingJMainWindow(Ui_MainWindow):

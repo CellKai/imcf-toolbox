@@ -3,8 +3,9 @@
 
 import sys
 import numpy as np
-from ui_table_widget import *
 from log import log
+from genui import select_file
+from genui.table_widget import Ui_MainWindow, QtCore, QtGui
 
 
 class My_UI_Window(Ui_MainWindow):

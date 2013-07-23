@@ -7,9 +7,9 @@ GUI for statistics calculations from MTrack2 tracklists.
 
 import sys
 import argparse
-from aux_gui import select_file
+from genui import select_file
+from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 from mtrack2_stats import gen_stats
-from ui_generic_in_out_opt import *
 
 
 class MTrack2MainWindow(Ui_MainWindow):
