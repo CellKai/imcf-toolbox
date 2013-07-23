@@ -75,16 +75,15 @@ class My_UI_Window(Ui_MainWindow):
         QtCore.QObject.blockSignals(self.tableWidget, b)
 
     def set_ordering(self, idx):
-        """Select the ordering function that defines the cell sequence.
-        """
+        """Set the ordering function that defines the cell sequence."""
         self.update_cellslist = self.orderings[idx]
         self.update_cellslist()
         self.upd_celltext()
 
     def order_leftright_topbottom(self):
         """Fill the cellslist with the (row,col) tuples in the appropriate
-        order, each line from left to right (ls = linescan), from top to
-        bottom (tb)."""
+        order, each line from left to right (ls = linescan), from top to bottom
+        (tb)."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -97,8 +96,8 @@ class My_UI_Window(Ui_MainWindow):
 
     def order_leftright_bottomtop(self):
         """Fill the cellslist with the (row,col) tuples in the appropriate
-        order, each line from left to right (ls = linescan), from bottom to
-        top (bt)."""
+        order, each line from left to right (ls = linescan), from bottom to top
+        (bt)."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -135,6 +134,7 @@ class My_UI_Window(Ui_MainWindow):
         self.upd_clistmask()
 
     def order_snakeline_topleft(self):
+        """Order cells in snakeline from top left, going right."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -148,6 +148,7 @@ class My_UI_Window(Ui_MainWindow):
         self.upd_clistmask()
 
     def order_snakeline_topright(self):
+        """Order cells in snakeline from top right, going left."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -163,9 +164,9 @@ class My_UI_Window(Ui_MainWindow):
     def upd_clistmask(self):
         """Update the cellslist mask according to the checked state of cells.
 
-        Iterates over all entries in the (unmasked) cellslist, examines
-        whether the corresponding cell is checked or unchecked in the GUI
-        and sets the clist mask entries accordingly.
+        Iterate over all entries in the (unmasked) cellslist, examine whether
+        the corresponding cell is checked or unchecked in the GUI and set the
+        clist mask entries accordingly.
 
         Parameters
         ----------
@@ -191,7 +192,7 @@ class My_UI_Window(Ui_MainWindow):
     def unmasked_idx(self, row, col):
         """Get the index of a cell in the unmasked clist.
 
-        Returns the position of a cell inside the unmasked cellslist, which
+        Return the position of a cell inside the unmasked cellslist, which
         corresponds to the "real" position in that list, taking both, masked
         and unmasked cells into account. This is the position of the cell in
         the sequence defined by the selected ordering, ignoring the
@@ -212,7 +213,7 @@ class My_UI_Window(Ui_MainWindow):
     def masked_idx(self, row, col):
         """Get the index of a cell in the masked clist.
 
-        Returns the position of a cell inside the masked cellslist, which
+        Return the position of a cell inside the masked cellslist, which
         corresponds to the "virtual" position in that list, taking only the
         active (=unmasked) cells into account. This is the sequential position
         of the cell given the selected ordering and the enabled/disabled
@@ -233,8 +234,8 @@ class My_UI_Window(Ui_MainWindow):
     def gen_cell(self, row, col, text=''):
         """Create and assign a new table cell.
 
-        Creates the content widget for a cell, assigns the default state
-        (checked) and puts the item at the given place in the table.
+        Create the content widget for a cell, assign the default state
+        (checked) and put the item at the given place in the table.
 
         Parameters
         ----------
@@ -249,9 +250,9 @@ class My_UI_Window(Ui_MainWindow):
         self.tableWidget.setItem(row, col, cell)
 
     def cell_enable(self, row, col):
-        """Enables (unmasks) the cell at (row, col).
+        """Enable (unmask) the cell at (row, col).
 
-        Enables the cell at the given location by setting the corresponding
+        Enable the cell at the given location by setting the corresponding
         entry in the mask to False (i.e. "not masked").
 
         Parameters
@@ -268,9 +269,9 @@ class My_UI_Window(Ui_MainWindow):
         return self.masked_idx(row, col)
 
     def cell_disable(self, row, col):
-        """Disables (masks) the cell at (row, col).
+        """Disable (mask) the cell at (row, col).
 
-        Disables the cell at the given location by setting the corresponding
+        Disable the cell at the given location by setting the corresponding
         entry in the mask to True (i.e. "masked").
 
         Parameters
@@ -312,9 +313,9 @@ class My_UI_Window(Ui_MainWindow):
     def upd_cell(self, row, col):
         """Update a given cell according to its state.
 
-        Checks the state of the given cell and compares it with the state
-        in the clist. If they differ a cell has been changed via the GUI.
-        In this case the clist and the cell's text label needs to be updated.
+        Check the state of the given cell and compare it with the state in the
+        clist. If they differ a cell has been changed via the GUI. In this case
+        the clist and the cell's text label needs to be updated.
 
         Parameters
         ----------
@@ -361,9 +362,8 @@ class My_UI_Window(Ui_MainWindow):
     def upd_celltext(self, start=0, end=0):
         """Update the contents (index numbers) for a range of cells.
 
-        Updates the value shown in a cell (representing its position
-        in the consecutive list) for a specified range of clist index
-        numbers.
+        Update the value shown in a cell (representing its position in the
+        consecutive list) for a specified range of clist index numbers.
 
         Parameters
         ----------
