@@ -8,11 +8,10 @@ GUI for tiling order arrangement.
 import sys
 import numpy as np
 from log import log
-from genui import select_file
 from genui.table_widget import Ui_MainWindow, QtCore, QtGui
 
 
-class My_UI_Window(Ui_MainWindow):
+class TilesOrderWindow(Ui_MainWindow):
 
     """Main Window for tiles prealignement."""
 
@@ -40,10 +39,10 @@ class My_UI_Window(Ui_MainWindow):
         self.rows = 0
         self.cols = 0
 
-    def setupUi(self, MainWindow):
+    def setup_window(self, window):
         """Customize the generic UI to our specific case."""
-        super(My_UI_Window, self).setupUi(MainWindow)
-        MainWindow.setWindowTitle("Grid Aligner")
+        super(TilesOrderWindow, self).setupUi(window)
+        window.setWindowTitle("Grid Aligner")
         QtCore.QObject.connect(self.sb_h,
             QtCore.SIGNAL("valueChanged(int)"), self.set_cols)
         QtCore.QObject.connect(self.sb_v,
@@ -60,19 +59,19 @@ class My_UI_Window(Ui_MainWindow):
             QtCore.SIGNAL("cellChanged(int, int)"), self.upd_cell)
         QtCore.QObject.connect(self.cb_ordering,
             QtCore.SIGNAL("currentIndexChanged(int)"), self.set_ordering)
-        # QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        # QtCore.QMetaObject.connectSlotsByName(window)
         self.cols = self.tableWidget.columnCount()
         self.rows = self.tableWidget.rowCount()
         self.change_table_size(2, 2)
 
-    def block_table_signals(self, b):
+    def block_table_signals(self, value):
         """Blocks/unblocks signal from the table.
 
         Parameters
         ----------
-        b : bool
+        value : bool
         """
-        QtCore.QObject.blockSignals(self.tableWidget, b)
+        QtCore.QObject.blockSignals(self.tableWidget, value)
 
     def set_ordering(self, idx):
         """Set the ordering function that defines the cell sequence."""
@@ -460,11 +459,14 @@ class My_UI_Window(Ui_MainWindow):
         self.block_table_signals(False)
 
 
-if __name__ == "__main__":
-    # instantiate a QApplication object
+def main():
+    """Set up the GUI window and show it."""
     app = QtGui.QApplication(sys.argv)
-    MainWindow = QtGui.QMainWindow()
-    ui = My_UI_Window()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    main_window = QtGui.QMainWindow()
+    gui = TilesOrderWindow()
+    gui.setup_window(main_window)
+    main_window.show()
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    sys.exit(main())
