@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+GUI for tiling order arrangement.
+"""
+
 import sys
 import numpy as np
 from log import log
@@ -9,13 +13,18 @@ from genui.table_widget import Ui_MainWindow, QtCore, QtGui
 
 
 class My_UI_Window(Ui_MainWindow):
+
+    """Main Window for tiles prealignement."""
+
     def __init__(self):
-        '''The clist contains the list of cells in logical order, which
-        represent the positions in consecutive order. Values are tuples of
-        the form [row, col].
-        Note: this is just a placeholder, the list will be initialized
-        later and has the type np.ma.array (numpy masked array).
-        '''
+        """Prepare our cellslist data structure.
+
+        The clist contains the list of cells in logical order, which represent
+        the positions in consecutive order. Values are tuples of the form [row,
+        col].
+        Note: this is just a placeholder, the list will be initialized later
+        and has the type np.ma.array (numpy masked array).
+        """
         self.clist = []
         # define the list of available orderings:
         self.orderings = [
@@ -32,6 +41,7 @@ class My_UI_Window(Ui_MainWindow):
         self.cols = 0
 
     def setupUi(self, MainWindow):
+        """Customize the generic UI to our specific case."""
         super(My_UI_Window, self).setupUi(MainWindow)
         MainWindow.setWindowTitle("Grid Aligner")
         QtCore.QObject.connect(self.sb_h,
@@ -56,25 +66,25 @@ class My_UI_Window(Ui_MainWindow):
         self.change_table_size(2, 2)
 
     def block_table_signals(self, b):
-        '''Blocks/unblocks signal from the table.
-        .
+        """Blocks/unblocks signal from the table.
+
         Parameters
         ----------
         b : bool
-        '''
+        """
         QtCore.QObject.blockSignals(self.tableWidget, b)
 
     def set_ordering(self, idx):
-        '''Select the ordering function that defines the cell sequence.
-        '''
+        """Select the ordering function that defines the cell sequence.
+        """
         self.update_cellslist = self.orderings[idx]
         self.update_cellslist()
         self.upd_celltext()
 
     def order_leftright_topbottom(self):
-        '''Fill the cellslist with the (row,col) tuples in the appropriate
+        """Fill the cellslist with the (row,col) tuples in the appropriate
         order, each line from left to right (ls = linescan), from top to
-        bottom (tb).'''
+        bottom (tb)."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -86,9 +96,9 @@ class My_UI_Window(Ui_MainWindow):
         self.upd_clistmask()
 
     def order_leftright_bottomtop(self):
-        '''Fill the cellslist with the (row,col) tuples in the appropriate
+        """Fill the cellslist with the (row,col) tuples in the appropriate
         order, each line from left to right (ls = linescan), from bottom to
-        top (bt).'''
+        top (bt)."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -100,8 +110,8 @@ class My_UI_Window(Ui_MainWindow):
         self.upd_clistmask()
 
     def order_topbottom_leftright(self):
-        '''Fill the cellslist with the (row,col) tuples in the appropriate
-        order, each row from top to bottom, from left to right.'''
+        """Fill the cellslist with the (row,col) tuples in the appropriate
+        order, each row from top to bottom, from left to right."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for col in range(self.cols):
@@ -112,8 +122,8 @@ class My_UI_Window(Ui_MainWindow):
         self.upd_clistmask()
 
     def order_bottomtop_leftright(self):
-        '''Fill the cellslist with the (row,col) tuples in the appropriate
-        order, each row from bottom to top, from left to right.'''
+        """Fill the cellslist with the (row,col) tuples in the appropriate
+        order, each row from bottom to top, from left to right."""
         cells = np.zeros(shape=(self.rows * self.cols, 2), dtype=int)
         self.cellsval = np.zeros((self.rows, self.cols), dtype=int)
         for row in range(self.rows):
@@ -151,20 +161,20 @@ class My_UI_Window(Ui_MainWindow):
         self.upd_clistmask()
 
     def upd_clistmask(self):
-        '''Update the cellslist mask according to the checked state of cells.
-        .
+        """Update the cellslist mask according to the checked state of cells.
+
         Iterates over all entries in the (unmasked) cellslist, examines
         whether the corresponding cell is checked or unchecked in the GUI
         and sets the clist mask entries accordingly.
-        .
+
         Parameters
         ----------
         None
-        .
+
         Returns
         -------
         void
-        '''
+        """
         for i, (row, col) in enumerate(self.clist):
             item = self.tableWidget.item(row, col)
             try:
@@ -179,119 +189,119 @@ class My_UI_Window(Ui_MainWindow):
                 pass
 
     def unmasked_idx(self, row, col):
-        '''Get the index of a cell in the unmasked clist.
-        .
+        """Get the index of a cell in the unmasked clist.
+
         Returns the position of a cell inside the unmasked cellslist, which
         corresponds to the "real" position in that list, taking both, masked
         and unmasked cells into account. This is the position of the cell in
         the sequence defined by the selected ordering, ignoring the
         enabled/disabled states.
-        .
+
         Parameters
         ----------
         row, col : int
             The cell position from the grid perspective.
-        .
+
         Returns
         ----------
         idx : int
             The index number in the clist.
-        '''
+        """
         return self.clist.data.tolist().index([row, col])
 
     def masked_idx(self, row, col):
-        '''Get the index of a cell in the masked clist.
-        .
+        """Get the index of a cell in the masked clist.
+
         Returns the position of a cell inside the masked cellslist, which
         corresponds to the "virtual" position in that list, taking only the
         active (=unmasked) cells into account. This is the sequential position
         of the cell given the selected ordering and the enabled/disabled
         states.
-        .
+
         Parameters
         ----------
         row, col : int
             The cell position from the grid perspective.
-        .
+
         Returns
         ----------
         idx : int
             The index number in the masked clist.
-        '''
+        """
         return np.ma.compress_rows(self.clist).tolist().index([row, col])
 
     def gen_cell(self, row, col, text=''):
-        '''Create and assign a new table cell.
-        .
+        """Create and assign a new table cell.
+
         Creates the content widget for a cell, assigns the default state
         (checked) and puts the item at the given place in the table.
-        .
+
         Parameters
         ----------
         row, col : int
             The location of the new cell in the table.
         text : string
             The text to be shown in the cell.
-        '''
+        """
         log.warn('this is gen_cell(%s, %s, "%s")' % (row, col, text))
         cell = QtGui.QTableWidgetItem(text)
         cell.setCheckState(QtCore.Qt.Checked)
         self.tableWidget.setItem(row, col, cell)
 
     def cell_enable(self, row, col):
-        '''Enables (unmasks) the cell at (row, col).
-        .
+        """Enables (unmasks) the cell at (row, col).
+
         Enables the cell at the given location by setting the corresponding
         entry in the mask to False (i.e. "not masked").
-        .
+
         Parameters
         ----------
         row, col : int
             The location of the cell in the table.
-        .
+
         Returns
         ----------
         idx : int
             The index number of this cell in the masked clist.
-        '''
+        """
         self.clist.mask[self.unmasked_idx(row, col)] = False
         return self.masked_idx(row, col)
 
     def cell_disable(self, row, col):
-        '''Disables (masks) the cell at (row, col).
-        .
+        """Disables (masks) the cell at (row, col).
+
         Disables the cell at the given location by setting the corresponding
         entry in the mask to True (i.e. "masked").
-        .
+
         Parameters
         ----------
         row, col : int
             The location of the cell in the table.
-        .
+
         Returns
         ----------
         idx : int
             The index number of this cell in the masked clist *BEFORE*
             it was disabled.
-        '''
+        """
         # look up the index first, won't work once the cell is disabled:
         idx = self.masked_idx(row, col)
         self.clist.mask[self.unmasked_idx(row, col)] = True
         return idx
 
     def is_enabled(self, row, col):
-        '''Check if a given cell is enabled or disabled in the clist.
-        .
+        """Check if a given cell is enabled or disabled in the clist.
+
         Parameters
         ----------
         row, col : int
             The location of the cell in the table.
-        .
+
         Returns
         ----------
         state : bool
             The state of the cell in clist, True meaning active/unmasked.
-        '''
+        """
         try:
             # tolist() replaces masked entries by default with 'None'.
             self.clist.tolist().index([row, col])
@@ -300,22 +310,22 @@ class My_UI_Window(Ui_MainWindow):
         return True
 
     def upd_cell(self, row, col):
-        '''Update a given cell according to its state.
-        .
+        """Update a given cell according to its state.
+
         Checks the state of the given cell and compares it with the state
         in the clist. If they differ a cell has been changed via the GUI.
         In this case the clist and the cell's text label needs to be updated.
-        .
+
         Parameters
         ----------
         row, col : int
             The location of the cell in the table.
-        .
+
         Returns
         ----------
         item : QtGui.QTableWidgetItem
             The widget item (the content) of the cell, or None.
-        '''
+        """
         self.block_table_signals(True)
         log.debug('this is upd_cell(%s, %s)' % (row, col))
         if ((type(row) == np.ma.core.MaskedConstant) or
@@ -349,17 +359,17 @@ class My_UI_Window(Ui_MainWindow):
         return item
 
     def upd_celltext(self, start=0, end=0):
-        '''Update the contents (index numbers) for a range of cells.
-        .
+        """Update the contents (index numbers) for a range of cells.
+
         Updates the value shown in a cell (representing its position
         in the consecutive list) for a specified range of clist index
         numbers.
-        .
+
         Parameters
         ----------
         start, end : int, optional
             The range of clist index numbers to update.
-        '''
+        """
         self.block_table_signals(True)
         if end == 0:
             end = len(np.ma.compress_rows(self.clist))
@@ -396,7 +406,7 @@ class My_UI_Window(Ui_MainWindow):
         self.change_table_size(nrows, self.cols)
 
     def change_table_size(self, nrows, ncols):
-        '''FIXME: add function description!'''
+        """FIXME: add function description!"""
         self.block_table_signals(True)
         # make sure we have at least on row and column:
         if nrows < 1:
