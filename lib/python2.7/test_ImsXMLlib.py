@@ -1,13 +1,13 @@
 #!/usr/bin/python
 
-from ImsXMLlib import ImarisXML
+from imaris_xml import ImarisXML
 from log import log
 
 log.setLevel(20)
 
 basedir = 'TESTDATA/spots_distances/'
 infile = basedir + 'spots_red_multi_ws-all.xml'
-outfile = basedir + 'result_ImsXMLlib_sp_red_mult_all.txt'
+outfile = basedir + 'result_ImarisXML_sp_red_mult_all.txt'
 
 # test with filehandle:
 XML = ImarisXML(open(infile))

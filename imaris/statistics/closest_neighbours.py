@@ -11,7 +11,7 @@ closest distance to the one from the first file.
 import argparse
 import sys
 import csv
-from ImsXMLlib import ImarisXML
+from imaris_xml import ImarisXML
 from volpy import dist_matrix, find_neighbor
 from log import log
 from aux import set_loglevel

@@ -9,7 +9,7 @@ from log import log
 from aux import filename
 import numpy as np
 import volpy as vp
-import ImsXMLlib
+import imaris_xml as ix
 import sys
 import argparse
 
@@ -47,7 +47,7 @@ def wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, file_xml,
     log.info('Done.')
     # structure_XX.shape (N, 2)
 
-    xmldata = ImsXMLlib.ImarisXML(file_xml)
+    xmldata = ix.ImarisXML(file_xml)
     wingpoints = np.array(xmldata.coordinates('Position'))
     # we're working on a projection, so remove the third dimension/column
     wingpoints_2d = np.delete(wingpoints, 2, 1)
