@@ -21,13 +21,14 @@ from aux import set_loglevel
 def print_summary(edm, spots_c, spots_r, id_r, id_n):
     """Print summary of results.
 
-     Arguments
-     ---------
-     edm : the euclidean distance matrix
-     spots_c : the list of candidate spots
-     id_r, count_r, count_r : reference spot
-     id_n : index number of closest neighbour
-     """
+    Parameters
+    ---------
+    edm : the euclidean distance matrix
+    spots_c : coordinate list of candidate spots
+    spots_r : coordinate list of reference spots
+    pair : (int, int)
+        The index numbers of a "closest neighbours" pair.
+    """
     log.warn('\nCalculating closest neighbour.')
     log.warn('Reference: \t\t[%s]\t%s' % (id_r, spots_r[id_r]))
     log.warn('Closest neighbour: \t[%s]\t%s' % (id_n, spots_c[id_n]))
