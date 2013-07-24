@@ -13,12 +13,11 @@ import sys
 import csv
 from ImsXMLlib import ImarisXML
 from volpy import dist_matrix, find_neighbor
-from numpy import delete
 from log import log
 from aux import set_loglevel
 
 
-def print_summary(edm, spots_c, spots_r, id_r, id_n):
+def print_summary(edm, spots_c, spots_r, pair):
     """Print summary of results.
 
     Parameters
@@ -29,6 +28,8 @@ def print_summary(edm, spots_c, spots_r, id_r, id_n):
     pair : (int, int)
         The index numbers of a "closest neighbours" pair.
     """
+    id_r = pair[0]
+    id_n = pair[1]
     log.warn('\nCalculating closest neighbour.')
     log.warn('Reference: \t\t[%s]\t%s' % (id_r, spots_r[id_r]))
     log.warn('Closest neighbour: \t[%s]\t%s' % (id_n, spots_c[id_n]))
@@ -54,44 +55,81 @@ def parse_arguments():
         argparser.error(str(err))
 
 
-def closest_neighbours(in_ref, in_cnd, out_csv):
-    """Calculate the closest neighbours of given reference spots."""
-    xml_ref = ImarisXML(in_ref)
-    xml_cnd = ImarisXML(in_cnd)
-    log.warn('References file: %s' % in_ref.name)
-    log.warn('Candidates file: %s' % in_cnd.name)
+def parse_coordinates(xmlfile, desc):
+    """Read the 'Position' sheet from the Imaris XML file.
 
-    # spots_r are taken as the base to find the closest ones
-    # in the set of spots_c
-    spots_r = xml_ref.coordinates('Position')
-    spots_c = xml_cnd.coordinates('Position')
-    log.warn("Reference objects: %s" % len(spots_r))
-    log.warn("Candidate objects: %s" % len(spots_c))
+    Returns
+    -------
+    coordinates : [(x, y, z)]
+        List of 3-tuples of floats, representing the coordinates.
+    """
+    log.warn('Reading %s file: %s' % (desc, xmlfile.name))
+    imsxml = ImarisXML(xmlfile)
+    coordinates = imsxml.coordinates('Position')
+    log.warn("- %s objects: %s" % (desc, len(coordinates)))
+    return coordinates
 
-    dist_mat = dist_matrix(spots_r + spots_c)
-    dists_to_ref = dist_mat[:][0]
+
+def csv_write_distances(out_csv, edm, ref_id):
+    """Write distances from a given reference id to a CSV file.
+
+    Parameters
+    ----------
+    out_csv : filehandle
+    edm : euclidean distance matrix
+    ref_id : int
+        The index number of the reference point in the edm.
+    """
+    dists_to_ref = edm[:][ref_id]
+    # TODO: this should rather write only the distances of points from the
+    # candidate list, excluding the ones from the reference list...
     log.info("Distances to reference:\n%s" % dists_to_ref)
-    dists_to_ref = delete(dists_to_ref, 0, 0)
-    if (out_csv.name != '<stdout>'):
-        log.warn("Writing results to '%s'" % out_csv.name)
-        csvout = csv.writer(out_csv)
-        for i, line in enumerate(dists_to_ref):
-            csvout.writerow([i, line])
+    log.warn("Writing distances to '%s'..." % out_csv.name)
+    csvout = csv.writer(out_csv)
+    csvout.writerow(["Distances to reference spot %d" % ref_id])
+    for i, line in enumerate(dists_to_ref):
+        csvout.writerow([i, line])
+    log.warn("Done.")
 
+
+def closest_pairs(spots_r, spots_c):
+    """Calculate the closest neighbours of given reference spots.
+
+    Parameters
+    ----------
+    spots_r, spots_c : coordinate lists
+        The coordinates (lists of 3-tuples of floats) of objects.
+
+    Returns
+    -------
+    edm : euclidean distance matrix
+    pairs : list((int, int))
+        The list of pairs of closest neighbours (index numbers).
+    """
+    pairs = []
+    dist_mat = dist_matrix(spots_r + spots_c)
     # create a mask to ignore the reference spots
     ref_mask = [1] * len(spots_r) + [0] * len(spots_c)
     for refid in range(len(spots_r)):
         # the result of find_neighbor() must be adjusted by the length of the
         # spots_r list to retrieve the index number for the spots_c list:
         nearest = find_neighbor(refid, dist_mat, ref_mask) - len(spots_r)
-        print_summary(dist_mat, spots_c, spots_r, refid, nearest)
+        pair = (refid, nearest)
+        print_summary(dist_mat, spots_c, spots_r, pair)
+        pairs.append(pair)
+    return (dist_mat, pairs)
 
 
 def main():
     """Parse the commandline and dispatch the calculations."""
     args = parse_arguments()
     set_loglevel(args.verbosity)
-    closest_neighbours(args.reference, args.candidate, args.csv)
+    spots_r = parse_coordinates(args.reference, 'reference')
+    spots_c = parse_coordinates(args.candidate, 'candidate')
+    (edm, pairs) = closest_pairs(spots_r, spots_c)
+    if (args.csv.name != '<stdout>'):
+        for pair in pairs:
+            csv_write_distances(args.csv, edm, pair[0])
 
 if __name__ == "__main__":
     sys.exit(main())
