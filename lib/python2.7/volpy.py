@@ -398,17 +398,18 @@ def gen_mask(pointlist, masklength):
 
     Returns
     -------
-    mask : list([0,1])
-        The mask with the desired indices masked.
+    mask : ndarray(dtype=bool)
+        A boolean mask with the desired indices masked.
 
     Example
     -------
     >>> gen_mask([1,3,4,7,8], 11)
-    [0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0]
+    array([False,  True, False,  True,  True, False, False,  True,  True,
+           False, False], dtype=bool)
     """
-    mask = [0] * masklength
+    mask = np.ma.make_mask_none((masklength,))
     for point in pointlist:
-        mask[point] = 1
+        mask[point] = True
     return mask
 
 
