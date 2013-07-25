@@ -374,7 +374,7 @@ def vappend(lst, val, desc="list"):
     lst.append(val)
 
 
-def tesselate(pl1, pl2, dist):
+def tesselate(pl1, pl2, edm):
     """Calculate a polygonal partition of a surface in space.
 
     Take a distance matrix and two lists of indices (describing sequences of
@@ -388,15 +388,30 @@ def tesselate(pl1, pl2, dist):
     ----------
     pl1, pl2 : lists
         The pointlists (index numbers).
-    dist : EDM
+    edm : EDM
         The euclidean distance matrix.
 
     Returns
     -------
+    (edges, triangles, vertices)
     edges : list(tuple)
         The list of pairs of index numbers denoting the edges.
-    """
+    triangles : list(triplets)
+        The list of 3-tuples denoting the vertices of the triangles.
 
+    Example
+    -------
+    >>> edm = dist_matrix([ [0,4], [4,2], [7,3], [8,6], [5,8], [3,5] ])
+    >>> pl1 = [0, 1, 2, 3]
+    >>> pl2 = [0, 5, 4, 3]
+    >>> (edges, triangles, vertices) = tesselate(pl1, pl2, edm)
+    >>> print(edges)
+    [(1, 5), (2, 5), (2, 4)]
+    >>> print(triangles)
+    [(1, 5, 0), (2, 5, 1), (2, 4, 5), (2, 4, 3)]
+    >>> print(vertices)
+    [0, 1, 5, 2, 4, 3]
+    """
     # remove first and last items and get copies of the remaining pointlists
     (start_a, end_a, list_a) = cut_extrema(pl1)
     (start_b, end_b, list_b) = cut_extrema(pl2)
@@ -429,7 +444,7 @@ def tesselate(pl1, pl2, dist):
             out = list_a.pop(0)
         else:
             # check distances of A0-B1 and B0-A1
-            if dist[list_a[0], list_b[1]] > dist[list_b[0], list_a[1]]:
+            if edm[list_a[0], list_b[1]] > edm[list_b[0], list_a[1]]:
                 out = list_a.pop(0)
             else:
                 out = list_b.pop(0)
