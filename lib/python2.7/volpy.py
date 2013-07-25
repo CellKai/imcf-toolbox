@@ -292,55 +292,6 @@ def sort_neighbors(edm):
     return adjacents
 
 
-def build_filament_mask(adjacent, delimiters):
-    """Calculate filament masks for distance matrix and adjacency lists.
-
-    Take an ordered list of indices (adjacency list) and a tuple of delimiters
-    marking the first and the last index of the adjacency list that belongs to
-    this filament.
-
-    Calculate two arrays masking the entries that don't belong to the filament
-    denoted this way, the first mask uses the numbers given in the adjacency
-    list (to be used with the distance matrix), the second mask uses the index
-    positions of the list (for usage with the adjacency list itself).
-
-    Parameters
-    ----------
-    adjacent : list
-        The adjacency list of the filament.
-    delimiters : tuple(int)
-        The index numbers of first and last filament entry.
-
-    Returns
-    -------
-    (dist_mat_mask, adjacent_mask) : tuple of masks
-    """
-    mask = [True] * len(adjacent)
-    mask_adj = [True] * len(adjacent)
-    maskval = True
-    # required to determine which delimiter is found first:
-    found_first = False
-    # if second comes first, we need to invert the mask eventually:
-    invert = False
-    for i, point in enumerate(adjacent):
-        if point == delimiters[0]:
-            found_first = True
-            maskval = not(maskval)
-        if point == delimiters[1]:
-            maskval = not(maskval)
-            # check if we need to invert the mask:
-            if not(found_first):
-                invert = True
-        mask[point] = maskval
-        mask_adj[i] = maskval
-    if invert:
-        # print 'inverting mask.'
-        mask = [not(x) for x in mask]
-        mask_adj = [not(x) for x in mask_adj]
-    # print mask
-    return (mask, mask_adj)
-
-
 def build_tuple_seq(sequence, cyclic=False):
     """Convert a sequence into a list of 2-tuples.
 
