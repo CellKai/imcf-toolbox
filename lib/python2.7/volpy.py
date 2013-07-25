@@ -483,11 +483,11 @@ def tri_area(point1, point2, point3):
 
     Example
     -------
-    >>> import numpy as np
-    >>> tri_area(np.array([3,0,0]), np.array([0,4,0]), np.array([0,0,0]))
+    >>> from numpy import array
+    >>> tri_area(array([3,0,0]), array([0,4,0]), array([0,0,0]))
     6.0
-    >>> tri_area(np.array([95.6, 66.8, 17.8]), np.array([83.8, 75.3, 28.9]),
-    ...     np.array([75.6, 46.1, 13.4]))
+    >>> tri_area(array([95.6, 66.8, 17.8]), array([83.8, 75.3, 28.9]),
+    ...     array([75.6, 46.1, 13.4]))
     266.29388412992131
     """
     vec1 = point2 - point1
