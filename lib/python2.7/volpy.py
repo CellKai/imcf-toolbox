@@ -393,7 +393,7 @@ def tesselate(pl1, pl2, edm):
 
     Returns
     -------
-    (edges, triangles, vertices)
+    (edges, triangles)
     edges : list(tuple)
         The list of pairs of index numbers denoting the edges.
     triangles : list(triplets)
@@ -404,13 +404,11 @@ def tesselate(pl1, pl2, edm):
     >>> edm = dist_matrix([ [0,4], [4,2], [7,3], [8,6], [5,8], [3,5] ])
     >>> pl1 = [0, 1, 2, 3]
     >>> pl2 = [0, 5, 4, 3]
-    >>> (edges, triangles, vertices) = tesselate(pl1, pl2, edm)
+    >>> (edges, triangles) = tesselate(pl1, pl2, edm)
     >>> print(edges)
     [(1, 5), (2, 5), (2, 4)]
     >>> print(triangles)
     [(1, 5, 0), (2, 5, 1), (2, 4, 5), (2, 4, 3)]
-    >>> print(vertices)
-    [0, 1, 5, 2, 4, 3]
     """
     # remove first and last items and get copies of the remaining pointlists
     (start_a, end_a, list_a) = cut_extrema(pl1)
@@ -418,10 +416,8 @@ def tesselate(pl1, pl2, edm):
     if start_a != start_b or end_a != end_b:
         raise Exception('Pointlist mismatch.')
 
-    # initialize lists
     edges = []
     triangles = []
-    vertices = []
     try:
         vappend(edges, (list_a[0], list_b[0]), 'edges')
     except IndexError as err:
@@ -429,7 +425,6 @@ def tesselate(pl1, pl2, edm):
             (err, list_a, list_b))
 
     vappend(triangles, (list_a[0], list_b[0], start_a), 'triangles')
-    vappend(vertices, start_a, 'vertices')
 
     # Process pointlists A and B simultaneously and determine the distances of
     # A0-B1 and B0-A1. Remove the first element from the list where the
@@ -450,18 +445,14 @@ def tesselate(pl1, pl2, edm):
                 out = list_b.pop(0)
         vappend(edges, (list_a[0], list_b[0]), 'edges')
         vappend(triangles, (list_a[0], list_b[0], out), 'triangles')
-        vappend(vertices, out, 'vertices')
         log.debug("removed 1st element from list: %s" % out)
 
     # finally add the last triangle containing the endpoint
     vappend(triangles, (list_a[0], list_b[0], end_a), 'triangles')
-    vappend(vertices, list_a[0], 'vertices')
-    vappend(vertices, list_b[0], 'vertices')
-    vappend(vertices, end_a, 'vertices')
 
     log.info("edges from tesselation: %s" % edges)
     log.debug("triangles from tesselation: %s" % triangles)
-    return (edges, triangles, vertices)
+    return (edges, triangles)
 
 
 def tri_area(point1, point2, point3):
@@ -701,7 +692,7 @@ class CellJunction(Points3D):
         self._fil1 = GreedyPath(self, self.get_mdpair(), None)
         self._fil2 = GreedyPath(self, self.get_mdpair(), self._fil1.mask)
         self.perimeter = self._fil1.length + self._fil2.length
-        (self.edges, self.triangles, self.vertices) = \
+        (self.edges, self.triangles) = \
             tesselate(self._fil2.path, self._fil1.path, self.get_edm())
         log.warn("------------ largest distance results -------------")
         log.warn("idx numbers:\t" + ppr.pformat(self.get_mdpair()))
@@ -709,7 +700,6 @@ class CellJunction(Points3D):
         log.warn("distance:\t" + ppr.pformat(self.get_mdpair_dist()))
         log.warn("---------------------------------------------------")
         log.warn("perimeter: %s" % self.perimeter)
-        log.debug("vertices: %s" % self.vertices)
         log.debug("edges: %s" % self.edges)
 
     def get_longest_edge(self):
