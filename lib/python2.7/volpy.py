@@ -35,7 +35,7 @@ __all__ = [
     'GreedyPath',
     'CellJunction',
     # 'find_neighbor',
-    # 'gen_mask',
+    # 'make_mask_by_index',
     # 'gen_unmask',
 ]
 
@@ -334,8 +334,8 @@ def build_tuple_seq(sequence, cyclic=False):
     return tuples
 
 
-def gen_mask(pointlist, masklength):
-    """Generate a binary mask given by a list of indices.
+def make_mask_by_index(pointlist, masklength):
+    """Generate a mask from a list of index numbers.
 
     Take a list of indices and a length parameter, generate a mask with that
     given length, masking the indices in the given list.
@@ -354,7 +354,7 @@ def gen_mask(pointlist, masklength):
 
     Example
     -------
-    >>> gen_mask([1,3,4,7,8], 11)
+    >>> make_mask_by_index([1,3,4,7,8], 11)
     array([False,  True, False,  True,  True, False, False,  True,  True,
            False, False], dtype=bool)
     """
