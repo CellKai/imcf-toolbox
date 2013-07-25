@@ -100,29 +100,28 @@ def dist_matrix(pts):
     return dist_mat.reshape((len(pts), len(pts)))
 
 
-def get_max_dist_pair(matrix):
+def get_max_dist_pair(edm):
     """Determine points with largest distance using a distance matrix.
 
     Parameters
     ----------
-    matrix : EDM
-        The euclidean distance matrix.
+    edm : euclidean distance matrix
 
     Returns
     -------
     (i1, i2) : tuple(int)
         The tuple of index numbers of the largest distance pair.
+
+    Example
+    -------
+    >>> edm = dist_matrix([ [1.8, 4.1, 4.0], [2.8, 4.7, 4.5], [5.2, 4.2, 4.7],
+    ...                     [4.1, 4.5, 4.6], [3.7, 3.4, 4.5]])
+    >>> get_max_dist_pair(edm)
+    (0, 2)
     """
-    # TODO: this can be done with argmax()
-    maxdist = 0
-    pair = (-1, -1)
-    for row_num, row in enumerate(matrix):
-        row_max = max(row)
-        if row_max > maxdist:
-            maxdist = row_max
-            max_pos = matlib.where(row == row_max)[0][0]
-            pair = (row_num, max_pos)
-    return pair
+    # argmax() does the main job of finding the largest entry, unravel_index()
+    # converts the index back to the tuple usable for the 2d edm array
+    return np.unravel_index(edm.argmax(), edm.shape)
 
 
 def find_neighbor(pid, dist_mat, mask):
