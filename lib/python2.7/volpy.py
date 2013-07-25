@@ -229,7 +229,13 @@ def path_greedy(edm, mask_ref, pair):
 
 
 def cut_extrema(lst):
-    """Return the first & last element and the rest of a list (copied)."""
+    """Return the first & last element and the rest of a list (copied).
+
+    Example
+    -------
+    >>> cut_extrema([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    (1, 9, [2, 3, 4, 5, 6, 7, 8])
+    """
     # initialize
     first = []
     last = []
