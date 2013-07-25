@@ -163,7 +163,7 @@ def find_neighbor(pid, edm, mask):
     return np.ma.array(edm[pid], mask=mask).argmin()
 
 
-def path_greedy(dist_mat, mask_ref, pair):
+def path_greedy(edm, mask_ref, pair):
     """Use greedy search to find a path between a pair of points.
 
     Take a euclidean distance matrix, a mask and a tuple denoting the start and
@@ -173,7 +173,7 @@ def path_greedy(dist_mat, mask_ref, pair):
 
     Parameters
     ----------
-        dist_mat : EDM
+        edm : EDM
             The euclidean distance matrix of all points.
         mask_ref : list
             The array mask (a binary list) or 'None'.
@@ -182,20 +182,27 @@ def path_greedy(dist_mat, mask_ref, pair):
 
     Returns
     -------
-    (sequence, mask, plen)
+    (sequence, mask, pathlen)
         sequence : list
             The list of indices denoting the greedy path.
         mask : list
             The mask of the above sequence.
-        plen : int
+        pathlen : int
             The overall length of the path.
+
+    Example
+    -------
+    >>> edm = dist_matrix([ [1.8, 4.1, 4.0], [2.8, 4.7, 4.5], [5.2, 4.2, 4.7],
+    ...                     [4.1, 4.5, 4.6], [3.7, 3.4, 4.5]])
+    >>> path_greedy(edm, [0,0,1,0,0], (3,0))
+    ([3, 4, 1, 0], [1, 1, 1, 1, 1], 4.024730596576215)
     """
     sequence = []
-    plen = 0
+    pathlen = 0
 
     if mask_ref is None:
         # create an empty mask with the number of points:
-        mask = [0] * len(dist_mat[0])
+        mask = [0] * len(edm[0])
     else:
         # 'list' is a mutable type, so we explicitly copy it and return a new
         # mask at the end, to avoid silently modifying the reference
@@ -208,17 +215,17 @@ def path_greedy(dist_mat, mask_ref, pair):
     while True:
         sequence.append(cur)
         mask[cur] = 1
-        closest = find_neighbor(cur, dist_mat, mask)
-        plen += dist_mat[cur, closest]
-        log.debug('accumulated path length: %s' % plen)
+        closest = find_neighbor(cur, edm, mask)
+        pathlen += edm[cur, closest]
+        log.debug('accumulated path length: %s' % pathlen)
         if closest == pair[1]:
             sequence.append(pair[1])
             mask[closest] = 1
             break
         cur = closest
-    log.info('path length: %s' % plen)
+    log.info('path length: %s' % pathlen)
     log.info('path (%s->%s): %s' % (pair[0], pair[1], sequence))
-    return (sequence, mask, plen)
+    return (sequence, mask, pathlen)
 
 
 def cut_extrema(lst):
@@ -363,7 +370,7 @@ def build_tuple_seq(sequence, cyclic=False):
 
 
 def gen_mask(pointlist, masklength):
-    """Generate a binary mask given by a list of indices. 
+    """Generate a binary mask given by a list of indices.
 
     Take a list of indices and a length parameter, generate a mask with that
     given length, masking the indices in the given list.
