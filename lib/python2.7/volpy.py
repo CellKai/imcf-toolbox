@@ -124,7 +124,7 @@ def get_max_dist_pair(edm):
     return np.unravel_index(edm.argmax(), edm.shape)
 
 
-def find_neighbor(pid, dist_mat, mask):
+def find_neighbor(pid, edm, mask):
     """Find the closest neighbor in a given distance matrix.
 
     Take a reference point and look up the closest neighbor in a masked
@@ -136,7 +136,7 @@ def find_neighbor(pid, dist_mat, mask):
     ----------
     pid : int
         The index of the reference point.
-    dist_mat : EDM
+    edm : EDM
         The euclidean distance matrix of all points.
     mask : list
         The binary list to use as a mask.
@@ -146,9 +146,12 @@ def find_neighbor(pid, dist_mat, mask):
     closest : int
         The index of the closest neighbor.
     """
-    masked_dists = np.ma.array(dist_mat[pid], mask=mask)
-    closest = masked_dists.argmin()
-    return closest
+    # we need to make sure at least the reference point is masked, so first
+    # make sure the mask is a full array, then mask our reference id
+    if mask == 0:
+        mask = np.zeros(edm.shape[0])
+    mask[pid] = 1
+    return np.ma.array(edm[pid], mask=mask).argmin()
 
 
 def path_greedy(dist_mat, mask_ref, pair):
