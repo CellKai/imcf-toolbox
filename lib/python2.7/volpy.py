@@ -145,6 +145,15 @@ def find_neighbor(pid, edm, mask):
     -------
     closest : int
         The index of the closest neighbor.
+
+    Example
+    -------
+    >>> edm = dist_matrix([ [1.8, 4.1, 4.0], [2.8, 4.7, 4.5], [5.2, 4.2, 4.7],
+    ...                     [4.1, 4.5, 4.6], [3.7, 3.4, 4.5]])
+    >>> find_neighbor(3, edm, 0)
+    2
+    >>> find_neighbor(2, edm, [0,0,1,1,0])
+    4
     """
     # we need to make sure at least the reference point is masked, so first
     # make sure the mask is a full array, then mask our reference id
