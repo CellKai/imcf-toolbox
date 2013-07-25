@@ -384,6 +384,10 @@ def tesselate(pl1, pl2, edm):
     object into triangles (tesselation), trying to minimize the overall area of
     all triangles.
 
+    If one or both pointlists have less than 3 entries, an IndexError will be
+    raised - this case is simply not covered yet, as no real-world application
+    produced such data.
+
     Parameters
     ----------
     pl1, pl2 : lists
@@ -409,21 +413,27 @@ def tesselate(pl1, pl2, edm):
     [(1, 5), (2, 5), (2, 4)]
     >>> print(triangles)
     [(1, 5, 0), (2, 5, 1), (2, 4, 5), (2, 4, 3)]
+
+    >>> tesselate([0,1,2,5], pl2, edm)
+    Traceback (most recent call last):
+      (Traceback stack omitted)
+    IndexError: Pointlist mismatch.
+    >>> tesselate([0,3], pl2, edm)
+    Traceback (most recent call last):
+      (Traceback stack omitted)
+    IndexError: Pointlist too short.
     """
     # remove first and last items and get copies of the remaining pointlists
     (start_a, end_a, list_a) = cut_extrema(pl1)
     (start_b, end_b, list_b) = cut_extrema(pl2)
     if start_a != start_b or end_a != end_b:
-        raise Exception('Pointlist mismatch.')
+        raise IndexError('Pointlist mismatch.')
+    if len(list_a) == 0 or len(list_b) == 0:
+        raise IndexError('Pointlist too short.')
 
     edges = []
     triangles = []
-    try:
-        vappend(edges, (list_a[0], list_b[0]), 'edges')
-    except IndexError as err:
-        raise SystemExit("%s: list_a = %s -- list_b = %s" % \
-            (err, list_a, list_b))
-
+    vappend(edges, (list_a[0], list_b[0]), 'edges')
     vappend(triangles, (list_a[0], list_b[0], start_a), 'triangles')
 
     # Process pointlists A and B simultaneously and determine the distances of
@@ -446,7 +456,6 @@ def tesselate(pl1, pl2, edm):
         vappend(edges, (list_a[0], list_b[0]), 'edges')
         vappend(triangles, (list_a[0], list_b[0], out), 'triangles')
         log.debug("removed 1st element from list: %s" % out)
-
     # finally add the last triangle containing the endpoint
     vappend(triangles, (list_a[0], list_b[0], end_a), 'triangles')
 
