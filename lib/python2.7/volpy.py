@@ -248,7 +248,7 @@ def cut_extrema(lst):
     return (first, last, listcopy)
 
 
-def sort_neighbors(dist_mat):
+def sort_neighbors(edm):
     """Sort a list of indices to minimize the distance between elements.
 
     Take an EDM and iteratively build a list of indices where each point is
@@ -257,30 +257,38 @@ def sort_neighbors(dist_mat):
 
     Parameters
     ----------
-    dist_mat : EDM
+    edm : EDM
         The euclidean distance matrix of all points.
 
     Returns
     -------
     adjacents : list
         The list of indices in sorted order.
+
+    Example
+    -------
+    >>> edm = dist_matrix([ [1.8, 4.1, 4.0], [2.8, 4.7, 4.5], [5.2, 4.2, 4.7],
+    ...                     [4.1, 4.5, 4.6], [3.7, 3.4, 4.5]])
+    >>> sort_neighbors(edm)
+    [0, 1, 3, 2, 4]
     """
     adjacents = []
 
     # inital mask is 0 everywhere (no masking at all):
-    mask = [0] * len(dist_mat[0])
+    mask = [0] * edm.shape[0]
 
     # for convenience we use a set instead of a list, so we don't have
     # to care on what position the current element is
-    pointset = set(range(len(dist_mat[0])))
+    pointset = set(range(edm.shape[0]))
     cur = 0
     while len(pointset) > 0:
         adjacents.append(cur)
         pointset.remove(cur)
         mask[cur] = 1
-        closest = find_neighbor(cur, dist_mat, mask)
+        closest = find_neighbor(cur, edm, mask)
         # print str(cur) + ' - ' + str(closest)
         cur = closest
+    log.debug(adjacents)
     return adjacents
 
 
