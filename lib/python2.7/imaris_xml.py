@@ -8,7 +8,7 @@
 
 import xml.etree.ElementTree as etree
 from log import log
-from aux import filename
+from misc import filename
 
 
 class ImarisXML(object):

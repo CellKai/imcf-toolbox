@@ -20,7 +20,7 @@ import pprint
 import numpy as np
 import volpy as vp
 from log import log
-from aux import check_filehandle, filename
+from misc import check_filehandle, filename
 
 
 def parse_cell(cell):

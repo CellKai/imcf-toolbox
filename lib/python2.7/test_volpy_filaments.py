@@ -3,7 +3,7 @@
 # FIXME: this script is generating *binary* data, which is not what we wanted!
 
 from volpy import Filament
-from aux import set_loglevel
+from misc import set_loglevel
 
 basedir = 'TESTDATA/filaments/'
 infile = basedir + 'testdata-filaments-small.csv'

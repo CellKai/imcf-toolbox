@@ -12,7 +12,7 @@ import sys
 import argparse
 
 import volpy as vp
-from aux import set_loglevel
+from misc import set_loglevel
 
 
 def parse_arguments():

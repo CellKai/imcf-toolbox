@@ -14,7 +14,7 @@ import csv
 from imaris_xml import ImarisXML
 from volpy import dist_matrix, find_neighbor
 from log import log
-from aux import set_loglevel
+from misc import set_loglevel
 
 
 def print_summary(edm, spots_c, spots_r, pair):

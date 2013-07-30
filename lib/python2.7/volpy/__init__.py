@@ -13,7 +13,7 @@ import scipy
 import math
 import pprint
 import csv
-from aux import filename
+from misc import filename
 
 # TODO:
 # - extend the Filament class to be able to return the masks of the individual

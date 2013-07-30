@@ -6,7 +6,7 @@ Process results of WingJ (http://www.tschaffter.ch/) with Imaris objects
 '''
 
 from log import log
-import aux
+import misc
 import numpy as np
 import volpy as vp
 import imaris_xml as ix
@@ -59,7 +59,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     elif file_ijroi is not None:
         log.info('Reading ROI file...')
         roi_tmp = []
-        roi_reader = csv.DictReader(aux.check_filehandle(file_ijroi))
+        roi_reader = csv.DictReader(misc.check_filehandle(file_ijroi))
         for item in roi_reader:
             roi_tmp.append([item['XM'], item['YM']])
         roi_coords = np.array(roi_tmp, dtype=float)
@@ -105,11 +105,11 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     log.info('Done.')
 
     # export the results as CSV files
-    log.info('Writing "%s".' % aux.filename(files_out[0]))
+    log.info('Writing "%s".' % misc.filename(files_out[0]))
     np.savetxt(files_out[0], wp_to_ap_min, delimiter=',')
-    log.info('Writing "%s".' % aux.filename(files_out[1]))
+    log.info('Writing "%s".' % misc.filename(files_out[1]))
     np.savetxt(files_out[1], wp_to_vd_min, delimiter=',')
-    log.info('Writing "%s".' % aux.filename(files_out[2]))
+    log.info('Writing "%s".' % misc.filename(files_out[2]))
     np.savetxt(files_out[2], wp_to_cnt_min, delimiter=',')
     log.info('Finished.')
 
@@ -143,7 +143,7 @@ def main():
     except IOError as err:
         argparser.error(str(err))
 
-    aux.set_loglevel(args.verbosity)
+    misc.set_loglevel(args.verbosity)
 
     wingj_dist_to_surfaces(
         (args.ap, args.vd, args.cnt),
