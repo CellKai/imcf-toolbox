@@ -18,8 +18,8 @@ import csv
 # TODO:
 #  - too many arguments (Pylint R0913)
 #  - too many local variables (Pylint R0914)
-def wingj_dist_to_surfaces(files_wingj, files_out,
-        px_size=1.0, file_xml=None, spots=None):
+def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
+        file_imsxml=None, file_ijroi=None):
     '''Calculate distances from WingJ structures to spots in 2D.
 
     Takes the three structure files exported from WingJ containing the A-P, the
@@ -34,12 +34,10 @@ def wingj_dist_to_surfaces(files_wingj, files_out,
     files_wingj, files_out : file handles or strings
         3-tuples of file handles or strings with filenames for the WingJ
         structure files.
-    file_xml : file handle or string
-        A file handle or filename-string to the Imaris XML export.
+    file_imsxml, file_ijroi : file handle or string
+        A file handle or filename-string to an Imaris XML export.
     px_size : float, optional
         The size of one pixel to correct WingJ coordinates with.
-    file_xml : fh or string
-    spots : string
 
     Returns
     -------
@@ -53,16 +51,15 @@ def wingj_dist_to_surfaces(files_wingj, files_out,
     log.info('Done.')
     # structure_XX.shape (N, 2)
 
-    if file_xml is not None:
-        xmldata = ix.ImarisXML(file_xml)
+    if file_imsxml is not None:
+        xmldata = ix.ImarisXML(file_imsxml)
         wingpoints = np.array(xmldata.coordinates('Position'))
         # we're working on a projection, so remove the third dimension/column
         wingpoints_2d = np.delete(wingpoints, 2, 1)
-
-    elif spots is not None:
+    elif file_ijroi is not None:
         log.info('Reading ROI file...')
         roi_tmp = []
-        roi_reader = csv.DictReader(spots)
+        roi_reader = csv.DictReader(file_ijroi)
         for item in roi_reader:
             roi_tmp.append([item['XM'], item['YM']])
         roi_coords = np.array(roi_tmp, dtype=float)
@@ -70,7 +67,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out,
         log.info('Done.')
         wingpoints_2d = roi_coords
     else:
-        raise SystemExit('no reference file given!')
+        raise AttributeError('no reference file given!')
 
     # number of objects from coordinates file
     wp_nr = wingpoints_2d.shape[0]
