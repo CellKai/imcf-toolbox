@@ -1,3 +1,16 @@
+Example using ImageJ measurement export
+=======================================
+
+```shell
+python wingj_distances.py --ap TESTDATA/wingj/structure_A-P.txt --vd TESTDATA/wingj/structure_V-D.txt --cnt TESTDATA/wingj/structure_contour.txt --apout TESTDATA/wingj/results-uncalibrated/wt1-to-AP.csv --vdout TESTDATA/wingj/results-uncalibrated/wt1-to-VD.csv  --cntout TESTDATA/wingj/results-uncalibrated/wt1-to-contour.csv --ijroi TESTDATA/wingj/surfaces-coords.ij.csv
+```
+
+Example using Imaris XML export
+===============================
+
+```shell
+python wingj_distances.py --ap TESTDATA/wingj/structure_A-P.txt --vd TESTDATA/wingj/structure_V-D.txt --cnt TESTDATA/wingj/structure_contour.txt --apout TESTDATA/wingj/results-uncalibrated/wt1-to-AP.csv --vdout TESTDATA/wingj/results-uncalibrated/wt1-to-VD.csv  --cntout TESTDATA/wingj/results-uncalibrated/wt1-to-contour.csv --imsxml TESTDATA/wingj/surfaces.xml
+```
 
 Testing the GUI
 ===============
