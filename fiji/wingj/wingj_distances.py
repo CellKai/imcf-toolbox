@@ -6,7 +6,7 @@ Process results of WingJ (http://www.tschaffter.ch/) with Imaris objects
 '''
 
 from log import log
-from aux import filename
+import aux
 import numpy as np
 import volpy as vp
 import imaris_xml as ix
@@ -105,11 +105,11 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     log.info('Done.')
 
     # export the results as CSV files
-    log.info('Writing "%s".' % filename(files_out[0]))
+    log.info('Writing "%s".' % aux.filename(files_out[0]))
     np.savetxt(files_out[0], wp_to_ap_min, delimiter=',')
-    log.info('Writing "%s".' % filename(files_out[1]))
+    log.info('Writing "%s".' % aux.filename(files_out[1]))
     np.savetxt(files_out[1], wp_to_vd_min, delimiter=',')
-    log.info('Writing "%s".' % filename(files_out[2]))
+    log.info('Writing "%s".' % aux.filename(files_out[2]))
     np.savetxt(files_out[2], wp_to_cnt_min, delimiter=',')
     log.info('Finished.')
 
@@ -142,9 +142,7 @@ def main():
     except IOError as err:
         argparser.error(str(err))
 
-    # default loglevel is 30 while 20 and 10 show more details
-    loglevel = (3 - args.verbosity) * 10
-    log.setLevel(loglevel)
+    aux.set_loglevel(args.verbosity)
 
     wingj_dist_to_surfaces((args.ap, args.vd, args.cnt),
         (args.apout, args.vdout, args.cntout), args.pixelsize,
