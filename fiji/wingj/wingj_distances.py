@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-'''
+"""
 Process results of WingJ (http://www.tschaffter.ch/) with Imaris objects
 (exported from the statistics part to XML) to do distance calculations.
-'''
+"""
 
 from log import log
 import misc
@@ -44,7 +44,7 @@ def read_csv_com(fname):
 #  - too many local variables (Pylint R0914)
 def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
         file_imsxml=None, file_ijroi=None):
-    '''Calculate distances from WingJ structures to spots in 2D.
+    """Calculate distances from WingJ structures to spots in 2D.
 
     Takes the three structure files exported from WingJ containing the A-P, the
     V-D, and the contour line separation coordinates plus an XML file generated
@@ -67,7 +67,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     Returns
     -------
     Nothing, all results are written to output CSV files directly.
-    '''
+    """
 
     log.info('Reading WingJ CSV files...')
     structure_ap = np.loadtxt(files_wingj[0], delimiter='\t')
