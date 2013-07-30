@@ -59,7 +59,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     elif file_ijroi is not None:
         log.info('Reading ROI file...')
         roi_tmp = []
-        roi_reader = csv.DictReader(file_ijroi)
+        roi_reader = csv.DictReader(aux.check_filehandle(file_ijroi))
         for item in roi_reader:
             roi_tmp.append([item['XM'], item['YM']])
         roi_coords = np.array(roi_tmp, dtype=float)
