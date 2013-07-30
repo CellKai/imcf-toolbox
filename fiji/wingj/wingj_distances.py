@@ -16,7 +16,6 @@ import csv
 
 
 # TODO:
-#  - too many arguments (Pylint R0913)
 #  - too many local variables (Pylint R0914)
 def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
         file_imsxml=None, file_ijroi=None):
@@ -33,15 +32,16 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     ----------
     files_wingj, files_out : file handles or strings
         3-tuples of file handles or strings with filenames for the WingJ
-        structure files.
+        structure files resp. the corresponding output files.
     file_imsxml, file_ijroi : file handle or string
-        A file handle or filename-string to an Imaris XML export.
+        A file handle or filename-string to an Imaris XML export resp. the
+        ImageJ measurements CSV export.
     px_size : float, optional
         The size of one pixel to correct WingJ coordinates with.
 
     Returns
     -------
-    Nothing, currently results are written to CSV directly.
+    Nothing, all results are written to output CSV files directly.
     '''
 
     log.info('Reading WingJ CSV files...')
@@ -85,8 +85,8 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     # dists_XX.shape (N+M, N+M)
     log.info('Done.')
 
-    # slice desired parts from the distance matrices: just the rows for all
-    # Imaris points ([:wp_nr,:]) and the cols for the WingJ points ([:,wp_nr:])
+    # slice desired parts from distance matrices: rows for all object points
+    # ([:wp_nr,:]) and columns for the WingJ structure points ([:,wp_nr:])
     wp_to_ap = dists_ap[:wp_nr, wp_nr:]
     wp_to_vd = dists_vd[:wp_nr, wp_nr:]
     wp_to_cnt = dists_cnt[:wp_nr, wp_nr:]
