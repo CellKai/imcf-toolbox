@@ -36,7 +36,13 @@ def read_csv_com(fname):
 
 class WingJStructure(object):
 
-    """Object representing the structures segmented by WingJ."""
+    """Object representing the structures segmented by WingJ.
+
+    WingJ produces three structure files that can be exported as CSV files,
+    containing the coordinates for the A-P, the V-D, and the contour line
+    separation. This class reads those files and provides various methods to
+    operate on these structures.
+    """
 
     def __init__(self, files, calib=1.0):
         """Read the CSV files and calibrate them."""
