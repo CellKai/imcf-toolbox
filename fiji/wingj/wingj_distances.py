@@ -15,6 +15,31 @@ import argparse
 import csv
 
 
+def read_csv_com(fname):
+    """Read center-of-mass coordinates from an ImageJ CSV export.
+
+    Parameters
+    ----------
+    fname : str or filehandle
+        The CSV export from an ImageJ measurement. Needs to contain the results
+        for center-of-mass ('XM' and 'YM' columns).
+
+    Returns
+    -------
+    coords : np.array (shape=(N, 2))
+        A numpy array containing the X and Y coordinates read from the CSV.
+    """
+    log.info('Reading measurements export file...')
+    roi_tmp = []
+    roi_reader = csv.DictReader(misc.check_filehandle(fname))
+    for item in roi_reader:
+        roi_tmp.append([item['XM'], item['YM']])
+    coords = np.array(roi_tmp, dtype=float)
+    log.debug(coords)
+    log.info('Done.')
+    return coords
+
+
 # TODO:
 #  - too many local variables (Pylint R0914)
 def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
@@ -56,15 +81,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
         # we're working on a projection, so remove the third dimension/column
         wingpoints_2d = np.delete(wingpoints, 2, 1)
     elif file_ijroi is not None:
-        log.info('Reading ROI file...')
-        roi_tmp = []
-        roi_reader = csv.DictReader(misc.check_filehandle(file_ijroi))
-        for item in roi_reader:
-            roi_tmp.append([item['XM'], item['YM']])
-        roi_coords = np.array(roi_tmp, dtype=float)
-        log.debug(roi_coords)
-        log.info('Done.')
-        wingpoints_2d = roi_coords
+        coords = read_csv_com(file_ijroi)
     else:
         raise AttributeError('no reference file given!')
 
