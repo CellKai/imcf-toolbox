@@ -27,7 +27,7 @@ class WingJMainWindow(Ui_MainWindow):
         self.le_infile.setPlaceholderText(msg % 'A-P separation')
         self.le_infile_2.setPlaceholderText(msg % 'V-D separation')
         self.le_infile_3.setPlaceholderText(msg % 'contour line')
-        msg = 'Imaris XML export having a "Position" sheet.'
+        msg = 'ImageJ CSV export with "center of mass" measurements.'
         self.le_infile_4.setPlaceholderText(msg)
         self.label_3.setText("Pixel size to calibrate WingJ data")
         msg = 'Output CSV file for distances to %s line.'
@@ -79,14 +79,16 @@ class WingJMainWindow(Ui_MainWindow):
         in_ap = str(self.le_infile.text())
         in_vd = str(self.le_infile_2.text())
         in_cnt = str(self.le_infile_3.text())
-        in_xml = str(self.le_infile_4.text())
+        in_ijroi = str(self.le_infile_4.text())
         out_ap = str(self.le_outfile.text())
         out_vd = str(self.le_outfile_2.text())
         out_cnt = str(self.le_outfile_3.text())
         px_size = self.sb_double.value()
         set_loglevel(self.sl_verbosity.value())
-        wingj_dist_to_surfaces(in_ap, in_vd, in_cnt, in_xml,
-            out_ap, out_vd, out_cnt, px_size)
+        wingj_dist_to_surfaces(
+            (in_ap, in_vd, in_cnt),
+            (out_ap, out_vd, out_cnt),
+            px_size, None, in_ijroi)
 
 
 def parse_arguments():
