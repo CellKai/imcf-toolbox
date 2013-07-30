@@ -123,10 +123,11 @@ def main():
         help='WingJ structure file for the V-D separation.')
     argparser.add_argument('--cnt', required=True, type=file,
         help='WingJ structure file for the contour line.')
-    argparser.add_argument('--imsxml', required=False, type=file, default=None,
+    group = argparser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--imsxml', type=file, default=None,
         help='Imaris Excel XML export containing a "Position" sheet.')
-    argparser.add_argument('--spots', required=False, type=file, default=None,
-        help='CSV file with ImageJ measurements of ROI\'s')
+    group.add_argument('--ijroi', type=file, default=None,
+        help='ImageJ CSV export having "center of mass" measurements.')
     argparser.add_argument('--apout', type=argparse.FileType('w'),
         required=True, help='Output CSV file for distances to A-P line.')
     argparser.add_argument('--vdout', type=argparse.FileType('w'),
@@ -144,9 +145,10 @@ def main():
 
     aux.set_loglevel(args.verbosity)
 
-    wingj_dist_to_surfaces((args.ap, args.vd, args.cnt),
-        (args.apout, args.vdout, args.cntout), args.pixelsize,
-        args.imsxml, args.spots)
+    wingj_dist_to_surfaces(
+        (args.ap, args.vd, args.cnt),
+        (args.apout, args.vdout, args.cntout),
+        args.pixelsize, args.imsxml, args.ijroi)
 
 
 if __name__ == "__main__":
