@@ -11,6 +11,7 @@ closest distance to the one from the first file.
 import argparse
 import sys
 import csv
+import numpy as np
 from imaris_xml import ImarisXML
 from volpy import dist_matrix, find_neighbor
 from log import log
@@ -107,17 +108,17 @@ def closest_pairs(spots_r, spots_c):
         The list of pairs of closest neighbours (index numbers).
     """
     pairs = []
-    dist_mat = dist_matrix(spots_r + spots_c)
+    edm = dist_matrix(np.vstack([spots_r, spots_c]))
     # create a mask to ignore the reference spots
     ref_mask = [1] * len(spots_r) + [0] * len(spots_c)
     for refid in range(len(spots_r)):
         # the result of find_neighbor() must be adjusted by the length of the
         # spots_r list to retrieve the index number for the spots_c list:
-        nearest = find_neighbor(refid, dist_mat, ref_mask) - len(spots_r)
+        nearest = find_neighbor(refid, edm, ref_mask) - len(spots_r)
         pair = (refid, nearest)
-        print_summary(dist_mat, spots_c, spots_r, pair)
+        print_summary(edm, spots_c, spots_r, pair)
         pairs.append(pair)
-    return (dist_mat, pairs)
+    return (edm, pairs)
 
 
 def main():

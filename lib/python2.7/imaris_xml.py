@@ -7,6 +7,7 @@
 #  - evaluate datatypes from XML cells
 
 import xml.etree.ElementTree as etree
+import numpy as np
 from log import log
 from misc import filename
 
@@ -151,13 +152,12 @@ class ImarisXML(object):
 
         Returns
         -------
-        out : [(x,y,z)]
-            A list of 3-tuples (floats) using the ID as index, representing the
-            coordinates in (x, y, z) order.
+        out : np.ndarray
+            A numpy ndarray of shape (N,3) containing 3-tuples (floats) using
+            the ID as index, representing the coordinates in (x, y, z) order.
         """
-        # x, y, z are fine in this context, so disable this pylint message here:
+        # x,y,z are fine in this context, so disable this pylint message here:
         # pylint: disable-msg=C0103
-        # TODO: use a numpy ndarray for the return structure
         coords = []
         # make sure the cells were already parsed:
         if not ws_name in self.cells:
@@ -170,7 +170,7 @@ class ImarisXML(object):
             z = float(cell[2])
             coords.insert(idx, (x, y, z))
         log.debug("Parsed coordinates: %i" % len(coords))
-        return(coords)
+        return np.array(coords)
 
 
 if __name__ == "__main__":

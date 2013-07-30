@@ -52,8 +52,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     # structure_XX.shape (N, 2)
 
     if file_imsxml is not None:
-        xmldata = ix.ImarisXML(file_imsxml)
-        wingpoints = np.array(xmldata.coordinates('Position'))
+        wingpoints = ix.ImarisXML(file_imsxml).coordinates('Position')
         # we're working on a projection, so remove the third dimension/column
         wingpoints_2d = np.delete(wingpoints, 2, 1)
     elif file_ijroi is not None:
