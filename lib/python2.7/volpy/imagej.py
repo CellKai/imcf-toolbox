@@ -25,6 +25,9 @@ def read_csv_com(fname):
     """
     log.info('Reading measurements export file...')
     roi_tmp = []
+    # NOTE: DictReader provides a "fieldnames" option, but unfortunately the
+    # ImageJ is so lazy that not every column gets labeled, (i.e. the first
+    # one) - thus we can't use it but need to assemble the structure ourselves
     roi_reader = csv.DictReader(misc.check_filehandle(fname))
     for item in roi_reader:
         roi_tmp.append([item['XM'], item['YM']])
