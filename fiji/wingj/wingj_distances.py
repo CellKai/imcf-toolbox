@@ -40,8 +40,94 @@ def read_csv_com(fname):
     return coords
 
 
-# TODO:
-#  - too many local variables (Pylint R0914)
+class WingJStructure(object):
+
+    """Object representing the structures segmented by WingJ."""
+
+    def __init__(self, files, calib=1.0):
+        """Read the CSV files and calibrate them."""
+        log.info('Reading WingJ CSV files...')
+        self.data = {}
+        self.data['AP'] = np.loadtxt(files[0], delimiter='\t')
+        self.data['VD'] = np.loadtxt(files[1], delimiter='\t')
+        self.data['CT'] = np.loadtxt(files[2], delimiter='\t')
+        # data['XX'].shape = (M, 2)
+        # calibrate the WingJ data if requested:
+        self.data['AP'] *= calib
+        self.data['VD'] *= calib
+        self.data['CT'] *= calib
+        log.info('Done.')
+
+    def dist_to_structures(self, coords):
+        """Calculate distance of given coordinates to WingJ structure.
+
+        Parameters
+        ----------
+        coords : np.array (shape=(N, 2))
+            2D coordinates given as numpy array.
+
+        Returns
+        -------
+        distances : dict(edm)
+            A dict containing three partial EDM's, one for each structure. Each
+            of them has the shape (N, M), where N corresponds to the entries in
+            the "coords" array and M corresponds to the entries in the WingJ
+            data structures.
+        """
+        edm = {}
+        log.info('Calculating distance matrices for all objects...')
+        edm['AP'] = vp.dist_matrix(np.vstack([coords, self.data['AP']]))
+        edm['VD'] = vp.dist_matrix(np.vstack([coords, self.data['VD']]))
+        edm['CT'] = vp.dist_matrix(np.vstack([coords, self.data['CT']]))
+        # edm['XX'].shape (N+M, N+M)
+        log.info('Done.')
+
+        # number of objects from coordinates file
+        count = coords.shape[0]
+        # slice distance matrices: the rows for all object points ([:count,:])
+        # and the columns for the WingJ structure points ([:,count:])
+        edm['AP'] = edm['AP'][:count, count:]
+        edm['VD'] = edm['VD'][:count, count:]
+        edm['CT'] = edm['CT'][:count, count:]
+        # edm['XX'].shape = (N, M)
+        # log.debug('Distances to "AP" structure:\n%s' % edm['AP'])
+        # log.debug('Distances to "VD" structure:\n%s' % edm['VD'])
+        # log.debug('Distances to "CT" structure:\n%s' % edm['CT'])
+        return edm
+
+    def min_dist_to_structures(self, coords):
+        """Find minimal distances of coordinates to the WingJ structures.
+
+        By using the dist_to_structures() result, we can just iterate through
+        all rows finding the minimum and we get the shortest distance for
+        each point to one of the WingJ structures.
+
+        Parameters
+        ----------
+        coords : np.array (shape=(N, 2))
+            2D coordinates given as numpy array.
+
+        Returns
+        -------
+        mindists : dict(np.array (shape=(N, 1)))
+            A dictionary with the arrays containing the minimal distance of a
+            coordinate pair to the WingJ structure.
+        """
+        count = coords.shape[0]
+        dists = self.dist_to_structures(coords)
+        mindists = {}
+        log.info('Finding shortest distances...')
+        mindists['AP'] = np.zeros((count))
+        mindists['VD'] = np.zeros((count))
+        mindists['CT'] = np.zeros((count))
+        for i in range(count):
+            mindists['AP'][i] = dists['AP'][i].min()
+            mindists['VD'][i] = dists['VD'][i].min()
+            mindists['CT'][i] = dists['CT'][i].min()
+        log.info('Done.')
+        return mindists
+
+
 def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
         file_imsxml=None, file_ijroi=None):
     """Calculate distances from WingJ structures to spots in 2D.
@@ -68,65 +154,26 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     -------
     Nothing, all results are written to output CSV files directly.
     """
-
-    log.info('Reading WingJ CSV files...')
-    structure_ap = np.loadtxt(files_wingj[0], delimiter='\t')
-    structure_vd = np.loadtxt(files_wingj[1], delimiter='\t')
-    structure_cnt = np.loadtxt(files_wingj[2], delimiter='\t')
-    log.info('Done.')
-    # structure_XX.shape (N, 2)
-
     if file_imsxml is not None:
-        wingpoints = ix.ImarisXML(file_imsxml).coordinates('Position')
+        # create the ImarisXML object and read the 'Position' sheet
+        coords = ix.ImarisXML(file_imsxml).coordinates('Position')
         # we're working on a projection, so remove the third dimension/column
-        wingpoints_2d = np.delete(wingpoints, 2, 1)
+        coords = np.delete(coords, 2, 1)
     elif file_ijroi is not None:
         coords = read_csv_com(file_ijroi)
     else:
         raise AttributeError('no reference file given!')
 
-    # number of objects from coordinates file
-    wp_nr = wingpoints_2d.shape[0]
-
-    # calibrate WingJ data
-    # px_size = 0.378
-    structure_ap *= px_size
-    structure_vd *= px_size
-    structure_cnt *= px_size
-
-    log.info('Calculating distance matrices for all objects...')
-    dists_ap = vp.dist_matrix(np.vstack([wingpoints_2d, structure_ap]))
-    dists_vd = vp.dist_matrix(np.vstack([wingpoints_2d, structure_vd]))
-    dists_cnt = vp.dist_matrix(np.vstack([wingpoints_2d, structure_cnt]))
-    # dists_XX.shape (N+M, N+M)
-    log.info('Done.')
-
-    # slice desired parts from distance matrices: rows for all object points
-    # ([:wp_nr,:]) and columns for the WingJ structure points ([:,wp_nr:])
-    wp_to_ap = dists_ap[:wp_nr, wp_nr:]
-    wp_to_vd = dists_vd[:wp_nr, wp_nr:]
-    wp_to_cnt = dists_cnt[:wp_nr, wp_nr:]
-    #  wp_to_XX.shape (M, N)
-
-    # now we can just iterate through all rows finding the minimum and we get
-    # the shortest distance for each point to one of the WingJ structures:
-    log.info('Finding shortest distances...')
-    wp_to_ap_min = np.zeros((wp_nr))
-    wp_to_vd_min = np.zeros((wp_nr))
-    wp_to_cnt_min = np.zeros((wp_nr))
-    for i in range(wp_nr):
-        wp_to_ap_min[i] = wp_to_ap[i].min()
-        wp_to_vd_min[i] = wp_to_vd[i].min()
-        wp_to_cnt_min[i] = wp_to_cnt[i].min()
-    log.info('Done.')
+    wingj = WingJStructure(files_wingj, px_size)
+    mindists = wingj.min_dist_to_structures(coords)
 
     # export the results as CSV files
     log.info('Writing "%s".' % misc.filename(files_out[0]))
-    np.savetxt(files_out[0], wp_to_ap_min, delimiter=',')
+    np.savetxt(files_out[0], mindists['AP'], delimiter=',')
     log.info('Writing "%s".' % misc.filename(files_out[1]))
-    np.savetxt(files_out[1], wp_to_vd_min, delimiter=',')
+    np.savetxt(files_out[1], mindists['VD'], delimiter=',')
     log.info('Writing "%s".' % misc.filename(files_out[2]))
-    np.savetxt(files_out[2], wp_to_cnt_min, delimiter=',')
+    np.savetxt(files_out[2], mindists['CT'], delimiter=',')
     log.info('Finished.')
 
 
