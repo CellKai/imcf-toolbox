@@ -137,8 +137,8 @@ class WingJStructure(object):
         mindists = self.min_dist_to_structures(coords)
         # export the results as CSV files
         log.info('Writing "%s".' % misc.filename(files_out[0]))
-        np.savetxt(files_out[0], mindists['AP'], delimiter=',')
+        np.savetxt(files_out[0], mindists['AP'], fmt='%.5f', delimiter=',')
         log.info('Writing "%s".' % misc.filename(files_out[1]))
-        np.savetxt(files_out[1], mindists['VD'], delimiter=',')
+        np.savetxt(files_out[1], mindists['VD'], fmt='%.5f', delimiter=',')
         log.info('Writing "%s".' % misc.filename(files_out[2]))
-        np.savetxt(files_out[2], mindists['CT'], delimiter=',')
+        np.savetxt(files_out[2], mindists['CT'], fmt='%.5f', delimiter=',')
