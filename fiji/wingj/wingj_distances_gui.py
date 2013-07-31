@@ -7,11 +7,10 @@ GUI for WingJ distance calculations.
 
 import sys
 import argparse
-from log import log
 from misc import set_loglevel
 from genui import select_file
 from genui.in4_out3_spin import Ui_MainWindow, QtCore, QtGui
-from wingj_distances import wingj_dist_to_surfaces
+from volpy.imagej import read_csv_com, WingJStructure
 
 
 class WingJMainWindow(Ui_MainWindow):
@@ -83,12 +82,12 @@ class WingJMainWindow(Ui_MainWindow):
         out_ap = str(self.le_outfile.text())
         out_vd = str(self.le_outfile_2.text())
         out_cnt = str(self.le_outfile_3.text())
-        px_size = self.sb_double.value()
+        calib = self.sb_double.value()
         set_loglevel(self.sl_verbosity.value())
-        wingj_dist_to_surfaces(
-            (in_ap, in_vd, in_cnt),
-            (out_ap, out_vd, out_cnt),
-            px_size, None, in_ijroi)
+
+        wingj = WingJStructure((in_ap, in_vd, in_cnt), calib)
+        coords = read_csv_com(in_ijroi)
+        wingj.min_dist_csv_export(coords, (out_ap, out_vd, out_cnt))
 
 
 def parse_arguments():
