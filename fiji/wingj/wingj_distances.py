@@ -52,15 +52,8 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
         raise AttributeError('no reference file given!')
 
     wingj = WingJStructure(files_wingj, px_size)
-    mindists = wingj.min_dist_to_structures(coords)
+    wingj.min_dist_csv_export(coords, files_out)
 
-    # export the results as CSV files
-    log.info('Writing "%s".' % misc.filename(files_out[0]))
-    np.savetxt(files_out[0], mindists['AP'], delimiter=',')
-    log.info('Writing "%s".' % misc.filename(files_out[1]))
-    np.savetxt(files_out[1], mindists['VD'], delimiter=',')
-    log.info('Writing "%s".' % misc.filename(files_out[2]))
-    np.savetxt(files_out[2], mindists['CT'], delimiter=',')
     log.info('Finished.')
 
 
