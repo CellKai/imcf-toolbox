@@ -43,9 +43,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     """
     if file_imsxml is not None:
         # create the ImarisXML object and read the 'Position' sheet
-        coords = ix.ImarisXML(file_imsxml).coordinates('Position')
-        # we're working on a projection, so remove the third dimension/column
-        coords = np.delete(coords, 2, 1)
+        coords = ix.ImarisXML(file_imsxml).coordinates_2d('Position')
     elif file_ijroi is not None:
         coords = read_csv_com(file_ijroi)
     else:
