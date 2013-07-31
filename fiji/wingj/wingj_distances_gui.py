@@ -9,7 +9,7 @@ import sys
 import argparse
 from log import log
 from misc import set_loglevel
-from genui import select_file
+from genui import select_file, select_file_save
 from genui.in4_out3_spin import Ui_MainWindow, QtCore, QtGui
 from volpy.imagej import read_csv_com, WingJStructure
 
@@ -45,11 +45,11 @@ class WingJMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self.pb_infile_4, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_infile_4: select_file(elt))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile: select_file(elt))
+            lambda elt=self.le_outfile: select_file_save(elt))
         QtCore.QObject.connect(self.pb_outfile_2, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile_2: select_file(elt))
+            lambda elt=self.le_outfile_2: select_file_save(elt))
         QtCore.QObject.connect(self.pb_outfile_3, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile_3: select_file(elt))
+            lambda elt=self.le_outfile_3: select_file_save(elt))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
             window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
