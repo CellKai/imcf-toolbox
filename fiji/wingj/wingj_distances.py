@@ -16,7 +16,7 @@ import sys
 import argparse
 
 
-def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
+def wingj_dists_csv_export(files_wingj, files_out, calib=1.0,
         file_imsxml=None, file_ijroi=None):
     """Calculate distances from WingJ structures to spots in 2D.
 
@@ -34,7 +34,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     file_imsxml, file_ijroi : file handle or string
         A file handle or filename-string to an Imaris XML export resp. the
         ImageJ measurements CSV export.
-    px_size : float, optional
+    calib : float, optional
         The size of one pixel to correct WingJ coordinates with.
 
     Returns
@@ -49,7 +49,7 @@ def wingj_dist_to_surfaces(files_wingj, files_out, px_size=1.0,
     else:
         raise AttributeError('no reference file given!')
 
-    wingj = WingJStructure(files_wingj, px_size)
+    wingj = WingJStructure(files_wingj, calib)
     wingj.min_dist_csv_export(coords, files_out)
 
     log.info('Finished.')
@@ -86,7 +86,7 @@ def main():
 
     misc.set_loglevel(args.verbosity)
 
-    wingj_dist_to_surfaces(
+    wingj_dists_csv_export(
         (args.ap, args.vd, args.cnt),
         (args.apout, args.vdout, args.cntout),
         args.pixelsize, args.imsxml, args.ijroi)
