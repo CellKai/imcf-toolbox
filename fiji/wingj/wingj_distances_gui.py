@@ -89,6 +89,7 @@ class WingJMainWindow(Ui_MainWindow):
         log.warn('Calculating distances to WingJ structures...')
         wingj = WingJStructure((in_ap, in_vd, in_cnt), calib)
         coords = read_csv_com(in_ijroi)
+        coords *= calib
         wingj.min_dist_csv_export(coords, (out_ap, out_vd, out_cnt))
         log.warn('Finished.')
 

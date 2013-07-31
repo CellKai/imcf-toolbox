@@ -62,6 +62,7 @@ def main():
         coords = ix.ImarisXML(args.imsxml).coordinates_2d('Position')
     elif args.ijroi is not None:
         coords = read_csv_com(args.ijroi)
+        coords *= args.pixelsize
     else:
         # this shouldn't happen with argparse, but you never know...
         raise AttributeError('no reference file given!')
