@@ -133,6 +133,7 @@ class WingJStructure(object):
         return mindists
 
     def min_dist_csv_export(self, coords, files_out):
+        """Calculate minimal distances and export them to CSV."""
         mindists = self.min_dist_to_structures(coords)
         # export the results as CSV files
         log.info('Writing "%s".' % misc.filename(files_out[0]))
