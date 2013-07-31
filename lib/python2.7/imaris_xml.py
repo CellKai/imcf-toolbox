@@ -172,6 +172,10 @@ class ImarisXML(object):
         log.debug("Parsed coordinates: %i" % len(coords))
         return np.array(coords)
 
+    def coordinates_2d(self, ws_name):
+        """A wrapper to retrieve a view on the 2D coordinates only."""
+        return self.coordinates(ws_name)[:,0:2]
+
 
 if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
