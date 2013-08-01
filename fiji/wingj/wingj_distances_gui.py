@@ -9,8 +9,8 @@ import sys
 import argparse
 from log import log
 from misc import set_loglevel
-from genui import select_file, select_file_save
-from genui.in4_out3_spin import Ui_MainWindow, QtCore, QtGui
+from genui import select_file, select_directory
+from genui.in2_spin import Ui_MainWindow, QtCore, QtGui
 from volpy.imagej import read_csv_com, WingJStructure
 
 
@@ -23,33 +23,20 @@ class WingJMainWindow(Ui_MainWindow):
         super(WingJMainWindow, self).setupUi(window)
         window.setWindowTitle("WingJ Distances")
         self.label.setText("WingJ Distances")
-        msg = 'WingJ structure file for the %s.'
-        self.le_infile.setPlaceholderText(msg % 'A-P separation')
-        self.le_infile_2.setPlaceholderText(msg % 'V-D separation')
-        self.le_infile_3.setPlaceholderText(msg % 'contour line')
+        msg = 'Directory containing WingJ structure files.'
+        self.le_infile.setPlaceholderText(msg)
         msg = 'ImageJ CSV export with "center of mass" measurements.'
-        self.le_infile_4.setPlaceholderText(msg)
+        self.le_infile_2.setPlaceholderText(msg)
         self.label_3.setText("Pixel size to calibrate WingJ data")
-        msg = 'Output CSV file for distances to %s line.'
-        self.le_outfile.setPlaceholderText(msg % 'A-P')
-        self.le_outfile_2.setPlaceholderText(msg % 'V-D')
-        self.le_outfile_3.setPlaceholderText(msg % 'contour')
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: select_file(elt))
+            lambda elt=self.le_infile: select_directory(elt))
+        ffilter = 'Comma-separated Values, *.csv (*.csv);;' + \
+            'Text files, *.txt (*.txt);;All files (*.*)'
         QtCore.QObject.connect(self.pb_infile_2, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile_2: select_file(elt))
-        QtCore.QObject.connect(self.pb_infile_3, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile_3: select_file(elt))
-        QtCore.QObject.connect(self.pb_infile_4, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile_4: select_file(elt))
-        QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile: select_file_save(elt))
-        QtCore.QObject.connect(self.pb_outfile_2, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile_2: select_file_save(elt))
-        QtCore.QObject.connect(self.pb_outfile_3, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile_3: select_file_save(elt))
+            lambda elt=self.le_infile_2: \
+                select_file(elt, ffilter=ffilter))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
             window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
@@ -68,29 +55,19 @@ class WingJMainWindow(Ui_MainWindow):
             return
         self.le_infile.setText(values[0])
         self.le_infile_2.setText(values[1])
-        self.le_infile_3.setText(values[2])
-        self.le_infile_4.setText(values[3])
-        self.le_outfile.setText(values[4])
-        self.le_outfile_2.setText(values[5])
-        self.le_outfile_3.setText(values[6])
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
-        in_ap = str(self.le_infile.text())
-        in_vd = str(self.le_infile_2.text())
-        in_cnt = str(self.le_infile_3.text())
-        in_ijroi = str(self.le_infile_4.text())
-        out_ap = str(self.le_outfile.text())
-        out_vd = str(self.le_outfile_2.text())
-        out_cnt = str(self.le_outfile_3.text())
+        directory = str(self.le_infile.text())
+        in_ijroi = str(self.le_infile_2.text())
         calib = self.sb_double.value()
         set_loglevel(self.sl_verbosity.value())
 
         log.warn('Calculating distances to WingJ structures...')
-        wingj = WingJStructure((in_ap, in_vd, in_cnt), calib)
+        wingj = WingJStructure(directory, calib)
         coords = read_csv_com(in_ijroi)
         coords *= calib
-        wingj.min_dist_csv_export(coords, (out_ap, out_vd, out_cnt))
+        wingj.min_dist_csv_export(coords, directory)
         log.warn('Finished.')
 
 
