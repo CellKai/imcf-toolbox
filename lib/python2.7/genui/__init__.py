@@ -8,7 +8,7 @@ Helper functions for PyQt related stuff.
 from PyQt4 import QtGui
 
 
-def select_file(element, cap=None, ffilter=''):
+def select_file(element, cap=None, directory='', ffilter=''):
     """Show file open dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -24,7 +24,7 @@ def select_file(element, cap=None, ffilter=''):
     if cap is None:
         cap='Open File'
     element.setText(QtGui.QFileDialog.getOpenFileName(
-        caption=cap, filter=ffilter))
+        caption=cap, directory=directory, filter=ffilter))
 
 
 def select_file_save(element, cap=None, ffilter=''):
