@@ -62,8 +62,7 @@ def select_directory(element, cap=None, directory='', dirsonly=True):
     """
     if cap is None:
         cap = 'Select Directory'
-    # TODO: this has no effect on Linux, test it on Windows and decide whether
-    # to keep or discard it:
+    # NOTE: dirsonly has no effect on Linux but it works on Windows
     if dirsonly:
         options = QtGui.QFileDialog.ShowDirsOnly
         element.setText(QtGui.QFileDialog.getExistingDirectory(

@@ -31,7 +31,7 @@ class WingJMainWindow(Ui_MainWindow):
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: select_directory(elt))
+            lambda elt=self.le_infile: select_directory(elt, dirsonly=False))
         ffilter = 'Comma-separated Values, *.csv (*.csv);;' + \
             'Text files, *.txt (*.txt);;All files (*.*)'
         QtCore.QObject.connect(self.pb_infile_2, QtCore.SIGNAL("clicked()"),
