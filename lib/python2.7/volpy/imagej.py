@@ -53,15 +53,18 @@ class WingJStructure(object):
         """Read the CSV files and calibrate them."""
         log.info('Reading WingJ CSV files...')
         self.data = {}
-        self.data['AP'] = np.loadtxt(files[0], delimiter='\t')
-        self.data['VD'] = np.loadtxt(files[1], delimiter='\t')
-        self.data['CT'] = np.loadtxt(files[2], delimiter='\t')
+        self._read_wingj_files(files)
         # data['XX'].shape = (M, 2)
         # calibrate the WingJ data if requested:
         self.data['AP'] *= calib
         self.data['VD'] *= calib
         self.data['CT'] *= calib
         log.info('Done.')
+
+    def _read_wingj_files(self, files, delimiter='\t'):
+        self.data['AP'] = np.loadtxt(files[0], delimiter=delimiter)
+        self.data['VD'] = np.loadtxt(files[1], delimiter=delimiter)
+        self.data['CT'] = np.loadtxt(files[2], delimiter=delimiter)
 
     def dist_to_structures(self, coords):
         """Calculate distance of given coordinates to WingJ structure.
