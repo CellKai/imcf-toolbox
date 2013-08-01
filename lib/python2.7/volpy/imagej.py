@@ -62,6 +62,14 @@ class WingJStructure(object):
         log.info('Done.')
 
     def _read_wingj_files(self, files, delimiter='\t'):
+        """Read the WingJ files into our data structure."""
+        # if files is not a list, we need to add the default filenames:
+        if isinstance(files, str):
+            filelist = []
+            filelist.append(files + '/structure_A-P.txt')
+            filelist.append(files + '/structure_V-D.txt')
+            filelist.append(files + '/structure_contour.txt')
+            files = filelist
         self.data['AP'] = np.loadtxt(files[0], delimiter=delimiter)
         self.data['VD'] = np.loadtxt(files[1], delimiter=delimiter)
         self.data['CT'] = np.loadtxt(files[2], delimiter=delimiter)
