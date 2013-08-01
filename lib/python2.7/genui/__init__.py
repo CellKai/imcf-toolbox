@@ -8,7 +8,7 @@ Helper functions for PyQt related stuff.
 from PyQt4 import QtGui
 
 
-def select_file(element):
+def select_file(element, cap=None, ffilter=''):
     """Show file open dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -21,10 +21,13 @@ def select_file(element):
 
     >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
     """
-    element.setText(QtGui.QFileDialog.getOpenFileName())
+    if cap is None:
+        cap='Open File'
+    element.setText(QtGui.QFileDialog.getOpenFileName(
+        caption=cap, filter=ffilter))
 
 
-def select_file_save(element):
+def select_file_save(element, cap=None, ffilter=''):
     """Show file save dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -38,4 +41,7 @@ def select_file_save(element):
 
     >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
     """
-    element.setText(QtGui.QFileDialog.getSaveFileName())
+    if cap is None:
+        cap='Save As'
+    element.setText(QtGui.QFileDialog.getSaveFileName(
+        caption=cap, filter=ffilter))
