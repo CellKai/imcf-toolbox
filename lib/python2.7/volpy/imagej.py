@@ -143,13 +143,19 @@ class WingJStructure(object):
         log.info('Done.')
         return mindists
 
-    def min_dist_csv_export(self, coords, files_out):
+    def min_dist_csv_export(self, coords, files):
         """Calculate minimal distances and export them to CSV."""
+        if isinstance(files, str):
+            filelist = []
+            filelist.append(files + '/mindists_A-P.csv')
+            filelist.append(files + '/mindists_V-D.csv')
+            filelist.append(files + '/mindists_contour.csv')
+            files = filelist
         mindists = self.min_dist_to_structures(coords)
         # export the results as CSV files
-        log.info('Writing "%s".' % misc.filename(files_out[0]))
-        np.savetxt(files_out[0], mindists['AP'], fmt='%.5f', delimiter=',')
-        log.info('Writing "%s".' % misc.filename(files_out[1]))
-        np.savetxt(files_out[1], mindists['VD'], fmt='%.5f', delimiter=',')
-        log.info('Writing "%s".' % misc.filename(files_out[2]))
-        np.savetxt(files_out[2], mindists['CT'], fmt='%.5f', delimiter=',')
+        log.info('Writing "%s".' % misc.filename(files[0]))
+        np.savetxt(files[0], mindists['AP'], fmt='%.5f', delimiter=',')
+        log.info('Writing "%s".' % misc.filename(files[1]))
+        np.savetxt(files[1], mindists['VD'], fmt='%.5f', delimiter=',')
+        log.info('Writing "%s".' % misc.filename(files[2]))
+        np.savetxt(files[2], mindists['CT'], fmt='%.5f', delimiter=',')
