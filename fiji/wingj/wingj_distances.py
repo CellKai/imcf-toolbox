@@ -24,23 +24,13 @@ import argparse
 def parse_arguments():
     """Parse commandline arguments."""
     argparser = argparse.ArgumentParser(description=__doc__)
-    argparser.add_argument('--ap', required=True, type=file,
-        help='WingJ structure file for the A-P separation.')
-    argparser.add_argument('--vd', required=True, type=file,
-        help='WingJ structure file for the V-D separation.')
-    argparser.add_argument('--cnt', required=True, type=file,
-        help='WingJ structure file for the contour line.')
+    argparser.add_argument('--directory', required=True,
+        help='Directory containing the WingJ structure files.')
     group = argparser.add_mutually_exclusive_group(required=True)
     group.add_argument('--imsxml', type=file, default=None,
         help='Imaris Excel XML export containing a "Position" sheet.')
     group.add_argument('--ijroi', type=file, default=None,
         help='ImageJ CSV export having "center of mass" measurements.')
-    argparser.add_argument('--apout', type=argparse.FileType('w'),
-        required=True, help='Output CSV file for distances to A-P line.')
-    argparser.add_argument('--vdout', type=argparse.FileType('w'),
-        required=True, help='Output CSV file for distances to V-D line.')
-    argparser.add_argument('--cntout', type=argparse.FileType('w'),
-        required=True, help='Output CSV file for distances to contour line.')
     argparser.add_argument('-p', '--pixelsize', required=False, type=float,
         default=1.0, help='Pixel size to calibrate WingJ data.')
     argparser.add_argument('-v', '--verbosity', dest='verbosity',
@@ -67,8 +57,8 @@ def main():
         # this shouldn't happen with argparse, but you never know...
         raise AttributeError('no reference file given!')
 
-    wingj = WingJStructure((args.ap, args.vd, args.cnt), args.pixelsize)
-    wingj.min_dist_csv_export(coords, (args.apout, args.vdout, args.cntout))
+    wingj = WingJStructure(args.directory, args.pixelsize)
+    wingj.min_dist_csv_export(coords, args.directory)
 
     log.warn('Finished.')
 
