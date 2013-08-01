@@ -22,7 +22,7 @@ def select_file(element, cap=None, directory='', ffilter=''):
     >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
     """
     if cap is None:
-        cap='Open File'
+        cap = 'Open File'
     element.setText(QtGui.QFileDialog.getOpenFileName(
         caption=cap, directory=directory, filter=ffilter))
 
@@ -42,7 +42,7 @@ def select_file_save(element, cap=None, ffilter=''):
     >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
     """
     if cap is None:
-        cap='Save As'
+        cap = 'Save As'
     element.setText(QtGui.QFileDialog.getSaveFileName(
         caption=cap, filter=ffilter))
 
@@ -61,7 +61,7 @@ def select_directory(element, cap=None, directory='', dirsonly=True):
     >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
     """
     if cap is None:
-        cap='Select Directory'
+        cap = 'Select Directory'
     # TODO: this has no effect on Linux, test it on Windows and decide whether
     # to keep or discard it:
     if dirsonly:
