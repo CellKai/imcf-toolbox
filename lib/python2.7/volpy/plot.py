@@ -119,20 +119,20 @@ def label_axes(axes, labels):
     axes.set_zlabel(labels[2])
 
 
-def set_minmax(axes, points3d_object):
+def set_minmax(axes, pts3d):
     """Determine min and max coordinates and set limits.
 
     Parameters
     ----------
     axes : mpl_toolkits.mplot3d.Axes3D
-    points3d_object : Points3D
+    pts3d : Points3D
 
     Returns
     -------
     (cmin, cmax)
     cmin, cmax : np.array (shape = (3,))
     """
-    data = points3d_object.get_coords()
+    data = pts3d.get_coords()
     cmin = data.min(axis=0)
     cmax = data.max(axis=0)
     axes.set_xlim3d(cmin[0], cmax[0])
@@ -141,43 +141,43 @@ def set_minmax(axes, points3d_object):
     return cmin, cmax
 
 
-def filaments(axes, points3d_object):
+def filaments(axes, pts3d):
     """Draw edges along a filament pointlist."""
-    data = points3d_object.get_coords()
-    adjacent = sort_neighbors(points3d_object.get_edm())
+    data = pts3d.get_coords()
+    adjacent = sort_neighbors(pts3d.get_edm())
     log.debug(adjacent)
     for pair in build_tuple_seq(adjacent, cyclic=True):
         coords = [data[pair[0]], data[pair[1]]]
         line(axes, coords, 'm')
 
 
-def edges(axes, points3d_object):
+def edges(axes, pts3d):
     """Plot edges of a Points3D object."""
-    data = points3d_object.get_coords()
+    data = pts3d.get_coords()
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
-    for i, pair in enumerate(points3d_object.edges):
+    for i, pair in enumerate(pts3d.edges):
         coords = [data[pair[0]], data[pair[1]]]
         curcol = colors[i % 6]
         line(axes, coords, curcol)
 
 
-def triangles(axes, points3d_object):
+def triangles(axes, pts3d):
     """Plot triangles from a Points3D vertex list."""
     rgb = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
-    for i, vtx in enumerate(points3d_object.get_vertices()):
+    for i, vtx in enumerate(pts3d.get_vertices()):
         curcol = colors[i % 6]
         tri = Poly3DCollection([vtx], facecolors=rgb(curcol), linewidth=0)
         tri.set_alpha(0.8)
         axes.add_collection3d(tri)
 
 
-def junction(points3d_object, show, export, stats=False, plotraw=False):
+def junction(pts3d, show, export, stats=False, plotraw=False):
     """Create a 3D plot of a junction object.
 
     Parameters
     ----------
-    points3d_object : Points3D
+    pts3d : Points3D
     show : bool
         Whether to display the plot on the screen.
     export : str
@@ -191,25 +191,25 @@ def junction(points3d_object, show, export, stats=False, plotraw=False):
     # prepare the figure
     fig = plt.figure()
     axes = Axes3D(fig)
-    (cmin, _) = set_minmax(axes, points3d_object)
+    (cmin, _) = set_minmax(axes, pts3d)
     label_axes(axes, ('X', 'Y', 'Z'))
 
     if stats:
         # print overall area and maximum tesselation edge length:
         axes.text(cmin[0], cmin[1], cmin[2],
-            s='  overall area: %.2f' % points3d_object.get_area(),
+            s='  overall area: %.2f' % pts3d.get_area(),
             color='blue')
-        axes.text(*points3d_object.get_longest_edge_pos(), color='blue',
-            s='  longest edge: %.2f' % points3d_object.get_longest_edge())
+        axes.text(*pts3d.get_longest_edge_pos(), color='blue',
+            s='  longest edge: %.2f' % pts3d.get_longest_edge())
 
     if plotraw:
         # draw the raw filament points:
-        scatter(axes, points3d_object.get_coords(), 'w')
+        scatter(axes, pts3d.get_coords(), 'w')
 
-    maxdist(axes, points3d_object.get_mdpair_coords())
-    filaments(axes, points3d_object)
-    edges(axes, points3d_object)
-    triangles(axes, points3d_object)
+    maxdist(axes, pts3d.get_mdpair_coords())
+    filaments(axes, pts3d)
+    edges(axes, pts3d)
+    triangles(axes, pts3d)
 
     if export:
         export_pngseries(export, axes)
