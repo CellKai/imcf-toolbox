@@ -5,6 +5,8 @@
 Helper functions for PyQt related stuff.
 """
 
+from genui.generic_window import GenericMainWindow
+
 import argparse
 from PyQt4 import QtGui
 
