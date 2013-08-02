@@ -7,6 +7,7 @@ GUI for WingJ distance calculations.
 
 import sys
 import argparse
+import os
 from log import log
 from misc import set_loglevel
 from genui import fopen, diropen
@@ -19,6 +20,7 @@ class WingJMainWindow(Ui_MainWindow):
     """Main Window for WingJ GUI."""
 
     def __init__(self):
+        """Set internal default values."""
         self.path = ''
 
     def setup_window(self, window):
@@ -49,14 +51,14 @@ class WingJMainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"),
             window.close)
         QtCore.QObject.connect(self.le_infile,
-            QtCore.SIGNAL("textChanged(QString)"), self._update_wjdir)
+            QtCore.SIGNAL("textChanged(QString)"), self._update_path)
         QtCore.QObject.connect(self.sl_verbosity,
             QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(window)
 
-    def _update_wjdir(self, path):
-        """Update the base directory where to find the WingJ files."""
-        self.path = path
+    def _update_path(self, path):
+        """Update the base directory for the file dialogs."""
+        self.path = os.path.dirname(str(path))
 
     def preset_fields(self, values):
         """Preset field contents with supplied values."""

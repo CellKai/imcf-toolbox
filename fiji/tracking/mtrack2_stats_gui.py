@@ -7,6 +7,7 @@ GUI for statistics calculations from MTrack2 tracklists.
 
 import sys
 import argparse
+import os
 from genui import fopen, fsave
 from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 from mtrack2_stats import gen_stats
@@ -15,6 +16,10 @@ from mtrack2_stats import gen_stats
 class MTrack2MainWindow(Ui_MainWindow):
 
     """Main Window for MTrack2 GUI."""
+
+    def __init__(self):
+        """Set internal default values."""
+        self.path = ''
 
     def setup_window(self, window):
         """Customize the generic UI to our specific case."""
@@ -31,7 +36,7 @@ class MTrack2MainWindow(Ui_MainWindow):
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_infile: fopen(elt, ffilter=ffilter))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile: fsave(elt))
+            lambda elt=self.le_outfile: fsave(elt, directory=self.path))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
             window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
@@ -40,9 +45,15 @@ class MTrack2MainWindow(Ui_MainWindow):
             window.close)
         QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"),
             window.close)
+        QtCore.QObject.connect(self.le_infile,
+            QtCore.SIGNAL("textChanged(QString)"), self._update_path)
         QtCore.QObject.connect(self.sl_verbosity,
             QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(window)
+
+    def _update_path(self, path):
+        """Update the base directory for the file dialogs."""
+        self.path = os.path.dirname(str(path))
 
     def preset_fields(self, values):
         """Preset field contents with supplied values."""
