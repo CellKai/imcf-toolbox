@@ -27,7 +27,7 @@ def fopen(element, cap=None, directory='', ffilter=''):
         caption=cap, directory=directory, filter=ffilter))
 
 
-def fsave(element, cap=None, ffilter=''):
+def fsave(element, cap=None, directory='', ffilter=''):
     """Show file save dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -44,7 +44,7 @@ def fsave(element, cap=None, ffilter=''):
     if cap is None:
         cap = 'Save As'
     element.setText(QtGui.QFileDialog.getSaveFileName(
-        caption=cap, filter=ffilter))
+        caption=cap, directory=directory, filter=ffilter))
 
 
 def diropen(element, cap=None, directory='', dirsonly=True):
