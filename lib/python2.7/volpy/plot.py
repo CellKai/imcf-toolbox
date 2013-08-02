@@ -15,7 +15,22 @@ import numpy as np
 
 
 def scatter(axes, points, color, linewidth=1):
-    """Do a 3D scatter plot with the given points."""
+    """Do a 3D scatter plot with the given points.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    points : tuple of np.ndarray (shape = (3,))
+    color : str
+    linewidth : int
+
+    Example
+    -------
+    >>> fig = plt.figure()
+    >>> axes = Axes3D(fig)
+    >>> pts = (np.array([5.7, 3.4, 4.5]), np.array([0.2, 3.7, 3.5]))
+    >>> scatter(axes, pts, 'r', 4)
+    """
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
@@ -24,7 +39,22 @@ def scatter(axes, points, color, linewidth=1):
 
 
 def line(axes, points, color, linewidth=1):
-    """Plot a line in 3D from the given points."""
+    """Plot a line in 3D from the given points.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    points : tuple of np.ndarray (shape = (3,))
+    color : str
+    linewidth : int
+
+    Example
+    -------
+    >>> fig = plt.figure()
+    >>> axes = Axes3D(fig)
+    >>> pts = (np.array([5.7, 3.4, 4.5]), np.array([0.2, 3.7, 3.5]))
+    >>> line(axes, pts, 'r', 4)
+    """
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
@@ -70,7 +100,20 @@ def maxdist(axes, maxdist_points):
 
 
 def label_axes(axes, labels):
-    """Label the axes of a 3D plot."""
+    """Label the axes of a 3D plot.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    labels : list(str)
+
+    Example
+    -------
+    >>> fig = plt.figure()
+    >>> axes = Axes3D(fig)
+    >>> labels = ['x', 'y', 'z']
+    >>> label_axes(axes, labels)
+    """
     axes.set_xlabel(labels[0])
     axes.set_ylabel(labels[1])
     axes.set_zlabel(labels[2])
@@ -130,7 +173,16 @@ def triangles(axes, points3d_object):
 
 
 def junction(points3d_object, show, export):
-    """Create a 3D plot of a junction object."""
+    """Create a 3D plot of a junction object.
+
+    Parameters
+    ----------
+    points3d_object : Points3D
+    show : bool
+        Whether to display the plot on the screen.
+    export : str
+        Path where to place a series of PNG files.
+    """
 
     # prepare the figure
     fig = plt.figure()
