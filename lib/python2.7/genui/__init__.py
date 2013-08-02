@@ -5,7 +5,47 @@
 Helper functions for PyQt related stuff.
 """
 
+import argparse
 from PyQt4 import QtGui
+
+
+def parse_presets(input_string=None):
+    """Parse commandline arguments for preset values.
+
+    Check the commandline for a '--preset' argument and assemble a dict from
+    the string found there. Each section of the preset-string has to have the
+    form "gui_element_name=desired_value" (without the quotes), multiple
+    sections can be appended by using a comma (,) as separator.
+
+    The generated dictionary is intended for being used with
+    GenericMainWindow.preset_fields().
+
+    Returns
+    -------
+    presets : dict
+        A dictionary of the key-value mappings parsed from the commandline.
+
+    Example
+    -------
+    >>> preset_string = ['--preset',
+    ...     'le_file_1=/path/to/file1,le_file_2=/other/path/for/file2']
+    >>> parse_presets(preset_string)
+    """
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-p', '--preset', required=False,
+        help='Prefill fields with values in this list.')
+    try:
+        args = argparser.parse_args(input_string)
+    except IOError as err:
+        argparser.error(str(err))
+    if args.preset != None:
+        presets = {}
+        for item in args.preset.split(','):
+            key, val = item.split('=')
+            presets[key] = val
+        return presets
+    else:
+        return None
 
 
 def fopen(element, cap=None, directory='', ffilter=''):
