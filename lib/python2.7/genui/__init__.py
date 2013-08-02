@@ -30,6 +30,7 @@ def parse_presets(input_string=None):
     >>> preset_string = ['--preset',
     ...     'le_file_1=/path/to/file1,le_file_2=/other/path/for/file2']
     >>> parse_presets(preset_string)
+    {'le_file_2': '/other/path/for/file2', 'le_file_1': '/path/to/file1'}
     """
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-p', '--preset', required=False,
@@ -60,6 +61,7 @@ def fopen(element, cap=None, directory='', ffilter=''):
     with Qt's connect() method, a lambda function must be used there, e.g.
 
     >>> connect(btn, sig, lambda elt=self.line_edit: fopen(elt))
+    ... # doctest: +SKIP
     """
     if cap is None:
         cap = 'Open File'
@@ -80,6 +82,7 @@ def fsave(element, cap=None, directory='', ffilter=''):
     with Qt's connect() method, a lambda function must be used there, e.g.
 
     >>> connect(btn, sig, lambda elt=self.line_edit: fsave(elt))
+    ... # doctest: +SKIP
     """
     if cap is None:
         cap = 'Save As'
@@ -99,6 +102,7 @@ def diropen(element, cap=None, directory='', dirsonly=True):
     with Qt's connect() method, a lambda function must be used there, e.g.
 
     >>> connect(btn, sig, lambda elt=self.line_edit: diropen(elt))
+    ... # doctest: +SKIP
     """
     if cap is None:
         cap = 'Select Directory'
@@ -110,3 +114,9 @@ def diropen(element, cap=None, directory='', dirsonly=True):
     else:
         element.setText(QtGui.QFileDialog.getExistingDirectory(
             caption=cap, directory=directory))
+
+
+if __name__ == "__main__":
+    print('Running doctest on file "%s".' % __file__)
+    import doctest
+    doctest.testmod()
