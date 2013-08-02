@@ -27,8 +27,9 @@ class JunctionsMainWindow(Ui_MainWindow):
         self.cb_option.setText("Show a 3D plot of the calculated data.")
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
+        ffilter = 'Comma-separated Values (*.csv);;All files (*.*)'
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: fopen(elt))
+            lambda elt=self.le_infile: fopen(elt, ffilter=ffilter))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_outfile: fsave(elt))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),

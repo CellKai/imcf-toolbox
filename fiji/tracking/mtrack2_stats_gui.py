@@ -27,8 +27,9 @@ class MTrack2MainWindow(Ui_MainWindow):
         # self.cb_option.setDisabled(True)
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
+        ffilter = 'Text files (*.txt);;All files (*.*)'
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: fopen(elt))
+            lambda elt=self.le_infile: fopen(elt, ffilter=ffilter))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_outfile: fsave(elt))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
