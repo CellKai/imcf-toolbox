@@ -6,61 +6,33 @@ GUI for Junction statistics calculations.
 """
 
 import sys
-import argparse
 import volpy as vp
-import os
 from misc import set_loglevel, check_filehandle
-from genui import fopen, fsave
+from genui import fopen, fsave, GenericMainWindow
 from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 
 
-class JunctionsMainWindow(Ui_MainWindow):
+class JunctionsMainWindow(Ui_MainWindow, GenericMainWindow):
 
     """Main Window for Junction Statistics GUI."""
-
-    def __init__(self):
-        """Set internal default values."""
-        self.path = ''
 
     def setup_window(self, window):
         """Customize the generic UI to our specific case."""
         super(JunctionsMainWindow, self).setupUi(window)
+        self.set_defaults(window)
         window.setWindowTitle("Junction Statistics")
         self.label.setText("Junction Statistics")
         msg = "Input CSV File containing Filament points (Ctrl+O)"
         self.le_infile.setPlaceholderText(msg)
         self.cb_option.setText("Show a 3D plot of the calculated data.")
-        window.addAction(self.sc_ctrl_w)
-        window.addAction(self.sc_ctrl_q)
         ffilter = 'Comma-separated Values (*.csv);;All files (*.*)'
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_infile: fopen(elt, ffilter=ffilter))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_outfile: fsave(elt, directory=self.path))
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
-            window.close)
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
-            self.run_calculations)
-        QtCore.QObject.connect(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"),
-            window.close)
-        QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"),
-            window.close)
         QtCore.QObject.connect(self.le_infile,
             QtCore.SIGNAL("textChanged(QString)"), self._update_path)
-        QtCore.QObject.connect(self.sl_verbosity,
-            QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
         QtCore.QMetaObject.connectSlotsByName(window)
-
-    def _update_path(self, path):
-        """Update the base directory for the file dialogs."""
-        self.path = os.path.dirname(str(path))
-
-    def preset_fields(self, values):
-        """Preset field contents with supplied values."""
-        if not values:
-            return
-        self.le_infile.setText(values[0])
-        self.le_outfile.setText(values[1])
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
@@ -73,22 +45,6 @@ class JunctionsMainWindow(Ui_MainWindow):
         # reset the outfile's name
         self.le_outfile.setText('')
         if (self.cb_option.checkState() == 2):
-            vp.plot3d_junction(junction, True, False)
-
-
-def parse_arguments():
-    """Parse commandline arguments for preset values."""
-    argparser = argparse.ArgumentParser(description=__doc__)
-    argparser.add_argument('-p', '--preset', required=False,
-        help='Prefill fields with values in this list.')
-    try:
-        args = argparser.parse_args()
-    except IOError as err:
-        argparser.error(str(err))
-    if args.preset != None:
-        return args.preset.split(',')
-    else:
-        return None
 
 
 def main():
@@ -97,7 +53,6 @@ def main():
     main_window = QtGui.QMainWindow()
     gui = JunctionsMainWindow()
     gui.setup_window(main_window)
-    gui.preset_fields(parse_arguments())
     main_window.show()
     return app.exec_()
 

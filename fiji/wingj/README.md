@@ -17,8 +17,12 @@ python wingj_distances.py --directory ../../sample_data/wingj \
 Testing the GUI
 ===============
 
-The `--preset` switch can be used to facilitate testing the GUI from the commandline:
+The `--preset` switch can be used to facilitate testing the GUI from the
+commandline by specifying the names and corresponding values for the desired
+GUI elements in the following form:
 
 ```shell
-python wingj_distances_gui.py --preset ../../sample_data/wingj,../../sample_data/wingj/surfaces-coords.ij.csv
+PRESETS="le_infile=../../sample_data/wingj,"\
+"le_infile_2=../../sample_data/wingj/surfaces-coords.ij.csv"
+python wingj_distances_gui.py --preset $PRESETS
 ```
