@@ -8,7 +8,7 @@ Helper functions for PyQt related stuff.
 from PyQt4 import QtGui
 
 
-def select_file(element, cap=None, directory='', ffilter=''):
+def fopen(element, cap=None, directory='', ffilter=''):
     """Show file open dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -19,7 +19,7 @@ def select_file(element, cap=None, directory='', ffilter=''):
     slot, resulting in many more or less identical code segments. To use it
     with Qt's connect() method, a lambda function must be used there, e.g.
 
-    >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
+    >>> connect(btn, sig, lambda elt=self.line_edit: fopen(elt))
     """
     if cap is None:
         cap = 'Open File'
@@ -27,7 +27,7 @@ def select_file(element, cap=None, directory='', ffilter=''):
         caption=cap, directory=directory, filter=ffilter))
 
 
-def select_file_save(element, cap=None, ffilter=''):
+def fsave(element, cap=None, ffilter=''):
     """Show file save dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -39,7 +39,7 @@ def select_file_save(element, cap=None, ffilter=''):
     slot, resulting in many more or less identical code segments. To use it
     with Qt's connect() method, a lambda function must be used there, e.g.
 
-    >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
+    >>> connect(btn, sig, lambda elt=self.line_edit: fsave(elt))
     """
     if cap is None:
         cap = 'Save As'
@@ -47,7 +47,7 @@ def select_file_save(element, cap=None, ffilter=''):
         caption=cap, filter=ffilter))
 
 
-def select_directory(element, cap=None, directory='', dirsonly=True):
+def diropen(element, cap=None, directory='', dirsonly=True):
     """Show directory dialog and update an element's text with the result.
 
     Provides a callback function for usage with "Browse" buttons or similar in
@@ -58,7 +58,7 @@ def select_directory(element, cap=None, directory='', dirsonly=True):
     slot, resulting in many more or less identical code segments. To use it
     with Qt's connect() method, a lambda function must be used there, e.g.
 
-    >>> connect(btn, sig, lambda elt=self.line_edit: select_file(elt))
+    >>> connect(btn, sig, lambda elt=self.line_edit: diropen(elt))
     """
     if cap is None:
         cap = 'Select Directory'

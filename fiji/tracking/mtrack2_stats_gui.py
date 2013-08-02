@@ -7,7 +7,7 @@ GUI for statistics calculations from MTrack2 tracklists.
 
 import sys
 import argparse
-from genui import select_file
+from genui import fopen, fsave
 from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 from mtrack2_stats import gen_stats
 
@@ -28,9 +28,9 @@ class MTrack2MainWindow(Ui_MainWindow):
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: select_file(elt))
+            lambda elt=self.le_infile: fopen(elt))
         QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile: select_file(elt))
+            lambda elt=self.le_outfile: fsave(elt))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
             window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),

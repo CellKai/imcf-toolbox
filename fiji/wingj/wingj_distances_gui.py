@@ -9,7 +9,7 @@ import sys
 import argparse
 from log import log
 from misc import set_loglevel
-from genui import select_file, select_directory
+from genui import fopen, diropen
 from genui.in2_spin import Ui_MainWindow, QtCore, QtGui
 from volpy.imagej import read_csv_com, WingJStructure
 
@@ -34,12 +34,12 @@ class WingJMainWindow(Ui_MainWindow):
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
         QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: select_directory(elt, dirsonly=False))
+            lambda elt=self.le_infile: diropen(elt, dirsonly=False))
         ffilter = 'Comma-separated Values (*.csv);;' + \
             'Text files (*.txt);;All files (*.*)'
         QtCore.QObject.connect(self.pb_infile_2, QtCore.SIGNAL("clicked()"),
             lambda elt=self.le_infile_2: \
-                select_file(elt, ffilter=ffilter, directory=self.path))
+                fopen(elt, ffilter=ffilter, directory=self.path))
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
             window.close)
         QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
