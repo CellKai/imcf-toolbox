@@ -5,6 +5,7 @@
 Module to set common default properties for PyQt windows.
 """
 
+import genui
 import os
 from PyQt4 import QtGui, QtCore
 from log import log
@@ -29,6 +30,7 @@ class GenericMainWindow(object):
 
     def set_defaults(self, window):
         """Set some default values used in all derived GUIs."""
+        self.preset_fields(genui.parse_presets())
         # TODO: there are many things that could potentially go wrong here,
         # they should be captured via try/except, as they are mostly harmless
         # NOTE: an instance of GenericMainWindow doesn't have the members
