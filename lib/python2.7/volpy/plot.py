@@ -172,7 +172,7 @@ def triangles(axes, points3d_object):
         axes.add_collection3d(tri)
 
 
-def junction(points3d_object, show, export):
+def junction(points3d_object, show, export, stats=False, plotraw=False):
     """Create a 3D plot of a junction object.
 
     Parameters
@@ -182,24 +182,29 @@ def junction(points3d_object, show, export):
         Whether to display the plot on the screen.
     export : str
         Path where to place a series of PNG files.
+    stats : bool (optional)
+        Show additional statistics in the plot.
+    plotraw : bool (optional)
+        Plot the raw filament points.
     """
 
     # prepare the figure
     fig = plt.figure()
     axes = Axes3D(fig)
-    set_minmax(axes, points3d_object)
+    (cmin, _) = set_minmax(axes, points3d_object)
     label_axes(axes, ('X', 'Y', 'Z'))
 
+    if stats:
+        # print overall area and maximum tesselation edge length:
+        axes.text(cmin[0], cmin[1], cmin[2],
+            s='  overall area: %.2f' % points3d_object.get_area(),
+            color='blue')
+        axes.text(*points3d_object.get_longest_edge_pos(), color='blue',
+            s='  longest edge: %.2f' % points3d_object.get_longest_edge())
 
-    # # print overall area and maximum tesselation edge length:
-    # axes.text(*cmin, s='  overall area: %.2f' % points3d_object.get_area(),
-    #     color='blue')
-    # axes.text(*points3d_object.get_longest_edge_pos(), color='blue',
-    #     s='  longest edge: %.2f' % points3d_object.get_longest_edge())
-
-    # draw the raw filament points:
-    # TODO: add commandline switch to enable this!
-    # plot3d_scatter(axes, data, 'w')
+    if plotraw:
+        # draw the raw filament points:
+        scatter(axes, points3d_object.get_coords(), 'w')
 
     maxdist(axes, points3d_object.get_mdpair_coords())
     filaments(axes, points3d_object)
