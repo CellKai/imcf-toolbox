@@ -14,25 +14,25 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 
 
-def plot3d_scatter(plot, points, color, linewidth=1):
+def scatter(axes, points, color, linewidth=1):
     """Do a 3D scatter plot with the given points."""
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = np.asarray(zip(points[0], points[1]))
-    plot.scatter(x, y, z, zdir='z', c=color, linewidth=linewidth)
+    axes.scatter(x, y, z, zdir='z', c=color, linewidth=linewidth)
 
 
-def plot3d_line(plot, points, color, linewidth=1):
+def line(axes, points, color, linewidth=1):
     """Plot a line in 3D from the given points."""
     # x, y, z are fine in this context, so disable this pylint message here:
     # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = np.asarray(zip(points[0], points[1]))
-    plot.plot(x, y, z, zdir='z', c=color, linewidth=linewidth)
+    axes.plot(x, y, z, zdir='z', c=color, linewidth=linewidth)
 
 
-def plot3d_maxdist(axes, maxdist_points):
+def maxdist(axes, maxdist_points):
     """Plot and label the points with maximum distance.
 
     Parameters
@@ -52,16 +52,16 @@ def plot3d_maxdist(axes, maxdist_points):
     >>> axes = Axes3D(fig)
     >>> point1 = np.array([76.123, 77.062, -7.5684])
     >>> point2 = np.array([98.758, 36.733, 5.4777])
-    >>> plot3d_maxdist(axes, (point1, point2))
+    >>> maxdist(axes, (point1, point2))
     (array([ 87.4405 ,  56.8975 ,  -1.04535]), 48.051765744975484)
     """
-    plot3d_scatter(axes, maxdist_points, 'r', linewidth=18)
+    scatter(axes, maxdist_points, 'r', linewidth=18)
     for i in (0, 1):
         axes.text(*maxdist_points[i], color='blue',
             s='   (%s | %s | %s)' % (maxdist_points[i][0],
             maxdist_points[i][1], maxdist_points[i][2]))
     # draw connection line between points:
-    plot3d_line(axes, maxdist_points, 'y')
+    line(axes, maxdist_points, 'y')
     # calculate length and add label:
     pos = maxdist_points[1] + ((maxdist_points[0] - maxdist_points[1]) / 2)
     dist = np.linalg.norm(maxdist_points[0] - maxdist_points[1])
@@ -69,14 +69,14 @@ def plot3d_maxdist(axes, maxdist_points):
     return (pos, dist)
 
 
-def plot3d_label_axes(axes, labels):
+def label_axes(axes, labels):
     """Label the axes of a 3D plot."""
     axes.set_xlabel(labels[0])
     axes.set_ylabel(labels[1])
     axes.set_zlabel(labels[2])
 
 
-def plot3d_set_minmax(axes, points3d_object):
+def set_minmax(axes, points3d_object):
     """Determine min and max coordinates and set limits.
 
     Parameters
@@ -98,28 +98,28 @@ def plot3d_set_minmax(axes, points3d_object):
     return cmin, cmax
 
 
-def plot3d_filaments(axes, points3d_object):
+def filaments(axes, points3d_object):
     """Draw edges along a filament pointlist."""
     data = points3d_object.get_coords()
     adjacent = sort_neighbors(points3d_object.get_edm())
     log.debug(adjacent)
     for pair in build_tuple_seq(adjacent, cyclic=True):
         coords = [data[pair[0]], data[pair[1]]]
-        plot3d_line(axes, coords, 'm')
+        line(axes, coords, 'm')
 
 
-def plot3d_tess_edges(axes, points3d_object):
-    """Draw edges from tesselation results."""
+def edges(axes, points3d_object):
+    """Plot edges of a Points3D object."""
     data = points3d_object.get_coords()
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
     for i, pair in enumerate(points3d_object.edges):
         coords = [data[pair[0]], data[pair[1]]]
         curcol = colors[i % 6]
-        plot3d_line(axes, coords, curcol)
+        line(axes, coords, curcol)
 
 
-def plot3d_tess_tri(axes, points3d_object):
-    """Draw triangle areas from tesselation results."""
+def triangles(axes, points3d_object):
+    """Plot triangles from a Points3D vertex list."""
     rgb = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
     for i, vtx in enumerate(points3d_object.get_vertices()):
@@ -129,15 +129,15 @@ def plot3d_tess_tri(axes, points3d_object):
         axes.add_collection3d(tri)
 
 
-def plot3d_junction(points3d_object, show, export):
+def junction(points3d_object, show, export):
     """Create a 3D plot of a junction object."""
 
     # prepare the figure
     fig = plt.figure()
     axes = Axes3D(fig)
+    set_minmax(axes, points3d_object)
+    label_axes(axes, ('X', 'Y', 'Z'))
 
-    plot3d_set_minmax(axes, points3d_object)
-    plot3d_label_axes(axes, ('X', 'Y', 'Z'))
 
     # # print overall area and maximum tesselation edge length:
     # axes.text(*cmin, s='  overall area: %.2f' % points3d_object.get_area(),
@@ -149,18 +149,18 @@ def plot3d_junction(points3d_object, show, export):
     # TODO: add commandline switch to enable this!
     # plot3d_scatter(axes, data, 'w')
 
-    plot3d_maxdist(axes, points3d_object.get_mdpair_coords())
-    plot3d_filaments(axes, points3d_object)
-    plot3d_tess_edges(axes, points3d_object)
-    plot3d_tess_tri(axes, points3d_object)
+    maxdist(axes, points3d_object.get_mdpair_coords())
+    filaments(axes, points3d_object)
+    edges(axes, points3d_object)
+    triangles(axes, points3d_object)
 
     if export:
-        plot3d_pngseries(export, axes)
+        export_pngseries(export, axes)
     if show:
-        plot3d_show()
+        plt.show()
 
 
-def plot3d_pngseries(outdir, axes):
+def export_pngseries(outdir, axes):
     """Export a 3D plot as a series of PNGs, rotating in 1 deg steps.
 
     Parameters
@@ -180,7 +180,7 @@ def plot3d_pngseries(outdir, axes):
     log.warn("done")
 
 
-def plot3d_show():
+def show_3d():
     """Show an interactive 3D plot of the data."""
     # disabling the blocking mode makes the script return immediately
     # without showing anything, unless a couple of draw() statements

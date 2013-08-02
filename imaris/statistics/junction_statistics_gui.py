@@ -7,6 +7,7 @@ GUI for Junction statistics calculations.
 
 import sys
 import volpy as vp
+import volpy.plot as plot
 from misc import set_loglevel, check_filehandle
 from genui import fopen, fsave, GenericMainWindow
 from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
@@ -45,6 +46,7 @@ class JunctionsMainWindow(Ui_MainWindow, GenericMainWindow):
         # reset the outfile's name
         self.le_outfile.setText('')
         if (self.cb_option.checkState() == 2):
+            plot.junction(junction, True, False)
 
 
 def main():

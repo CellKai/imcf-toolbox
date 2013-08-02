@@ -12,6 +12,7 @@ import sys
 import argparse
 
 import volpy as vp
+import volpy.plot as plot
 from misc import set_loglevel
 
 
@@ -49,7 +50,7 @@ def main():
         junction.write_output(args.outfile, args.infile)
 
     if args.plot or args.export_plot:
-        vp.plot3d_junction(junction, args.plot, args.export_plot)
+        plot.junction(junction, args.plot, args.export_plot)
 
 
 if __name__ == "__main__":
