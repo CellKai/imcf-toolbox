@@ -47,6 +47,19 @@ def filehandle(fname, mode='r'):
     -------
     A valid (open) filehandle with the given mode. Raises an IOError
     otherwise.
+
+    Example
+    -------
+    >>> fname = __file__
+    >>> type(fname)
+    <type 'str'>
+    >>> type(filehandle(fname))
+    <type 'file'>
+    >>> fh = open(__file__, 'r')
+    >>> type(fh)
+    <type 'file'>
+    >>> type(filehandle(fh))
+    <type 'file'>
     """
     log.debug(type(fname))
     if (type(fname).__name__ == 'str'):
@@ -83,8 +96,8 @@ def filename(name):
     -------
     >>> filename('test_file_name')
     'test_file_name'
-    >>> filename(open('/dev/null', 'w'))
-    '/dev/null'
+    >>> filename(open(__file__, 'r'))
+    'misc.py'
     """
     if isinstance(name, file):
         return name.name
