@@ -142,7 +142,13 @@ def set_minmax(axes, pts3d):
 
 
 def filaments(axes, pts3d):
-    """Draw edges along a filament pointlist."""
+    """Draw edges along a filament pointlist.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    pts3d : Points3D
+    """
     data = pts3d.get_coords()
     adjacent = sort_neighbors(pts3d.get_edm())
     log.debug(adjacent)
@@ -152,7 +158,13 @@ def filaments(axes, pts3d):
 
 
 def edges(axes, pts3d):
-    """Plot edges of a Points3D object."""
+    """Plot edges of a Points3D object.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    pts3d : Points3D
+    """
     data = pts3d.get_coords()
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
     for i, pair in enumerate(pts3d.edges):
@@ -162,7 +174,13 @@ def edges(axes, pts3d):
 
 
 def triangles(axes, pts3d):
-    """Plot triangles from a Points3D vertex list."""
+    """Plot triangles from a Points3D vertex list.
+
+    Parameters
+    ----------
+    axes : mpl_toolkits.mplot3d.Axes3D
+    pts3d : Points3D
+    """
     rgb = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
     colors = ['r', 'g', 'b', 'y', 'c', 'm']
     for i, vtx in enumerate(pts3d.get_vertices()):
