@@ -41,6 +41,8 @@ class WingJMainWindow(Ui_MainWindow, GenericMainWindow):
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
         statusmsg = self.statusbar.showMessage
+        button_ok = self.bb_ok_cancel.button(QtGui.QDialogButtonBox.Ok)
+        button_ok.setEnabled(False)
         directory = str(self.le_path_1.text())
         in_ijroi = str(self.le_path_2.text())
         calib = self.sb_double.value()
@@ -56,6 +58,7 @@ class WingJMainWindow(Ui_MainWindow, GenericMainWindow):
         resn = wingj.min_dist_csv_export(coords, directory)
         log.warn('Finished.')
         statusmsg('Exported results for %d objects.' % len(coords))
+        button_ok.setEnabled(True)
 
 
 def main():
