@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-# FIXME: this script is generating *binary* data, which is not what we wanted!
-
 from volpy import Filament
 from log import set_loglevel
 
