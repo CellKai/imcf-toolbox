@@ -40,17 +40,22 @@ class WingJMainWindow(Ui_MainWindow, GenericMainWindow):
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
+        statusmsg = self.statusbar.showMessage
         directory = str(self.le_path_1.text())
         in_ijroi = str(self.le_path_2.text())
         calib = self.sb_double.value()
         set_loglevel(self.sl_verbosity.value())
 
         log.warn('Calculating distances to WingJ structures...')
+        statusmsg('Reading WingJ files...')
         wingj = WingJStructure(directory, calib)
+        statusmsg('Reading object coordinates...')
         coords = read_csv_com(in_ijroi)
         coords *= calib
-        wingj.min_dist_csv_export(coords, directory)
+        statusmsg('Calculating distances...')
+        resn = wingj.min_dist_csv_export(coords, directory)
         log.warn('Finished.')
+        statusmsg('Exported results for %d objects.' % len(coords))
 
 
 def main():
