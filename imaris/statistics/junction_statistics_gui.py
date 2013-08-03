@@ -9,7 +9,7 @@ import sys
 import volpy as vp
 import volpy.plot as plot
 from log import set_loglevel
-from misc import check_filehandle
+from misc import filehandle
 from genui import fopen, fsave, GenericMainWindow
 from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 
@@ -39,7 +39,7 @@ class JunctionsMainWindow(Ui_MainWindow, GenericMainWindow):
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
         in_csv = str(self.le_infile.text())
-        out_csv = check_filehandle(str(self.le_outfile.text()), 'w')
+        out_csv = filehandle(str(self.le_outfile.text()), 'w')
         set_loglevel(self.sl_verbosity.value())
 
         junction = vp.CellJunction(in_csv)

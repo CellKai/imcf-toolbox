@@ -30,7 +30,7 @@ def read_csv_com(fname):
     # NOTE: DictReader provides a "fieldnames" option, but unfortunately the
     # ImageJ is so lazy that not every column gets labeled, (i.e. the first
     # one) - thus we can't use it but need to assemble the structure ourselves
-    roi_reader = csv.DictReader(misc.check_filehandle(fname))
+    roi_reader = csv.DictReader(misc.filehandle(fname))
     for item in roi_reader:
         roi_tmp.append([item['XM'], item['YM']])
     coords = np.array(roi_tmp, dtype=float)

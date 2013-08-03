@@ -28,7 +28,7 @@ def _is_string_like(obj):
     return True
 
 
-def check_filehandle(fname, mode='r'):
+def filehandle(fname, mode='r'):
     """Make sure a variable is either a filehandle or create one from it.
 
     This function takes a variable and checks whether it is already a

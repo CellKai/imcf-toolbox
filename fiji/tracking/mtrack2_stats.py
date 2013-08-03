@@ -20,7 +20,7 @@ import pprint
 import numpy as np
 import volpy as vp
 from log import log
-from misc import check_filehandle, filename
+from misc import filehandle, filename
 
 
 def parse_cell(cell):
@@ -176,7 +176,7 @@ def gen_stats(f_in, f_out, label=False, deltas=[1], thresh=0, verbosity=0):
     # TODO: parsing can be done in a nicer way be reading the header lines via
     # csvreader.next(), checking for the expected values and the number of
     # tracks and then directly reading the trackpoints into a numpy ndarray...
-    mtrack2_file = check_filehandle(f_in, 'r')
+    mtrack2_file = filehandle(f_in, 'r')
     csvreader = csv.reader(mtrack2_file, delimiter='\t')
 
     # parse all lines into memory
