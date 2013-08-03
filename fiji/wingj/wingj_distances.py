@@ -14,8 +14,7 @@ structures.
 """
 
 from volpy.imagej import read_csv_com, WingJStructure
-from log import log
-import misc
+from log import log, set_loglevel
 import imaris_xml as ix
 import sys
 import argparse
@@ -45,7 +44,7 @@ def parse_arguments():
 def main():
     """Parse commandline arguments and run distance calculations."""
     args = parse_arguments()
-    misc.set_loglevel(args.verbosity)
+    set_loglevel(args.verbosity)
     log.warn('Calculating distances to WingJ structures...')
 
     if args.imsxml is not None:

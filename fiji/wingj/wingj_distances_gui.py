@@ -6,8 +6,7 @@ GUI for WingJ distance calculations.
 """
 
 import sys
-from log import log
-from misc import set_loglevel
+from log import log, set_loglevel
 from genui import fopen, diropen, GenericMainWindow
 from genui.in2_spin import Ui_MainWindow, QtCore, QtGui
 from volpy.imagej import read_csv_com, WingJStructure

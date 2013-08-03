@@ -8,7 +8,8 @@ GUI for Junction statistics calculations.
 import sys
 import volpy as vp
 import volpy.plot as plot
-from misc import set_loglevel, check_filehandle
+from log import set_loglevel
+from misc import check_filehandle
 from genui import fopen, fsave, GenericMainWindow
 from genui.in_out_opt import Ui_MainWindow, QtCore, QtGui
 

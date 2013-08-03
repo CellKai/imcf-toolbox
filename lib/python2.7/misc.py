@@ -94,18 +94,6 @@ def filename(name):
         raise TypeError
 
 
-def set_loglevel(verbosity):
-    """Calculate the default loglevel and set it accordingly.
-
-    This is a convenience function that wraps the calculation and setting of
-    the logging level. The way our "log" module is currently built (as a
-    singleton), there is no obvious better way to have this somewhere else.
-    """
-    # default loglevel is 30 while 20 and 10 show more details
-    loglevel = (3 - verbosity) * 10
-    log.setLevel(loglevel)
-
-
 if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
     import doctest

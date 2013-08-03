@@ -13,7 +13,7 @@ import argparse
 
 import volpy as vp
 import volpy.plot as plot
-from misc import set_loglevel
+from log import set_loglevel
 
 
 def parse_arguments():

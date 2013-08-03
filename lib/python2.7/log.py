@@ -8,7 +8,7 @@ Example
 From there on a logger is available for usage with e.g. log.warn(), even if the
 import statement from above happens in multiple places across modules, it will
 always use the same logger instance (that "singleton" functionality is built
-into the logging module, we just do the setup here). This can easily be check
+into the logging module, we just do the setup here). This can easily be checked
 by looking at the log handlers in the different modules.
 
 The logging levels, in increasing order of importance, are:
@@ -32,6 +32,18 @@ log = logging.getLogger('imcf_logger')
 
 # we always log to stdout, so add a console handler to the logger
 log.addHandler(logging.StreamHandler())
+
+
+def set_loglevel(verbosity):
+    """Calculate the default loglevel and set it accordingly.
+
+    This is a convenience function that wraps the calculation and setting of
+    the logging level. The way our "log" module is currently built (as a
+    singleton), there is no obvious better way to have this somewhere else.
+    """
+    # default loglevel is 30 while 20 and 10 show more details
+    loglevel = (3 - verbosity) * 10
+    log.setLevel(loglevel)
 
 # from http://stackoverflow.com/questions/4722745
 #
