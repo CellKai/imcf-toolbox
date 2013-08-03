@@ -23,25 +23,25 @@ class WingJMainWindow(Ui_MainWindow, GenericMainWindow):
         window.setWindowTitle("WingJ Distances")
         self.label.setText("WingJ Distances")
         msg = 'Directory containing WingJ structure files.'
-        self.le_infile.setPlaceholderText(msg)
+        self.le_path_1.setPlaceholderText(msg)
         msg = 'ImageJ CSV export with "center of mass" measurements.'
-        self.le_infile_2.setPlaceholderText(msg)
+        self.le_path_2.setPlaceholderText(msg)
         self.label_3.setText("Pixel size to calibrate WingJ data")
-        QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: diropen(elt, dirsonly=False))
+        QtCore.QObject.connect(self.pb_path_1, QtCore.SIGNAL("clicked()"),
+            lambda elt=self.le_path_1: diropen(elt, dirsonly=False))
         ffilter = 'Comma-separated Values (*.csv);;' + \
             'Text files (*.txt);;All files (*.*)'
-        QtCore.QObject.connect(self.pb_infile_2, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile_2: \
+        QtCore.QObject.connect(self.pb_path_2, QtCore.SIGNAL("clicked()"),
+            lambda elt=self.le_path_2: \
                 fopen(elt, ffilter=ffilter, directory=self.path))
-        QtCore.QObject.connect(self.le_infile,
+        QtCore.QObject.connect(self.le_path_1,
             QtCore.SIGNAL("textChanged(QString)"), self._update_path)
         QtCore.QMetaObject.connectSlotsByName(window)
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
-        directory = str(self.le_infile.text())
-        in_ijroi = str(self.le_infile_2.text())
+        directory = str(self.le_path_1.text())
+        in_ijroi = str(self.le_path_2.text())
         calib = self.sb_double.value()
         set_loglevel(self.sl_verbosity.value())
 

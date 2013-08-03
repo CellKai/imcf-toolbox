@@ -22,7 +22,7 @@ commandline by specifying the names and corresponding values for the desired
 GUI elements in the following form:
 
 ```shell
-PRESETS="le_infile=../../sample_data/wingj,"\
-"le_infile_2=../../sample_data/wingj/surfaces-coords.ij.csv"
+PRESETS="le_path_1=../../sample_data/wingj,"\
+"le_path_2=../../sample_data/wingj/surfaces-coords.ij.csv"
 python wingj_distances_gui.py --preset $PRESETS
 ```

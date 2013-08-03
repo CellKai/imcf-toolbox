@@ -32,7 +32,7 @@
      <string notr="true">Generic Description Text</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_infile">
+   <widget class="QPushButton" name="pb_path_1">
     <property name="geometry">
      <rect>
       <x>480</x>
@@ -48,7 +48,7 @@
      <string notr="true">Ctrl+O</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="le_infile">
+   <widget class="QLineEdit" name="le_path_1">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -143,7 +143,7 @@
      <number>2</number>
     </property>
    </widget>
-   <widget class="QLineEdit" name="le_infile_2">
+   <widget class="QLineEdit" name="le_path_2">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -159,7 +159,7 @@
      <string notr="true">Input File (Ctrl+O)</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_infile_2">
+   <widget class="QPushButton" name="pb_path_2">
     <property name="geometry">
      <rect>
       <x>480</x>
@@ -229,9 +229,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pb_infile</sender>
+   <sender>pb_path_1</sender>
    <signal>clicked()</signal>
-   <receiver>le_infile</receiver>
+   <receiver>le_path_1</receiver>
    <slot>update()</slot>
    <hints>
     <hint type="sourcelabel">
