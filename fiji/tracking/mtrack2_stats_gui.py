@@ -36,18 +36,20 @@ class MTrack2MainWindow(Ui_MainWindow, GenericMainWindow):
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
+        statusmsg = self.statusbar.showMessage
+        button_ok = self.bb_ok_cancel.button(QtGui.QDialogButtonBox.Ok)
+        button_ok.setEnabled(False)
         infile = str(self.le_infile.text())
         outfile = str(self.le_outfile.text())
         label = False
         if (self.cb_option.checkState() == 2):
             label = True
         verbosity = self.sl_verbosity.value()
+        statusmsg('Analyzing MTrack2 results...')
         gen_stats(f_in=infile, f_out=outfile, label=label,
             deltas=[1, 5], verbosity=verbosity)
-        # TODO: should we exit after the work's done? -> ask user!
-        # sys.exit()
-        # if we don't exit, reset at least the outfile's name
-        self.le_outfile.setText('')
+        statusmsg('Finished creating statistics.')
+        button_ok.setEnabled(True)
 
 
 def main():

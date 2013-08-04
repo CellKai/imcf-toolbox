@@ -38,16 +38,22 @@ class JunctionsMainWindow(Ui_MainWindow, GenericMainWindow):
 
     def run_calculations(self):
         """Collect the settings and launch the calculation."""
+        statusmsg = self.statusbar.showMessage
+        button_ok = self.bb_ok_cancel.button(QtGui.QDialogButtonBox.Ok)
+        button_ok.setEnabled(False)
         in_csv = str(self.le_infile.text())
         out_csv = filehandle(str(self.le_outfile.text()), 'w')
         set_loglevel(self.sl_verbosity.value())
 
+        statusmsg('Parsing junction files...')
         junction = vp.CellJunction(in_csv)
+        statusmsg('Writing output files...')
         junction.write_output(out_csv, in_csv)
-        # reset the outfile's name
-        self.le_outfile.setText('')
         if (self.cb_option.checkState() == 2):
+            statusmsg('Showing plot...')
             plot.junction(junction, True, False)
+        statusmsg('Finished.')
+        button_ok.setEnabled(True)
 
 
 def main():
