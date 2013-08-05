@@ -66,7 +66,7 @@ def get_options():
     dlg.addNumericField("Height", 32, 0)
     dlg.showDialog()
     if dlg.wasCanceled():
-        print "User canceled dialog!"
+        print "User canceled dialog."
         return  None
     # Read out the options
     boxw = int(dlg.getNextNumber())
@@ -99,7 +99,7 @@ def boxed_intensities(imp1, width, height):
 
     if (imw % width + imh % height) > 0:
         msg = "WARNING: image size (%dx%d) not dividable by box (%dx%d)!"
-        print msg % (imw, imh, width, height)
+        IJ.log(msg % (imw, imh, width, height))
 
     for box_y in range(0, imh / height):
         start_y = box_y * height
