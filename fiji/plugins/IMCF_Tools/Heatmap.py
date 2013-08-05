@@ -56,6 +56,10 @@ boxh = 32
 ip1 = imp1.getProcessor()
 ip2 = imp2.getProcessor()
 
+if (imw % boxw + imh % boxh) > 0:
+    msg = "WARNING: image size (%dx%d) is not a multiple of box size (%dx%d)!"
+    print msg % (imw, imh, boxw, boxh)
+
 bavg = rect_avg(ip1, 0, 0, boxw, boxh)
 print bavg
 rect_set(ip2, 0, 0, boxw, boxh, bavg)
