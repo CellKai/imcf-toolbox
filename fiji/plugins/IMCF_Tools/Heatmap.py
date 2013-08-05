@@ -1,4 +1,6 @@
-"""Region based average intensities calculation."""
+"""Region based average intensities calculation.
+
+Create intensity heat-maps for single-channel images."""
 
 from ij.plugin import Duplicator
 
@@ -60,8 +62,13 @@ if (imw % boxw + imh % boxh) > 0:
     msg = "WARNING: image size (%dx%d) is not a multiple of box size (%dx%d)!"
     print msg % (imw, imh, boxw, boxh)
 
-bavg = rect_avg(ip1, 0, 0, boxw, boxh)
-print bavg
-rect_set(ip2, 0, 0, boxw, boxh, bavg)
+for box_y in range(0, imh / boxh):
+    start_y = box_y * boxh
+    for box_x in range(0, imw / boxw):
+        start_x = box_x * boxw
+        # print "%d %d" % (start_x, start_y)
+        bavg = rect_avg(ip1, start_x, start_y, boxw, boxh)
+        # print bavg
+        rect_set(ip2, start_x, start_y, boxw, boxh, bavg)
 
 imp2.show()
