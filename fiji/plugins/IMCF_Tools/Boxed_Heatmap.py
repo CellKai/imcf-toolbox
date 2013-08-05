@@ -68,12 +68,6 @@ def get_options():
     return boxw, boxh
 
 
-options = get_options()
-if options is not None:
-    boxw, boxh = options
-    imp1 = WindowManager.getCurrentImage()
-    boxed_intensities(imp1, boxw, boxh)
-
 def boxed_intensities(imp1, width, height):
     """Create a new image with averaged intensity regions."""
     imp2 = Duplicator().run(imp1)
@@ -99,3 +93,10 @@ def boxed_intensities(imp1, width, height):
             rect_set(ip2, start_x, start_y, boxw, boxh, bavg)
 
     imp2.show()
+
+
+options = get_options()
+if options is not None:
+    boxw, boxh = options
+    imp1 = WindowManager.getCurrentImage()
+    boxed_intensities(imp1, boxw, boxh)
