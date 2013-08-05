@@ -2,13 +2,13 @@
 
 from ij.plugin import Duplicator
 
-def rect_avg(proc, startx, starty, dx, dy):
+def rect_avg(proc, start_x, start_y, dx, dy):
     """Calculate average intensity of a rectangular area.
 
     Parameters
     ----------
     proc : ImageProcessor
-    startx, starty : int
+    start_x, start_y : int
         The starting coordinates of the rectangle.
     dx, dy : int
         The width and height of the rectangle.
@@ -19,28 +19,28 @@ def rect_avg(proc, startx, starty, dx, dy):
         The average intensity.
     """
     bsum = 0
-    for y in range(starty, dy):
-        for x in range(startx, dx):
+    for y in range(start_y, start_y + dy):
+        for x in range(start_x, start_x + dx):
             bsum += proc.getPixel(x, y)
-            # print "[%d, %d] = %d" % (x, y, ip.getPixel(x, y))
+            # print "[%d, %d] = %d" % (x, y, proc.getPixel(x, y))
     avg = bsum / (dx * dy)
     return avg
 
-def rect_set(proc, startx, starty, dx, dy, val):
+def rect_set(proc, start_x, start_y, dx, dy, val):
     """Paint a rectangular area with a given value.
 
     Parameters
     ----------
     proc : ImageProcessor
-    startx, starty : int
+    start_x, start_y : int
         The starting coordinates of the rectangle.
     dx, dy : int
         The width and height of the rectangle.
     val : int
         The value to use for painting.
     """
-    for y in range(starty, dy):
-        for x in range(startx, dx):
+    for y in range(start_y, start_y + dy):
+        for x in range(start_x, start_x + dx):
             proc.putPixel(x, y, val)
 
 
