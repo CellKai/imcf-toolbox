@@ -1,8 +1,11 @@
 """Region based average intensities calculation.
 
-Create intensity heat-maps for single-channel images."""
+Create region based (rectangles) intensity heat-maps
+for single-channel images.
+"""
 
 from ij.plugin import Duplicator
+from ij.gui import GenericDialog
 
 def rect_avg(proc, start_x, start_y, dx, dy):
     """Calculate average intensity of a rectangular area.
@@ -45,6 +48,26 @@ def rect_set(proc, start_x, start_y, dx, dy, val):
         for x in range(start_x, start_x + dx):
             proc.putPixel(x, y, val)
 
+def get_options():
+    """Ask user for input values."""
+    gd = GenericDialog("Options for Boxed Heatmap")
+    gd.addMessage("Boxed Heatmap settings")
+    gd.addMessage("Specify box size:")
+    gd.addNumericField("Width", 32, 0)
+    gd.addNumericField("Height", 32, 0)
+    gd.showDialog()
+    if gd.wasCanceled():
+        print "User canceled dialog!"
+        return  None
+    # Read out the options
+    boxw = int(gd.getNextNumber())
+    boxh = int(gd.getNextNumber())
+    return boxw, boxh
+
+
+options = get_options()
+if options is not None:
+	boxw, boxh = options
 
 imp1 = WindowManager.getCurrentImage()
 imp2 = Duplicator().run(imp1)
@@ -52,9 +75,6 @@ imp2.setTitle('heatmap-' + imp1.getTitle())
 
 imw = imp1.getWidth()
 imh = imp1.getHeight()
-
-boxw = 32
-boxh = 32
 
 ip1 = imp1.getProcessor()
 ip2 = imp2.getProcessor()
