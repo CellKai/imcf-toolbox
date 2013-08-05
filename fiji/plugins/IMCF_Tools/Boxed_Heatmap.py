@@ -48,6 +48,7 @@ def rect_set(proc, start_x, start_y, dx, dy, val):
 
 imp1 = WindowManager.getCurrentImage()
 imp2 = Duplicator().run(imp1)
+imp2.setTitle('heatmap-' + imp1.getTitle())
 
 imw = imp1.getWidth()
 imh = imp1.getHeight()
