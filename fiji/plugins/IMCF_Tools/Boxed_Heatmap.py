@@ -8,7 +8,7 @@ from ij.plugin import Duplicator
 from ij.gui import GenericDialog
 
 
-def rect_avg(proc, start_x, start_y, dx, dy):
+def rect_avg(proc, start_x, start_y, delta_x, delta_y):
     """Calculate average intensity of a rectangular area.
 
     Parameters
@@ -16,7 +16,7 @@ def rect_avg(proc, start_x, start_y, dx, dy):
     proc : ImageProcessor
     start_x, start_y : int
         The starting coordinates of the rectangle.
-    dx, dy : int
+    delta_x, delta_y : int
         The width and height of the rectangle.
 
     Returns
@@ -24,16 +24,18 @@ def rect_avg(proc, start_x, start_y, dx, dy):
     avg : int
         The average intensity.
     """
+    # "x" and "y" are perfectly fine in this context:
+    # pylint: disable-msg=C0103
     bsum = 0
-    for y in range(start_y, start_y + dy):
-        for x in range(start_x, start_x + dx):
+    for y in range(start_y, start_y + delta_y):
+        for x in range(start_x, start_x + delta_x):
             bsum += proc.getPixel(x, y)
             # print "[%d, %d] = %d" % (x, y, proc.getPixel(x, y))
-    avg = bsum / (dx * dy)
+    avg = bsum / (delta_x * delta_y)
     return avg
 
 
-def rect_set(proc, start_x, start_y, dx, dy, val):
+def rect_set(proc, start_x, start_y, delta_x, delta_y, val):
     """Paint a rectangular area with a given value.
 
     Parameters
@@ -41,30 +43,34 @@ def rect_set(proc, start_x, start_y, dx, dy, val):
     proc : ImageProcessor
     start_x, start_y : int
         The starting coordinates of the rectangle.
-    dx, dy : int
+    delta_x, delta_y : int
         The width and height of the rectangle.
     val : int
         The value to use for painting.
     """
-    for y in range(start_y, start_y + dy):
-        for x in range(start_x, start_x + dx):
+    # "x" and "y" are perfectly fine in this context:
+    # pylint: disable-msg=C0103
+    # having 6 instead of 5 arguments is acceptable here:
+    # pylint: disable-msg=R0913
+    for y in range(start_y, start_y + delta_y):
+        for x in range(start_x, start_x + delta_x):
             proc.putPixel(x, y, val)
 
 
 def get_options():
     """Ask user for input values."""
-    gd = GenericDialog("Options for Boxed Heatmap")
-    gd.addMessage("Boxed Heatmap settings")
-    gd.addMessage("Specify box size:")
-    gd.addNumericField("Width", 32, 0)
-    gd.addNumericField("Height", 32, 0)
-    gd.showDialog()
-    if gd.wasCanceled():
+    dlg = GenericDialog("Options for Boxed Heatmap")
+    dlg.addMessage("Boxed Heatmap settings")
+    dlg.addMessage("Specify box size:")
+    dlg.addNumericField("Width", 32, 0)
+    dlg.addNumericField("Height", 32, 0)
+    dlg.showDialog()
+    if dlg.wasCanceled():
         print "User canceled dialog!"
         return  None
     # Read out the options
-    boxw = int(gd.getNextNumber())
-    boxh = int(gd.getNextNumber())
+    boxw = int(dlg.getNextNumber())
+    boxh = int(dlg.getNextNumber())
     return boxw, boxh
 
 
@@ -91,18 +97,18 @@ def boxed_intensities(imp1, width, height):
     ip1 = imp1.getProcessor()
     ip2 = imp2.getProcessor()
 
-    if (imw % boxw + imh % boxh) > 0:
+    if (imw % width + imh % height) > 0:
         msg = "WARNING: image size (%dx%d) not dividable by box (%dx%d)!"
-        print msg % (imw, imh, boxw, boxh)
+        print msg % (imw, imh, width, height)
 
-    for box_y in range(0, imh / boxh):
-        start_y = box_y * boxh
-        for box_x in range(0, imw / boxw):
-            start_x = box_x * boxw
+    for box_y in range(0, imh / height):
+        start_y = box_y * height
+        for box_x in range(0, imw / width):
+            start_x = box_x * width
             # print "%d %d" % (start_x, start_y)
-            bavg = rect_avg(ip1, start_x, start_y, boxw, boxh)
+            bavg = rect_avg(ip1, start_x, start_y, width, height)
             # print bavg
-            rect_set(ip2, start_x, start_y, boxw, boxh, bavg)
+            rect_set(ip2, start_x, start_y, width, height, bavg)
 
     return imp2
 
