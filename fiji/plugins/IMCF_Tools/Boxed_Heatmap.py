@@ -69,7 +69,19 @@ def get_options():
 
 
 def boxed_intensities(imp1, width, height):
-    """Create a new image with averaged intensity regions."""
+    """Create a new image with averaged intensity regions.
+
+    Parameters
+    ----------
+    imp1 : ImagePlus
+    width, height : int
+        The width and height of the rectangles.
+
+    Returns
+    -------
+    imp2 : ImagePlus
+        The resulting ImagePlus, same dimensions as imp1.
+    """
     imp2 = Duplicator().run(imp1)
     imp2.setTitle('heatmap-' + imp1.getTitle())
 
@@ -92,11 +104,18 @@ def boxed_intensities(imp1, width, height):
             # print bavg
             rect_set(ip2, start_x, start_y, boxw, boxh, bavg)
 
-    imp2.show()
+    return imp2
 
 
-options = get_options()
-if options is not None:
-    boxw, boxh = options
-    imp1 = WindowManager.getCurrentImage()
-    boxed_intensities(imp1, boxw, boxh)
+def main():
+    """Get options and create new image."""
+    options = get_options()
+    if options is not None:
+        bwidth, bheight = options
+        img_cur = WindowManager.getCurrentImage()
+        img_new = boxed_intensities(img_cur, bwidth, bheight)
+        img_new.show()
+
+
+if __name__ == "__main__":
+    main()
