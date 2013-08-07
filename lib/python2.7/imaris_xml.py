@@ -19,7 +19,7 @@ class ImarisXML(object):
 
     Example
     -------
-    >>> fh = open('TESTDATA/nuclei_cv/imaris_spots.xml', 'r')
+    >>> fh = open('../../sample_data/nuclei_cv/imaris_spots.xml', 'r')
     >>> xmldata = ImarisXML(fh)
     >>> if xmldata._worksheet('Position') is not None:
     ...     True
