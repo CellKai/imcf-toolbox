@@ -50,9 +50,16 @@ class WingJStructure(object):
     """
 
     def __init__(self, files, calib=1.0):
-        """Read the CSV files and calibrate them."""
+        """Read the CSV files and calibrate them.
+
+        Instance Variables
+        ------------------
+        data : dict(np.array)
+        calib : float
+        """
         log.info('Reading WingJ CSV files...')
         self.data = {}
+        self.calib = calib
         self._read_wingj_files(files)
         # data['XX'].shape = (M, 2)
         # calibrate the WingJ data if requested:
@@ -73,6 +80,17 @@ class WingJStructure(object):
         self.data['AP'] = np.loadtxt(files[0], delimiter=delimiter)
         self.data['VD'] = np.loadtxt(files[1], delimiter=delimiter)
         self.data['CT'] = np.loadtxt(files[2], delimiter=delimiter)
+
+    def set_origin(self, origin):
+        """Set the origin spot (the intersection of A-P and V-D lines).
+
+        Parameters
+        ----------
+        origin : np.array (shape=(N, 2))
+            2D coordinates given as numpy array.
+        """
+        self.data['orig'] = origin * self.calib
+        log.debug('Set origin to %s.' % self.data['orig'])
 
     def dist_to_structures(self, coords):
         """Calculate distance of given coordinates to WingJ structure.
@@ -95,6 +113,7 @@ class WingJStructure(object):
         edm['AP'] = vp.dist_matrix(np.vstack([coords, self.data['AP']]))
         edm['VD'] = vp.dist_matrix(np.vstack([coords, self.data['VD']]))
         edm['CT'] = vp.dist_matrix(np.vstack([coords, self.data['CT']]))
+        edm['orig'] = vp.dist_matrix(np.vstack([coords, self.data['orig']]))
         # edm['XX'].shape (N+M, N+M)
         log.info('Done.')
 
@@ -105,10 +124,12 @@ class WingJStructure(object):
         edm['AP'] = edm['AP'][:count, count:]
         edm['VD'] = edm['VD'][:count, count:]
         edm['CT'] = edm['CT'][:count, count:]
+        edm['orig'] = edm['orig'][:count, count:]
         # edm['XX'].shape = (N, M)
         # log.debug('Distances to "AP" structure:\n%s' % edm['AP'])
         # log.debug('Distances to "VD" structure:\n%s' % edm['VD'])
         # log.debug('Distances to "CT" structure:\n%s' % edm['CT'])
+        log.debug('Distances to origin:\n%s' % edm['orig'])
         return edm
 
     def min_dist_to_structures(self, coords):
