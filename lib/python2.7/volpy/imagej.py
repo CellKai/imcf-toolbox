@@ -17,7 +17,7 @@ def read_csv_com(fname):
     fname : str or filehandle
         The CSV export from an ImageJ measurement. Needs to contain the results
         for center-of-mass ('XM' and 'YM' columns). Make sure to set the output
-        option in ImageJ to either '.csv' or '.xls' but *NOT* '.csv' as the
+        option in ImageJ to either '.csv' or '.xls' but *NOT* '.txt' as the
         latter will use tabs as delimiter.
 
     Returns
