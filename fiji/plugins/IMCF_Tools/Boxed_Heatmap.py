@@ -4,6 +4,7 @@ Create region based (rectangles) intensity heat-maps
 for single-channel images.
 """
 
+from ij import WindowManager
 from ij.plugin import Duplicator
 from ij.gui import GenericDialog
 
