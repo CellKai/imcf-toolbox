@@ -25,8 +25,6 @@ def rect_avg(proc, start_x, start_y, delta_x, delta_y):
     avg : int
         The average intensity.
     """
-    # "x" and "y" are perfectly fine in this context:
-    # pylint: disable-msg=C0103
     bsum = 0
     for y in range(start_y, start_y + delta_y):
         for x in range(start_x, start_x + delta_x):
@@ -49,8 +47,6 @@ def rect_set(proc, start_x, start_y, delta_x, delta_y, val):
     val : int
         The value to use for painting.
     """
-    # "x" and "y" are perfectly fine in this context:
-    # pylint: disable-msg=C0103
     # having 6 instead of 5 arguments is acceptable here:
     # pylint: disable-msg=R0913
     for y in range(start_y, start_y + delta_y):

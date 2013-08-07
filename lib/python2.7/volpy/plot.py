@@ -31,8 +31,6 @@ def scatter(axes, points, color, linewidth=1):
     >>> pts = (np.array([5.7, 3.4, 4.5]), np.array([0.2, 3.7, 3.5]))
     >>> scatter(axes, pts, 'r', 4)
     """
-    # x, y, z are fine in this context, so disable this pylint message here:
-    # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = np.asarray(zip(points[0], points[1]))
     axes.scatter(x, y, z, zdir='z', c=color, linewidth=linewidth)
@@ -55,8 +53,6 @@ def line(axes, points, color, linewidth=1):
     >>> pts = (np.array([5.7, 3.4, 4.5]), np.array([0.2, 3.7, 3.5]))
     >>> line(axes, pts, 'r', 4)
     """
-    # x, y, z are fine in this context, so disable this pylint message here:
-    # pylint: disable-msg=C0103
     # we need to have the coordinates as 3 ndarrays (x,y,z):
     x, y, z = np.asarray(zip(points[0], points[1]))
     axes.plot(x, y, z, zdir='z', c=color, linewidth=linewidth)
