@@ -66,6 +66,7 @@ class WingJStructure(object):
         self.data['AP'] *= calib
         self.data['VD'] *= calib
         self.data['CT'] *= calib
+        self._calc_origin()
         log.info('Done.')
 
     def _read_wingj_files(self, files, delimiter='\t'):
@@ -81,15 +82,17 @@ class WingJStructure(object):
         self.data['VD'] = np.loadtxt(files[1], delimiter=delimiter)
         self.data['CT'] = np.loadtxt(files[2], delimiter=delimiter)
 
-    def set_origin(self, origin):
-        """Set the origin spot (the intersection of A-P and V-D lines).
-
-        Parameters
-        ----------
-        origin : np.array (shape=(N, 2))
-            2D coordinates given as numpy array.
-        """
-        self.data['orig'] = origin * self.calib
+    def _calc_origin(self):
+        """Calculate the origin (the intersection of A-P and V-D lines)."""
+        # TODO: investigate more WingJ structure files, probably the origin
+        # spot is always stored as the "central" element in the AP/VD files
+        # (meaning entry 500 of 1000).
+        edm = vp.dist_matrix(np.vstack([self.data['AP'], self.data['VD']]))
+        closest = vp.get_min_dist_pair(edm, self.data['AP'].shape[0])
+        log.debug(self.data['AP'][closest[0]])
+        log.debug(self.data['VD'][closest[1] - self.data['AP'].shape[0]])
+        log.debug(edm[closest])
+        self.data['orig'] = self.data['AP'][closest[0]]
         log.debug('Set origin to %s.' % self.data['orig'])
 
     def dist_to_structures(self, coords):
@@ -124,7 +127,8 @@ class WingJStructure(object):
         edm['AP'] = edm['AP'][:count, count:]
         edm['VD'] = edm['VD'][:count, count:]
         edm['CT'] = edm['CT'][:count, count:]
-        edm['orig'] = edm['orig'][:count, count:]
+        # there is just one "orig" spot, so we just slice the first row:
+        edm['orig'] = edm['orig'][0, 1:]
         # edm['XX'].shape = (N, M)
         # log.debug('Distances to "AP" structure:\n%s' % edm['AP'])
         # log.debug('Distances to "VD" structure:\n%s' % edm['VD'])
@@ -157,6 +161,7 @@ class WingJStructure(object):
         mindists['AP'] = np.zeros((count))
         mindists['VD'] = np.zeros((count))
         mindists['CT'] = np.zeros((count))
+        mindists['orig'] = dists['orig']
         for i in range(count):
             mindists['AP'][i] = dists['AP'][i].min()
             mindists['VD'][i] = dists['VD'][i].min()
