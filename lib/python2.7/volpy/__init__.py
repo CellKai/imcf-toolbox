@@ -123,6 +123,55 @@ def get_max_dist_pair(edm):
     return np.unravel_index(edm.argmax(), edm.shape)
 
 
+def get_min_dist_pair(edm, split):
+    """Get points with minimal distance from set_1 to set_2.
+
+    Take an EDM and an index number splitting the EDM into two parts ("set_1"
+    and "set_2") and identify the tuple (point_1, point_2) with the minimal
+    distance where "point_N" is from "set_N".
+
+    Parameters
+    ----------
+    edm : euclidean distance matrix
+    split : int
+        The index number where to split the EDM.
+
+    Returns
+    -------
+    (i1, i2) : tuple(int)
+        The tuple of index numbers of the minimal distance pair. If more than
+        one pair has the same minimal distance, the first one (in row-col
+        order) is returned.
+
+    Example
+    -------
+    2 |     *   *
+    1 | x     *   x
+    0-+------------
+      0 1 2 3 4 5 6
+    >>> pl1 = np.array([[1,1],[6,1]])  # marked as 'x' above
+    >>> pl2 = np.array([[3,2],[4,1],[5,2]])  # marked as '*' above
+    >>> edm =  dist_matrix(np.vstack([pl1, pl2]))
+    >>> get_min_dist_pair(edm, 2)
+    (1, 4)
+    """
+    subset = edm[:split, split:]
+    # argmin() returns the smallest entry, unravel_index() converts the index
+    # back to the tuple usable for the 2d edm array
+    minpos = np.unravel_index(subset.argmin(), subset.shape)
+    log.debug(subset)
+    log.info(minpos)
+    log.info(subset[minpos])
+    log.info('---')
+    # now we need to convert the array coordinates back to the form usable
+    # with the original (non-subset) EDM:
+    minpos_orig = (minpos[0], minpos[1] + split)
+    log.debug(edm)
+    log.info(minpos_orig)
+    log.info(edm[minpos_orig])
+    return minpos_orig
+
+
 def find_neighbor(pid, edm, mask):
     """Find the closest neighbor in a given distance matrix.
 
@@ -765,8 +814,6 @@ class CellJunction(Points3D):
         write(['longest transversal edge', self.get_longest_edge()])
         write(['overall area', self.get_area()])
         write(['perimeter', self.perimeter])
-
-
 
 
 if __name__ == "__main__":
