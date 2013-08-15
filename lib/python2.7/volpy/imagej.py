@@ -92,6 +92,8 @@ class WingJStructure(object):
         log.debug(self.data['AP'][closest[0]])
         log.debug(self.data['VD'][closest[1] - self.data['AP'].shape[0]])
         log.debug(edm[closest])
+        # *IF* the above holds, we can just use the coordinates of the first
+        # spot, instead of calculating "new" coordinates:
         self.data['orig'] = self.data['AP'][closest[0]]
         log.debug('Set origin to %s.' % self.data['orig'])
 
