@@ -8,6 +8,3 @@ __testdata
 # Java stuff
 *.class
 *.jar
-
-# Action Bars coming from other sources:
-fiji/plugins/ActionBar/Shared Bars/
