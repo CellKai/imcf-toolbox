@@ -88,12 +88,14 @@ run("Subtract Background...");
 
 <button> 3 line 2
 label=stitchPairs
+icon=icons/stitchpairs.png
 arg=<macro>
 run("Pairwise stitching");
 </macro>
 
 <button> 4 line 2
 label=stitchGrid
+icon=icons/stitchgrid.png
 arg=<macro>
 run("Grid/Collection stitching");
 </macro>
