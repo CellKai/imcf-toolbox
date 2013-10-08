@@ -106,6 +106,13 @@ icon=icons/stack_reg.png
 arg=<macro>
 run("StackReg");
 </macro>
+
+<button> 6 line 2
+label=Segmentation Toolbar
+icon=icons/segmentation.png
+arg=<macro>
+run("Segmentation Toolbar");
+</macro>
 </line>
 
 // end of file
