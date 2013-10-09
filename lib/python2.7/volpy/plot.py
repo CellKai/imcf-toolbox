@@ -116,7 +116,11 @@ def label_axes(axes, labels):
 
 
 def set_minmax(axes, pts3d):
-    """Determine min and max coordinates and set limits.
+    """Determine min and max coordinates and the display limits.
+
+    The min and max coordinates are used to calculate the center of the points,
+    then the largest distance to this center is used to set an isometric
+    bounding box around the points.
 
     Parameters
     ----------
@@ -131,9 +135,14 @@ def set_minmax(axes, pts3d):
     data = pts3d.get_coords()
     cmin = data.min(axis=0)
     cmax = data.max(axis=0)
-    axes.set_xlim3d(cmin[0], cmax[0])
-    axes.set_ylim3d(cmin[1], cmax[1])
-    axes.set_zlim3d(cmin[2], cmax[2])
+    dim = abs(cmax - cmin)
+    maxdim = max(dim)
+    center = cmin + (dim / 2)
+    bbmin = center - maxdim * 0.5
+    bbmax = center + maxdim * 0.5
+    axes.set_xlim3d(bbmin[0], bbmax[0])
+    axes.set_ylim3d(bbmin[1], bbmax[1])
+    axes.set_zlim3d(bbmin[2], bbmax[2])
     return cmin, cmax
 
 
