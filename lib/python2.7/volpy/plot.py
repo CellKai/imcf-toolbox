@@ -84,8 +84,8 @@ def maxdist(axes, maxdist_points):
     scatter(axes, maxdist_points, 'r', linewidth=18)
     for i in (0, 1):
         axes.text(*maxdist_points[i], color='blue',
-            s='   (%s | %s | %s)' % (maxdist_points[i][0],
-            maxdist_points[i][1], maxdist_points[i][2]))
+                  s='   (%s | %s | %s)' % (maxdist_points[i][0],
+                  maxdist_points[i][1], maxdist_points[i][2]))
     # draw connection line between points:
     line(axes, maxdist_points, 'y')
     # calculate length and add label:
@@ -219,11 +219,10 @@ def junction(pts3d, show, export, stats=False, plotraw=False):
 
     if stats:
         # print overall area and maximum tesselation edge length:
-        axes.text(cmin[0], cmin[1], cmin[2],
-            s='  overall area: %.2f' % pts3d.get_area(),
-            color='blue')
+        axes.text(cmin[0], cmin[1], cmin[2], color='blue',
+                  s='  overall area: %.2f' % pts3d.get_area())
         axes.text(*pts3d.get_longest_edge_pos(), color='blue',
-            s='  longest edge: %.2f' % pts3d.get_longest_edge())
+                  s='  longest edge: %.2f' % pts3d.get_longest_edge())
 
     if plotraw:
         # draw the raw filament points:
