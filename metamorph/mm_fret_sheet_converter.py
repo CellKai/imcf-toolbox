@@ -40,9 +40,16 @@ def main():
     assembly[:, 1] = sheet.col_values(1, 3, 3 + sec_size)
     # assembly[:, 2] <-- we need to calculate the euclidean deltas here
 
-    for sec in range(sections):
+    col = 3
+    for sec in range(sections / 2):
         start = (sec_size + 3) * sec + 3
-        assembly[:, sec + 3] = sheet.col_values(2, start, start + sec_size)
+        # print start
+        assembly[:, col] = sheet.col_values(2, start, start + sec_size)
+        col += 1
+        start += (sec_size + 3) * (sections / 2)
+        # print start
+        assembly[:, col] = sheet.col_values(2, start, start + sec_size)
+        col += 1
 
     print assembly
 
