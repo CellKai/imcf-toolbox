@@ -2,9 +2,20 @@
 
 from xlrd import open_workbook, colname
 import numpy as np
-import pprint
+import argparse
 
-ppr = pprint.PrettyPrinter(indent=4)
+def parse_arguments():
+    """Parse commandline arguments."""
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('--infile', required=True, type=str,
+        help='Metamorph Excel export file.')
+    argparser.add_argument('-v', '--verbosity', dest='verbosity',
+        action='count', default=0)
+    try:
+        args = argparser.parse_args()
+    except IOError as err:
+        argparser.error(str(err))
+    return args
 
 xlfile = open('../sample_data/fret/2013_08_05T2_-_Linescans_example_2013_10_15.xlsx','rb').read()
 wb = open_workbook(file_contents=xlfile)
