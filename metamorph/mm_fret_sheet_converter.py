@@ -29,13 +29,22 @@ def main():
     sheet = wb.sheet_by_index(0)
     print("Sheet 0 name: %s" % sheet.name)
 
-    # sec_size = 83
     sec_size = int(sheet.cell_value(1,8))
     sections = int(sheet.nrows / (sec_size + 3))
     print("Section size: %s, number of sections: %s" % (sec_size, sections))
 
+    # now we assemble the data in a numpy array that can easily be exported
+    # using numpy's savetxt() function
+    assembly = np.zeros(shape = (sec_size, sections + 3))
+    assembly[:, 0] = sheet.col_values(0, 3, 3 + sec_size)
+    assembly[:, 1] = sheet.col_values(1, 3, 3 + sec_size)
+    # assembly[:, 2] <-- we need to calculate the euclidean deltas here
+
     for sec in range(sections):
-        print sheet.row_values(1,1)
+        start = (sec_size + 3) * sec + 3
+        assembly[:, sec + 3] = sheet.col_values(2, start, start + sec_size)
+
+    print assembly
 
 
 if __name__ == "__main__":
