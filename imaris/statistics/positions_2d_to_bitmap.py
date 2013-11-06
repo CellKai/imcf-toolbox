@@ -1,4 +1,14 @@
+#!/usr/bin/python
 # coding: utf-8
+
+"""Generate a bitmap from coordinates given as an Imaris Excel XML export.
+
+Takes a XML file exported from Imaris via the statistics tab containing
+coordinates of segmented objects and uses them to generate a 2D bitmap of a
+given size. The resulting bitmap is stored as a CSV file that can be used in
+ImageJ via the File>Import>Text_Image function, empty pixels are black, the
+others contain values > 0.
+"""
 
 import imaris_xml
 import numpy as np
