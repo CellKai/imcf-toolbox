@@ -29,7 +29,7 @@ coords_2d[:,1] -= coords_2d[:,1].min()
 xmax = coords_2d[:,0].max()
 ymax = coords_2d[:,1].max()
 
-matrix = np.zeros((dim_x, dim_y))
+matrix = np.zeros((dim_x, dim_y), dtype=np.int)
 for point in coords_2d:
     pix_x = int((point[0] / xmax) * (dim_x - 1))
     pix_y = int((point[1] / ymax) * (dim_y - 1))
