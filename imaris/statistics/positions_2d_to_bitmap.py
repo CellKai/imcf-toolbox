@@ -11,20 +11,36 @@ others contain values > 0.
 """
 
 import sys
+import argparse
 
 import imaris_xml
 import numpy as np
 
+
+def parse_arguments():
+    """Parse the commandline arguments."""
+    argparser = argparse.ArgumentParser(description=__doc__)
+    argparser.add_argument('-i', '--infile', required=True, type=file,
+        help='Imaris Excel XML export containing "Position" data.')
+    argparser.add_argument('-o', '--outfile', type=argparse.FileType('w'),
+        help='CSV file to store the results.', required=True)
+    argparser.add_argument('-s', '--size', required=True, type=int,
+        help='Size of generated bitmap in pixels.')
+    argparser.add_argument('-d', '--delta', default=50, type=int,
+        help='Offset used for indicating an object (default=50).')
+    try:
+        return argparser.parse_args()
+    except IOError as err:
+        argparser.error(str(err))
+
 def main():
     """Read Imaris export and generate bitmap."""
-    # TODO: use arg
-    dim_x = 256
-    dim_y = dim_x
-    offset = 50
+    args = parse_arguments()
 
-    # TODO: use arg
-    fh = open('spots_red_multi_ws-all.xml', 'r')
-    xmldata = imaris_xml.ImarisXML(fh)
+    dim_x = args.size
+    dim_y = dim_x
+
+    xmldata = imaris_xml.ImarisXML(args.infile)
 
     coords = xmldata.coordinates('Position')
     coords_2d = coords[:,0:2]
@@ -42,10 +58,9 @@ def main():
         pix_x = int((point[0] / xmax) * (dim_x - 1))
         pix_y = int((point[1] / ymax) * (dim_y - 1))
         # print "(%f,%f) -> (%i,%i)" % (point[0], point[1], pix_x, pix_y)
-        matrix[pix_x, pix_y] += offset
+        matrix[pix_x, pix_y] += args.delta
 
-    # TODO: use arg
-    np.savetxt('bitmap.csv', matrix, fmt='%i')
+    np.savetxt(args.outfile, matrix, fmt='%i')
 
 
 if __name__ == "__main__":
