@@ -28,6 +28,9 @@ def parse_arguments():
         help='Size of generated bitmap in pixels.')
     argparser.add_argument('-d', '--delta', default=50, type=int,
         help='Offset used for indicating an object (default=50).')
+    argparser.add_argument('--crop', dest='cropempty',
+        action='store_const', const=True, default=False,
+        help='Crop away empty regions without objects.')
     try:
         return argparser.parse_args()
     except IOError as err:
@@ -45,10 +48,10 @@ def main():
     coords = xmldata.coordinates('Position')
     coords_2d = coords[:,0:2]
 
-    # TODO: make this configurable
     # remove emtpy blocks (aka shift coords to origin)
-    coords_2d[:,0] -= coords_2d[:,0].min()
-    coords_2d[:,1] -= coords_2d[:,1].min()
+    if args.cropempty:
+        coords_2d[:,0] -= coords_2d[:,0].min()
+        coords_2d[:,1] -= coords_2d[:,1].min()
 
     xmax = coords_2d[:,0].max()
     ymax = coords_2d[:,1].max()
