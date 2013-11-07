@@ -45,19 +45,18 @@ def main():
 
     xmldata = imaris_xml.ImarisXML(args.infile)
 
-    coords = xmldata.coordinates('Position')
-    coords_2d = coords[:,0:2]
+    coords = xmldata.coordinates_2d('Position')
 
     # remove emtpy blocks (aka shift coords to origin)
     if args.cropempty:
-        coords_2d[:,0] -= coords_2d[:,0].min()
-        coords_2d[:,1] -= coords_2d[:,1].min()
+        coords[:,0] -= coords[:,0].min()
+        coords[:,1] -= coords[:,1].min()
 
-    xmax = coords_2d[:,0].max()
-    ymax = coords_2d[:,1].max()
+    xmax = coords[:,0].max()
+    ymax = coords[:,1].max()
 
     matrix = np.zeros((dim_x, dim_y), dtype=np.int)
-    for point in coords_2d:
+    for point in coords:
         pix_x = int((point[0] / xmax) * (dim_x - 1))
         pix_y = int((point[1] / ymax) * (dim_y - 1))
         # print "(%f,%f) -> (%i,%i)" % (point[0], point[1], pix_x, pix_y)
