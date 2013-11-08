@@ -23,6 +23,8 @@ def parse_arguments():
     addarg = argparser.add_argument
     addarg('-i', '--infile', required=True, type=file,
            help='Imaris Excel XML export containing "Position" data.')
+    # FIXME: this is truncating an existing output file with the given name
+    # even if nothing is done (like for example only displaying the help:
     addarg('-o', '--outfile', required=True, type=argparse.FileType('w'),
            help='CSV file to store the results.')
     addarg('-s', '--size', required=True, type=int,
