@@ -751,10 +751,10 @@ class Points3D(object):
         """
         bitmap = np.zeros((size[0], size[1]), dtype=np.int)
         coords = self.data
-        xmin = coords[:, 0].min()
-        ymin = coords[:, 1].min()
-        xmax = coords[:, 0].max()
-        ymax = coords[:, 1].max()
+        xmin = self.limits[0][0]
+        ymin = self.limits[1][0]
+        xmax = self.limits[0][1]
+        ymax = self.limits[1][1]
         if crop:
             xcrop = xmin
             ycrop = ymin
