@@ -656,7 +656,6 @@ class Points3D(object):
     def __init__(self, csvfile):
         """Load point coordinates from a CSV file."""
         # TODO: make loading of data more flexible (not just CSV)
-        # TODO: create an instance var for the volume limits
         self.edm = None
         self.mdpair = None
         # np.loadtxt() returns an ndarray() of floats, complains on non-floats
@@ -664,6 +663,24 @@ class Points3D(object):
         log.info('Parsed %i points from CSV.\n%s' %
                  (len(self.data), str(self.data)))
         log.debug(ppr.pformat(self.data))
+        self.limits = []
+        self.set_limits_defaults()
+
+    def set_limits(self, xmin, xmax, ymin, ymax, zmin, zmax):
+        """Set the volume limits."""
+        self.limits = [(xmin, xmax),
+                       (ymin, ymax),
+                       (zmin, zmax)]
+        log.debug("Setting volume limits:\n%s" % ppr.pformat(self.limits))
+
+    def set_limits_defaults(self):
+        """Set the default volume limits using min/max coordinates."""
+        self.set_limits(self.data[:, 0].min(),
+                        self.data[:, 0].max(),
+                        self.data[:, 1].min(),
+                        self.data[:, 1].max(),
+                        self.data[:, 2].min(),
+                        self.data[:, 2].max())
 
     def get_coords(self):
         """Get the coordinates of this object as np.ndarray."""
