@@ -730,20 +730,21 @@ class Points3D(object):
         -------
         bitmap : ndarray
         """
+        bitmap = np.zeros((size[0], size[1]), dtype=np.int)
         coords = self.data
         xmin = coords[:, 0].min()
         ymin = coords[:, 1].min()
         xmax = coords[:, 0].max()
         ymax = coords[:, 1].max()
-
-        bitmap = np.zeros((size[0], size[1]), dtype=np.int)
+        if crop:
+            crop_x = xmin
+            crop_y = ymin
+        else:
+            crop_x = crop_y = 0
         for point in coords:
-            pix_x = int((point[0] / xmax) * (size[0] - 1))
-            pix_y = int((point[1] / ymax) * (size[1] - 1))
+            pix_x = int(((point[0] - crop_x) / xmax) * (size[0] - 1))
+            pix_y = int(((point[1] - crop_y) / ymax) * (size[1] - 1))
             # print "(%f,%f) -> (%i,%i)" % (point[0], point[1], pix_x, pix_y)
-            if crop:
-                pix_x -= xmin
-                pix_y -= ymin
             bitmap[pix_x, pix_y] += delta
 
         return bitmap
