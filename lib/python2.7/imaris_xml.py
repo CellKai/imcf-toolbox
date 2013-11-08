@@ -10,6 +10,7 @@ import xml.etree.ElementTree as etree
 import numpy as np
 from log import log
 from misc import filename
+import volpy as vp
 
 
 class ImarisXML(object):
@@ -174,6 +175,20 @@ class ImarisXML(object):
         """A wrapper to retrieve a view on the 2D coordinates only."""
         return self.coordinates(ws_name)[:, 0:2]
 
+
+class StatisticsSpots(vp.Points3D):
+
+    """Class representing "spots" objects exported from the statistics tab."""
+
+    def __init__(self, infile):
+        """Load spots positions from a statistics XML export."""
+        self.edm = None
+        self.mdpair = None
+        xmldata = ImarisXML(infile)
+        self.data = xmldata.coordinates('Position')
+        del xmldata
+        log.info('Created %i spots from XML export.\n%s' %
+                 (len(self.data), str(self.data)))
 
 if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
