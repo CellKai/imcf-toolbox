@@ -93,7 +93,7 @@ def dist_matrix(pts):
                 matlib.repmat(pts, len(pts), 1) -
                 matlib.repeat(pts, len(pts), axis=0)
             ) ** 2,
-                           axis=1
+            axis=1
         )
     )
     return dist_mat.reshape((len(pts), len(pts)))
@@ -660,7 +660,7 @@ class Points3D(object):
         # np.loadtxt() returns an ndarray() of floats, complains on non-floats
         self.data = np.loadtxt(csvfile, delimiter=',')
         log.info('Parsed %i points from CSV.\n%s' %
-            (len(self.data), str(self.data)))
+                 (len(self.data), str(self.data)))
         log.debug(ppr.pformat(self.data))
 
     def get_coords(self):
@@ -670,7 +670,7 @@ class Points3D(object):
     def get_edm(self):
         """Get the euclidean distance matrix of the points."""
         # lazy initialization of the EDM:
-        if self.edm == None:
+        if self.edm is None:
             self.edm = dist_matrix(self.data)
             log.info(ppr.pformat(self.edm))
         return self.edm
@@ -684,7 +684,7 @@ class Points3D(object):
           The tuple of index numbers for the described points.
         """
         # lazy initialization of the maxdistpair:
-        if self.mdpair == None:
+        if self.mdpair is None:
             self.mdpair = get_max_dist_pair(self.get_edm())
         return self.mdpair
 
@@ -698,7 +698,7 @@ class Points3D(object):
         """
         # NOTE: previously this was a list, not a tuple...
         return (self.data[self.get_mdpair()[0]],
-            self.data[self.get_mdpair()[1]])
+                self.data[self.get_mdpair()[1]])
 
     def get_mdpair_dist(self):
         """Get the distance of the maximum distance pair.
@@ -811,7 +811,7 @@ class CellJunction(Points3D):
 
     def get_longest_edge_pos(self):
         """Look up the length of the longest transversal edge."""
-        if self._te_max_pos == None:
+        if self._te_max_pos is None:
             self.get_longest_edge()
         return self._te_max_pos
 
@@ -820,9 +820,11 @@ class CellJunction(Points3D):
         if self._vtxlist == []:
             for (vtx1, vtx2, vtx3) in self.triangles:
                 self._vtxlist.append([tuple(self.data[vtx1]),
-                    tuple(self.data[vtx2]), tuple(self.data[vtx3])])
+                                      tuple(self.data[vtx2]),
+                                      tuple(self.data[vtx3])])
                 self._area += tri_area(self.data[vtx1],
-                    self.data[vtx2], self.data[vtx3])
+                                       self.data[vtx2],
+                                       self.data[vtx3])
             log.debug("vtxlist: %s" % self._vtxlist)
         return self._vtxlist
 

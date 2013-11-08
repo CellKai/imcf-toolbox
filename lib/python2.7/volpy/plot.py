@@ -85,7 +85,8 @@ def maxdist(axes, maxdist_points):
     for i in (0, 1):
         axes.text(*maxdist_points[i], color='blue',
                   s='   (%s | %s | %s)' % (maxdist_points[i][0],
-                  maxdist_points[i][1], maxdist_points[i][2]))
+                                           maxdist_points[i][1],
+                                           maxdist_points[i][2]))
     # draw connection line between points:
     line(axes, maxdist_points, 'y')
     # calculate length and add label:
