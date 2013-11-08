@@ -20,29 +20,29 @@ import numpy as np
 def parse_arguments():
     """Parse the commandline arguments."""
     argparser = argparse.ArgumentParser(description=__doc__)
-    argparser.add_argument('-i', '--infile', required=True, type=file,
-        help='Imaris Excel XML export containing "Position" data.')
-    argparser.add_argument('-o', '--outfile', type=argparse.FileType('w'),
-        help='CSV file to store the results.', required=True)
-    argparser.add_argument('-s', '--size', required=True, type=int,
-        help='Size of generated bitmap in pixels.')
-    argparser.add_argument('-d', '--delta', default=50, type=int,
-        help='Offset used for indicating an object (default=50).')
-    argparser.add_argument('--crop', dest='cropempty',
-        action='store_const', const=True, default=False,
-        help='Crop away empty regions without objects.')
+    addarg = argparser.add_argument
+    addarg('-i', '--infile', required=True, type=file,
+           help='Imaris Excel XML export containing "Position" data.')
+    addarg('-o', '--outfile', required=True, type=argparse.FileType('w'),
+           help='CSV file to store the results.')
+    addarg('-s', '--size', required=True, type=int,
+           help='Size of generated bitmap in pixels.')
+    addarg('--delta', default=50, type=int,
+           help='Offset used for indicating an object (default=50).')
+    addarg('--crop', action='store_const', const=True, default=False,
+           help='Crop away empty regions without objects.')
     try:
         return argparser.parse_args()
     except IOError as err:
         argparser.error(str(err))
+
 
 def main():
     """Read Imaris export and generate bitmap."""
     args = parse_arguments()
 
     spots = StatisticsSpots(args.infile)
-    matrix = spots.gen_bitmap((args.size, args.size),
-                              crop=args.cropempty, delta=50)
+    matrix = spots.gen_bitmap((args.size, args.size), crop=args.crop, delta=50)
     np.savetxt(args.outfile, matrix, fmt='%i')
 
 
