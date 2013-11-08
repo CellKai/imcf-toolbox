@@ -13,7 +13,7 @@ others contain values > 0.
 import sys
 import argparse
 
-import imaris_xml
+from imaris_xml import StatisticsSpots
 import numpy as np
 
 
@@ -40,28 +40,9 @@ def main():
     """Read Imaris export and generate bitmap."""
     args = parse_arguments()
 
-    dim_x = args.size
-    dim_y = dim_x
-
-    xmldata = imaris_xml.ImarisXML(args.infile)
-
-    coords = xmldata.coordinates_2d('Position')
-
-    # remove emtpy blocks (aka shift coords to origin)
-    if args.cropempty:
-        coords[:,0] -= coords[:,0].min()
-        coords[:,1] -= coords[:,1].min()
-
-    xmax = coords[:,0].max()
-    ymax = coords[:,1].max()
-
-    matrix = np.zeros((dim_x, dim_y), dtype=np.int)
-    for point in coords:
-        pix_x = int((point[0] / xmax) * (dim_x - 1))
-        pix_y = int((point[1] / ymax) * (dim_y - 1))
-        # print "(%f,%f) -> (%i,%i)" % (point[0], point[1], pix_x, pix_y)
-        matrix[pix_x, pix_y] += args.delta
-
+    spots = StatisticsSpots(args.infile)
+    matrix = spots.gen_bitmap((args.size, args.size),
+                              crop=args.cropempty, delta=50)
     np.savetxt(args.outfile, matrix, fmt='%i')
 
 
