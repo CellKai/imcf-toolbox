@@ -191,7 +191,7 @@ class StatisticsSpots(vp.Points3D):
         del xmldata
         log.info('Created %i spots from XML export.\n%s' %
                  (len(self.data), str(self.data)))
-        self.limits = []
+        self.limits = [[0, 0], [0, 0], [0, 0]]
         self.set_limits_defaults()
 
 if __name__ == "__main__":

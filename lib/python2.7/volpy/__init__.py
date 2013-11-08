@@ -663,14 +663,26 @@ class Points3D(object):
         log.info('Parsed %i points from CSV.\n%s' %
                  (len(self.data), str(self.data)))
         log.debug(ppr.pformat(self.data))
-        self.limits = []
+        self.limits = [[0, 0], [0, 0], [0, 0]]
         self.set_limits_defaults()
 
-    def set_limits(self, xmin, xmax, ymin, ymax, zmin, zmax):
+    def set_limits(self,
+                   xmin=None, xmax=None,
+                   ymin=None, ymax=None,
+                   zmin=None, zmax=None):
         """Set the volume limits."""
-        self.limits = [(xmin, xmax),
-                       (ymin, ymax),
-                       (zmin, zmax)]
+        if xmin is not None:
+            self.limits[0][0] = xmin
+        if xmax is not None:
+            self.limits[0][1] = xmax
+        if ymin is not None:
+            self.limits[1][0] = ymin
+        if ymax is not None:
+            self.limits[1][1] = ymax
+        if zmin is not None:
+            self.limits[2][0] = zmin
+        if zmax is not None:
+            self.limits[2][1] = zmax
         log.debug("Setting volume limits:\n%s" % ppr.pformat(self.limits))
 
     def set_limits_defaults(self):

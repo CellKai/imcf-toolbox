@@ -33,10 +33,9 @@ def parse_arguments():
            help='Offset used for indicating an object (default=50).')
     addarg('--crop', action='store_const', const=True, default=False,
            help='Crop away empty regions without objects.')
-    # FIXME: this needs to be grouped to make it optional!
-    addarg('-x', '--xmax', required=True, type=float,
+    addarg('-x', '--xmax', required=False, type=float, default=None,
            help='Size of volume (x direction) in calibrated units .')
-    addarg('-y', '--ymax', required=True, type=float,
+    addarg('-y', '--ymax', required=False, type=float, default=None,
            help='Size of volume (y direction) in calibrated units .')
     try:
         return argparser.parse_args()
@@ -49,7 +48,10 @@ def main():
     args = parse_arguments()
 
     spots = StatisticsSpots(args.infile)
-    spots.set_limits(0, args.xmax, 0, args.ymax, 0, 0)
+    if args.xmax is not None:
+        spots.set_limits(xmax=args.xmax)
+    if args.ymax is not None:
+        spots.set_limits(ymax=args.ymax)
     matrix = spots.gen_bitmap((args.size, args.size), crop=args.crop, delta=50)
     np.savetxt(args.outfile, matrix, fmt='%i')
 
