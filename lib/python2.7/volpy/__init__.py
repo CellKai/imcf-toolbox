@@ -739,13 +739,13 @@ class Points3D(object):
         xmax = coords[:, 0].max()
         ymax = coords[:, 1].max()
         if crop:
-            crop_x = xmin
-            crop_y = ymin
+            xcrop = xmin
+            ycrop = ymin
         else:
-            crop_x = crop_y = 0
+            xcrop = ycrop = 0
         for point in coords:
-            pix_x = int(((point[0] - crop_x) / xmax) * (size[0] - 1))
-            pix_y = int(((point[1] - crop_y) / ymax) * (size[1] - 1))
+            pix_x = int(((point[0] - xcrop) / (xmax - xcrop)) * (size[0] - 1))
+            pix_y = int(((point[1] - ycrop) / (ymax - ycrop)) * (size[1] - 1))
             # print "(%f,%f) -> (%i,%i)" % (point[0], point[1], pix_x, pix_y)
             bitmap[pix_x, pix_y] += delta
 
