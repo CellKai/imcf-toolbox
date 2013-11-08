@@ -709,6 +709,45 @@ class Points3D(object):
         """
         return self.get_edm()[self.get_mdpair()]
 
+    def gen_bitmap(self, size, crop=False, delta=1):
+        """Generate a 2D bitmap of the coordinates.
+
+        The bitmap is a matrix (size[0] x size[1]) with all values set to
+        zero, except those where an object exists (converted from object
+        coordinate space to the bitmap coordinate space).
+
+        Parameters
+        ----------
+        size : (int, int)
+        crop : Bool
+            Set to True if empty parts of the target coordinate space should
+            be cropped away before generating the bitmap.
+        delta : int
+            Can be used to specify the offset that gets added at a position
+            when an object is mapped to a pixel.
+
+        Returns
+        -------
+        bitmap : ndarray
+        """
+        coords = self.data
+        xmin = coords[:, 0].min()
+        ymin = coords[:, 1].min()
+        xmax = coords[:, 0].max()
+        ymax = coords[:, 1].max()
+
+        bitmap = np.zeros((size[0], size[1]), dtype=np.int)
+        for point in coords:
+            pix_x = int((point[0] / xmax) * (size[0] - 1))
+            pix_y = int((point[1] / ymax) * (size[1] - 1))
+            # print "(%f,%f) -> (%i,%i)" % (point[0], point[1], pix_x, pix_y)
+            if crop:
+                pix_x -= xmin
+                pix_y -= ymin
+            bitmap[pix_x, pix_y] += delta
+
+        return bitmap
+
 
 class Filament(Points3D):
     """Filament objects in 3D space based on a Points3D object."""
