@@ -31,12 +31,14 @@ class SpotsToBitmapMainWindow(Ui_MainWindow, GenericMainWindow):
         self.label_3.setText("Input size (in calibrated units)")
         self.group_2.setTitle("Output File")
         self.label_4.setText("Output size (in pixels)")
-        QtCore.QObject.connect(self.pb_infile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_infile: fopen(elt, ffilter=ffilter))
-        QtCore.QObject.connect(self.pb_outfile, QtCore.SIGNAL("clicked()"),
-            lambda elt=self.le_outfile: fsave(elt, directory=self.path))
-        QtCore.QObject.connect(self.le_infile,
-            QtCore.SIGNAL("textChanged(QString)"), self._update_path)
+        # signal<->slot connections:
+        conn = QtCore.QObject.connect
+        conn(self.pb_infile, QtCore.SIGNAL("clicked()"),
+             lambda elt=self.le_infile: fopen(elt, ffilter=ffilter))
+        conn(self.pb_outfile, QtCore.SIGNAL("clicked()"),
+             lambda elt=self.le_outfile: fsave(elt, directory=self.path))
+        conn(self.le_infile,
+             QtCore.SIGNAL("textChanged(QString)"), self._update_path)
         QtCore.QMetaObject.connectSlotsByName(window)
 
     def run_calculations(self):
