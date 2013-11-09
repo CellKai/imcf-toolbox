@@ -52,6 +52,10 @@ class SpotsToBitmapMainWindow(Ui_MainWindow, GenericMainWindow):
         outfile = filehandle(str(self.le_outfile.text()), 'w')
         xmax = self.dsb_1.value()
         ymax = self.dsb_2.value()
+        if (xmax + ymax) == 0:
+            statusmsg('Input size required!')
+            button_ok.setEnabled(True)
+            return
         xtgt = self.sb_1.value()
         ytgt = self.sb_2.value()
         set_loglevel(self.sl_verbosity.value())
