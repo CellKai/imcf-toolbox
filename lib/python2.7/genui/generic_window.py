@@ -31,9 +31,10 @@ class GenericMainWindow(object):
     def set_defaults(self, window):
         """Set some default values used in all derived GUIs."""
         self.preset_fields(genui.parse_presets())
-        # TODO: there are many things that could potentially go wrong here,
-        # they should be captured via try/except, as they are mostly harmless
-        # NOTE: an instance of GenericMainWindow doesn't have the members
+        # NOTE I: there are many things that could potentially go wrong here,
+        # but we don't try to catch them as they are important indicators that
+        # something is missing in a derived subclass.
+        # NOTE II: an instance of GenericMainWindow doesn't have the members
         # referenced herein, only an appropriately constructed subclass will,
         # so we disable the corresponding pylint message:
         # pylint: disable-msg=E1101
