@@ -39,16 +39,14 @@ class GenericMainWindow(object):
         # pylint: disable-msg=E1101
         window.addAction(self.sc_ctrl_w)
         window.addAction(self.sc_ctrl_q)
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"),
-            window.close)
-        QtCore.QObject.connect(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
-            self.run_calculations)
-        QtCore.QObject.connect(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"),
-            window.close)
-        QtCore.QObject.connect(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"),
-            window.close)
-        QtCore.QObject.connect(self.sl_verbosity,
-            QtCore.SIGNAL("valueChanged(int)"), self.sb_verbosity.setValue)
+        conn = QtCore.QObject.connect
+        conn(self.bb_ok_cancel, QtCore.SIGNAL("rejected()"), window.close)
+        conn(self.bb_ok_cancel, QtCore.SIGNAL("accepted()"),
+             self.run_calculations)
+        conn(self.sc_ctrl_w, QtCore.SIGNAL("triggered()"), window.close)
+        conn(self.sc_ctrl_q, QtCore.SIGNAL("triggered()"), window.close)
+        conn(self.sl_verbosity, QtCore.SIGNAL("valueChanged(int)"),
+             self.sb_verbosity.setValue)
 
     def preset_fields(self, val_dict):
         """Preset GUI elements with supplied values.
