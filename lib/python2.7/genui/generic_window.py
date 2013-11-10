@@ -71,10 +71,19 @@ class GenericMainWindow(object):
         # pylint: disable-msg=E1101
         if not val_dict:
             return
-        types = (QtGui.QLineEdit)
+        types = (QtGui.QLineEdit,
+                 QtGui.QDoubleSpinBox,
+                 QtGui.QSpinBox)
         for name in val_dict.keys():
             elt = self.centralwidget.findChild(types, name)
             if elt:
-                elt.setText(str(val_dict[name]))
+                if type(elt) == QtGui.QLineEdit:
+                    elt.setText(str(val_dict[name]))
+                elif type(elt) == QtGui.QSpinBox:
+                    elt.setValue(int(val_dict[name]))
+                elif type(elt) == QtGui.QDoubleSpinBox:
+                    elt.setValue(float(val_dict[name]))
+                else:
+                    log.error('Unrecognized widget type!')
             else:
                 log.warn("Couldn't find GUI element '%s'" % name)
