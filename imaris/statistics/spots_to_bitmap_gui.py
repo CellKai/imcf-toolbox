@@ -21,6 +21,8 @@ class SpotsToBitmapMainWindow(Ui_MainWindow, GenericMainWindow):
     def setup_window(self, window):
         """Customize the generic UI to our specific case."""
         super(SpotsToBitmapMainWindow, self).setupUi(window)
+        self.sb_1.setValue(512)
+        self.sb_2.setValue(512)
         self.set_defaults(window)
         window.setWindowTitle("Imaris Spots to Bitmap")
         self.label_1.setText("Spots To Bitmap Converter")
@@ -31,8 +33,6 @@ class SpotsToBitmapMainWindow(Ui_MainWindow, GenericMainWindow):
         self.label_3.setText("Input size (in calibrated units)")
         self.group_2.setTitle("Output File")
         self.label_4.setText("Output size (in pixels)")
-        self.sb_1.setValue(512)
-        self.sb_2.setValue(512)
         # signal<->slot connections:
         conn = QtCore.QObject.connect
         conn(self.pb_infile, QtCore.SIGNAL("clicked()"),
