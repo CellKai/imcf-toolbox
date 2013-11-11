@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'generic_in_out_xysize_xysize.ui'
 #
-# Created: Sat Nov  9 11:48:12 2013
+# Created: Mon Nov 11 11:30:33 2013
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -68,11 +68,13 @@ class Ui_MainWindow(object):
         self.dsb_1 = QtGui.QDoubleSpinBox(self.group_1)
         self.dsb_1.setGeometry(QtCore.QRect(250, 70, 100, 27))
         self.dsb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.dsb_1.setDecimals(3)
         self.dsb_1.setMaximum(9999.99)
         self.dsb_1.setObjectName(_fromUtf8("dsb_1"))
         self.dsb_2 = QtGui.QDoubleSpinBox(self.group_1)
         self.dsb_2.setGeometry(QtCore.QRect(360, 70, 100, 27))
         self.dsb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.dsb_2.setDecimals(3)
         self.dsb_2.setMaximum(9999.99)
         self.dsb_2.setObjectName(_fromUtf8("dsb_2"))
         self.pb_infile = QtGui.QPushButton(self.group_1)
