@@ -181,18 +181,15 @@ class StatisticsSpots(vp.Points3D):
 
     def __init__(self, infile):
         """Load spots positions from a statistics XML export."""
-        # NOTE: we don't call super.__init__() here on purpose as the
-        # constructor expects a CSV file (which we don't have in our case).
-        # This should be fixed by making super.__init__() more flexible.
-        self.edm = None
-        self.mdpair = None
+        super(StatisticsSpots, self).__init__(infile)
+
+    def __load_data__(self, infile):
+        """Override the loading by using the XML importer."""
         xmldata = ImarisXML(infile)
         self.data = xmldata.coordinates('Position')
         del xmldata
         log.info('Created %i spots from XML export.\n%s' %
                  (len(self.data), str(self.data)))
-        self.limits = [[0, 0], [0, 0], [0, 0]]
-        self.set_limits_defaults()
 
 if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
