@@ -657,6 +657,7 @@ class Points3D(object):
         """Load point coordinates from a CSV file."""
         self.edm = None
         self.mdpair = None
+        self.data = None
         self.__load_data__(csvfile)
         log.debug(ppr.pformat(self.data))
         self.limits = [[0, 0], [0, 0], [0, 0]]
