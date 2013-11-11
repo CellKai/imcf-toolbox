@@ -655,16 +655,24 @@ class Points3D(object):
 
     def __init__(self, csvfile):
         """Load point coordinates from a CSV file."""
-        # TODO: make loading of data more flexible (not just CSV)
         self.edm = None
         self.mdpair = None
-        # np.loadtxt() returns an ndarray() of floats, complains on non-floats
-        self.data = np.loadtxt(csvfile, delimiter=',')
-        log.info('Parsed %i points from CSV.\n%s' %
-                 (len(self.data), str(self.data)))
+        self.__load_data__(csvfile)
         log.debug(ppr.pformat(self.data))
         self.limits = [[0, 0], [0, 0], [0, 0]]
         self.set_limits_defaults()
+
+    def __load_data__(self, infile):
+        """Load data from a file into the object's "data" variable.
+
+        The method sets the instance variable "self.data", it doesn't return
+        anything. It can be overridden in a subclass to construct an object
+        from different data than the default CSV reader used here.
+        """
+        # np.loadtxt() returns an ndarray() of floats, complains on non-floats
+        self.data = np.loadtxt(infile, delimiter=',')
+        log.info('Parsed %i points from CSV.\n%s' %
+                 (len(self.data), str(self.data)))
 
     def set_limits(self,
                    xmin=None, xmax=None,
