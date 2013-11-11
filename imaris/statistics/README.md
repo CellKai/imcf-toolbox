@@ -6,8 +6,10 @@ commandline by specifying the names and corresponding values for the desired
 GUI elements in the following form:
 
 ```shell
-PRESETS="le_infile=TESTDATA/filaments/testdata-filaments-manual.csv,"\
-"le_outfile=TESTDATA/filaments/result_filaments-manual.csv"
+IN="TESTDATA/filaments/testdata-filaments-manual.csv"
+OUT="TESTDATA/filaments/result_filaments-manual.csv"
+PRESETS="le_infile=${IN},le_outfile=${OUT}"
+rm -v "${OUT}"
 python junction_statistics_gui.py --preset $PRESETS
 ```
 
