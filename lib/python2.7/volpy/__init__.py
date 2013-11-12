@@ -674,11 +674,11 @@ class Points3D(object):
         log.info('Parsed %i points from CSV.\n%s' %
                  (len(self.data), str(self.data)))
 
-    def set_limits(self,
-                   xmin=None, xmax=None,
-                   ymin=None, ymax=None,
+    def set_limits(self, xmin=None, xmax=None, ymin=None, ymax=None,
                    zmin=None, zmax=None):
         """Set the volume limits."""
+        # we have 7 arguments, which is perfectly fine in our case, so
+        # pylint: disable-msg=R0913
         if xmin is not None:
             self.limits[0][0] = xmin
         if xmax is not None:
