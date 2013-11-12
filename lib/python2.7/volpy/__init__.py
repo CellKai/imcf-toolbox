@@ -839,7 +839,11 @@ class CellJunction(Points3D):
         log.debug("edges: %s" % self.edges)
 
     def get_longest_edge(self):
-        """Determine the longest transversal edge from the tesselation."""
+        """Determine the length of the longest transversal edge.
+
+        Scans through the edges that were returned from the tesselation and
+        returns the length of the longest one. This can be considered as
+        the maximum width of the CellJunction object."""
         if self._te_max == 0:
             for edge in self.edges:
                 curlen = self.get_edm()[edge[0], edge[1]]
