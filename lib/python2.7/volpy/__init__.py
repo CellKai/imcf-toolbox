@@ -21,7 +21,6 @@ from misc import filename
 # - sanity/type checks
 
 __all__ = [
-    'build_filament_mask',
     'build_tuple_seq',
     'dist_matrix',
     'get_max_dist_pair',
