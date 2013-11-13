@@ -855,7 +855,7 @@ class CellJunction(Points3D):
         return self._te_max
 
     def get_longest_edge_pos(self):
-        """Look up the length of the longest transversal edge."""
+        """Get the position for the label of the longest edge."""
         if self._te_max_pos is None:
             self.get_longest_edge()
         return self._te_max_pos
