@@ -825,11 +825,12 @@ class CellJunction(Points3D):
         # the shortest path using only the remaining points. This results in
         # two separate point lists forming a loop that can then be used for the
         # tesselation procedure.
-        self._fil1 = GreedyPath(self, self.get_mdpair(), None)
-        self._fil2 = GreedyPath(self, self.get_mdpair(), self._fil1.mask)
-        self.perimeter = self._fil1.length + self._fil2.length
+        filaments = self.filaments = [None, None]
+        filaments[0] = GreedyPath(self, self.get_mdpair(), None)
+        filaments[1] = GreedyPath(self, self.get_mdpair(), filaments[0].mask)
+        self.perimeter = filaments[0].length + filaments[1].length
         (self.edges, self.triangles) = \
-            tesselate(self._fil2.path, self._fil1.path, self.get_edm())
+            tesselate(filaments[1].path, filaments[0].path, self.get_edm())
         log.warn("------------ largest distance results -------------")
         log.warn("idx numbers:\t" + ppr.pformat(self.get_mdpair()))
         log.warn("coordinates:\t" + ppr.pformat(self.get_mdpair_coords()))
