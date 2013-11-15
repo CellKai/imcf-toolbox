@@ -3,7 +3,7 @@
 """Tests the volpy filament parser."""
 
 from volpy import Filament
-from log import set_loglevel
+from log import set_loglevel, set_filehandler
 
 
 def run_test(fin, fout):
@@ -15,7 +15,8 @@ def run_test(fin, fout):
         (len(flmnt.get_coords()), fin)
     print('Written results to "%s"' % fout)
 
-set_loglevel(0)
+set_filehandler('/tmp/asdfasdfasdf', no_stdout=True)
+set_loglevel(2)
 basedir = 'TESTDATA/filaments/'
 
 infile = basedir + 'testdata-filaments-small.csv'

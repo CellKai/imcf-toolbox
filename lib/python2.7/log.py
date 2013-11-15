@@ -31,7 +31,8 @@ import logging
 log = logging.getLogger('imcf_logger')
 
 # we always log to stdout, so add a console handler to the logger
-log.addHandler(logging.StreamHandler())
+STREAM_HDL = logging.StreamHandler()
+log.addHandler(STREAM_HDL)
 
 
 def set_loglevel(verbosity):
@@ -44,6 +45,16 @@ def set_loglevel(verbosity):
     # default loglevel is 30 while 20 and 10 show more details
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
+
+def set_filehandler(fname, no_stdout=False):
+    """Set the logging handler to a FileHandler.
+
+    Optionally removes the StreamHandler that logs to stdout.
+    """
+    FILE_HDL = logging.FileHandler(fname)
+    log.addHandler(FILE_HDL)
+    if no_stdout:
+        log.removeHandler(STREAM_HDL)
 
 # from http://stackoverflow.com/questions/4722745
 #
