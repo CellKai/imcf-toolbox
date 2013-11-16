@@ -223,7 +223,7 @@ def junction(pts3d, show, export, stats=False, plotraw=False):
         axes.text(cmin[0], cmin[1], cmin[2], color='blue',
                   s='  overall area: %.2f' % pts3d.get_area())
         axes.text(*pts3d.get_longest_edge_pos(), color='blue',
-                  s='  longest edge: %.2f' % pts3d.get_longest_edge())
+                  s='  longest edge: %.2f' % pts3d.get_longest_edge_len())
 
     if plotraw:
         # draw the raw filament points:

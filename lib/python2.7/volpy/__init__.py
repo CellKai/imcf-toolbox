@@ -816,8 +816,7 @@ class CellJunction(Points3D):
         build the connecting paths and to run the tesselation algorithm.
         """
         super(CellJunction, self).__init__(csvfile)
-        self._te_max = 0   # longest transversal edge
-        self._te_max_pos = None   # used to place the label with matplotlib
+        self._te_max = None   # ID of longest transversal edge
         self._vtxlist = []   # a list of lists of 3-tuples of coordinates
         self._area = 0   # combined area of all tesselation polygons
 
@@ -840,25 +839,30 @@ class CellJunction(Points3D):
         log.debug("edges: %s" % self.edges)
 
     def get_longest_edge(self):
-        """Determine the length of the longest transversal edge.
+        """Determine the longest transversal edge.
 
         Scans through the edges that were returned from the tesselation and
-        returns the length of the longest one. This can be considered as
-        the maximum width of the CellJunction object."""
-        if self._te_max == 0:
+        identifies the longest one. This edge can be considered as the maximum
+        width of the CellJunction object."""
+        if self._te_max is None:
+            tmplen = 0
             for edge in self.edges:
                 curlen = self.get_edm()[edge[0], edge[1]]
-                if curlen > self._te_max:
-                    self._te_max = curlen
-                    self._te_max_pos = self.data[edge[0]]   # store position
-            log.warn("longest edge from tesselation: %s" % self._te_max)
+                if curlen > tmplen:
+                    tmplen = curlen
+                    self._te_max = edge
+            log.warn("longest edge from tesselation: %s" % str(self._te_max))
         return self._te_max
+
+    def get_longest_edge_len(self):
+        """Get the length of the longest edge."""
+        edge = self.get_longest_edge()
+        return self.get_edm()[edge[0], edge[1]]
 
     def get_longest_edge_pos(self):
         """Get the position for the label of the longest edge."""
-        if self._te_max_pos is None:
-            self.get_longest_edge()
-        return self._te_max_pos
+        edge = self.get_longest_edge()
+        return self.data[edge[0]]
 
     def get_vertices(self):
         """Calculate the list of vertices of the tesselation result."""
@@ -897,7 +901,7 @@ class CellJunction(Points3D):
         write(['distance', str(self.get_edm()[mdpair])])
         write([])
         write(['area results calculated by triangular tesselation'])
-        write(['longest transversal edge', self.get_longest_edge()])
+        write(['longest transversal edge', self.get_longest_edge_len()])
         write(['overall area', self.get_area()])
         write(['perimeter', self.perimeter])
 
