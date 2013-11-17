@@ -50,11 +50,16 @@ def set_filehandler(fname, no_stdout=False):
     """Set the logging handler to a FileHandler.
 
     Optionally removes the StreamHandler that logs to stdout.
+
+    Returns
+    -------
+    FILE_HDL : FileHandler
     """
     FILE_HDL = logging.FileHandler(fname)
     log.addHandler(FILE_HDL)
     if no_stdout:
         log.removeHandler(STREAM_HDL)
+    return FILE_HDL
 
 # from http://stackoverflow.com/questions/4722745
 #
