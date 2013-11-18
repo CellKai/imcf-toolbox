@@ -46,10 +46,10 @@ def set_loglevel(verbosity):
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
 
-def set_filehandler(fname, no_stdout=False):
+def set_filehandler(fname, no_stderr=False):
     """Set the logging handler to a FileHandler.
 
-    Optionally removes the StreamHandler that logs to stdout.
+    Optionally removes the StreamHandler that logs to stderr.
 
     Returns
     -------
@@ -57,7 +57,7 @@ def set_filehandler(fname, no_stdout=False):
     """
     FILE_HDL = logging.FileHandler(fname)
     log.addHandler(FILE_HDL)
-    if no_stdout:
+    if no_stderr:
         log.removeHandler(STREAM_HDL)
     return FILE_HDL
 
