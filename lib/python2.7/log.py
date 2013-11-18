@@ -46,7 +46,7 @@ def set_loglevel(verbosity):
     loglevel = (3 - verbosity) * 10
     log.setLevel(loglevel)
 
-def set_filehandler(fname, no_stderr=False):
+def set_filehandler(fname, no_stderr=False, mode='a'):
     """Set the logging handler to a FileHandler.
 
     Optionally removes the StreamHandler that logs to stderr.
@@ -55,7 +55,7 @@ def set_filehandler(fname, no_stderr=False):
     -------
     FILE_HDL : FileHandler
     """
-    FILE_HDL = logging.FileHandler(fname)
+    FILE_HDL = logging.FileHandler(fname, mode=mode)
     log.addHandler(FILE_HDL)
     if no_stderr:
         log.removeHandler(STREAM_HDL)
