@@ -21,6 +21,8 @@ class SpotsToBitmapMainWindow(Ui_MainWindow, GenericMainWindow):
     def setup_window(self, window):
         """Customize the generic UI to our specific case."""
         super(SpotsToBitmapMainWindow, self).setupUi(window)
+        self.dsb_1.setValue(387.5)
+        self.dsb_2.setValue(387.5)
         self.sb_1.setValue(1024)
         self.sb_2.setValue(1024)
         self.set_defaults(window)
