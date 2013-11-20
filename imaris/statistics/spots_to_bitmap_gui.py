@@ -21,8 +21,8 @@ class SpotsToBitmapMainWindow(Ui_MainWindow, GenericMainWindow):
     def setup_window(self, window):
         """Customize the generic UI to our specific case."""
         super(SpotsToBitmapMainWindow, self).setupUi(window)
-        self.sb_1.setValue(512)
-        self.sb_2.setValue(512)
+        self.sb_1.setValue(1024)
+        self.sb_2.setValue(1024)
         self.set_defaults(window)
         window.setWindowTitle("Imaris Spots to Bitmap")
         self.label_1.setText("Spots To Bitmap Converter")
