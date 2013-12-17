@@ -63,6 +63,9 @@ class FluoViewMosaic(object):
         assert mosaic.find('YScanDirection').text == 'TopToBottom'
         xcount = int(mosaic.find('XImages').text)
         ycount = int(mosaic.find('YImages').text)
+        xidx = float(mosaic.find('XIndex').text)
+        yidx = float(mosaic.find('YIndex').text)
+        idxratio = float(mosaic.find('IndexRatio').text)
         print('Mosaic %i: %ix%i' % (idx, xcount, ycount))
         images = []
         for img in mosaic.findall('ImageInfo'):
@@ -79,6 +82,9 @@ class FluoViewMosaic(object):
             'id': idx,
             'xcount': xcount,
             'ycount': ycount,
+            'xidx': xidx,
+            'yidx': yidx,
+            'idxratio': idxratio,
             'tiles': images
         })
 
