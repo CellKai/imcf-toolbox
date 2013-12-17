@@ -93,7 +93,10 @@ class FluoViewMosaic(object):
         print('# Define the number of dimensions we are working on')
         print('dim = 3')
         print('# Define the image coordinates (in pixels)')
-        # FIXME: coordinates need to be converted from abs pos to pixels
+        # TODO: parse tile size from image data instead of hardcoding it!
+        size = 1024
+        ratio = self.mosaics[idx]['idxratio'] / 100
         for img in self.mosaics[idx]['tiles']:
-            print('%s; ; (%f, %f, %f)' %
-                  (img['imgf'], img['xpos'], img['ypos'], 0))
+            xpos = img['xno'] * ratio * size
+            ypos = img['yno'] * ratio * size
+            print('%s; ; (%f, %f, %f)' % (img['imgf'], xpos, ypos, 0))
