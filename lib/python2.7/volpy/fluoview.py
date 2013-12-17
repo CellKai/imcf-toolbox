@@ -92,7 +92,8 @@ class FluoViewMosaic(object):
         """Generate TileConfiguration.txt for Fiji's stitcher."""
         print('# Define the number of dimensions we are working on')
         print('dim = 3')
-        print('# Define the image coordinates')
+        print('# Define the image coordinates (in pixels)')
+        # FIXME: coordinates need to be converted from abs pos to pixels
         for img in self.mosaics[idx]['tiles']:
             print('%s; ; (%f, %f, %f)' %
                   (img['imgf'], img['xpos'], img['ypos'], 0))
