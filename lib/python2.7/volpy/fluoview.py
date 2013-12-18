@@ -5,6 +5,7 @@
 # import numpy as np
 # import volpy as vp
 import xml.etree.ElementTree as etree
+import os
 # import misc
 from log import log
 
@@ -99,4 +100,6 @@ class FluoViewMosaic(object):
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size
             ypos = img['yno'] * ratio * size
-            print('%s; ; (%f, %f, %f)' % (img['imgf'], xpos, ypos, 0))
+            # make sure to have OS agnostic directory separators:
+            imgf = img['imgf'].replace('\\', os.sep)
+            print('%s; ; (%f, %f, %f)' % (imgf, xpos, ypos, 0))
