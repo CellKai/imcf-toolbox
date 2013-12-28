@@ -91,9 +91,10 @@ class FluoViewMosaic(object):
 
     def write_tile_config(self, idx):
         """Generate TileConfiguration.txt for Fiji's stitcher."""
-        print('# Define the number of dimensions we are working on')
-        print('dim = 3')
-        print('# Define the image coordinates (in pixels)')
+        out = open('mosaic_%02i.txt' % idx, 'w')
+        out.write('# Define the number of dimensions we are working on\n')
+        out.write('dim = 3\n')
+        out.write('# Define the image coordinates (in pixels)\n')
         # TODO: parse tile size from image data instead of hardcoding it!
         size = 800
         ratio = self.mosaics[idx]['idxratio'] / 100
@@ -104,4 +105,5 @@ class FluoViewMosaic(object):
             # imgf = img['imgf'].replace('\\', os.sep)
             # fix wrong filenames from stupid Olympus software:
             imgf = img['imgf'].replace('.oif', '_01.oif')
-            print('%s; ; (%f, %f, %f)' % (imgf, xpos, ypos, 0))
+            out.write('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
+        out.close()
