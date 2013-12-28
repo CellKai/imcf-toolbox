@@ -102,4 +102,6 @@ class FluoViewMosaic(object):
             ypos = img['yno'] * ratio * size
             # uncomment this to have OS agnostic directory separators:
             # imgf = img['imgf'].replace('\\', os.sep)
+            # fix wrong filenames from stupid Olympus software:
+            imgf = img['imgf'].replace('.oif', '_01.oif')
             print('%s; ; (%f, %f, %f)' % (imgf, xpos, ypos, 0))
