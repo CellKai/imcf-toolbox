@@ -100,6 +100,6 @@ class FluoViewMosaic(object):
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size
             ypos = img['yno'] * ratio * size
-            # make sure to have OS agnostic directory separators:
-            imgf = img['imgf'].replace('\\', os.sep)
+            # uncomment this to have OS agnostic directory separators:
+            # imgf = img['imgf'].replace('\\', os.sep)
             print('%s; ; (%f, %f, %f)' % (imgf, xpos, ypos, 0))
