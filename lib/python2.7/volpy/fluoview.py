@@ -12,9 +12,19 @@ from log import log
 
 class FluoViewMosaic(object):
 
-    """Object representing a tiled project from Olympus FluoView.
+    """Object representing a tiled ("mosaic") project from Olympus FluoView.
 
-    TODO: explain
+    Olympus FluoView creates a "MATL_Mosaic.log" file for each tiled project.
+    The file contains XML (no specifications given), describing some generic
+    settings like axis directions, number of mosaics, and some more.
+    After the generic section, every mosaic (a set of tiles belonging together)
+    is described in detail (number of tiles in x and y direction, overlap,
+    stage positions, file names and positions of each of the mosaic's tiles).
+
+    Please note that multiple mosaics are contained in these project files and
+    each of the mosaics can have different properties.
+
+    TODO: explain what the class provides, add examples?
     """
 
     def __init__(self, infile):
