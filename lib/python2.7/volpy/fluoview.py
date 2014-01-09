@@ -55,7 +55,7 @@ class FluoViewMosaic(object):
         # found as a 'NoneType' is returned then:
         self.experiment['xdir'] = root.find('XAxisDirection').text
         self.experiment['ydir'] = root.find('YAxisDirection').text
-        self.experiment['mcount'] = root.find('NumberOfMosaics').text
+        self.experiment['mcount'] = int(root.find('NumberOfMosaics').text)
         # currently we only support LTR and TTB experiments:
         if not self.experiment['xdir'] == 'LeftToRight':
             raise TypeError('Unsupported XAxis configuration')
