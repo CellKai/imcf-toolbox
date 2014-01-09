@@ -50,7 +50,12 @@ class FluoViewMosaic(object):
         log.info('Done.')
 
     def check_fvxml(self):
-        """Check XML for expected contents."""
+        """Check XML for being a valid FluoView mosaic experiment file.
+
+        Evaluate the XML tree for known elements like the root tag (expected to
+        be "XYStage", and some of the direct children to make sure the parsed
+        file is in fact a FluoView mosaic XML file.
+        """
         root = self.tree.getroot()
         if not root.tag == 'XYStage':
             raise TypeError('Unexpected value: %s' % root.tag)
