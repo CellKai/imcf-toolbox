@@ -37,7 +37,7 @@ class FluoViewMosaic(object):
                            'xdir': str,   # X axis direction
                            'ydir': str    # Y axis direction
                          })
-        mosaic : list
+        mosaics : list
         """
         log.info('Reading FluoView Mosaic XML...')
         # a dictionary of experiment-wide settings
