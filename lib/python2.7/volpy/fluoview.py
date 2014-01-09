@@ -37,7 +37,7 @@ class FluoViewMosaic(object):
                            'xdir': str,   # X axis direction
                            'ydir': str    # Y axis direction
                          })
-        mosaics : list
+        mosaics : list of mosaics (dicts, see parse_mosaic)
         """
         log.info('Reading FluoView Mosaic XML...')
         # a dictionary of experiment-wide settings
@@ -76,7 +76,24 @@ class FluoViewMosaic(object):
             self.parse_mosaic(mosaic)
 
     def parse_mosaic(self, mosaic):
-        """Parse a mosaic section and assemble a dict from it."""
+        """Parse a mosaic section and assemble a dict from it.
+
+        Generate a dict from a mosaic and append it to the object's mosaics
+        list. The dict has the following format:
+
+        mosaic : dict({'id': int,
+                       'idxratio': float,
+                       'tiles': tiles
+                     })
+
+        tiles : list(dict({'imgf': str,    # tile filename
+                           'imgid': int,   # tile ID
+                           'xno': int,     # tile index in X direction
+                           'xpos': float,  # tile position in X direction
+                           'yno': int,     # tile index in Y direction
+                           'ypos': float   # tile position in Y direction
+                         }))
+        """
         idx = int(mosaic.attrib['No'])
         assert mosaic.find('XScanDirection').text == 'LeftToRight'
         assert mosaic.find('YScanDirection').text == 'TopToBottom'
