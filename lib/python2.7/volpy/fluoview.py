@@ -8,6 +8,8 @@ import xml.etree.ElementTree as etree
 import os
 # import misc
 from log import log
+import ConfigParser
+import codecs
 
 
 class FluoViewMosaic(object):
@@ -155,3 +157,34 @@ class FluoViewMosaic(object):
             imgf = img['imgf'].replace('.oif', '_01.oif')
             out.write('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
         out.close()
+
+    def dim_from_oif(self, oif):
+        """Read image dimensions from a .oif file.
+
+        Parameters
+        ----------
+        oif : str
+            The .oif file to read the dimensions from.
+
+        Returns
+        -------
+        dim : (int, int)
+            Pixel dimensions in X and Y direction as tuple.
+        """
+        oif = oif.replace('\\', os.sep)
+        oif = os.path.dirname(self.mosaicfile) + os.sep + oif
+        oif = oif.replace('.oif', '_01.oif')
+        log.debug('Parsing OIF file for dimensions: %s' % oif)
+        # we're using ConfigParser which can't handle UTF-16 (and UTF-8) files
+        # properly, so we need the help of "codecs" to parse the file
+        conv = codecs.open(oif, "r", "utf16")
+        parser = ConfigParser.RawConfigParser()
+        parser.readfp(conv)
+        try:
+            dim_h = parser.get(u'Reference Image Parameter', u'ImageHeight')
+            dim_w = parser.get(u'Reference Image Parameter', u'ImageWidth')
+        except ConfigParser.NoOptionError:
+            raise ValueError("Can't read image dimensions from %s." % oif)
+        dim = (int(dim_w), int(dim_h))
+        log.warn('Dimensions: %s %s' % dim)
+        return dim
