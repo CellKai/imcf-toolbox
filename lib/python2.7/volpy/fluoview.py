@@ -24,7 +24,16 @@ class FluoViewMosaic(object):
     Please note that multiple mosaics are contained in these project files and
     each of the mosaics can have different properties.
 
-    TODO: explain what the class provides, add examples?
+    TODO: explain what the class provides
+
+    Example
+    -------
+    FIXME: example is not conftest-proof!
+    >>> import volpy.fluoview as fv
+    >>> mosaicfile = '/path/to/some/FluoView/experiment/MATL_Mosaic.log'
+    >>> mosaic = fv.FluoViewMosaic(mosaicfile)
+    >>> for i in xrange(len(mosaic.mosaics)):
+    ...    mosaic.write_tile_config(i)
     """
 
     def __init__(self, infile):
