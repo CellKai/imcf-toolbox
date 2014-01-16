@@ -41,6 +41,7 @@ class FluoViewMosaic(object):
 
         Instance Variables
         ------------------
+        mosaicfile : str  # the input XML filename
         tree : xml.etree.ElementTree
         experiment : dict({'mcount': int, # number of mosaics
                            'xdir': str,   # X axis direction
@@ -49,6 +50,7 @@ class FluoViewMosaic(object):
         mosaics : list of mosaics (dicts, see parse_mosaic)
         """
         log.info('Reading FluoView Mosaic XML...')
+        self.mosaicfile = infile
         # a dictionary of experiment-wide settings
         self.experiment = {}
         # a list of dicts with mosaic specific settings
