@@ -142,11 +142,11 @@ class FluoViewMosaic(object):
         out.write('dim = 3\n')
         out.write('# Define the image coordinates (in pixels)\n')
         # TODO: parse tile size from image data instead of hardcoding it!
-        size = 800
+        size = (800, 800)
         ratio = self.mosaics[idx]['idxratio'] / 100
         for img in self.mosaics[idx]['tiles']:
-            xpos = img['xno'] * ratio * size
-            ypos = img['yno'] * ratio * size
+            xpos = img['xno'] * ratio * size[0]
+            ypos = img['yno'] * ratio * size[1]
             # uncomment this to have OS agnostic directory separators:
             # imgf = img['imgf'].replace('\\', os.sep)
             # fix wrong filenames from stupid Olympus software:
