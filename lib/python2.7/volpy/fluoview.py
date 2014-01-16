@@ -158,6 +158,7 @@ class FluoViewMosaic(object):
             imgf = img['imgf'].replace('.oif', '_01.oif')
             out.write('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
         out.close()
+        log.warn('Wrote tile config to %s' % out.name)
 
     def dim_from_oif(self, oif):
         """Read image dimensions from a .oif file.
