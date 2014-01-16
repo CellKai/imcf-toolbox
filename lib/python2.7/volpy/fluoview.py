@@ -135,6 +135,8 @@ class FluoViewMosaic(object):
 
     def write_tile_config(self, idx):
         """Generate TileConfiguration.txt for Fiji's stitcher."""
+        # TODO: this method should go into a superclass for generic mosaic type
+        # experiments as it will also be required for other input formats
         out = open('mosaic_%02i.txt' % idx, 'w')
         out.write('# Define the number of dimensions we are working on\n')
         out.write('dim = 3\n')
