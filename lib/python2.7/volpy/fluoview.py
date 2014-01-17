@@ -43,7 +43,9 @@ class FluoViewMosaic(object):
 
         Instance Variables
         ------------------
-        mosaicfile : str  # the input XML filename
+        infile : {'dir': str,    # path to input XML file
+                  'name': str,   # the input XML filename
+                 }
         tree : xml.etree.ElementTree
         experiment : dict({'mcount': int, # number of mosaics
                            'xdir': str,   # X axis direction
@@ -52,7 +54,10 @@ class FluoViewMosaic(object):
         mosaics : list of mosaics (dicts, see parse_mosaic)
         """
         log.info('Reading FluoView Mosaic XML...')
-        self.mosaicfile = infile
+        self.infile = {
+            'dir': os.path.dirname(infile).replace('\\', os.sep) + os.sep,
+            'name': os.path.basename(infile)
+        }
         # a dictionary of experiment-wide settings
         self.experiment = {}
         # a list of dicts with mosaic specific settings
@@ -174,8 +179,8 @@ class FluoViewMosaic(object):
             Pixel dimensions in X and Y direction as tuple.
         """
         oif = oif.replace('\\', os.sep)
-        oif = os.path.dirname(self.mosaicfile) + os.sep + oif
         oif = oif.replace('.oif', '_01.oif')
+        oif = self.infile['dir'] + oif
         log.debug('Parsing OIF file for dimensions: %s' % oif)
         # we're using ConfigParser which can't handle UTF-16 (and UTF-8) files
         # properly, so we need the help of "codecs" to parse the file
