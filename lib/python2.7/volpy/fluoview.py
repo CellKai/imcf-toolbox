@@ -146,7 +146,9 @@ class FluoViewMosaic(object):
         """Generate TileConfiguration.txt for Fiji's stitcher."""
         # TODO: this method should go into a superclass for generic mosaic type
         # experiments as it will also be required for other input formats
-        out = open('mosaic_%02i.txt' % idx, 'w')
+        # filename is zero-padded to the total number of mosaics:
+        fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
+        out = open(fname, 'w')
         out.write('# Define the number of dimensions we are working on\n')
         out.write('dim = 3\n')
         out.write('# Define the image coordinates (in pixels)\n')
