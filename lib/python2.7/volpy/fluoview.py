@@ -148,6 +148,8 @@ class FluoViewMosaic(object):
         # experiments as it will also be required for other input formats
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
+        # for now we're writing to the directory containing the input XML:
+        fname = self.infile['dir'] + fname
         out = open(fname, 'w')
         out.write('# Define the number of dimensions we are working on\n')
         out.write('dim = 3\n')
