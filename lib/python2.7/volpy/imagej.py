@@ -12,13 +12,24 @@ from log import log
 def read_csv_com(fname):
     """Read center-of-mass coordinates from an ImageJ CSV export.
 
+    Read in the CSV export from an ImageJ measurement. The file needs to
+    contain the results for center-of-mass ('XM' and 'YM' columns). Make sure
+    to set the output option in ImageJ to either '.csv' or '.xls' but *NOT*
+    '.txt' as the latter will use tabs as delimiter.
+
+    The CSV file is required to have the above described column labels as the
+    first line to identify which column contains the relevant data. Everything
+    else is ignored. This is one possible example for such an export file:
+    ------- 8< -------
+    ,Area,Mean,Min,Max,XM,YM
+    1,496,197,96,232,187.752,10.1101
+    1,496,197,96,232,169.939,16.717
+    1,496,197,96,232,161.114,27.0873
+    ------- >8 -------
+
     Parameters
     ----------
     fname : str or filehandle
-        The CSV export from an ImageJ measurement. Needs to contain the results
-        for center-of-mass ('XM' and 'YM' columns). Make sure to set the output
-        option in ImageJ to either '.csv' or '.xls' but *NOT* '.txt' as the
-        latter will use tabs as delimiter.
 
     Returns
     -------
