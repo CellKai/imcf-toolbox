@@ -207,3 +207,40 @@ class FluoViewMosaic(object):
         dim = (int(dim_w), int(dim_h))
         log.warn('Dimensions: %s %s' % dim)
         return dim
+
+    def write_stitching_macro(self):
+        """Generate a stitching macro template."""
+        fname = 'stitch_all.ijm'
+        # for now we're writing to the directory containing the input XML:
+        fname = self.infile['dir'] + fname
+        out = open(fname, 'w')
+        out.write('input_dir="FILL_IN";\n')
+        out.write('output_dir="FILL_IN";\n\n')
+        out.write('for (id=0; id<%i; id++) {\n' %
+                  (self.experiment['mcount'] - 1))
+        out.write('print("=================================================");')
+        out.write('pad="";')
+        out.write('    if (id < 10) {\n')
+        out.write('        pad="0";\n')
+        out.write('    }\n')
+        out.write('    print("processing mosaic " + id);\n')
+        params  = 'type=[Positions from file] '
+        params += 'order=[Defined by TileConfiguration] '
+        params += 'directory=" + input_dir + " '
+        params += 'layout_file=mosaic_" + pad + id + ".txt '
+        params += 'fusion_method=[Linear Blending] '
+        params += 'regression_threshold=0.30 '
+        params += 'max/avg_displacement_threshold=2.50 '
+        params += 'absolute_displacement_threshold=3.50 '
+        params += 'compute_overlap '
+        params += 'subpixel_accuracy '
+        params += 'computation_parameters=[Save computation time (but use more RAM)] '
+        params += 'image_output=[Fuse and display]'
+        out.write('    run("Grid/Collection stitching", "%s");\n' % params)
+        params  = 'save=" + output_dir + "\\\\mosaic_" + pad + id + ".ome.tif '
+        params += 'compression=Uncompressed'
+        out.write('    run("Bio-Formats Exporter", "%s");\n' % params)
+        out.write('    close();\n')
+        out.write('}\n')
+        out.close()
+        log.warn('Wrote macro template to %s' % out.name)
