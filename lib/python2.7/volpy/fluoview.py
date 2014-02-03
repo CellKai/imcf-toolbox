@@ -120,7 +120,11 @@ class FluoViewMosaic(object):
         xidx = float(mosaic.find('XIndex').text)
         yidx = float(mosaic.find('YIndex').text)
         idxratio = float(mosaic.find('IndexRatio').text)
-        print('Mosaic %i: %ix%i' % (idx, xcount, ycount))
+        log.info('Mosaic %i: %ix%i' % (idx, xcount, ycount))
+        # warn if overlap is below 5 percent:
+        if (idxratio > 95.0):
+            log.warn('WARNING: overlap of mosaic %i is only %.1f%%!' %
+                     (idx, (100.0 - idxratio)))
         images = []
         for img in mosaic.findall('ImageInfo'):
             info = {
