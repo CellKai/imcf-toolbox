@@ -35,8 +35,7 @@ class FluoViewMosaic(object):
     >>> import volpy.fluoview as fv
     >>> mosaicfile = '/path/to/some/FluoView/experiment/MATL_Mosaic.log'
     >>> mosaic = fv.FluoViewMosaic(mosaicfile)
-    >>> for i in xrange(len(mosaic.mosaics)):
-    ...    mosaic.write_tile_config(i)
+    >>> mosaic.write_all_tile_configs()
     """
 
     def __init__(self, infile):
