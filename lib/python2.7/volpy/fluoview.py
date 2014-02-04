@@ -226,7 +226,7 @@ class FluoViewMosaic(object):
         fname = self.infile['path'] + fname
         out = open(fname, 'w')
         out.write('input_dir="FILL_IN";\n')
-        out.write('output_dir="FILL_IN";\n\n')
+        out.write('output_dir=input_dir;\n\n')
         out.write('for (id=0; id<%i; id++) {\n' %
                   (self.experiment['mcount'] - 1))
         out.write('    print("===========================================");\n')
