@@ -181,7 +181,7 @@ class FluoViewMosaic(object):
     def write_all_tile_configs(self):
         """Wrapper to generate all TileConfiguration.txt files."""
         for i in xrange(self.experiment['mcount']):
-           self.write_tile_config(i)
+            self.write_tile_config(i)
 
     def dim_from_oif(self, oif):
         """Read image dimensions from a .oif file.
