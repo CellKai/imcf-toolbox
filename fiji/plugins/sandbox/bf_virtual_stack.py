@@ -11,16 +11,15 @@ irdr = ImageProcessorReader()
 irdr.setId(path)
 
 bf = BFVirtualStack(path, irdr, False, False, False)
-print 'finished reading stack'
+print 'Successfully created virtual stack.'
+
 width = bf.getWidth()
 height = bf.getHeight()
 size = bf.getSize()
-print '%s %s %s' % (width, height, size)
-proc = bf.getProcessor(1)
-info = proc.toString()
-print 'info: %s' % info
 procreader = bf.getReader()
 # meta = procreader.getMetadata()
 # print meta
-print procreader.getMetadataValue('AbsPositionValueX')
-print procreader.getMetadataValue('AbsPositionValueY')
+absposx = procreader.getMetadataValue('AbsPositionValueX')
+absposy = procreader.getMetadataValue('AbsPositionValueY')
+print 'Dimensions (x, y, size): %s, %s, %s' % (width, height, size)
+print 'Absolute positions: %s, %s' % (absposx, absposy)
