@@ -5,7 +5,8 @@
 # import numpy as np
 # import volpy as vp
 import xml.etree.ElementTree as etree
-import os
+from os import sep
+from os.path import basename, dirname
 # import misc
 from log import log
 import ConfigParser
@@ -55,8 +56,8 @@ class FluoViewMosaic(object):
         """
         log.info('Reading FluoView Mosaic XML...')
         self.infile = {
-            'dir': os.path.dirname(infile).replace('\\', os.sep) + os.sep,
-            'name': os.path.basename(infile)
+            'dir': dirname(infile).replace('\\', sep) + sep,
+            'name': basename(infile)
         }
         # a dictionary of experiment-wide settings
         self.experiment = {}
@@ -171,7 +172,7 @@ class FluoViewMosaic(object):
             xpos = img['xno'] * ratio * size[0]
             ypos = img['yno'] * ratio * size[1]
             # uncomment this to have OS agnostic directory separators:
-            # imgf = img['imgf'].replace('\\', os.sep)
+            # imgf = img['imgf'].replace('\\', sep)
             # fix wrong filenames from stupid Olympus software:
             imgf = img['imgf'].replace('.oif', '_01.oif')
             out.write('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
@@ -196,7 +197,7 @@ class FluoViewMosaic(object):
         dim : (int, int)
             Pixel dimensions in X and Y direction as tuple.
         """
-        oif = oif.replace('\\', os.sep)
+        oif = oif.replace('\\', sep)
         oif = oif.replace('.oif', '_01.oif')
         oif = self.infile['dir'] + oif
         log.debug('Parsing OIF file for dimensions: %s' % oif)
