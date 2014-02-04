@@ -226,6 +226,8 @@ class FluoViewMosaic(object):
         out.write('for (id=0; id<%i; id++) {\n' %
                   (self.experiment['mcount'] - 1))
         out.write('    print("===========================================");\n')
+        # TODO: padding needs to be done according to the overall number of
+        # mosaics, see write_tile_config() above
         out.write('    pad="";\n')
         out.write('    if (id < 10) {\n')
         out.write('        pad="0";\n')
@@ -239,6 +241,8 @@ class FluoViewMosaic(object):
         params += 'regression_threshold=0.30 '
         params += 'max/avg_displacement_threshold=2.50 '
         params += 'absolute_displacement_threshold=3.50 '
+        # TODO: if overlap is below a certain level, we should disable
+        # computing the overlap and probably also subpixel accuracy
         params += 'compute_overlap '
         params += 'subpixel_accuracy '
         params += 'computation_parameters=[Save computation time (but use more RAM)] '
