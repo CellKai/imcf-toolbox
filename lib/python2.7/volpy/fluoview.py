@@ -248,7 +248,8 @@ class FluoViewMosaic(object):
         # computing the overlap and probably also subpixel accuracy
         params += 'compute_overlap '
         params += 'subpixel_accuracy '
-        params += 'computation_parameters=[Save computation time (but use more RAM)] '
+        params += 'computation_parameters='
+        params += '[Save computation time (but use more RAM)] '
         params += 'image_output=[Fuse and display]'
         out.write('    run("Grid/Collection stitching", "%s");\n' % params)
         params  = 'save=" + output_dir + "\\\\mosaic_" + pad + id + ".ome.tif '
