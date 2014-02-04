@@ -45,6 +45,7 @@ class FluoViewMosaic(object):
         Instance Variables
         ------------------
         infile : {'path': str,    # path to input XML file
+                  'dname': str,   # the directory name (last part of 'path')
                   'fname': str,   # the input XML filename
                  }
         tree : xml.etree.ElementTree
@@ -57,6 +58,7 @@ class FluoViewMosaic(object):
         log.info('Reading FluoView Mosaic XML...')
         self.infile = {}
         self.infile['path'] = dirname(infile).replace('\\', sep) + sep
+        self.infile['dname'] = basename(dirname(self.infile['path']))
         self.infile['fname'] = basename(infile)
         # a dictionary of experiment-wide settings
         self.experiment = {}
@@ -220,7 +222,7 @@ class FluoViewMosaic(object):
 
     def write_stitching_macro(self):
         """Generate a stitching macro template."""
-        fname = 'stitch_all.ijm'
+        fname = self.infile['dname'] + '_stitch_all.ijm'
         # for now we're writing to the directory containing the input XML:
         fname = self.infile['path'] + fname
         out = open(fname, 'w')
