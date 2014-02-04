@@ -44,8 +44,8 @@ class FluoViewMosaic(object):
 
         Instance Variables
         ------------------
-        infile : {'dir': str,    # path to input XML file
-                  'name': str,   # the input XML filename
+        infile : {'path': str,    # path to input XML file
+                  'fname': str,   # the input XML filename
                  }
         tree : xml.etree.ElementTree
         experiment : dict({'mcount': int, # number of mosaics
@@ -55,10 +55,9 @@ class FluoViewMosaic(object):
         mosaics : list of mosaics (dicts, see parse_mosaic)
         """
         log.info('Reading FluoView Mosaic XML...')
-        self.infile = {
-            'dir': dirname(infile).replace('\\', sep) + sep,
-            'name': basename(infile)
-        }
+        self.infile = {}
+        self.infile['path'] = dirname(infile).replace('\\', sep) + sep
+        self.infile['fname'] = basename(infile)
         # a dictionary of experiment-wide settings
         self.experiment = {}
         # a list of dicts with mosaic specific settings
@@ -154,7 +153,7 @@ class FluoViewMosaic(object):
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
         # for now we're writing to the directory containing the input XML:
-        fname = self.infile['dir'] + fname
+        fname = self.infile['path'] + fname
         out = open(fname, 'w')
         out.write('# Define the number of dimensions we are working on\n')
         out.write('dim = 3\n')
@@ -199,7 +198,7 @@ class FluoViewMosaic(object):
         """
         oif = oif.replace('\\', sep)
         oif = oif.replace('.oif', '_01.oif')
-        oif = self.infile['dir'] + oif
+        oif = self.infile['path'] + oif
         log.debug('Parsing OIF file for dimensions: %s' % oif)
         # we're using ConfigParser which can't handle UTF-16 (and UTF-8) files
         # properly, so we need the help of "codecs" to parse the file
@@ -223,7 +222,7 @@ class FluoViewMosaic(object):
         """Generate a stitching macro template."""
         fname = 'stitch_all.ijm'
         # for now we're writing to the directory containing the input XML:
-        fname = self.infile['dir'] + fname
+        fname = self.infile['path'] + fname
         out = open(fname, 'w')
         out.write('input_dir="FILL_IN";\n')
         out.write('output_dir="FILL_IN";\n\n')
