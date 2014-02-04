@@ -221,8 +221,8 @@ class FluoViewMosaic(object):
         out.write('output_dir="FILL_IN";\n\n')
         out.write('for (id=0; id<%i; id++) {\n' %
                   (self.experiment['mcount'] - 1))
-        out.write('print("=================================================");')
-        out.write('pad="";')
+        out.write('    print("===========================================");\n')
+        out.write('    pad="";\n')
         out.write('    if (id < 10) {\n')
         out.write('        pad="0";\n')
         out.write('    }\n')
