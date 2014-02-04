@@ -158,7 +158,11 @@ class FluoViewMosaic(object):
         out.write('# Define the number of dimensions we are working on\n')
         out.write('dim = 3\n')
         out.write('# Define the image coordinates (in pixels)\n')
-        size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
+        try:
+            size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
+        except IOError as e:
+            log.warn('\nWARNING: %s\n===> SKIPPING MOSAIC %i <===\n' % (e, idx))
+            return
         ratio = self.mosaics[idx]['idxratio'] / 100
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size[0]
