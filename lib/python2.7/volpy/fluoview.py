@@ -82,6 +82,9 @@ class FluoViewMosaic(object):
         # found as a 'NoneType' is returned then:
         self.experiment['xdir'] = root.find('XAxisDirection').text
         self.experiment['ydir'] = root.find('YAxisDirection').text
+        # FIXME: mcount is WRONG, it gives the index number of the last mosaic
+        # in the project, but a project might e.g. only contain mosaics number
+        # 5 and 6 (so "2" would be correct but mcount is "6"):
         self.experiment['mcount'] = int(root.find('NumberOfMosaics').text)
         # currently we only support LTR and TTB experiments:
         if not self.experiment['xdir'] == 'LeftToRight':
