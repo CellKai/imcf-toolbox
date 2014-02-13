@@ -239,8 +239,7 @@ class FluoViewMosaic(object):
         ijm += 'input_dir="";\n'
         ijm += 'if(input_dir == "") {\n'
         ijm += '\tmsg = "Select directory \'%s\'";\n' % self.infile['dname']
-        ijm += '\tinput_dir = getDirectory(msg);\n'
-        ijm += '}\n'
+        ijm += '\tinput_dir = getDirectory(msg);\n}\n'
         ijm += 'output_dir=input_dir;\n\n'
         ijm += 'padlen="%i";\n\n' % len(str(mcount))
 
@@ -283,10 +282,8 @@ class FluoViewMosaic(object):
         ijm += '\tbfexp += "compression=Uncompressed";\n'
         ijm += '\tprint("*** Finished processing file: " + layout_file);\n'
         ijm += '\tprint("*** Exporting to OME-TIFF: " + ome_tiff);\n'
-        ijm += '\trun("Bio-Formats Exporter", bfexp);\n'
-        ijm += '\tclose();\n'
-        ijm += '\tprint("*** Finished exporting to OME-TIFF.");\n'
-        ijm += '}\n'
+        ijm += '\trun("Bio-Formats Exporter", bfexp);\n\tclose();\n'
+        ijm += '\tprint("*** Finished exporting to OME-TIFF.");\n}\n'
         ijm += 'print("===========================================");\n'
         ijm += 'print("*** Finished processing %i mosaics. ***)";\n' % mcount
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
