@@ -228,39 +228,63 @@ class FluoViewMosaic(object):
         fname = self.infile['dname'] + '_stitch_all.ijm'
         # for now we're writing to the directory containing the input XML:
         fname = self.infile['path'] + fname
+        ijm = '// stitching macro for %s\n' % self.infile['dname']
+        ijm += 'input_dir="";\n'
+        ijm += 'if(input_dir == "") {\n'
+        ijm += '\tmsg = "Select directory \'%s\'";\n' % self.infile['dname']
+        ijm += '\tinput_dir = getDirectory(msg);\n'
+        ijm += '}\n'
+        ijm += 'output_dir=input_dir;\n\n'
+        mcount = self.experiment['mcount']
+        ijm += 'padlen="%i";\n\n' % len(str(mcount))
+
+        ijm += '// parameters to compute positions\n'
+        ijm += 'compute = "";\n'
+        # If the overlap is below a certain level (5 percent), we disable
+        # computing the actual positions and subpixel accuracy:
+        com = '// computing positions was disabled as the stage coordinates\n'
+        com += '// indicate an overlap of less than 5 percent!\n'
+        com += '// uncomment the following line to re-enable it:\n'
+        disable = ''
+        if (self.mosaics[0]['idxratio'] > 95.0):
+            disable = '// '
+            ijm += com
+        ijm += '%scompute += "compute_overlap ";\n' % disable
+        ijm += '%scompute += "subpixel_accuracy ";\n\n' % disable
+
+        ijm += '// stitching parameters template\n'
+        ijm += 'tpl  = "type=[Positions from file] ";\n'
+        ijm += 'tpl += "order=[Defined by TileConfiguration] ";\n'
+        ijm += 'tpl += "directory=" + input_dir + " ";\n'
+        ijm += 'tpl += "fusion_method=[Linear Blending] ";\n'
+        ijm += 'tpl += "regression_threshold=0.30 ";\n'
+        ijm += 'tpl += "max/avg_displacement_threshold=2.50 ";\n'
+        ijm += 'tpl += "absolute_displacement_threshold=3.50 ";\n'
+        ijm += 'tpl += compute;\n'
+        ijm += 'tpl += "computation_parameters=";\n'
+        ijm += 'tpl += "[Save computation time (but use more RAM)] ";\n'
+        ijm += 'tpl += "image_output=[Fuse and display] ";\n\n'
+
+        ijm += 'for (id=0; id<%i; id++) {\n' % (mcount - 1)
+        ijm += '\tlayout_file = "mosaic_" + IJ.pad(id, padlen) + ".txt";\n'
+        ijm += '\tome_tiff = "mosaic_" + IJ.pad(id, padlen) + ".ome.tif ";\n'
+        ijm += '\tparam = tpl + "layout_file=" + layout_file;\n'
+        ijm += '\tprint("===========================================");\n'
+        ijm += '\tprint("*** Processing file: " + layout_file);\n'
+        ijm += '\trun("Grid/Collection stitching", param);\n'
+
+        ijm += '\tbfexp  = "save=" + output_dir + "\\\\" + ome_tiff + " ";\n'
+        ijm += '\tbfexp += "compression=Uncompressed";\n'
+        ijm += '\tprint("*** Finished processing file: " + layout_file);\n'
+        ijm += '\tprint("*** Exporting to OME-TIFF: " + ome_tiff);\n'
+        ijm += '\trun("Bio-Formats Exporter", bfexp);\n'
+        ijm += '\tclose();\n'
+        ijm += '\tprint("*** Finished exporting to OME-TIFF.");\n'
+        ijm += '}\n'
+        ijm += 'print("===========================================");\n'
+        ijm += 'print("*** Finished processing %i mosaics. ***)";\n' % mcount
+        log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
         out = open(fname, 'w')
-        out.write('input_dir="FILL_IN";\n')
-        out.write('output_dir=input_dir;\n\n')
-        out.write('for (id=0; id<%i; id++) {\n' %
-                  (self.experiment['mcount'] - 1))
-        out.write('    print("===========================================");\n')
-        # TODO: padding needs to be done according to the overall number of
-        # mosaics, see write_tile_config() above
-        out.write('    pad="";\n')
-        out.write('    if (id < 10) {\n')
-        out.write('        pad="0";\n')
-        out.write('    }\n')
-        out.write('    print("processing mosaic " + id);\n')
-        params  = 'type=[Positions from file] '
-        params += 'order=[Defined by TileConfiguration] '
-        params += 'directory=" + input_dir + " '
-        params += 'layout_file=mosaic_" + pad + id + ".txt '
-        params += 'fusion_method=[Linear Blending] '
-        params += 'regression_threshold=0.30 '
-        params += 'max/avg_displacement_threshold=2.50 '
-        params += 'absolute_displacement_threshold=3.50 '
-        # TODO: if overlap is below a certain level, we should disable
-        # computing the overlap and probably also subpixel accuracy
-        params += 'compute_overlap '
-        params += 'subpixel_accuracy '
-        params += 'computation_parameters='
-        params += '[Save computation time (but use more RAM)] '
-        params += 'image_output=[Fuse and display]'
-        out.write('    run("Grid/Collection stitching", "%s");\n' % params)
-        params  = 'save=" + output_dir + "\\\\mosaic_" + pad + id + ".ome.tif '
-        params += 'compression=Uncompressed'
-        out.write('    run("Bio-Formats Exporter", "%s");\n' % params)
-        out.write('    close();\n')
-        out.write('}\n')
+        out.write(ijm)
         out.close()
         log.warn('Wrote macro template to %s' % out.name)
