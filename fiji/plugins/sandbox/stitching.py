@@ -6,10 +6,15 @@ params = StitchingParameters()
 
 cdir = '/scratch/imageproc/data/paolo/FluoView_stitching/sample_experiment/'
 cfile = 'TileConfiguration.txt'
+cfileout = 'TileConfiguration.registered.txt'
 
-layout = stitcher.getLayoutFromFile(cdir, cfile)
-# for entry in  dir(stitcher):
-# 	print entry
+print '-----------------'
+for entry in  dir(stitcher):
+	print entry
+print '-----------------'
+
+# stitcher.run('')
+layout = stitcher.getLayoutFromFile(cdir, cfileout, None)
 
 print '-----------------'
 for entry in  dir(params):
