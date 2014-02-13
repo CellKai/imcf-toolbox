@@ -225,6 +225,7 @@ class FluoViewMosaic(object):
     def write_stitching_macro(self):
         """Generate a stitching macro template."""
         # TODO: this method is a candidate for a mosaic superclass
+        # TODO: allow for setting path and filename
         fname = self.infile['dname'] + '_stitch_all.ijm'
         # for now we're writing to the directory containing the input XML:
         fname = self.infile['path'] + fname
