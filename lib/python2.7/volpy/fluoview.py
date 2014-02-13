@@ -237,6 +237,7 @@ class FluoViewMosaic(object):
         fname = self.infile['dname'] + '_stitch_all.ijm'
         # for now we're writing to the directory containing the input XML:
         fname = self.infile['path'] + fname
+        mcount = self.experiment['mcount']
         ijm = '// stitching macro for %s\n' % self.infile['dname']
         ijm += 'input_dir="";\n'
         ijm += 'if(input_dir == "") {\n'
@@ -244,7 +245,6 @@ class FluoViewMosaic(object):
         ijm += '\tinput_dir = getDirectory(msg);\n'
         ijm += '}\n'
         ijm += 'output_dir=input_dir;\n\n'
-        mcount = self.experiment['mcount']
         ijm += 'padlen="%i";\n\n' % len(str(mcount))
 
         ijm += '// parameters to compute positions\n'
