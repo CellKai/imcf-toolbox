@@ -218,7 +218,7 @@ class FluoViewMosaic(object):
             conv = codecs.open(oif, "r", "utf16")
         except IOError:
             raise IOError("Can't find required OIF file for parsing image" +
-                " dimensions: %s" % oif)
+                          " dimensions: %s" % oif)
         parser = ConfigParser.RawConfigParser()
         parser.readfp(conv)
         try:
