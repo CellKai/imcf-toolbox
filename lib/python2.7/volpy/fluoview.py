@@ -43,7 +43,8 @@ class FluoViewMosaic(object):
     >>> mosaic.mosaics[0]['tiles'][0]['imgf']
     'Slide1sec001\\\\Slide1sec001.oif'
     >>> mosaic.write_all_tile_configs()
-    >>> mosaic.write_stitching_macro()
+    >>> code = mosaic.gen_stitching_macro_code()
+    >>> mosaic.write_stitching_macro(code)
     """
 
     def __init__(self, infile):
@@ -230,13 +231,9 @@ class FluoViewMosaic(object):
         log.warn('Dimensions: %s %s' % dim)
         return dim
 
-    def write_stitching_macro(self):
-        """Generate a stitching macro template."""
+    def gen_stitching_macro_code(self):
+        """Generate code in ImageJ's macro language to stitch the mosaics."""
         # TODO: this method is a candidate for a mosaic superclass
-        # TODO: allow for setting path and filename
-        fname = self.infile['dname'] + '_stitch_all.ijm'
-        # for now we're writing to the directory containing the input XML:
-        fname = self.infile['path'] + fname
         mcount = self.experiment['mcount']
         ijm = '// stitching macro for %s\n' % self.infile['dname']
         ijm += 'input_dir="";\n'
@@ -293,8 +290,19 @@ class FluoViewMosaic(object):
         ijm += 'print("===========================================");\n'
         ijm += 'print("*** Finished processing %i mosaics. ***)";\n' % mcount
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
+        return(ijm)
+
+    def write_stitching_macro(self, code, fname=None, dname=None):
+        """Write generated macro code into a file."""
+        if fname is None:
+            fname = self.infile['dname'] + '_stitch_all.ijm'
+        if dname is None:
+            # if not requested other, write to input directory:
+            fname = self.infile['path'] + fname
+        else:
+            fname = dname + fname
         out = open(fname, 'w')
-        out.write(ijm)
+        out.write(code)
         out.close()
         log.warn('Wrote macro template to %s' % out.name)
 
