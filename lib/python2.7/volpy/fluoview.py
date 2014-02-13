@@ -31,11 +31,19 @@ class FluoViewMosaic(object):
 
     Example
     -------
-    FIXME: example is not conftest-proof!
     >>> import volpy.fluoview as fv
-    >>> mosaicfile = '/path/to/some/FluoView/experiment/MATL_Mosaic.log'
+    >>> from log import set_loglevel
+    >>> set_loglevel(3)
+    >>> mosaicfile = 'TESTDATA/mosaic/MATL_Mosaic.log'
     >>> mosaic = fv.FluoViewMosaic(mosaicfile)
+    >>> mosaic.experiment['mcount']
+    1
+    >>> mosaic.experiment['xdir']
+    'LeftToRight'
+    >>> mosaic.mosaics[0]['tiles'][0]['imgf']
+    'Slide1sec001\\\\Slide1sec001.oif'
     >>> mosaic.write_all_tile_configs()
+    >>> mosaic.write_stitching_macro()
     """
 
     def __init__(self, infile):
@@ -289,3 +297,9 @@ class FluoViewMosaic(object):
         out.write(ijm)
         out.close()
         log.warn('Wrote macro template to %s' % out.name)
+
+
+if __name__ == "__main__":
+    print('Running doctest on file "%s".' % __file__)
+    import doctest
+    doctest.testmod()
