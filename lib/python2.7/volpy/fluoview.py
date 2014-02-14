@@ -170,7 +170,7 @@ class FluoViewMosaic(object):
         out.write('# Define the image coordinates (in pixels)\n')
         try:
             size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
-        except IOError as err:
+        except IOError, err:
             # if reading the OIF fails, we just issue a warning and continue
             # with the next mosaic:
             log.warn('\n*** WARNING *** WARNING *** WARNING ***\n%s' % err)
