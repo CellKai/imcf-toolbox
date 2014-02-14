@@ -2,12 +2,9 @@
 
 """Tools to process data produced with Olympus FluoView."""
 
-# import numpy as np
-# import volpy as vp
 import xml.etree.ElementTree as etree
 from os import sep
 from os.path import basename, dirname
-# import misc
 from log import log
 import ConfigParser
 import codecs
