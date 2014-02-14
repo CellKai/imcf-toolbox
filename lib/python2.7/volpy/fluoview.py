@@ -232,10 +232,11 @@ class FluoViewMosaic(object):
         """Generate code in ImageJ's macro language to stitch the mosaics."""
         # TODO: this method is a candidate for a mosaic superclass
         mcount = self.experiment['mcount']
-        ijm = '// stitching macro for %s\n' % self.infile['dname']
+        ijm = 'name="%s";\n' % self.infile['dname']
+        ijm += 'print("Stitching macro for dataset [" + name + "]");\n'
         ijm += 'input_dir="";\n'
         ijm += 'if(input_dir == "") {\n'
-        ijm += '\tmsg = "Select directory \'%s\'";\n' % self.infile['dname']
+        ijm += '\tmsg = "Select directory \'" + name + "\'";\n'
         ijm += '\tinput_dir = getDirectory(msg);\n}\n'
         ijm += 'output_dir=input_dir;\n\n'
         ijm += 'padlen="%i";\n\n' % len(str(mcount))
@@ -272,12 +273,12 @@ class FluoViewMosaic(object):
         ijm += '\tome_tiff = "mosaic_" + IJ.pad(id, padlen) + ".ome.tif ";\n'
         ijm += '\tparam = tpl + "layout_file=" + layout_file;\n'
         ijm += '\tprint("===========================================");\n'
-        ijm += '\tprint("*** Processing file: " + layout_file);\n'
+        ijm += '\tprint("*** [" + name + "]: processing " + layout_file);\n'
         ijm += '\trun("Grid/Collection stitching", param);\n'
 
         ijm += '\tbfexp  = "save=" + output_dir + "\\\\" + ome_tiff + " ";\n'
         ijm += '\tbfexp += "compression=Uncompressed";\n'
-        ijm += '\tprint("*** Finished processing file: " + layout_file);\n'
+        ijm += '\tprint("*** [" + name + "]: finished " + layout_file);\n'
         ijm += '\tprint("*** Exporting to OME-TIFF: " + ome_tiff);\n'
         ijm += '\trun("Bio-Formats Exporter", bfexp);\n\tclose();\n'
         ijm += '\tprint("*** Finished exporting to OME-TIFF.");\n}\n'
