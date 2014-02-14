@@ -282,7 +282,7 @@ class FluoViewMosaic(object):
         ijm += '\trun("Bio-Formats Exporter", bfexp);\n\tclose();\n'
         ijm += '\tprint("*** Finished exporting to OME-TIFF.");\n}\n'
         ijm += 'print("===========================================");\n'
-        ijm += 'print("*** Finished processing %i mosaics. ***)";\n' % mcount
+        ijm += 'print("[" + name + "]: processed %i mosaics.");\n' % mcount
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
         return(ijm)
 
