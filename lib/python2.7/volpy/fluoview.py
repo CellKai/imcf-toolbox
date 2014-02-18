@@ -40,7 +40,7 @@ class FluoViewMosaic(object):
     >>> mosaic.mosaics[0]['tiles'][0]['imgf']
     'Slide1sec001\\\\Slide1sec001.oif'
     >>> mosaic.write_all_tile_configs()
-    >>> code = mosaic.gen_stitching_macro_code()
+    >>> code = mosaic.gen_stitching_macro_code('ijm_templates/stitching')
     >>> mosaic.write_stitching_macro(code)
     """
 
@@ -228,62 +228,48 @@ class FluoViewMosaic(object):
         log.warn('Dimensions: %s %s' % dim)
         return dim
 
-    def gen_stitching_macro_code(self):
-        """Generate code in ImageJ's macro language to stitch the mosaics."""
+    def gen_stitching_macro_code(self, pfx):
+        """Generate code in ImageJ's macro language to stitch the mosaics.
+
+        Take two template files ("head" and "body") and generate an ImageJ
+        macro to stitch the mosaics. Using the splitted templates allows for
+        setting default values in the body that can be overridden in this
+        generator method (the ImageJ macro language doesn't have a command to
+        check if a variable is set or not, it just exits with an error).
+
+        Parameters
+        ----------
+        pfx : str
+            The prefix for the two template files, will be completed with the
+            corresponding suffixes "_head.ijm" and "_body.ijm".
+
+        Returns
+        -------
+        ijm : list(str)
+            The generated macro code as a list of str (one str per line).
+        """
         # TODO: this method is a candidate for a mosaic superclass
         mcount = self.experiment['mcount']
-        ijm = 'name="%s";\n' % self.infile['dname']
-        ijm += 'print("Stitching macro for dataset [" + name + "]");\n'
-        ijm += 'input_dir="";\n'
-        ijm += 'if(input_dir == "") {\n'
-        ijm += '\tmsg = "Select directory \'" + name + "\'";\n'
-        ijm += '\tinput_dir = getDirectory(msg);\n}\n'
-        ijm += 'output_dir=input_dir;\n\n'
-        ijm += 'padlen="%i";\n\n' % len(str(mcount))
+        tpl = open(pfx + '_head.ijm', 'r')
+        ijm = tpl.readlines()
+        tpl.close()
+        ijm.append('\n')
 
-        ijm += '// parameters to compute positions\n'
-        ijm += 'compute = "";\n'
+        ijm.append('name="%s";\n' % self.infile['dname'])
+        ijm.append('padlen=%i;\n' % len(str(mcount)))
+        ijm.append('mcount=%i;\n' % mcount)
+        ijm.append('input_dir="";\n')
+        ijm.append('use_batch_mode=true;\n')
+
         # If the overlap is below a certain level (5 percent), we disable
         # computing the actual positions and subpixel accuracy:
-        com = '// computing positions was disabled as the stage coordinates\n'
-        com += '// indicate an overlap of less than 5 percent!\n'
-        com += '// uncomment the following line to re-enable it:\n'
-        disable = ''
         if (self.mosaics[0]['idxratio'] > 95.0):
-            disable = '// '
-            ijm += com
-        ijm += '%scompute += "compute_overlap ";\n' % disable
-        ijm += '%scompute += "subpixel_accuracy ";\n\n' % disable
+            ijm.append('compute = false;\n')
 
-        ijm += '// stitching parameters template\n'
-        ijm += 'tpl  = "type=[Positions from file] ";\n'
-        ijm += 'tpl += "order=[Defined by TileConfiguration] ";\n'
-        ijm += 'tpl += "directory=" + input_dir + " ";\n'
-        ijm += 'tpl += "fusion_method=[Linear Blending] ";\n'
-        ijm += 'tpl += "regression_threshold=0.30 ";\n'
-        ijm += 'tpl += "max/avg_displacement_threshold=2.50 ";\n'
-        ijm += 'tpl += "absolute_displacement_threshold=3.50 ";\n'
-        ijm += 'tpl += compute;\n'
-        ijm += 'tpl += "computation_parameters=";\n'
-        ijm += 'tpl += "[Save computation time (but use more RAM)] ";\n'
-        ijm += 'tpl += "image_output=[Fuse and display] ";\n\n'
-
-        ijm += 'for (id=0; id<%i; id++) {\n' % (mcount - 1)
-        ijm += '\tlayout_file = "mosaic_" + IJ.pad(id, padlen) + ".txt";\n'
-        ijm += '\tome_tiff = "mosaic_" + IJ.pad(id, padlen) + ".ome.tif ";\n'
-        ijm += '\tparam = tpl + "layout_file=" + layout_file;\n'
-        ijm += '\tprint("===========================================");\n'
-        ijm += '\tprint("*** [" + name + "]: processing " + layout_file);\n'
-        ijm += '\trun("Grid/Collection stitching", param);\n'
-
-        ijm += '\tbfexp  = "save=" + output_dir + "\\\\" + ome_tiff + " ";\n'
-        ijm += '\tbfexp += "compression=Uncompressed";\n'
-        ijm += '\tprint("*** [" + name + "]: finished " + layout_file);\n'
-        ijm += '\tprint("*** Exporting to OME-TIFF: " + ome_tiff);\n'
-        ijm += '\trun("Bio-Formats Exporter", bfexp);\n\tclose();\n'
-        ijm += '\tprint("*** Finished exporting to OME-TIFF.");\n}\n'
-        ijm += 'print("===========================================");\n'
-        ijm += 'print("[" + name + "]: processed %i mosaics.");\n' % mcount
+        ijm.append('\n')
+        tpl = open(pfx + '_body.ijm', 'r')
+        ijm += tpl.readlines()
+        tpl.close()
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
         return(ijm)
 
@@ -293,11 +279,11 @@ class FluoViewMosaic(object):
             fname = self.infile['dname'] + '_stitch_all.ijm'
         if dname is None:
             # if not requested other, write to input directory:
-            fname = self.infile['path'] + fname
+            fname = self.infile['path'] + sep + fname
         else:
             fname = dname + fname
         out = open(fname, 'w')
-        out.write(code)
+        out.writelines(code)
         out.close()
         log.warn('Wrote macro template to %s' % out.name)
 
