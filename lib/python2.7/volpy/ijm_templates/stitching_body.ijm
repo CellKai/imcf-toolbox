@@ -13,9 +13,16 @@ hr = hr + hr;
 
 print(hr);
 print("Stitching macro for dataset [" + name + "]");
-if(input_dir == "") {
+if(input_dir == '') {
 	msg = "Select directory for dataset '" + name + "'";
 	input_dir = getDirectory(msg);
+}
+// input_dir could be empty if the dialog was canceled or operating headless
+if (input_dir == '') {
+	print(hr);
+	print("ERROR: No input directory given, stopping!");
+	print(hr);
+	exit;
 }
 output_dir = input_dir;
 sep = File.separator;
