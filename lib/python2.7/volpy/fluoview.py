@@ -156,7 +156,7 @@ class FluoViewMosaic(object):
             'tiles': images
         })
 
-    def write_tile_config(self, idx):
+    def write_tile_config(self, idx, fixpath=False):
         """Generate TileConfiguration.txt for Fiji's stitcher.
 
         Generate a layout configuration file for a ceartain mosaic in the
@@ -167,6 +167,7 @@ class FluoViewMosaic(object):
         Parameters
         ----------
         idx : int  --  The index of the mosaic to create the tile config for.
+        fixpath : bool  --  Whether to adjust the path separators.
         """
         # TODO: this method should go into a superclass for generic mosaic type
         # experiments as it will also be required for other input formats
@@ -191,18 +192,18 @@ class FluoViewMosaic(object):
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size[0]
             ypos = img['yno'] * ratio * size[1]
-            # uncomment this to have OS agnostic directory separators:
-            # imgf = img['imgf'].replace('\\', sep)
             # fix wrong filenames from stupid Olympus software:
             imgf = img['imgf'].replace('.oif', '_01.oif')
+            if(fixpath):
+                imgf = imgf.replace('\\', sep)
             out.write('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
         out.close()
         log.warn('Wrote tile config to %s' % out.name)
 
-    def write_all_tile_configs(self):
+    def write_all_tile_configs(self, fixpath=False):
         """Wrapper to generate all TileConfiguration.txt files."""
         for i in xrange(self.experiment['mcount']):
-            self.write_tile_config(i)
+            self.write_tile_config(i, fixpath)
 
     def dim_from_oif(self, oif):
         """Read image dimensions from a .oif file.
