@@ -157,9 +157,20 @@ class FluoViewMosaic(object):
         })
 
     def write_tile_config(self, idx):
-        """Generate TileConfiguration.txt for Fiji's stitcher."""
+        """Generate TileConfiguration.txt for Fiji's stitcher.
+
+        Generate a layout configuration file for a ceartain mosaic in the
+        format readable by Fiji's "Grid/Collection stitching" plugin. The
+        configuration is stored in a file in the input directory carrying the
+        mosaic's index number as a suffix.
+
+        Parameters
+        ----------
+        idx : int  --  The index of the mosaic to create the tile config for.
+        """
         # TODO: this method should go into a superclass for generic mosaic type
         # experiments as it will also be required for other input formats
+        # TODO: split into two functions: generating and writing
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
         # for now we're writing to the directory containing the input XML:
