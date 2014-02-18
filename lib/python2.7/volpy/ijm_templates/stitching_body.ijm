@@ -14,6 +14,7 @@ if(input_dir == "") {
 	input_dir = getDirectory(msg);
 }
 output_dir=input_dir;
+sep = File.separator;
 
 setBatchMode(use_batch_mode);
 
@@ -40,10 +41,10 @@ for (id = 0; id < mcount; id++) {
 	print("===========================================");
 	print("*** [" + name + "]: processing " + layout_file);
 	run("Grid/Collection stitching", param);
-	bfexp  = "save=" + output_dir + "\\" + ome_tiff + " ";
+	bfexp  = "save=" + output_dir + sep + ome_tiff + " ";
 	bfexp += "compression=Uncompressed";
 	print("*** [" + name + "]: finished " + layout_file);
-	print("*** Exporting to OME-TIFF: " + ome_tiff);
+	print("*** Exporting to OME-TIFF: " + output_dir + sep + ome_tiff);
 	run("Bio-Formats Exporter", bfexp);
 	close();
 	print("*** Finished exporting to OME-TIFF.");
