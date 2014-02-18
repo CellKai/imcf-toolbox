@@ -157,7 +157,15 @@ class FluoViewMosaic(object):
         })
 
     def write_tile_config(self, idx, path='', fixpath=False):
-        """Generate TileConfiguration.txt for Fiji's stitcher."""
+        """Generate and write the tile configuration file.
+
+        Call the method to generate the corresponding tile configuration and
+        store the result in a file. The naming scheme is "mosaic_xyz.txt" where
+        "xyz" is the zero-padded index number of this particular mosaic. If a
+        path is given, the file will be stored there, otherwise the input
+        directory is assumed as the output directory. The "fixpath" parameter
+        is directly passed on to the generator method.
+        """
         config = self.gen_tile_config(idx, fixpath)
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
