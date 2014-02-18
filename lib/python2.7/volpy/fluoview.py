@@ -158,29 +158,6 @@ class FluoViewMosaic(object):
             'tiles': images
         })
 
-    def write_tile_config(self, idx, path='', fixpath=False):
-        """Generate and write the tile configuration file.
-
-        Call the method to generate the corresponding tile configuration and
-        store the result in a file. The naming scheme is "mosaic_xyz.txt" where
-        "xyz" is the zero-padded index number of this particular mosaic. If a
-        path is given, the file will be stored there, otherwise the input
-        directory is assumed as the output directory. The "fixpath" parameter
-        is directly passed on to the generator method.
-        """
-        # TAG: move_to_superclass
-        config = self.gen_tile_config(idx, fixpath)
-        # filename is zero-padded to the total number of mosaics:
-        fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
-        if(path == ''):
-            fname = self.infile['path'] + fname
-        else:
-            fname = path + sep + fname
-        out = open(fname, 'w')
-        out.writelines(config)
-        out.close()
-        log.warn('Wrote tile config to %s' % out.name)
-
     def gen_tile_config(self, idx, fixpath=False):
         """Generate a tile configuration for Fiji's stitcher.
 
@@ -222,6 +199,29 @@ class FluoViewMosaic(object):
                 imgf = imgf.replace('\\', sep)
             app('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
         return(conf)
+
+    def write_tile_config(self, idx, path='', fixpath=False):
+        """Generate and write the tile configuration file.
+
+        Call the method to generate the corresponding tile configuration and
+        store the result in a file. The naming scheme is "mosaic_xyz.txt" where
+        "xyz" is the zero-padded index number of this particular mosaic. If a
+        path is given, the file will be stored there, otherwise the input
+        directory is assumed as the output directory. The "fixpath" parameter
+        is directly passed on to the generator method.
+        """
+        # TAG: move_to_superclass
+        config = self.gen_tile_config(idx, fixpath)
+        # filename is zero-padded to the total number of mosaics:
+        fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
+        if(path == ''):
+            fname = self.infile['path'] + fname
+        else:
+            fname = path + sep + fname
+        out = open(fname, 'w')
+        out.writelines(config)
+        out.close()
+        log.warn('Wrote tile config to %s' % out.name)
 
     def write_all_tile_configs(self, path='', fixpath=False):
         """Wrapper to generate all TileConfiguration.txt files."""
