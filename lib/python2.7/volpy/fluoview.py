@@ -9,6 +9,10 @@ from log import log
 import ConfigParser
 import codecs
 
+# TODO: a superclass for generic mosaic type experiments should be created as
+# it will also be required for other input formats, several methods should be
+# moved there (they are tagged with "move_to_superclass")
+
 
 class FluoViewMosaic(object):
 
@@ -23,8 +27,6 @@ class FluoViewMosaic(object):
 
     Please note that multiple mosaics are contained in these project files and
     each of the mosaics can have different properties.
-
-    TODO: explain what the class provides
 
     Example
     -------
@@ -166,6 +168,7 @@ class FluoViewMosaic(object):
         directory is assumed as the output directory. The "fixpath" parameter
         is directly passed on to the generator method.
         """
+        # TAG: move_to_superclass
         config = self.gen_tile_config(idx, fixpath)
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
@@ -195,8 +198,7 @@ class FluoViewMosaic(object):
         -------
         config : list(str)  --  The generated tile config.
         """
-        # TODO: this method should go into a superclass for generic mosaic type
-        # experiments as it will also be required for other input formats
+        # TAG: move_to_superclass
         conf = list()
         app = conf.append
         app('# Define the number of dimensions we are working on\n')
@@ -223,6 +225,7 @@ class FluoViewMosaic(object):
 
     def write_all_tile_configs(self, path='', fixpath=False):
         """Wrapper to generate all TileConfiguration.txt files."""
+        # TAG: move_to_superclass
         for i in xrange(self.experiment['mcount']):
             self.write_tile_config(i, path, fixpath)
 
@@ -281,7 +284,7 @@ class FluoViewMosaic(object):
         ijm : list(str)
             The generated macro code as a list of str (one str per line).
         """
-        # TODO: this method is a candidate for a mosaic superclass
+        # TAG: move_to_superclass
         mcount = self.experiment['mcount']
         tpl = open(pfx + '_head.ijm', 'r')
         ijm = tpl.readlines()
