@@ -156,8 +156,22 @@ class FluoViewMosaic(object):
             'tiles': images
         })
 
-    def write_tile_config(self, idx, fixpath=False):
-        """Generate TileConfiguration.txt for Fiji's stitcher.
+    def write_tile_config(self, idx, path='', fixpath=False):
+        """Generate TileConfiguration.txt for Fiji's stitcher."""
+        config = self.gen_tile_config(idx, fixpath)
+        # filename is zero-padded to the total number of mosaics:
+        fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
+        if(path == ''):
+            fname = self.infile['path'] + fname
+        else:
+            fname = path + sep + fname
+        out = open(fname, 'w')
+        out.writelines(config)
+        out.close()
+        log.warn('Wrote tile config to %s' % out.name)
+
+    def gen_tile_config(self, idx, fixpath=False):
+        """Generate a tile configuration for Fiji's stitcher.
 
         Generate a layout configuration file for a ceartain mosaic in the
         format readable by Fiji's "Grid/Collection stitching" plugin. The
@@ -168,18 +182,18 @@ class FluoViewMosaic(object):
         ----------
         idx : int  --  The index of the mosaic to create the tile config for.
         fixpath : bool  --  Whether to adjust the path separators.
+
+        Returns
+        -------
+        config : list(str)  --  The generated tile config.
         """
         # TODO: this method should go into a superclass for generic mosaic type
         # experiments as it will also be required for other input formats
-        # TODO: split into two functions: generating and writing
-        # filename is zero-padded to the total number of mosaics:
-        fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
-        # for now we're writing to the directory containing the input XML:
-        fname = self.infile['path'] + fname
-        out = open(fname, 'w')
-        out.write('# Define the number of dimensions we are working on\n')
-        out.write('dim = 3\n')
-        out.write('# Define the image coordinates (in pixels)\n')
+        conf = list()
+        app = conf.append
+        app('# Define the number of dimensions we are working on\n')
+        app('dim = 3\n')
+        app('# Define the image coordinates (in pixels)\n')
         try:
             size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
         except IOError, err:
@@ -196,14 +210,13 @@ class FluoViewMosaic(object):
             imgf = img['imgf'].replace('.oif', '_01.oif')
             if(fixpath):
                 imgf = imgf.replace('\\', sep)
-            out.write('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
-        out.close()
-        log.warn('Wrote tile config to %s' % out.name)
+            app('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
+        return(conf)
 
-    def write_all_tile_configs(self, fixpath=False):
+    def write_all_tile_configs(self, path='', fixpath=False):
         """Wrapper to generate all TileConfiguration.txt files."""
         for i in xrange(self.experiment['mcount']):
-            self.write_tile_config(i, fixpath)
+            self.write_tile_config(i, path, fixpath)
 
     def dim_from_oif(self, oif):
         """Read image dimensions from a .oif file.
