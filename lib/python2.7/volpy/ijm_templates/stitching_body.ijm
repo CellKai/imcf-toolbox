@@ -53,8 +53,10 @@ for (id = 0; id < mcount; id++) {
 	close();
 	print("*** Finished exporting to OME-TIFF.");
 }
+duration = (getTime() - time_start) / 1000;
 print(hr);
 print("[" + name + "]: processed " + mcount + " mosaics.");
+print("Overall duration: " + duration + "s");
 print(hr);
 
 setBatchMode(false);

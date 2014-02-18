@@ -8,5 +8,7 @@ compute = true;  // whether to compute the overlap)
 input_dir = '';  // user will be asked if empty
 use_batch_mode = false;
 
+time_start = getTime();
+
 // END stitching macro HEAD
 
