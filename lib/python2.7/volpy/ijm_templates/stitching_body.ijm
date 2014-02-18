@@ -8,12 +8,16 @@
  *   compute : boolean (whether to compute the overlap)
 \*/
 
+hr = "========================================";  // horizontal rule
+hr = hr + hr;
+
+print(hr);
 print("Stitching macro for dataset [" + name + "]");
 if(input_dir == "") {
 	msg = "Select directory for dataset '" + name + "'";
 	input_dir = getDirectory(msg);
 }
-output_dir=input_dir;
+output_dir = input_dir;
 sep = File.separator;
 
 setBatchMode(use_batch_mode);
@@ -38,7 +42,7 @@ for (id = 0; id < mcount; id++) {
 	layout_file = "mosaic_" + IJ.pad(id, padlen) + ".txt";
 	ome_tiff = "mosaic_" + IJ.pad(id, padlen) + ".ome.tif ";
 	param = tpl + "layout_file=" + layout_file;
-	print("===========================================");
+	print(hr);
 	print("*** [" + name + "]: processing " + layout_file);
 	run("Grid/Collection stitching", param);
 	bfexp  = "save=" + output_dir + sep + ome_tiff + " ";
@@ -49,8 +53,9 @@ for (id = 0; id < mcount; id++) {
 	close();
 	print("*** Finished exporting to OME-TIFF.");
 }
-print("===========================================");
+print(hr);
 print("[" + name + "]: processed " + mcount + " mosaics.");
+print(hr);
 
 setBatchMode(false);
 
