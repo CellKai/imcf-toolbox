@@ -267,11 +267,11 @@ class FluoViewMosaic(object):
         tpl.close()
         ijm.append('\n')
 
-        ijm.append('name="%s";\n' % self.infile['dname'])
-        ijm.append('padlen=%i;\n' % len(str(mcount)))
-        ijm.append('mcount=%i;\n' % mcount)
+        ijm.append('name = "%s";\n' % self.infile['dname'])
+        ijm.append('padlen = %i;\n' % len(str(mcount)))
+        ijm.append('mcount = %i;\n' % mcount)
         ijm.append('input_dir="";\n')
-        ijm.append('use_batch_mode=true;\n')
+        ijm.append('use_batch_mode = true;\n')
 
         # If the overlap is below a certain level (5 percent), we disable
         # computing the actual positions and subpixel accuracy:
