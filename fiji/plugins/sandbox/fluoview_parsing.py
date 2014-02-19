@@ -14,9 +14,11 @@ base = '/home/ehrenfeu/usr/packages/imcf_toolbox/sample_data/fluoview/minimal_1m
 mf = base + 'MATL_Mosaic.log'
 
 mosaic = fv.FluoViewMosaic(mf)
+mosaic.write_all_tile_configs(fixpath=True)
 code = mosaic.gen_stitching_macro_code('stitching')
 flat = ""
 for line in code:
 	flat += line
 
-print flat
+#print flat
+IJ.runMacro(flat)
