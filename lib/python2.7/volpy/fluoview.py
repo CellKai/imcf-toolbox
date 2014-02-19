@@ -41,7 +41,7 @@ class FluoViewMosaic(object):
     >>> mosaic.mosaics[0]['tiles'][0]['imgf']
     'Slide1sec001\\\\Slide1sec001.oif'
     >>> mosaic.write_all_tile_configs()
-    >>> code = mosaic.gen_stitching_macro_code('ijm_templates/stitching')
+    >>> code = mosaic.gen_stitching_macro_code('stitching')
     >>> mosaic.write_stitching_macro(code)
     """
 
@@ -305,7 +305,10 @@ class FluoViewMosaic(object):
         """
         # TAG: move_to_superclass
         mcount = self.experiment['mcount']
-        tpl = open(pfx + '_head.ijm', 'r')
+        # templates are expected in a subdir of the current package:
+        basedir = dirname(__file__) + sep + 'ijm_templates' + sep
+        log.info('Template directory: %s' % basedir)
+        tpl = open(basedir + pfx + '_head.ijm', 'r')
         ijm = tpl.readlines()
         tpl.close()
         ijm.append('\n')
@@ -322,7 +325,7 @@ class FluoViewMosaic(object):
             ijm.append('compute = false;\n')
 
         ijm.append('\n')
-        tpl = open(pfx + '_body.ijm', 'r')
+        tpl = open(basedir + pfx + '_body.ijm', 'r')
         ijm += tpl.readlines()
         tpl.close()
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
