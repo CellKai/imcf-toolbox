@@ -81,7 +81,8 @@ class FluoViewMosaic(object):
 
         Evaluate the XML tree for known elements like the root tag (expected to
         be "XYStage", and some of the direct children to make sure the parsed
-        file is in fact a FluoView mosaic XML file.
+        file is in fact a FluoView mosaic XML file. Raises exceptions in case
+        something expected can't be found in the tree.
         """
         root = self.tree.getroot()
         if not root.tag == 'XYStage':
