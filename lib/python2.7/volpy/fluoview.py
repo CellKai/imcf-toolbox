@@ -168,12 +168,16 @@ class FluoViewMosaic(object):
 
         Parameters
         ----------
-        idx : int  --  The index of the mosaic to create the tile config for.
-        fixpath : bool  --  Whether to adjust the path separators.
+        idx : int
+            The index of the mosaic to generate the tile config for.
+        fixpath : bool (optional)
+            Determines if the path separators in the tile config file should be
+            kept as the are or be adjusted to the currently used environment.
 
         Returns
         -------
-        config : list(str)  --  The generated tile config.
+        config : list(str)
+            The tile configuration as a list of strings, one per line.
         """
         # TAG: move_to_superclass
         conf = list()
