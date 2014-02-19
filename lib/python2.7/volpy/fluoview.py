@@ -125,8 +125,6 @@ class FluoViewMosaic(object):
                   'idxratio': float,  # non-overlapping tile percentage
                   'xcount': int,  # number of tiles in X
                   'ycount': int,  # number of tiles in Y
-                  'xidx': float,  # FIXME
-                  'yidx': float,  # FIXME
                   'tiles': [{
                              'imgf': str,    # tile filename
                              'imgid': int,   # tile ID
@@ -142,8 +140,6 @@ class FluoViewMosaic(object):
         assert mosaic_xmltree.find('YScanDirection').text == 'TopToBottom'
         xcount = int(mosaic_xmltree.find('XImages').text)
         ycount = int(mosaic_xmltree.find('YImages').text)
-        xidx = float(mosaic_xmltree.find('XIndex').text)
-        yidx = float(mosaic_xmltree.find('YIndex').text)
         idxratio = float(mosaic_xmltree.find('IndexRatio').text)
         log.info('Mosaic %i: %ix%i' % (idx, xcount, ycount))
         # warn if overlap is below 5 percent:
@@ -164,8 +160,6 @@ class FluoViewMosaic(object):
         return({'id': idx,
                 'xcount': xcount,
                 'ycount': ycount,
-                'xidx': xidx,
-                'yidx': yidx,
                 'idxratio': idxratio,
                 'tiles': images})
 
