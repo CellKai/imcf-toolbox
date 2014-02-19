@@ -264,7 +264,7 @@ class FluoViewMosaic(object):
         log.warn('Dimensions: %s %s' % dim)
         return dim
 
-    def gen_stitching_macro_code(self, pfx):
+    def gen_stitching_macro_code(self, pfx, path=''):
         """Generate code in ImageJ's macro language to stitch the mosaics.
 
         Take two template files ("head" and "body") and generate an ImageJ
@@ -278,6 +278,8 @@ class FluoViewMosaic(object):
         pfx : str
             The prefix for the two template files, will be completed with the
             corresponding suffixes "_head.ijm" and "_body.ijm".
+        path : str (optional)
+            The path to use as input directory for the macro.
 
         Returns
         -------
@@ -294,7 +296,7 @@ class FluoViewMosaic(object):
         ijm.append('name = "%s";\n' % self.infile['dname'])
         ijm.append('padlen = %i;\n' % len(str(mcount)))
         ijm.append('mcount = %i;\n' % mcount)
-        ijm.append('input_dir="";\n')
+        ijm.append('input_dir="%s";\n' % path)
         ijm.append('use_batch_mode = true;\n')
 
         # If the overlap is below a certain level (5 percent), we disable
