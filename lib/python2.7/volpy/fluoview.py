@@ -101,7 +101,11 @@ class FluoViewMosaic(object):
             raise TypeError('Unsupported YAxis configuration')
 
     def parse_all_mosaics(self):
-        """Wrapper to parse all mosaic parts."""
+        """Wrapper to parse all mosaic parts.
+
+        Call the mosaic parser for all "Mosaic" XML subtrees and collect the
+        resulting dicts in the object's mosaics variable.
+        """
         for mosaic_subtree in self.tree.getroot().findall('Mosaic'):
             self.mosaics.append(self.parse_mosaic(mosaic_subtree))
 
