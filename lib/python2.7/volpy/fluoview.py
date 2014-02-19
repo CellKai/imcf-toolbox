@@ -286,7 +286,7 @@ class FluoViewMosaic(object):
 
         Take two template files ("head" and "body") and generate an ImageJ
         macro to stitch the mosaics. Using the splitted templates allows for
-        setting default values in the body that can be overridden in this
+        setting default values in the head that can be overridden in this
         generator method (the ImageJ macro language doesn't have a command to
         check if a variable is set or not, it just exits with an error).
 
@@ -296,7 +296,7 @@ class FluoViewMosaic(object):
             The prefix for the two template files, will be completed with the
             corresponding suffixes "_head.ijm" and "_body.ijm".
         path : str (optional)
-            The path to use as input directory for the macro.
+            The path to use as input directory *INSIDE* the macro.
 
         Returns
         -------
