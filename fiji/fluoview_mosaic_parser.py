@@ -25,8 +25,9 @@ def main():
     set_loglevel(args.verbosity)
 
     mosaic = fv.FluoViewMosaic(args.mosaic.name)
-    for i in xrange(len(mosaic.mosaics)):
-        mosaic.write_tile_config(i)
+    mosaic.write_all_tile_configs()
+    code = mosaic.gen_stitching_macro_code('stitching')
+    mosaic.write_stitching_macro(code)
 
 
 if __name__ == "__main__":
