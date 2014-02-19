@@ -106,23 +106,32 @@ class FluoViewMosaic(object):
             self.parse_mosaic(mosaic)
 
     def parse_mosaic(self, mosaic):
-        """Parse a mosaic section and assemble a dict from it.
+        """Parse a mosaic XML subtree and assemble a dict from it.
 
         Generate a dict from a mosaic and append it to the object's mosaics
         list. The dict has the following format:
 
-        mosaic : dict({'id': int,
-                       'idxratio': float,
-                       'tiles': tiles
-                     })
+        mosaic : {'id': int,
+                  'idxratio': float,
+                  'tiles': [{
+                             'imgf': str,    # tile filename
+                             'imgid': int,   # tile ID
+                             'xno': int,     # tile index in X direction
+                             'yno': int,     # tile index in Y direction
+                             'xpos': float,  # tile position in X direction
+                             'ypos': float   # tile position in Y direction
+                           }],
+                  'xcount': int,  # number of tiles in X
+                  'ycount': int,  # number of tiles in Y
+                  'xidx': float,  # FIXME
+                  'yidx': float   # FIXME
+                 }
 
-        tiles : list(dict({'imgf': str,    # tile filename
-                           'imgid': int,   # tile ID
-                           'xno': int,     # tile index in X direction
-                           'xpos': float,  # tile position in X direction
-                           'yno': int,     # tile index in Y direction
-                           'ypos': float   # tile position in Y direction
-                         }))
+        Parameters
+        ----------
+        mosaic : xml.etree.ElementTree.Element
+            The subtree of the XML ElementTree containing the details of a
+            single mosaic.
         """
         idx = int(mosaic.attrib['No'])
         assert mosaic.find('XScanDirection').text == 'LeftToRight'
