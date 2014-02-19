@@ -224,7 +224,10 @@ class FluoViewMosaic(object):
         log.warn('Wrote tile config to %s' % out.name)
 
     def write_all_tile_configs(self, path='', fixpath=False):
-        """Wrapper to generate all TileConfiguration.txt files."""
+        """Wrapper to generate all TileConfiguration.txt files.
+
+        All arguments are directly passed on to write_tile_config().
+        """
         # TAG: move_to_superclass
         for i in xrange(self.experiment['mcount']):
             self.write_tile_config(i, path, fixpath)
