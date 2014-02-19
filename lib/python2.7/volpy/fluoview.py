@@ -312,7 +312,18 @@ class FluoViewMosaic(object):
         return(ijm)
 
     def write_stitching_macro(self, code, fname=None, dname=None):
-        """Write generated macro code into a file."""
+        """Write generated macro code into a file.
+
+        Parameters
+        ----------
+        code : list(str)
+            The code as a list of strings, one per line.
+        fname : str (optional)
+            The desired output filename, if empty the directory name (usually
+            describing the dataset) is used with a generic suffix.
+        dname : str (optional)
+            The output directory, if empty the input directory is used.
+        """
         if fname is None:
             fname = self.infile['dname'] + '_stitch_all.ijm'
         if dname is None:
