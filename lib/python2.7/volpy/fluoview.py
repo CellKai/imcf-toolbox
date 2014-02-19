@@ -53,13 +53,13 @@ class FluoViewMosaic(object):
         ------------------
         infile : {'path': str,    # path to input XML file
                   'dname': str,   # the directory name (last part of 'path')
-                  'fname': str,   # the input XML filename
+                  'fname': str    # the input XML filename
                  }
         tree : xml.etree.ElementTree
-        experiment : dict({'mcount': int, # number of mosaics
-                           'xdir': str,   # X axis direction
-                           'ydir': str    # Y axis direction
-                         })
+        experiment : {'mcount': int, # number of mosaics
+                      'xdir': str,   # X axis direction
+                      'ydir': str    # Y axis direction
+                     }
         mosaics : list of mosaics (dicts, see parse_mosaic)
         """
         log.info('Reading FluoView Mosaic XML...')
@@ -122,7 +122,11 @@ class FluoViewMosaic(object):
         Returns
         -------
         mosaic : {'id': int,
-                  'idxratio': float,
+                  'idxratio': float,  # non-overlapping tile percentage
+                  'xcount': int,  # number of tiles in X
+                  'ycount': int,  # number of tiles in Y
+                  'xidx': float,  # FIXME
+                  'yidx': float,  # FIXME
                   'tiles': [{
                              'imgf': str,    # tile filename
                              'imgid': int,   # tile ID
@@ -130,11 +134,7 @@ class FluoViewMosaic(object):
                              'yno': int,     # tile index in Y direction
                              'xpos': float,  # tile position in X direction
                              'ypos': float   # tile position in Y direction
-                           }],
-                  'xcount': int,  # number of tiles in X
-                  'ycount': int,  # number of tiles in Y
-                  'xidx': float,  # FIXME
-                  'yidx': float   # FIXME
+                           }]
                  }
         """
         idx = int(mosaic_xmltree.attrib['No'])
