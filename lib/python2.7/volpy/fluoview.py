@@ -105,13 +105,12 @@ class FluoViewMosaic(object):
         for mosaic_subtree in self.tree.getroot().findall('Mosaic'):
             self.mosaics.append(self.parse_mosaic(mosaic_subtree))
 
-    def parse_mosaic(self, mosaic):
+    def parse_mosaic(self, mosaic_xmltree):
         """Parse a mosaic XML subtree and assemble a dict from it.
-
 
         Parameters
         ----------
-        mosaic : xml.etree.ElementTree.Element
+        mosaic_xmltree : xml.etree.ElementTree.Element
             The subtree of the XML ElementTree containing the details of a
             single mosaic.
 
@@ -133,21 +132,21 @@ class FluoViewMosaic(object):
                   'yidx': float   # FIXME
                  }
         """
-        idx = int(mosaic.attrib['No'])
-        assert mosaic.find('XScanDirection').text == 'LeftToRight'
-        assert mosaic.find('YScanDirection').text == 'TopToBottom'
-        xcount = int(mosaic.find('XImages').text)
-        ycount = int(mosaic.find('YImages').text)
-        xidx = float(mosaic.find('XIndex').text)
-        yidx = float(mosaic.find('YIndex').text)
-        idxratio = float(mosaic.find('IndexRatio').text)
+        idx = int(mosaic_xmltree.attrib['No'])
+        assert mosaic_xmltree.find('XScanDirection').text == 'LeftToRight'
+        assert mosaic_xmltree.find('YScanDirection').text == 'TopToBottom'
+        xcount = int(mosaic_xmltree.find('XImages').text)
+        ycount = int(mosaic_xmltree.find('YImages').text)
+        xidx = float(mosaic_xmltree.find('XIndex').text)
+        yidx = float(mosaic_xmltree.find('YIndex').text)
+        idxratio = float(mosaic_xmltree.find('IndexRatio').text)
         log.info('Mosaic %i: %ix%i' % (idx, xcount, ycount))
         # warn if overlap is below 5 percent:
         if (idxratio > 95.0):
             log.warn('WARNING: overlap of mosaic %i is only %.1f%%!' %
                      (idx, (100.0 - idxratio)))
         images = []
-        for img in mosaic.findall('ImageInfo'):
+        for img in mosaic_xmltree.findall('ImageInfo'):
             info = {
                 'imgid': int(img.find('No').text),
                 'xpos': float(img.find('XPos').text),
