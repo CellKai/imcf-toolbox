@@ -102,15 +102,21 @@ class FluoViewMosaic(object):
 
     def parse_all_mosaics(self):
         """Wrapper to parse all mosaic parts."""
-        for mosaic in self.tree.getroot().findall('Mosaic'):
-            self.parse_mosaic(mosaic)
+        for mosaic_subtree in self.tree.getroot().findall('Mosaic'):
+            self.mosaics.append(self.parse_mosaic(mosaic_subtree))
 
     def parse_mosaic(self, mosaic):
         """Parse a mosaic XML subtree and assemble a dict from it.
 
-        Generate a dict from a mosaic and append it to the object's mosaics
-        list. The dict has the following format:
 
+        Parameters
+        ----------
+        mosaic : xml.etree.ElementTree.Element
+            The subtree of the XML ElementTree containing the details of a
+            single mosaic.
+
+        Returns
+        -------
         mosaic : {'id': int,
                   'idxratio': float,
                   'tiles': [{
@@ -126,12 +132,6 @@ class FluoViewMosaic(object):
                   'xidx': float,  # FIXME
                   'yidx': float   # FIXME
                  }
-
-        Parameters
-        ----------
-        mosaic : xml.etree.ElementTree.Element
-            The subtree of the XML ElementTree containing the details of a
-            single mosaic.
         """
         idx = int(mosaic.attrib['No'])
         assert mosaic.find('XScanDirection').text == 'LeftToRight'
@@ -157,15 +157,13 @@ class FluoViewMosaic(object):
                 'imgf': img.find('Filename').text
             }
             images.append(info)
-        self.mosaics.append({
-            'id': idx,
-            'xcount': xcount,
-            'ycount': ycount,
-            'xidx': xidx,
-            'yidx': yidx,
-            'idxratio': idxratio,
-            'tiles': images
-        })
+        return({'id': idx,
+                'xcount': xcount,
+                'ycount': ycount,
+                'xidx': xidx,
+                'yidx': yidx,
+                'idxratio': idxratio,
+                'tiles': images})
 
     def gen_tile_config(self, idx, fixpath=False):
         """Generate a tile configuration for Fiji's stitcher.
