@@ -122,9 +122,9 @@ class FluoViewMosaic(object):
         Returns
         -------
         mosaic : {'id': int,
-                  'idxratio': float,  # non-overlapping tile percentage
-                  'xcount': int,  # number of tiles in X
-                  'ycount': int,  # number of tiles in Y
+                  'ratio': float,  # non-overlapping tile percentage
+                  'xcount': int,   # number of tiles in X
+                  'ycount': int,   # number of tiles in Y
                   'tiles': [{
                              'imgf': str,    # tile filename
                              'imgid': int,   # tile ID
@@ -140,12 +140,12 @@ class FluoViewMosaic(object):
         assert mosaic_xmltree.find('YScanDirection').text == 'TopToBottom'
         xcount = int(mosaic_xmltree.find('XImages').text)
         ycount = int(mosaic_xmltree.find('YImages').text)
-        idxratio = float(mosaic_xmltree.find('IndexRatio').text)
+        ratio = float(mosaic_xmltree.find('IndexRatio').text)
         log.info('Mosaic %i: %ix%i' % (idx, xcount, ycount))
         # warn if overlap is below 5 percent:
-        if (idxratio > 95.0):
+        if (ratio > 95.0):
             log.warn('WARNING: overlap of mosaic %i is only %.1f%%!' %
-                     (idx, (100.0 - idxratio)))
+                     (idx, (100.0 - ratio)))
         images = []
         for img in mosaic_xmltree.findall('ImageInfo'):
             info = {
@@ -160,7 +160,7 @@ class FluoViewMosaic(object):
         return({'id': idx,
                 'xcount': xcount,
                 'ycount': ycount,
-                'idxratio': idxratio,
+                'ratio': ratio,
                 'tiles': images})
 
     def gen_tile_config(self, idx, fixpath=False):
@@ -198,7 +198,7 @@ class FluoViewMosaic(object):
             log.warn('\n*** WARNING *** WARNING *** WARNING ***\n%s' % err)
             log.warn('=====> SKIPPING MOSAIC %i <=====\n' % idx)
             return
-        ratio = self.mosaics[idx]['idxratio'] / 100
+        ratio = self.mosaics[idx]['ratio'] / 100
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size[0]
             ypos = img['yno'] * ratio * size[1]
@@ -319,7 +319,7 @@ class FluoViewMosaic(object):
 
         # If the overlap is below a certain level (5 percent), we disable
         # computing the actual positions and subpixel accuracy:
-        if (self.mosaics[0]['idxratio'] > 95.0):
+        if (self.mosaics[0]['ratio'] > 95.0):
             ijm.append('compute = false;\n')
 
         ijm.append('\n')
