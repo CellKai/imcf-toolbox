@@ -33,8 +33,7 @@ class FluoViewMosaic(object):
     >>> import volpy.fluoview as fv
     >>> from log import set_loglevel
     >>> set_loglevel(3)
-    >>> mosaicfile = 'TESTDATA/mosaic/MATL_Mosaic.log'
-    >>> mosaic = fv.FluoViewMosaic(mosaicfile)
+    >>> mosaic = fv.FluoViewMosaic('TESTDATA/mosaic/MATL_Mosaic.log')
     >>> mosaic.experiment['mcount']
     1
     >>> mosaic.experiment['xdir']
