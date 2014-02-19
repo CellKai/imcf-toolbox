@@ -205,10 +205,16 @@ class FluoViewMosaic(object):
 
         Call the method to generate the corresponding tile configuration and
         store the result in a file. The naming scheme is "mosaic_xyz.txt" where
-        "xyz" is the zero-padded index number of this particular mosaic. If a
-        path is given, the file will be stored there, otherwise the input
-        directory is assumed as the output directory. The "fixpath" parameter
-        is directly passed on to the generator method.
+        "xyz" is the zero-padded index number of this particular mosaic.
+
+        Parameters
+        ----------
+        idx : int
+            Index number of the mosaic to write the tile config for.
+        path : str (optional)
+            The output directory, if empty the input directory is used.
+        fixpath : bool (optional)
+            Passed on to gen_tile_config().
         """
         # TAG: move_to_superclass
         config = self.gen_tile_config(idx, fixpath)
