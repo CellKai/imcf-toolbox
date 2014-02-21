@@ -352,7 +352,7 @@ class FluoViewMosaic(object):
             # if not requested other, write to input directory:
             fname = self.infile['path'] + sep + fname
         else:
-            fname = dname + fname
+            fname = dname + sep + fname
         out = open(fname, 'w')
         out.writelines(code)
         out.close()
