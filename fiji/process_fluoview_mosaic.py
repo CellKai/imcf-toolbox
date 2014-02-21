@@ -8,9 +8,14 @@ import argparse
 def parse_arguments():
     """Parse commandline arguments."""
     argparser = argparse.ArgumentParser(description=__doc__)
-    argparser.add_argument('--mosaic', type=file, required=True,
+    add = argparser.add_argument
+    add('--mosaic', type=file, required=True,
         help='FluoView "MATL_Mosaic.log" XML file with stage positions.')
-    argparser.add_argument('-v', '--verbosity', dest='verbosity',
+    add('--out', type=str, required=False, default='',
+        help='Output directory, otherwise the input directory is used.')
+    add('-f', '--fixsep', action='store_const', const=True, default=False,
+        help='Adjust path separators to current environment.')
+    add('-v', '--verbosity', dest='verbosity',
         action='count', default=0)
     try:
         args = argparser.parse_args()
@@ -25,9 +30,9 @@ def main():
     set_loglevel(args.verbosity)
 
     mosaic = fv.FluoViewMosaic(args.mosaic.name)
-    mosaic.write_all_tile_configs()
+    mosaic.write_all_tile_configs(path=args.out, fixpath=args.fixsep)
     code = mosaic.gen_stitching_macro_code('stitching')
-    mosaic.write_stitching_macro(code)
+    mosaic.write_stitching_macro(code, dname=args.out)
 
 
 if __name__ == "__main__":
