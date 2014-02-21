@@ -6,6 +6,8 @@ from sys import path
 # extend the search path by $FIJI_ROOT/bin/
 path.append('/home/ehrenfeu/.local/lib/python2.7')
 path.append('/home/ehrenfeu/.local/lib/python2.7/site-packages/volpy')
+# path.append('C:\\Devel\\imcf_toolbox\\lib\\python2.7')
+# path.append('C:\\Devel\\imcf_toolbox\\lib\\python2.7\\volpy')
 
 import fluoview as fv
 from log import log, set_loglevel
