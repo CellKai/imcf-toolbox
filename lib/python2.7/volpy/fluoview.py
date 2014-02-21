@@ -316,6 +316,8 @@ class FluoViewMosaic(object):
         ijm.append('name = "%s";\n' % self.infile['dname'])
         ijm.append('padlen = %i;\n' % len(str(mcount)))
         ijm.append('mcount = %i;\n' % mcount)
+        # windows path separator (in)sanity:
+        path = path.replace('\\', '\\\\')
         ijm.append('input_dir="%s";\n' % path)
         ijm.append('use_batch_mode = true;\n')
 
