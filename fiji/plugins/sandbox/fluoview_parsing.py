@@ -10,7 +10,7 @@ path.append('/home/ehrenfeu/.local/lib/python2.7/site-packages/volpy')
 import fluoview as fv
 from log import log, set_loglevel
 
-set_loglevel(1)
+# set_loglevel(1)
 
 dc = DirectoryChooser("Choose a directory with a 'MATL_Mosaic.log' file")
 base = dc.getDirectory()
