@@ -4,7 +4,7 @@
 
 import xml.etree.ElementTree as etree
 from os import sep
-from os.path import basename, dirname
+from os.path import basename, dirname, join
 from log import log
 import ConfigParser
 import codecs
@@ -63,7 +63,7 @@ class FluoViewMosaic(object):
         """
         log.info('Reading FluoView Mosaic XML...')
         self.infile = {}
-        self.infile['path'] = dirname(infile).replace('\\', sep) + sep
+        self.infile['path'] = dirname(infile).replace('\\', sep)
         self.infile['dname'] = basename(dirname(self.infile['path']))
         self.infile['fname'] = basename(infile)
         # a dictionary of experiment-wide settings
@@ -229,7 +229,7 @@ class FluoViewMosaic(object):
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
         if(path == ''):
-            fname = self.infile['path'] + fname
+            fname = join(self.infile['path'], fname)
         else:
             fname = path + sep + fname
         out = open(fname, 'w')
@@ -261,7 +261,7 @@ class FluoViewMosaic(object):
         """
         oif = oif.replace('\\', sep)
         oif = oif.replace('.oif', '_01.oif')
-        oif = self.infile['path'] + oif
+        oif = join(self.infile['path'], oif)
         log.debug('Parsing OIF file for dimensions: %s' % oif)
         # we're using ConfigParser which can't handle UTF-16 (and UTF-8) files
         # properly, so we need the help of "codecs" to parse the file
@@ -350,7 +350,7 @@ class FluoViewMosaic(object):
             fname = self.infile['dname'] + '_stitch_all.ijm'
         if dname is None:
             # if not requested other, write to input directory:
-            fname = self.infile['path'] + sep + fname
+            fname = join(self.infile['path'], fname)
         else:
             fname = dname + sep + fname
         out = open(fname, 'w')
