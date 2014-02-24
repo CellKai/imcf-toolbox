@@ -1,6 +1,15 @@
 import os
 from java.lang.System import getProperty
+from os.path import join
+import sys.path
 
-print(os.getcwd())
- 
-print('Fiji dir: %s' % getProperty('fiji.dir'))
+libs = join(getProperty('fiji.dir'), join('plugins', join('IMCF', 'libs')))
+sys.path.append(libs)
+
+print(sys.path)
+
+import fluoview
+import log
+
+print fluoview.__file__
+print log.__file__
