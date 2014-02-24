@@ -1,8 +1,9 @@
 from ij import IJ
-from ij.io import DirectoryChooser
-from sys import path
+from ij.io import DirectoryChooser, OpenDialog
+import sys.path
 # from java.lang.System import getProperty
  
+print(sys.path)
 # extend the search path by $FIJI_ROOT/bin/
 path.append('/home/ehrenfeu/.local/lib/python2.7')
 path.append('/home/ehrenfeu/.local/lib/python2.7/site-packages/volpy')
@@ -14,8 +15,12 @@ from log import log, set_loglevel
 
 # set_loglevel(1)
 
-dc = DirectoryChooser("Choose a directory with a 'MATL_Mosaic.log' file")
-base = dc.getDirectory()
+infile = OpenDialog("Choose a 'MATL_Mosaic.log' file", '*.log')
+print(infile.getDirectory())
+print(infile.getFileName())
+
+# dc = DirectoryChooser("Choose a directory with a 'MATL_Mosaic.log' file")
+# base = dc.getDirectory()
 
 mf = base + 'MATL_Mosaic.log'
 
