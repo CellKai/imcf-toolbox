@@ -1,24 +1,22 @@
-from ij import IJ
-from ij.io import DirectoryChooser, OpenDialog
 # explicitly add our libs to PYTHONPATH
+from java.lang.System import getProperty
 from os.path import join
 import sys.path
-from java.lang.System import getProperty
 imcfpath = join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs')
 sys.path.append(imcfpath)
 
 
 import fluoview as fv
 from log import log, set_loglevel
+from ij import IJ
+from ij.io import DirectoryChooser, OpenDialog
 import sys
 
 # set_loglevel(1)
 
-log.warn(fv.__file__)
+log.debug(fv.__file__)
 
 od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
-# dc = DirectoryChooser("Choose a directory with a 'MATL_Mosaic.log' file")
-# base = dc.getDirectory()
 fname = od.getFileName()
 if (fname is None):
     sys.exit()
