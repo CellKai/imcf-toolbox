@@ -1,14 +1,12 @@
 from ij import IJ
 from ij.io import DirectoryChooser, OpenDialog
+# explicitly add our libs to PYTHONPATH
+from os.path import join
 import sys.path
-# from java.lang.System import getProperty
- 
-print(sys.path)
-# extend the search path by $FIJI_ROOT/bin/
-path.append('/home/ehrenfeu/.local/lib/python2.7')
-path.append('/home/ehrenfeu/.local/lib/python2.7/site-packages/volpy')
-# path.append('C:\\Devel\\imcf_toolbox\\lib\\python2.7')
-# path.append('C:\\Devel\\imcf_toolbox\\lib\\python2.7\\volpy')
+from java.lang.System import getProperty
+imcfpath = join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs')
+sys.path.append(imcfpath)
+
 
 import fluoview as fv
 from log import log, set_loglevel
