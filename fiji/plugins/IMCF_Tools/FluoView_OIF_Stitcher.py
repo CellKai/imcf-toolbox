@@ -1,7 +1,7 @@
 # TODO: present either a GUI to ask the user about the individual steps
 # or allow passing all parameters as arguments for this plugin
 
-# explicitly add our libs to PYTHONPATH
+# explicitly add our libs to the module search path
 from java.lang.System import getProperty
 from os.path import join
 import sys.path
