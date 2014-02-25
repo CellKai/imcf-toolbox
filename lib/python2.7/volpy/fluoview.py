@@ -231,7 +231,7 @@ class FluoViewMosaic(object):
         if(path == ''):
             fname = join(self.infile['path'], fname)
         else:
-            fname = path + sep + fname
+            fname = join(path, fname)
         out = open(fname, 'w')
         out.writelines(config)
         out.close()
