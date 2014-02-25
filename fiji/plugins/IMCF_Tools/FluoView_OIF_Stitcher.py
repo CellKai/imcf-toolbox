@@ -35,7 +35,6 @@ def main():
         return
     log.warn(base + fname)
     mosaic = fv.FluoViewMosaic(base + fname)
-    # FIXME: ask user where to put the tile configs
     mosaic.write_all_tile_configs(fixpath=True)
     code = mosaic.gen_stitching_macro_code('stitching', base)
     flat = ""
