@@ -45,6 +45,6 @@ def main():
     print flat
     #IJ.runMacro(flat)
 
-log.debug(fv.__file__)
 # set_loglevel(1)
-main()
+log.debug(fv.__file__)
+sys.exit(main())
