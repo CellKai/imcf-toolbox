@@ -1,3 +1,5 @@
+"""Fiji plugin for stitching FluoView mosaics in OIF format."""
+
 # TODO: present either a GUI to ask the user about the individual steps
 # or allow passing all parameters as arguments for this plugin
 
@@ -5,8 +7,7 @@
 from java.lang.System import getProperty
 from os.path import join
 import sys.path
-imcfpath = join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs')
-sys.path.append(imcfpath)
+sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 
 
 import fluoview as fv
@@ -18,22 +19,22 @@ import sys
 
 def ui_get_input_file():
     """Ask user for input file and process results."""
-    od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
-    fname = od.getFileName()
+    dialog = OpenDialog("Choose a 'MATL_Mosaic.log' file")
+    fname = dialog.getFileName()
     if (fname is None):
         log.warn('No input file selected!')
         return((None, None))
-    base = od.getDirectory()
+    base = dialog.getDirectory()
     return((base, fname))
 
 
 def main():
+    """The main program workflow."""
     (base, fname) = ui_get_input_file()
     if (base is None):
         return
-    mf = base + fname
-    log.warn(mf)
-    mosaic = fv.FluoViewMosaic(mf)
+    log.warn(base + fname)
+    mosaic = fv.FluoViewMosaic(base + fname)
     # FIXME: ask user where to put the tile configs
     mosaic.write_all_tile_configs(fixpath=True)
     code = mosaic.gen_stitching_macro_code('stitching', base)
