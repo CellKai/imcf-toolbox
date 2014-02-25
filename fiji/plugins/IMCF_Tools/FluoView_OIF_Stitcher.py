@@ -15,6 +15,7 @@ from ij import IJ
 from ij.io import DirectoryChooser, OpenDialog
 import sys
 
+
 def ui_get_input_file():
     """Ask user for input file and process results."""
     od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
@@ -25,12 +26,11 @@ def ui_get_input_file():
     base = od.getDirectory()
     return((base, fname))
 
+
 def main():
     (base, fname) = ui_get_input_file()
-
     if (base is None):
         return
-
     mf = base + fname
     log.warn(mf)
     mosaic = fv.FluoViewMosaic(mf)
@@ -40,7 +40,6 @@ def main():
     flat = ""
     for line in code:
         flat += line
-
     # TODO: ask user how to proceed (show macro, run it, ...)
     print flat
     #IJ.runMacro(flat)
