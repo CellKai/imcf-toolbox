@@ -10,16 +10,21 @@ sys.path.append(imcfpath)
 
 import fluoview as fv
 from log import log, set_loglevel
+import sys
 
 # set_loglevel(1)
 
+log.warn(fv.__file__)
 
 od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
 # dc = DirectoryChooser("Choose a directory with a 'MATL_Mosaic.log' file")
 # base = dc.getDirectory()
 fname = od.getFileName()
+if (fname is None):
+    sys.exit()
 base = od.getDirectory()
 mf = base + fname
+log.warn(mf)
 
 mosaic = fv.FluoViewMosaic(mf)
 mosaic.write_all_tile_configs(fixpath=True)
