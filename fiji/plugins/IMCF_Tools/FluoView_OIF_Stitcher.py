@@ -1,3 +1,6 @@
+# TODO: present either a GUI to ask the user about the individual steps
+# or allow passing all parameters as arguments for this plugin
+
 # explicitly add our libs to PYTHONPATH
 from java.lang.System import getProperty
 from os.path import join
@@ -25,11 +28,13 @@ mf = base + fname
 log.warn(mf)
 
 mosaic = fv.FluoViewMosaic(mf)
+# FIXME: ask user where to put the tile configs
 mosaic.write_all_tile_configs(fixpath=True)
 code = mosaic.gen_stitching_macro_code('stitching', base)
 flat = ""
 for line in code:
 	flat += line
 
-#print flat
-IJ.runMacro(flat)
+# TODO: ask user how to proceed (show macro, run it, ...)
+print flat
+#IJ.runMacro(flat)
