@@ -13,14 +13,13 @@ from log import log, set_loglevel
 
 # set_loglevel(1)
 
-infile = OpenDialog("Choose a 'MATL_Mosaic.log' file", '*.log')
-print(infile.getDirectory())
-print(infile.getFileName())
 
+od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
 # dc = DirectoryChooser("Choose a directory with a 'MATL_Mosaic.log' file")
 # base = dc.getDirectory()
-
-mf = base + 'MATL_Mosaic.log'
+fname = od.getFileName()
+base = od.getDirectory()
+mf = base + fname
 
 mosaic = fv.FluoViewMosaic(mf)
 mosaic.write_all_tile_configs(fixpath=True)
