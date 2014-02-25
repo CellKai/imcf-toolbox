@@ -15,10 +15,6 @@ from ij import IJ
 from ij.io import DirectoryChooser, OpenDialog
 import sys
 
-# set_loglevel(1)
-
-log.debug(fv.__file__)
-
 def ui_get_input_file():
     """Ask user for input file and process results."""
     od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
@@ -29,21 +25,26 @@ def ui_get_input_file():
     base = od.getDirectory()
     return((base, fname))
 
-(base, fname) = ui_get_input_file()
+def main():
+    (base, fname) = ui_get_input_file()
 
-if (base is None):
-    sys.exit(1)
+    if (base is None):
+        return
 
-mf = base + fname
-log.warn(mf)
-mosaic = fv.FluoViewMosaic(mf)
-# FIXME: ask user where to put the tile configs
-mosaic.write_all_tile_configs(fixpath=True)
-code = mosaic.gen_stitching_macro_code('stitching', base)
-flat = ""
-for line in code:
-	flat += line
+    mf = base + fname
+    log.warn(mf)
+    mosaic = fv.FluoViewMosaic(mf)
+    # FIXME: ask user where to put the tile configs
+    mosaic.write_all_tile_configs(fixpath=True)
+    code = mosaic.gen_stitching_macro_code('stitching', base)
+    flat = ""
+    for line in code:
+        flat += line
 
-# TODO: ask user how to proceed (show macro, run it, ...)
-print flat
-#IJ.runMacro(flat)
+    # TODO: ask user how to proceed (show macro, run it, ...)
+    print flat
+    #IJ.runMacro(flat)
+
+log.debug(fv.__file__)
+# set_loglevel(1)
+main()
