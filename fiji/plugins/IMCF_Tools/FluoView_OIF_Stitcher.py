@@ -19,14 +19,23 @@ import sys
 
 log.debug(fv.__file__)
 
-od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
-fname = od.getFileName()
-if (fname is None):
-    sys.exit()
-base = od.getDirectory()
+def ui_get_input_file():
+    """Ask user for input file and process results."""
+    od = OpenDialog("Choose a 'MATL_Mosaic.log' file")
+    fname = od.getFileName()
+    if (fname is None):
+        log.warn('No input file selected!')
+        return((None, None))
+    base = od.getDirectory()
+    return((base, fname))
+
+(base, fname) = ui_get_input_file()
+
+if (base is None):
+    sys.exit(1)
+
 mf = base + fname
 log.warn(mf)
-
 mosaic = fv.FluoViewMosaic(mf)
 # FIXME: ask user where to put the tile configs
 mosaic.write_all_tile_configs(fixpath=True)
