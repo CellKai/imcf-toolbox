@@ -14,6 +14,7 @@ import fluoview as fv
 from log import log, set_loglevel
 from ij import IJ
 from ij.io import DirectoryChooser, OpenDialog
+from ij.gui import GenericDialog
 import sys
 
 
@@ -35,6 +36,17 @@ def main():
         return
     log.warn(base + fname)
     mosaic = fv.FluoViewMosaic(base + fname)
+    dialog = GenericDialog('FluoView OIF Stitcher')
+    msg = "Parsed %i mosaics." % mosaic.experiment['mcount']
+    dialog.addMessage(msg)
+    msg = ("Mosaic '0' consists of %ix%i tiles and has an overlap of %i%%."
+           % (mosaic.mosaics[0]['xcount'],
+              mosaic.mosaics[0]['ycount'],
+              int(100 - mosaic.mosaics[0]['ratio'])
+             )
+          )
+    dialog.addMessage(msg)
+    dialog.showDialog()
     mosaic.write_all_tile_configs(fixpath=True)
     code = mosaic.gen_stitching_macro_code('stitching', base)
     flat = ""
