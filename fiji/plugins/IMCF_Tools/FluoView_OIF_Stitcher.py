@@ -14,6 +14,7 @@ from optparse import OptionParser
 
 import fluoview as fv
 from log import log, set_loglevel
+from misc import flatten
 
 
 def ui_get_input_file():
@@ -25,15 +26,6 @@ def ui_get_input_file():
         return((None, None))
     base = dialog.getDirectory()
     return((base, fname))
-
-
-def flatten(lst):
-    """Make a single string from a list of strings."""
-    # TODO: move to misc package
-    flat = ""
-    for line in lst:
-        flat += line
-    return(flat)
 
 
 def gen_mosaic_details(mosaics):

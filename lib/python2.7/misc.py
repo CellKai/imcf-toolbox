@@ -109,6 +109,28 @@ def filename(name):
         raise TypeError
 
 
+def flatten(lst):
+    """Make a single string from a list of strings.
+
+    Parameters
+    ----------
+    lst : list(str)
+
+    Returns
+    -------
+    flat : str
+
+    Example
+    -------
+    >>> flatten(('foo', 'bar'))
+    'foobar'
+    """
+    flat = ""
+    for line in lst:
+        flat += line
+    return(flat)
+
+
 if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
     import doctest
