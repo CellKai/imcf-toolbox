@@ -29,6 +29,14 @@ def ui_get_input_file():
     return((base, fname))
 
 
+def flatten(lst):
+    """Make a single string from a list of strings."""
+    flat = ""
+    for line in lst:
+        flat += line
+    return(flat)
+
+
 def main():
     """The main program workflow."""
     (base, fname) = ui_get_input_file()
@@ -48,13 +56,9 @@ def main():
     dialog.addMessage(msg)
     dialog.showDialog()
     mosaic.write_all_tile_configs(fixpath=True)
-    code = mosaic.gen_stitching_macro_code('stitching', base)
-    flat = ""
-    for line in code:
-        flat += line
-    # TODO: ask user how to proceed (show macro, run it, ...)
-    print flat
-    #IJ.runMacro(flat)
+    code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
+    print code
+    #IJ.runMacro(code)
 
 # set_loglevel(1)
 log.debug(fv.__file__)
