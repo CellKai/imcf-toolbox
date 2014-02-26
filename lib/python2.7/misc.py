@@ -2,8 +2,6 @@
 
 """Module providing various helper functions."""
 
-# TODO: make this Python2.5 compliant for Jython (*sigh*)
-
 from log import log
 
 
@@ -25,7 +23,9 @@ def _is_string_like(obj):
     """
     try:
         obj + ''
-    except (TypeError, ValueError):
+    except TypeError:
+        return False
+    except ValueError:
         return False
     return True
 
@@ -67,7 +67,7 @@ def filehandle(fname, mode='r'):
     if (type(fname).__name__ == 'str'):
         try:
             return open(fname, mode)
-        except IOError as err:
+        except IOError, err:
             message = "can't open '%s': %s"
             raise SystemExit(message % (fname, err))
     elif (type(fname).__name__ == 'file'):
