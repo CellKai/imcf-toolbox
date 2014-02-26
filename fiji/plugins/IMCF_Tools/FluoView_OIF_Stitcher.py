@@ -12,7 +12,7 @@ sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 import fluoview as fv
 from log import log, set_loglevel
 from ij import IJ
-from ij.io import DirectoryChooser, OpenDialog
+from ij.io import OpenDialog
 from ij.gui import GenericDialog
 import sys
 
