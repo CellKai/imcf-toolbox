@@ -42,7 +42,7 @@ def gen_mosaic_details(mosaics):
 
 
 def main_interactive():
-    """The main program workflow when running interactively."""
+    """The main routine for running interactively."""
     (base, fname) = ui_get_input_file()
     if (base is None):
         return
