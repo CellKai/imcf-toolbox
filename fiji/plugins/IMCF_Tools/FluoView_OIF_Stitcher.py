@@ -1,7 +1,6 @@
 """Fiji plugin for stitching FluoView mosaics in OIF format."""
 
-# TODO: present either a GUI to ask the user about the individual steps
-# or allow passing all parameters as arguments for this plugin
+# TODO: allow passing all parameters as arguments for this plugin
 
 # explicitly add our libs to the module search path
 from java.lang.System import getProperty
@@ -58,12 +57,14 @@ def main():
     mosaic = fv.FluoViewMosaic(base + fname)
     dialog = GenericDialog('FluoView OIF Stitcher')
     msg = gen_mosaic_details(mosaic)
+    msg += "\n \nPress [OK] to write tile configuration files\n"
+    msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
-    mosaic.write_all_tile_configs(fixpath=True)
-    code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
-    print code
-    #IJ.runMacro(code)
+    if dialog.wasOKed():
+        mosaic.write_all_tile_configs(fixpath=True)
+        code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
+        IJ.runMacro(code)
 
 # set_loglevel(1)
 log.debug(fv.__file__)
