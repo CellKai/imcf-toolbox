@@ -2,6 +2,8 @@
 
 """Module providing various helper functions."""
 
+# TODO: make this Python2.5 compliant for Jython (*sigh*)
+
 from log import log
 
 
