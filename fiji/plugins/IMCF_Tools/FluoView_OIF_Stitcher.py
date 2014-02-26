@@ -37,6 +37,18 @@ def flatten(lst):
     return(flat)
 
 
+def gen_mosaic_details(mosaics):
+    """Generate human readable string of details about the parsed mosaics."""
+    msg = ""
+    mcount = mosaics.experiment['mcount']
+    msg += "Parsed a total of %i mosaics from the logfile.\n \n" % mcount
+    for mos in mosaics.mosaics:
+        msg += "Mosaic %i: " % mos['id']
+        msg += "%i x %i tiles, " % (mos['xcount'], mos['ycount'])
+        msg += "%i%% overlap.\n" % int(100 - mos['ratio'])
+    return(msg)
+
+
 def main():
     """The main program workflow."""
     (base, fname) = ui_get_input_file()
@@ -45,14 +57,7 @@ def main():
     log.warn(base + fname)
     mosaic = fv.FluoViewMosaic(base + fname)
     dialog = GenericDialog('FluoView OIF Stitcher')
-    msg = "Parsed %i mosaics." % mosaic.experiment['mcount']
-    dialog.addMessage(msg)
-    msg = ("Mosaic '0' consists of %ix%i tiles and has an overlap of %i%%."
-           % (mosaic.mosaics[0]['xcount'],
-              mosaic.mosaics[0]['ycount'],
-              int(100 - mosaic.mosaics[0]['ratio'])
-             )
-          )
+    msg = gen_mosaic_details(mosaic)
     dialog.addMessage(msg)
     dialog.showDialog()
     mosaic.write_all_tile_configs(fixpath=True)
