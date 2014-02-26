@@ -50,8 +50,8 @@ def gen_mosaic_details(mosaics):
     return(msg)
 
 
-def main():
-    """The main program workflow."""
+def main_interactive():
+    """The main program workflow when running interactively."""
     (base, fname) = ui_get_input_file()
     if (base is None):
         return
@@ -68,6 +68,16 @@ def main():
         code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
         IJ.runMacro(code)
 
-# set_loglevel(1)
-log.debug(fv.__file__)
-sys.exit(main())
+
+def main_noninteractive():
+    """The main routine for running non-interactively."""
+    # FIXME: stub!
+    set_loglevel(6)
+    log.warn(__doc__)
+    log.warn('Running in non-interactive mode.')
+    log.debug('Python FluoView package file: %s' % fv.__file__)
+
+if (len(sys.argv) > 0):
+    sys.exit(main_noninteractive())
+else:
+    main_interactive()
