@@ -1,10 +1,8 @@
 """Fiji plugin for stitching FluoView mosaics in OIF format."""
 
-# TODO: allow passing all parameters as arguments for this plugin
-
 # explicitly add our libs to the module search path
 from java.lang.System import getProperty
-from os.path import join
+from os.path import join, dirname, basename
 import sys
 sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 
@@ -43,7 +41,7 @@ def gen_mosaic_details(mosaics):
     # TODO: could go into fluoview package
     msg = ""
     mcount = mosaics.experiment['mcount']
-    msg += "Parsed a total of %i mosaics from the logfile.\n \n" % mcount
+    msg += "Parsed %i mosaics from the FluoView project log.\n \n" % mcount
     for mos in mosaics.mosaics:
         msg += "Mosaic %i: " % mos['id']
         msg += "%i x %i tiles, " % (mos['xcount'], mos['ycount'])
@@ -72,11 +70,23 @@ def main_interactive():
 
 def main_noninteractive():
     """The main routine for running non-interactively."""
-    # FIXME: stub!
-    set_loglevel(6)
-    log.warn(__doc__)
-    log.warn('Running in non-interactive mode.')
+    args = parse_arguments()
+    set_loglevel(args.verbose)
+    log.info('Running in non-interactive mode.')
     log.debug('Python FluoView package file: %s' % fv.__file__)
+    base = dirname(args.fvlog)
+    fname = basename(args.fvlog)
+    mosaic = fv.FluoViewMosaic(join(base, fname))
+    log.warn(gen_mosaic_details(mosaic))
+    code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
+    if not args.dryrun:
+        log.info('Writing tile configuration files.')
+        mosaic.write_all_tile_configs(fixpath=True)
+        log.info('Launching stitching macro.')
+        IJ.runMacro(code)
+    else:
+        log.info('Dry-run was selected. Printing generated macro:')
+        log.warn(code)
 
 
 def parse_arguments():
