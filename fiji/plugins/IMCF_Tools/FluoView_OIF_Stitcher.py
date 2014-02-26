@@ -5,16 +5,16 @@
 # explicitly add our libs to the module search path
 from java.lang.System import getProperty
 from os.path import join
-import sys.path
+import sys
 sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 
 
-import fluoview as fv
-from log import log, set_loglevel
 from ij import IJ
 from ij.io import OpenDialog
 from ij.gui import GenericDialog
-import sys
+
+import fluoview as fv
+from log import log, set_loglevel
 
 
 def ui_get_input_file():
@@ -30,6 +30,7 @@ def ui_get_input_file():
 
 def flatten(lst):
     """Make a single string from a list of strings."""
+    # TODO: move to misc package
     flat = ""
     for line in lst:
         flat += line
@@ -38,6 +39,7 @@ def flatten(lst):
 
 def gen_mosaic_details(mosaics):
     """Generate human readable string of details about the parsed mosaics."""
+    # TODO: could go into fluoview package
     msg = ""
     mcount = mosaics.experiment['mcount']
     msg += "Parsed a total of %i mosaics from the logfile.\n \n" % mcount
