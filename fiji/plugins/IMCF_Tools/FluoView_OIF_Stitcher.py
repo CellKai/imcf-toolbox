@@ -12,6 +12,7 @@ sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 from ij import IJ
 from ij.io import OpenDialog
 from ij.gui import GenericDialog
+from optparse import OptionParser
 
 import fluoview as fv
 from log import log, set_loglevel
@@ -76,6 +77,32 @@ def main_noninteractive():
     log.warn(__doc__)
     log.warn('Running in non-interactive mode.')
     log.debug('Python FluoView package file: %s' % fv.__file__)
+
+
+def parse_arguments():
+    """Parse commandline arguments."""
+    epi = ('NOTE: commandline arguments need to be prefixed by THREE dashes'
+           '(e.g. "---dry-run") instead of the default two as Fiji otherwise'
+           'parses the arguments and won\'t pass them to the plugin.')
+    # preprocess argv for the above described workaround:
+    for (i, arg) in enumerate(sys.argv):
+        sys.argv[i] = arg.replace('---', '--')
+        if (len(sys.argv[i]) == 3):
+            sys.argv[i] = arg.replace('--', '-')
+
+    parser = OptionParser(description=__doc__, epilog=epi)
+    add = parser.add_option  # shorthand to improve readability
+    add("--fvlog", help='path to "MATL_Mosaic.log" file', metavar="FILE")
+    add("--dry-run", action="store_true", dest="dryrun", default=False,
+        help="print generated macro but don't run stitcher")
+    add("--verbose", action="count", default=0)
+
+    (opts, args) = parser.parse_args()
+    if (opts.fvlog is None):
+        print('ERROR: No MATL_Mosaic.log file given.\n')
+        parser.print_help()
+        sys.exit(1)
+    return(opts)  # we're not following this weird "args" idea of OptionParser
 
 if (len(sys.argv) > 0):
     sys.exit(main_noninteractive())
