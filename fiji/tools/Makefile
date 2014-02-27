@@ -1,22 +1,30 @@
-.PHONY: wrapper
+.PHONY: all
 
-DIRS = IMCF_Tools
-SCRIPTS = $(DIRS)/*.py
-MACROS = $(DIRS)/*.ijm
-BARS = $(DIRS)/ActionBar/*.ijm
-ICONS = $(DIRS)/icons/*
-CLASSES = $(DIRS)/*.class
-CONF = $(DIRS)/plugins.config
-PKGLIST = jarpackage.lst
+PKGLIST = $(wildcard *.lst)
 
-all: wrapper IMCF_Tools.jar
+SCRIPTS = $(wildcard *.py) $(wildcard *.ijm)
+CLASSES = $(wildcard *.class)
+CONF = plugins.config
 
-# target to compile the Java wrapper classes for scripts and macros:
-wrapper:
-	for i in $(DIRS); do make --directory $$i; done
+DIST = ../dist
+JAR = $(DIST)/plugins/IMCF/$(subst .lst,.jar,$(PKGLIST))
+
+# NOTE: $(@D) references the directory part of a target
+
+all: $(CLASSES) $(JAR)
+
+# compile the plugin wrappers
+%.class: %.java %.py
+	@ echo
+	@ echo '++++++++++ compiling plugin wrappers ++++++++++'
+	fiji-linux64 --javac $<
+	@ echo '---------- compiling plugin wrappers ----------'
 
 # create the JAR file
-IMCF_Tools.jar: $(SCRIPTS) $(MACROS) $(BARS) $(ICONS) $(CLASSES) $(CONF) $(PKGLIST)
-	cd IMCF_Tools ; \
-    zip -9 -r ../IMCF_Tools.jar . --include @../jarpackage.lst
+$(JAR): $(SCRIPTS) $(CLASSES) $(CONF) $(PKGLIST)
+	@ mkdir -pv $(@D)
+	@ echo
+	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
+	zip -9 -r $(JAR) . --include @$(subst .jar,.lst,$(@F))
+	@ echo '------------- assembling JAR file -------------'
 

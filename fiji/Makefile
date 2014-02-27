@@ -1,6 +1,6 @@
 .PHONY: all
 
-DIRS = action_bars
+DIRS = action_bars tools
 
 # process all dirs specified above:
 all:
