@@ -1,5 +1,3 @@
-.PHONY: all
-
 PKGLIST = $(wildcard *.lst)
 
 SCRIPTS = $(wildcard *.py) $(wildcard *.ijm)
