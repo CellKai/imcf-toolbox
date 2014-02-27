@@ -1,9 +1,12 @@
-helper/hosts/
+# vim swap files
 .*.sw?
+
+# Python stuff
 *.pyc
-__testdata
-*.wxg#
 *.py~
+
+# test-data symlinks
+__testdata
 
 # Java stuff
 *.class
