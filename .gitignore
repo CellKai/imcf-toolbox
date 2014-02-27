@@ -8,3 +8,6 @@ __testdata
 # Java stuff
 *.class
 *.jar
+
+# Fiji dist target
+fiji/dist/
