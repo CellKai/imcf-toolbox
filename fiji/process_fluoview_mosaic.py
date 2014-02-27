@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+"""Parse a FluoView project file and generate code for ImageJ's stitcher."""
+
 import volpy.fluoview as fv
 from log import log, set_loglevel
 import sys
