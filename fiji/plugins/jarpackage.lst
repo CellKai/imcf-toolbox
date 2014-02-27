@@ -1,0 +1,8 @@
+plugins.config
+README.md
+*.class
+*.java
+*.py
+*.pyc
+*.ijm
+icons/*.png
