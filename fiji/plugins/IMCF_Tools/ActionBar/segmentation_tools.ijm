@@ -1,7 +1,6 @@
-// Action Bar description file :segmentation_tools
-run("Action Bar",
-"/plugins/ActionBar/segmentation_tools.ijm");
-exit();
+// This Action Bar description file is meant for being included in a .jar file
+// and thus has no ImageJ macro language section, instead this part is in the
+// "plugins.config" file included in the .jar.
 
 <line>
 <button>
