@@ -27,7 +27,7 @@ run("Bio-Formats Exporter");
 
 <button> 3 line 1
 label=Histogram
-icon=icons/dHist.png
+icon=icons/histogram.png
 arg=<macro>
 run("Histogram");
 </macro>
