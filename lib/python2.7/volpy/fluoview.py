@@ -64,8 +64,9 @@ class FluoViewMosaic(object):
         log.info('Reading FluoView Mosaic XML...')
         self.infile = {}
         self.infile['path'] = dirname(infile).replace('\\', sep)
-        self.infile['dname'] = basename(dirname(self.infile['path']))
+        self.infile['dname'] = basename(self.infile['path'])
         self.infile['fname'] = basename(infile)
+        log.debug(self.infile)
         # a dictionary of experiment-wide settings
         self.experiment = {}
         # a list of dicts with mosaic specific settings
