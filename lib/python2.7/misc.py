@@ -3,6 +3,8 @@
 """Module providing various helper functions."""
 
 from log import log
+from os.path import splitext, join
+import zipfile
 
 
 # this is taken from numpy's iotools:
@@ -129,6 +131,50 @@ def flatten(lst):
     for line in lst:
         flat += line
     return(flat)
+
+
+def readtxt(fname, path='', flat=False):
+    """Commodity function for reading text files plain or zipped.
+
+    Read a text file line by line either plainly from a directory or a .zip or
+    .jar file. Return as a list of strings or optionally flattened into a
+    single string.
+
+    BEWARE: this is NOT intended for HUGE text files as it actually reads them
+    in and returns the content, not a handle to the reader itself!
+
+    Parameters
+    ----------
+    fname : str
+    path : str (optional)
+    flat : bool (optional)
+
+    Returns
+    -------
+    txt : str or list(str)
+
+    Example
+    -------
+    >>> readtxt('foo', '/tmp/archive.zip', flat=True)
+    ... # doctest: +SKIP
+    """
+    zipread = None
+    suffix = splitext(path)[1].lower()
+    if ((suffix == '.zip') or (suffix == '.jar')):
+        # ZipFile only works as a context manager from Python 2.7 on
+        # tag:python25
+        zipread = zipfile.ZipFile(path, 'r')
+        fin = zipread.open(fname)
+    else:
+        fin = open(join(path, fname), 'r')
+    if (flat):
+        txt = flatten(fin.readlines())
+    else:
+        txt = fin.readlines()
+    fin.close()
+    if (zipread is not None):
+        zipread.close()
+    return(txt)
 
 
 if __name__ == "__main__":
