@@ -4,7 +4,7 @@
 
 import xml.etree.ElementTree as etree
 from os import sep
-from os.path import basename, dirname, join
+from os.path import basename, dirname, join, exists
 from log import log
 from misc import readtxt
 import ConfigParser
@@ -312,6 +312,12 @@ class FluoViewMosaic(object):
         # by default templates are expected in a subdir of the current package:
         if (tplpath == ''):
             tplpath = join(dirname(__file__), 'ijm_templates')
+            log.debug('Looking for template directory: %s' % tplpath)
+            if not exists(tplpath):
+                tplpath += '.zip'
+                log.debug('Looking for template directory: %s' % tplpath)
+        if not exists(tplpath):
+            raise IOError("Template directory can't be found!")
         log.info('Template directory: %s' % tplpath)
         ijm = readtxt(pfx + '_head.ijm', tplpath)
         ijm.append('\n')
