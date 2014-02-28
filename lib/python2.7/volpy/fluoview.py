@@ -283,7 +283,7 @@ class FluoViewMosaic(object):
         log.warn('Dimensions: %s %s' % dim)
         return dim
 
-    def gen_stitching_macro_code(self, pfx, path=''):
+    def gen_stitching_macro_code(self, pfx, path='', tplpath=''):
         """Generate code in ImageJ's macro language to stitch the mosaics.
 
         Take two template files ("head" and "body") and generate an ImageJ
@@ -299,6 +299,8 @@ class FluoViewMosaic(object):
             corresponding suffixes "_head.ijm" and "_body.ijm".
         path : str (optional)
             The path to use as input directory *INSIDE* the macro.
+        tplpath : str (optional)
+            The path to a directory or zip file containing the templates.
 
         Returns
         -------
@@ -307,10 +309,11 @@ class FluoViewMosaic(object):
         """
         # TAG: move_to_superclass
         mcount = self.experiment['mcount']
-        # templates are expected in a subdir of the current package:
-        basedir = dirname(__file__) + sep + 'ijm_templates' + sep
-        log.info('Template directory: %s' % basedir)
-        ijm = readtxt(pfx + '_head.ijm', basedir)
+        # by default templates are expected in a subdir of the current package:
+        if (tplpath == ''):
+            tplpath = join(dirname(__file__), 'ijm_templates')
+        log.info('Template directory: %s' % tplpath)
+        ijm = readtxt(pfx + '_head.ijm', tplpath)
         ijm.append('\n')
 
         ijm.append('name = "%s";\n' % self.infile['dname'])
@@ -327,7 +330,7 @@ class FluoViewMosaic(object):
             ijm.append('compute = false;\n')
 
         ijm.append('\n')
-        ijm += readtxt(pfx + '_body.ijm', basedir)
+        ijm += readtxt(pfx + '_body.ijm', tplpath)
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
         return(ijm)
 
