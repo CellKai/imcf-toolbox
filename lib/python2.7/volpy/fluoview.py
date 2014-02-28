@@ -355,7 +355,7 @@ class FluoViewMosaic(object):
             fname = join(self.infile['path'], fname)
             log.debug('Macro output directory: %s' % self.infile['path'])
         else:
-            fname = dname + sep + fname
+            fname = join(dname, fname)
         out = open(fname, 'w')
         out.writelines(code)
         out.close()
