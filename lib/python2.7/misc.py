@@ -146,8 +146,14 @@ def readtxt(fname, path='', flat=False):
     Parameters
     ----------
     fname : str
+        The name of the file to read in. Can be a full or relative path if
+        desired. For automatic archive handling use the 'path' parameter.
     path : str (optional)
+        The directory where to look for the file. If the string has the suffix
+        '.zip' or '.jar' an archive is assumed and the corresponding mechanisms
+        are used to read 'fname' from within this archive.
     flat : bool (optional)
+        Used to request a flattened string instead of a list of strings.
 
     Returns
     -------
