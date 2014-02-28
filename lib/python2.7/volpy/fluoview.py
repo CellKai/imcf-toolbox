@@ -6,6 +6,7 @@ import xml.etree.ElementTree as etree
 from os import sep
 from os.path import basename, dirname, join
 from log import log
+from misc import readtxt
 import ConfigParser
 import codecs
 
@@ -309,9 +310,7 @@ class FluoViewMosaic(object):
         # templates are expected in a subdir of the current package:
         basedir = dirname(__file__) + sep + 'ijm_templates' + sep
         log.info('Template directory: %s' % basedir)
-        tpl = open(basedir + pfx + '_head.ijm', 'r')
-        ijm = tpl.readlines()
-        tpl.close()
+        ijm = readtxt(pfx + '_head.ijm', basedir)
         ijm.append('\n')
 
         ijm.append('name = "%s";\n' % self.infile['dname'])
@@ -328,9 +327,7 @@ class FluoViewMosaic(object):
             ijm.append('compute = false;\n')
 
         ijm.append('\n')
-        tpl = open(basedir + pfx + '_body.ijm', 'r')
-        ijm += tpl.readlines()
-        tpl.close()
+        ijm += readtxt(pfx + '_body.ijm', basedir)
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
         return(ijm)
 
