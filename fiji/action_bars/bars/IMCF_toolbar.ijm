@@ -35,7 +35,8 @@ run("Histogram");
 //cmd of "auto" button in B&C
 //run("Enhance Contrast", "saturated=0.35");
 <button> 4 line 1
-label=B & C
+label=Brightness & Contrast
+icon=icons/bright_contrast.png
 arg=<macro>
 run("Brightness/Contrast...");
 </macro>
