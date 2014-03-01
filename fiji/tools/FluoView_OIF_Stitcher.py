@@ -110,7 +110,11 @@ def parse_arguments():
         sys.exit(1)
     return(opts)  # we're not following this weird "args" idea of OptionParser
 
-if (len(sys.argv) > 0):
-    sys.exit(main_noninteractive())
-else:
-    main_interactive()
+# only run if we're called explicitly from the commandline or as a plugin from
+# Fiji's menu, this allows being imported in the Jython console for testing
+# and debugging purposes:
+if (__name__ == '__main__'):
+    if (len(sys.argv) > 0):
+        sys.exit(main_noninteractive())
+    else:
+        main_interactive()
