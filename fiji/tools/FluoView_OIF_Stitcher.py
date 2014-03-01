@@ -1,9 +1,13 @@
 """Fiji plugin for stitching FluoView mosaics in OIF format."""
 
+import sys
+# before doing anything else check the Python version:
+if not sys.version_info[:2] >= (2, 7):
+    raise Exception('Python 2.7 or newer is required!')
+
 # explicitly add our libs to the module search path
 from java.lang.System import getProperty
 from os.path import join, dirname, basename
-import sys
 sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 
 
