@@ -84,7 +84,7 @@ def main_noninteractive():
 def parse_arguments():
     """Parse commandline arguments."""
     epi = ('NOTE: commandline arguments need to be prefixed by THREE dashes'
-           '(e.g. "---dry-run") instead of the default two as Fiji otherwise'
+           '(e.g. "---dry-run") instead of the default two as Fiji otherwise '
            'parses the arguments and won\'t pass them to the plugin.')
     # preprocess argv for the above described workaround:
     for (i, arg) in enumerate(sys.argv):
