@@ -7,4 +7,5 @@ all:
 	@ for i in $(DIRS); do make --directory $$i; done
 
 clean:
-	@ rm -rv dist/
+	@ rm -rvf dist/
+	@ for i in $(DIRS); do make --directory $$i clean; done

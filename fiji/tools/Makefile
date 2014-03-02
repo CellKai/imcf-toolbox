@@ -11,6 +11,9 @@ JAR = $(DIST)/plugins/IMCF/$(subst .lst,.jar,$(PKGLIST))
 
 all: $(CLASSES) $(JAR)
 
+clean:
+	@ rm -vf $(CLASSES)
+
 # compile the plugin wrappers
 %.class: %.java %.py
 	@ echo

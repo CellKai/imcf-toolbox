@@ -10,6 +10,9 @@ ZIP = $(DIST)/plugins/IMCF/$(subst .lst,.zip,$(PKGLIST))
 
 all: $(ZIP)
 
+clean:
+	@ echo 'Nothing to clean here.'
+
 # create the ZIP file
 $(ZIP): $(DEPS) $(PKGLIST)
 	@ mkdir -pv $(@D)

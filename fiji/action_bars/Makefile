@@ -14,6 +14,9 @@ AUTO = $(DIST)/macros/AutoRun/imcf_toolbar.ijm
 
 all: $(JAR) $(AUTO)
 
+clean:
+	@ echo 'Nothing to clean here.'
+
 # copy autostart macro(s)
 $(AUTO): $(BARS_AUTORUN)
 	@ mkdir -pv $(@D)

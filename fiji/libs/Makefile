@@ -10,6 +10,9 @@ JAR = $(DIST)/plugins/IMCF/$(subst .lst,.jar,$(PKGLIST))
 
 all: $(JAR)
 
+clean:
+	@ echo 'Nothing to clean here.'
+
 # create the JAR file
 $(JAR): $(DEPS) $(PKGLIST)
 	@ mkdir -pv $(@D)
