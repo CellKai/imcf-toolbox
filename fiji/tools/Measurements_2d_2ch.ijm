@@ -1,9 +1,27 @@
+/*
+ * ImageJ macro to automate a 2 channel intensity measuring workflow.
+ *
+ * Requires at least 2 open images, asks the user in a dialog to assign one
+ * image as the "red" and one as the "green" channel, select the desired
+ * thresholding method and the filtering values for size and circularity that
+ * are passed to "Analyze Particles" later.
+ *
+ * The "red" channel is then used to create a mask by the chosen thresholding
+ * method, fill holes and watershed are run and "Analyze Particles" is used
+ * with the given values to create ROI's and add them to the ROI Manager.
+ *
+ * Finally, the ROI's are used to measure area, mean and min intensity in both
+ * input channels, creating separate result tables for each channel.
+ */
+
+
 if (nImages < 2) {
     msg = "Requires at least 2 open images.";
     showMessage("Error", msg);
     exit;
 }
 
+// assemble an array containing the currently open images:
 // print("number of images: " + nImages);
 names = newArray(nImages);
 for (i=0; i < nImages; i++){
@@ -75,6 +93,7 @@ run("Analyze Particles...",
 
 for(i=0; i<2; i++) {
     selectImage(names[i]);
+    // workaround to make sure correct ROI's are active on this image:
     roiManager("Show None");
     roiManager("Show All");
     run("Set Measurements...", "area mean min "
