@@ -1,3 +1,17 @@
+/*
+ * ImageJ macro to stitch all .lsm files in a directory.
+ *
+ * Asks the user for an input directory containing the LSM files to be stitched
+ * and an output directory for the results (can be the same) and runs Fiji's
+ * "Grid/Collection stitching" plugin with fixed settings, using the stage
+ * positions stored within the LSM files.
+ *
+ * NOTE: the macro assumes all LSM files belong to the same tiling acquisition.
+ * For multiple tilings, put the corresponding files into separate directories!
+ *
+ * The stitching result is saved as plain TIFF (no OME!).
+ */
+
 function stitch_LSM_file(infile, outfile) {
 	print("stitching file: " + infile);
 	
