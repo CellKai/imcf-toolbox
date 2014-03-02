@@ -58,10 +58,12 @@ def main_interactive():
     msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
+    code = flatten(mosaic.gen_stitching_macro_code('stitching', path=base))
     if dialog.wasOKed():
         mosaic.write_all_tile_configs(fixpath=True)
-        code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
         IJ.runMacro(code)
+    else:
+        print(code)
 
 
 def main_noninteractive():
