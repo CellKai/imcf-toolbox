@@ -1,8 +1,11 @@
-/* This macro asks for a file, a step-size, whether to do a maximum intensity
- * projection or what slice to use otherwise, and a scaling factor. Then it
- * opens the file using the Bio-Formats reader and does the projection or
- * selects the desired slice, scales it, runs auto-contrast for each channel
- * and finally stores the RGB converted variant as a JPEG-compressed AVI movie.
+/*
+ * ImageJ macro to create a movie (MIP or single slice) from a timelapse-stack.
+ *
+ * Asks for a file, a step-size, whether to do a maximum intensity projection
+ * or what slice to use otherwise, and a scaling factor. Then it opens the file
+ * using the Bio-Formats reader and does the projection or selects the desired
+ * slice, scales it, runs auto-contrast for each channel and finally stores the
+ * RGB converted variant as a JPEG-compressed AVI movie.
  */
 
 infile = File.openDialog("Select file");
@@ -79,8 +82,8 @@ function mk_overview_movie(infile, stepping, mip, slice, scale) {
     }
     run("RGB Color", "frames");
     run("AVI... ", "compression=JPEG frame=5");
-    // disable the close() call if the result should get displayed after the macro
-    // terminates
+    // disable the close() call if the result should get displayed after the
+    // macro terminates
     close();
     setBatchMode(false);
 }
