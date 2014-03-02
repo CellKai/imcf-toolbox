@@ -14,7 +14,7 @@ sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
 from ij import IJ
 from ij.io import OpenDialog
 from ij.gui import GenericDialog
-from optparse import OptionParser
+import argparse
 
 import fluoview as fv
 from log import log, set_loglevel
@@ -72,8 +72,8 @@ def main_noninteractive():
     set_loglevel(args.verbose)
     log.info('Running in non-interactive mode.')
     log.debug('Python FluoView package file: %s' % fv.__file__)
-    base = dirname(args.fvlog)
-    fname = basename(args.fvlog)
+    base = dirname(args.mosaiclog)
+    fname = basename(args.mosaiclog)
     mosaic = fv.FluoViewMosaic(join(base, fname))
     log.warn(gen_mosaic_details(mosaic))
     code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
@@ -98,19 +98,19 @@ def parse_arguments():
         if (len(sys.argv[i]) == 3):
             sys.argv[i] = arg.replace('--', '-')
 
-    parser = OptionParser(description=__doc__, epilog=epi)
-    add = parser.add_option  # shorthand to improve readability
-    add("--fvlog", help='path to "MATL_Mosaic.log" file', metavar="FILE")
+    parser = argparse.ArgumentParser(description=__doc__, epilog=epi)
+    add = parser.add_argument  # shorthand to improve readability
+    add("--mosaiclog", metavar='FILE', required=True,
+        help='FluoView "MATL_Mosaic.log" XML file with stage positions')
     add("--dry-run", action="store_true", dest="dryrun", default=False,
         help="print generated macro but don't run stitcher")
     add("--verbose", action="count", default=0)
 
-    (opts, args) = parser.parse_args()
-    if (opts.fvlog is None):
-        print('ERROR: No MATL_Mosaic.log file given.\n')
-        parser.print_help()
-        sys.exit(1)
-    return(opts)  # we're not following this weird "args" idea of OptionParser
+    try:
+        args = parser.parse_args()
+    except IOError as err:
+        parser.error(str(err))
+    return args
 
 # only run if we're called explicitly from the commandline or as a plugin from
 # Fiji's menu, this allows being imported in the Jython console for testing
