@@ -6,9 +6,11 @@ if not sys.version_info[:2] >= (2, 7):
     raise Exception('Python 2.7 or newer is required!')
 
 # explicitly add our libs to the module search path
-from java.lang.System import getProperty
 from os.path import join, dirname, basename
-sys.path.append(join(getProperty('fiji.dir'), 'plugins', 'IMCF', 'libs'))
+from java.lang.System import getProperty
+imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
+imcftpl = join(imcfdir, 'ijm_templates.zip')
+sys.path.append(join(imcfdir, 'imcf_libs.jar'))
 
 
 from ij import IJ
@@ -58,7 +60,8 @@ def main_interactive():
     msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
-    code = flatten(mosaic.gen_stitching_macro_code('stitching', path=base))
+    code = flatten(mosaic.gen_stitching_macro_code(
+        'stitching', path=base, tplpath=imcftpl))
     if dialog.wasOKed():
         mosaic.write_all_tile_configs(fixpath=True)
         IJ.runMacro(code)
@@ -76,7 +79,8 @@ def main_noninteractive():
     fname = basename(args.mosaiclog)
     mosaic = fv.FluoViewMosaic(join(base, fname))
     log.warn(gen_mosaic_details(mosaic))
-    code = flatten(mosaic.gen_stitching_macro_code('stitching', base))
+    code = flatten(mosaic.gen_stitching_macro_code(
+        'stitching', path=base, tplpath=imcftpl))
     if not args.dryrun:
         log.info('Writing tile configuration files.')
         mosaic.write_all_tile_configs(fixpath=True)
