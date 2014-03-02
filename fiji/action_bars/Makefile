@@ -14,13 +14,15 @@ AUTO = $(DIST)/macros/AutoRun/imcf_toolbar.ijm
 
 all: $(JAR) $(AUTO)
 
+# copy autostart macro(s)
+$(AUTO): $(BARS_AUTORUN)
+	@ mkdir -pv $(@D)
+	cp -v $(BARS_AUTORUN) $(AUTO)
+
+# create the JAR file
 $(JAR): $(BARS) $(ICONS) $(CONF) $(PKGLIST)
 	@ mkdir -pv $(@D)
 	@ echo
 	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
 	zip -9 -r $(JAR) . --include @$(subst .jar,.lst,$(@F))
 	@ echo '------------- assembling JAR file -------------'
-
-$(AUTO): $(BARS_AUTORUN)
-	@ mkdir -pv $(@D)
-	cp -v $(BARS_AUTORUN) $(AUTO)
