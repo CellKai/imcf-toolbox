@@ -1,6 +1,6 @@
 .PHONY: all
 
-DIRS = action_bars tools libs
+DIRS = action_bars tools libs ijm_templates
 
 # process all dirs specified above:
 all:
