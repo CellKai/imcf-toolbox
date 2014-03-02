@@ -1,6 +1,6 @@
 PKGLIST = $(wildcard *.lst)
 
-SCRIPTS = $(wildcard *.py)
+SCRIPTS = $(wildcard *.ijm)
 CLASSES = $(subst .java,.class,$(wildcard *.java))
 CONF = plugins.config
 
@@ -15,7 +15,7 @@ clean:
 	@ rm -vf $(CLASSES)
 
 # compile the plugin wrappers
-%.class: %.java %.py
+%.class: %.java %.ijm
 	@ echo
 	@ echo '++++++++++ compiling plugin wrappers ++++++++++'
 	fiji-linux64 --javac $<
