@@ -8,16 +8,21 @@ JAR = $(DIST)/plugins/IMCF/$(subst .lst,.jar,$(PKGLIST))
 
 # NOTE: $(@D) references the directory part of a target
 
-all: $(JAR)
+all: msg_01 $(JAR) msg_02
 
 clean:
 	@ echo 'Nothing to clean here.'
 
+msg_01:
+	@ echo '================= $(JAR) ================='
+	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
+
+msg_02:
+	@ echo '------------- assembling JAR file -------------'
+	@ echo '================= $(JAR) ================='
+
 # create the JAR file
 $(JAR): $(DEPS) $(PKGLIST)
 	@ mkdir -pv $(@D)
-	@ echo
-	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
 	zip -9 -r $(JAR) . --include @$(subst .jar,.lst,$(@F))
-	@ echo '------------- assembling JAR file -------------'
 

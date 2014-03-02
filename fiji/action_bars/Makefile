@@ -12,10 +12,23 @@ AUTO = $(DIST)/macros/AutoRun/imcf_toolbar.ijm
 
 # NOTE: $(@D) references the directory part of a target
 
-all: $(JAR) $(AUTO)
+all: msg_01 $(JAR) msg_02 $(AUTO) msg_03
 
 clean:
 	@ echo 'Nothing to clean here.'
+
+msg_01:
+	@ echo '================= $(JAR) ================='
+	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
+
+msg_02:
+	@ echo '------------- assembling JAR file -------------'
+	@ echo
+	@ echo '++++++++++ copying autostart macros ++++++++++'
+
+msg_03:
+	@ echo '---------- copying autostart macros ----------'
+	@ echo '================= $(JAR) ================='
 
 # copy autostart macro(s)
 $(AUTO): $(BARS_AUTORUN)
@@ -25,7 +38,4 @@ $(AUTO): $(BARS_AUTORUN)
 # create the JAR file
 $(JAR): $(BARS) $(ICONS) $(CONF) $(PKGLIST)
 	@ mkdir -pv $(@D)
-	@ echo
-	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
 	zip -9 -r $(JAR) . --include @$(subst .jar,.lst,$(@F))
-	@ echo '------------- assembling JAR file -------------'
