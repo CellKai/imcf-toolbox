@@ -1,3 +1,11 @@
+TODO
+====
+
+This should rather describe the structure of the subdirectories, e.g. why
+macros go into a JAR package that lives somewhere in the "plugins" tree.
+Instructions for testing with Jython can go directly into the docstring of the
+corresponding scripts themselves.
+
 Testing with the Jython Console
 ===============================
 
