@@ -6,7 +6,7 @@ import xml.etree.ElementTree as etree
 from os import sep
 from os.path import basename, dirname, join, exists
 from log import log
-from misc import readtxt
+from misc import readtxt, flatten
 import ConfigParser
 import codecs
 
@@ -283,7 +283,7 @@ class FluoViewMosaic(object):
         log.warn('Dimensions: %s %s' % dim)
         return dim
 
-    def gen_stitching_macro_code(self, pfx, path='', tplpath=''):
+    def gen_stitching_macro_code(self, pfx, path='', tplpath='', flat=False):
         """Generate code in ImageJ's macro language to stitch the mosaics.
 
         Take two template files ("head" and "body") and generate an ImageJ
@@ -301,11 +301,14 @@ class FluoViewMosaic(object):
             The path to use as input directory *INSIDE* the macro.
         tplpath : str (optional)
             The path to a directory or zip file containing the templates.
+        flat : bool (optional)
+            Used to request a flattened string instead of a list of strings.
 
         Returns
         -------
-        ijm : list(str)
-            The generated macro code as a list of str (one str per line).
+        ijm : list(str) or str
+            The generated macro code as a list of str (one str per line) or as
+            a single long string if requested via the "flat" parameter.
         """
         # TAG: move_to_superclass
         mcount = self.experiment['mcount']
@@ -338,7 +341,10 @@ class FluoViewMosaic(object):
         ijm.append('\n')
         ijm += readtxt(pfx + '_body.ijm', tplpath)
         log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
-        return(ijm)
+        if (flat):
+            return(flatten(ijm))
+        else:
+            return(ijm)
 
     def write_stitching_macro(self, code, fname=None, dname=None):
         """Write generated macro code into a file.
