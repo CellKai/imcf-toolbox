@@ -102,13 +102,20 @@ run("Grid/Collection stitching");
 </macro>
 
 <button> 5 line 2
+label=FluoView OIF Stitcher
+icon=icons/oif_stitcher.png
+arg=<macro>
+run("Olympus FluoView OIF Stitcher");
+</macro>
+
+<button> 6 line 2
 label=Stack Registration
 icon=icons/stack_reg.png
 arg=<macro>
 run("StackReg");
 </macro>
 
-<button> 6 line 2
+<button> 7 line 2
 label=Segmentation Toolbar
 icon=icons/segmentation.png
 arg=<macro>
