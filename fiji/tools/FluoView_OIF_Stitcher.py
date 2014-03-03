@@ -34,19 +34,19 @@ import sys
 # before doing anything else check the Python version:
 if not sys.version_info[:2] >= (2, 7):
     raise Exception('Python 2.7 or newer is required!')
+import argparse
+from os.path import join, dirname, basename
+
+# ImageJ imports
+from ij import IJ
+from ij.io import OpenDialog
+from ij.gui import GenericDialog
 
 # explicitly add our libs to the module search path
-from os.path import join, dirname, basename
 from java.lang.System import getProperty
 imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
 imcftpl = join(imcfdir, 'imcf_macros.jar')
 sys.path.append(join(imcfdir, 'imcf_libs.jar'))
-
-
-from ij import IJ
-from ij.io import OpenDialog
-from ij.gui import GenericDialog
-import argparse
 
 import fluoview as fv
 from log import log, set_loglevel
