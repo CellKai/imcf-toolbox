@@ -1,6 +1,7 @@
 PKGLIST = $(wildcard *.lst)
 
 SCRIPTS = $(wildcard *.ijm)
+TEMPLATES = $(wildcard templates/*.ijm)
 CLASSES = $(subst .java,.class,$(wildcard *.java))
 CONF = plugins.config
 
@@ -32,7 +33,7 @@ msg_03:
 	fiji-linux64 --javac $<
 
 # create the JAR file
-$(JAR): $(SCRIPTS) $(CLASSES) $(CONF) $(PKGLIST)
+$(JAR): $(SCRIPTS) $(CLASSES) $(CONF) $(PKGLIST) $(TEMPLATES)
 	@ mkdir -pv $(@D)
 	zip -9 -r $(JAR) . --include @$(subst .jar,.lst,$(@F))
 

@@ -9,7 +9,7 @@ if not sys.version_info[:2] >= (2, 7):
 from os.path import join, dirname, basename
 from java.lang.System import getProperty
 imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
-imcftpl = join(imcfdir, 'ijm_templates.zip')
+imcftpl = join(imcfdir, 'imcf_macros.jar')
 sys.path.append(join(imcfdir, 'imcf_libs.jar'))
 
 
@@ -20,7 +20,6 @@ import argparse
 
 import fluoview as fv
 from log import log, set_loglevel
-from misc import flatten
 
 
 def ui_get_input_file():
@@ -60,8 +59,8 @@ def main_interactive():
     msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
-    code = flatten(mosaic.gen_stitching_macro_code(
-        'stitching', path=base, tplpath=imcftpl))
+    code = mosaic.gen_stitching_macro_code('templates/stitching', path=base,
+                                           tplpath=imcftpl, flat=True)
     if dialog.wasOKed():
         mosaic.write_all_tile_configs(fixpath=True)
         IJ.runMacro(code)
@@ -79,8 +78,8 @@ def main_noninteractive():
     fname = basename(args.mosaiclog)
     mosaic = fv.FluoViewMosaic(join(base, fname))
     log.warn(gen_mosaic_details(mosaic))
-    code = flatten(mosaic.gen_stitching_macro_code(
-        'stitching', path=base, tplpath=imcftpl))
+    code = mosaic.gen_stitching_macro_code('templates/stitching', path=base,
+                                           tplpath=imcftpl, flat=True)
     if not args.dryrun:
         log.info('Writing tile configuration files.')
         mosaic.write_all_tile_configs(fixpath=True)
