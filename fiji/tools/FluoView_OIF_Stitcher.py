@@ -1,4 +1,34 @@
-"""Fiji plugin for stitching FluoView mosaics in OIF format."""
+"""Fiji plugin for stitching FluoView mosaics in OIF format.
+
+NOTE: this plugin requires your Jython environment to be updated to 2.7 (beta)
+as it will not work with Fiji's default Jython 2.5!
+
+The plugin reads a "MATL_Mosaic.log" file created by Olympus FluoView,
+identifies the mosaics configured in this experiment and creates an appropriate
+tile configuration for each mosaic exploiting the fact that the coherence of
+tiles to mosaics is stored in the experiment configuration as well as the
+individual stage positions for each tile (which greatly speeds up the actual
+stitching process.
+
+After identifying the mosaics and their corresponding tiles, it creates a macro
+to control the stitching of the individual mosaics given in the above
+experiment file and runs this macro. Stitching results are saved as OME-TIFF
+using the BioFormats exporter.
+
+The plugin can be run from within Fiji's menu as well as completely headless
+from the console using a command line like this. It uses the "argparse" module
+to parse the commandline arguments, however to "trick" the ImageJ launcher into
+passing on those arguments meant for the plugin instead of parsing them itself,
+plugin-arguments have to be prefixed with a TRIPLE dash "---" (both long and
+short versions):
+
+MOSAICLOG="../../sample_data/fluoview/minimal_1mosaic_15pct/MATL_Mosaic.log"
+ImageJ-linux64 --headless FluoView_OIF_Stitcher.py ---mosaiclog $MOSAICLOG
+
+NOTE: the plugin is not yet capable of being called in batch from within a
+macroas it will present the parsing results in a GUI dialog and ask for
+confirmation before running the actual stitching process.
+"""
 
 import sys
 # before doing anything else check the Python version:
