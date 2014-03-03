@@ -1,5 +1,6 @@
-"""Fiji plugin for stitching FluoView mosaics in OIF format.
+"""Fiji plugin for stitching FluoView mosaics in OIF format."""
 
+"""
 NOTE: this plugin requires your Jython environment to be updated to 2.7 (beta)
 as it will not work with Fiji's default Jython 2.5!
 
