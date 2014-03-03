@@ -17,11 +17,11 @@ experiment file and runs this macro. Stitching results are saved as OME-TIFF
 using the BioFormats exporter.
 
 The plugin can be run from within Fiji's menu as well as completely headless
-from the console using a command line like this. It uses the "argparse" module
-to parse the commandline arguments, however to "trick" the ImageJ launcher into
-passing on those arguments meant for the plugin instead of parsing them itself,
-plugin-arguments have to be prefixed with a TRIPLE dash "---" (both long and
-short versions):
+from the console using a command line like the one shown below. It uses the
+"argparse" module to parse the commandline arguments, however to "trick" the
+ImageJ launcher into passing on those arguments meant for the plugin instead of
+parsing them itself, plugin-arguments have to be prefixed with a TRIPLE dash
+"---" (both long and short versions):
 
 MOSAICLOG="../../sample_data/fluoview/minimal_1mosaic_15pct/MATL_Mosaic.log"
 ImageJ-linux64 --headless FluoView_OIF_Stitcher.py ---mosaiclog $MOSAICLOG
