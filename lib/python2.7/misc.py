@@ -25,9 +25,7 @@ def _is_string_like(obj):
     """
     try:
         obj + ''
-    except TypeError:
-        return False
-    except ValueError:
+    except (TypeError, ValueError):
         return False
     return True
 
@@ -69,7 +67,7 @@ def filehandle(fname, mode='r'):
     if (type(fname).__name__ == 'str'):
         try:
             return open(fname, mode)
-        except IOError, err:
+        except IOError as err:
             message = "can't open '%s': %s"
             raise SystemExit(message % (fname, err))
     elif (type(fname).__name__ == 'file'):
