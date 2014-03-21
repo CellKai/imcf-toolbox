@@ -76,6 +76,9 @@ print(circ_max);
 setBatchMode(true);
 // make sure the ROI Manager is empty
 roiManager("reset");
+// make sure nothing is selected
+run("Select None");
+
 
 // duplicate the red channel to create the mask
 selectImage(ch_red);
