@@ -5,6 +5,12 @@
  * desired thresholding method and the filtering values for size and
  * circularity that that are passed to "Analyze Particles" later.
  *
+ * Segmentation is done using the CLAHE local contrast algorithm, then using a
+ * local thresholding, some tweaks on the binary mask (fill holes, open) and
+ * finally applying the standard watershed method.
+ *
+ * The result is measured via "Analyze Particles" and displayed on the input
+ * image for visual control
  */
 
 
