@@ -1,17 +1,15 @@
 /*
  * ImageJ macro for Spang Lab segmentation, 2014-03.
  *
- * Requires at least 2 open images, asks the user in a dialog to assign one
- * image as the "segment and measure" and one as the "measure only"
- * channel, select the desired thresholding method and the filtering
- * values for size and circularity that that are passed to "Analyze
- * Particles" later.
+ * Asks the user in a dialog to select one image for processing, select the
+ * desired thresholding method and the filtering values for size and
+ * circularity that that are passed to "Analyze Particles" later.
  *
  */
 
 
-if (nImages < 2) {
-    msg = "Please open at least two images before running the macro!";
+if (nImages < 1) {
+    msg = "Please open one image before running the macro!";
     showMessage("Error", msg);
     exit;
 }
@@ -33,9 +31,8 @@ setBatchMode(false);
 // ***** USER INPUT DIALOG ***** //
 Dialog.create("Cells segmentation parameters");
 msg = "Assign images to channels:";
-Dialog.addMessage(msg);
-Dialog.addChoice("Channel used for SEGMENTATION:", names, names[0]);
-Dialog.addChoice("Channel for measurements only:", names, names[1]);
+//Dialog.addMessage(msg);
+Dialog.addChoice("Select image to use for SEGMENTATION:", names, names[0]);
 Dialog.addNumber("CLAHE slope maximum: ", 4);
 // threshold method selection (FIXME: complete the list!)
 methods = newArray('Phansalkar', 'Niblack', 'Otsu', 'Mean', 'Median');
@@ -49,7 +46,6 @@ Dialog.show();
 
 
 ch_segm = Dialog.getChoice();
-ch_meas = Dialog.getChoice();
 clahe_max = Dialog.getNumber();
 thr_method = Dialog.getChoice();
 thr_radius = Dialog.getNumber();
