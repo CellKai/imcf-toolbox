@@ -41,10 +41,10 @@ Dialog.addNumber("CLAHE slope maximum: ", 4);
 methods = newArray('Phansalkar', 'Niblack', 'Otsu', 'Mean', 'Median');
 Dialog.addChoice("Local Thresholding method:", methods, "Phansalkar");
 Dialog.addSlider("Local Thresholding radius:", 5, 50, 15);
-Dialog.addNumber("Object min size: ", 50);
-Dialog.addNumber("Object max size (0 for infinity): ", 0);
-Dialog.addSlider("Circularity min:", 0, 1, 0.5);
-Dialog.addSlider("Circularity max:", 0, 1, 1);
+Dialog.addNumber("Object size minimum: ", 50);
+Dialog.addNumber("Object size maximum (0 for infinity): ", 0);
+Dialog.addSlider("Circularity minimum:", 0, 1, 0.5);
+Dialog.addSlider("Circularity maximum:", 0.1, 1, 1);
 Dialog.addNumber("Decimal places:", 0);
 Dialog.show();
 
@@ -63,8 +63,7 @@ circ_max = Dialog.getNumber();
 decimal = Dialog.getNumber();
 // ***** USER INPUT DIALOG ***** //
 
-
-// setBatchMode(true);
+setBatchMode(true);
 // make sure the ROI Manager is empty
 roiManager("reset");
 // make sure nothing is selected
