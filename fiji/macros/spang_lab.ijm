@@ -45,7 +45,6 @@ Dialog.addNumber("Object size minimum: ", 50);
 Dialog.addNumber("Object size maximum (0 for infinity): ", 0);
 Dialog.addSlider("Circularity minimum:", 0, 1, 0.5);
 Dialog.addSlider("Circularity maximum:", 0.1, 1, 1);
-Dialog.addNumber("Decimal places:", 0);
 Dialog.show();
 
 
@@ -60,7 +59,6 @@ if(size_max == 0)
     size_max = "Infinity";
 circ_min = Dialog.getNumber();
 circ_max = Dialog.getNumber();
-decimal = Dialog.getNumber();
 // ***** USER INPUT DIALOG ***** //
 
 setBatchMode(true);
