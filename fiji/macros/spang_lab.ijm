@@ -63,14 +63,6 @@ circ_max = Dialog.getNumber();
 decimal = Dialog.getNumber();
 // ***** USER INPUT DIALOG ***** //
 
-/*
-print(ch_segm);
-print(ch_meas);
-print(size_min);
-print(size_max);
-print(circ_min);
-print(circ_max);
-*/
 
 // setBatchMode(true);
 // make sure the ROI Manager is empty
