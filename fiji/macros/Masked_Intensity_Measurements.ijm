@@ -23,16 +23,17 @@ if (nImages < 2) {
 
 // assemble an array containing the currently open images:
 // print("number of images: " + nImages);
+setBatchMode(true);
 names = newArray(nImages);
 for (i=0; i < nImages; i++){
     selectImage(i+1);
     names[i] = getTitle();
     // print(names[i]);
 }
-
 // sort the names array so we can try to pre-assign the correct
 // channels (given the files are named in a sensible way)
 Array.sort(names);
+setBatchMode(false);
 
 // ***** USER INPUT DIALOG ***** //
 Dialog.create("Thresholded Measurements / 2Ch, single slices");
