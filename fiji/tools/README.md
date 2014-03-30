@@ -8,6 +8,17 @@ Adding a new plugin to this package
 * Edit "plugins.config" accordingly to have the new plugin show up in ImageJ's
   "Plugin" menu structure with the desired name.
 
+Headless Operation
+==================
+
+To use headless operation mode on those plugins that are prepared for it (e.g.
+the `FluoView_OIF_Stitcher.py`) use a command like this one (mind the TRIPLE
+dash for plugin parameters like `mosaiclog`!):
+```
+./ImageJ-linux64 --headless /path/to/FluoView_OIF_Stitcher.py \
+    ---mosaiclog /some/oif_dataset/MATL_Mosaic.log
+```
+
 Testing with the Jython Console
 ===============================
 
