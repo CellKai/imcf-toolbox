@@ -1,5 +1,5 @@
-Adding a new plugin
-===================
+Adding a new plugin to this package
+===================================
 
 * Open the plugin script in Fiji's script editor unless it is Java code.
 * Use File > Export as .jar
