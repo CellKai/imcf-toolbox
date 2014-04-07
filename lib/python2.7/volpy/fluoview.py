@@ -164,7 +164,7 @@ class FluoViewMosaic(object):
                 'ratio': ratio,
                 'tiles': images})
 
-    def gen_tile_config(self, idx, fixpath=False):
+    def gen_tile_config(self, idx, fixpath=False, size=None):
         """Generate a tile configuration for Fiji's stitcher.
 
         Generate a layout configuration file for a ceartain mosaic in the
@@ -179,6 +179,9 @@ class FluoViewMosaic(object):
         fixpath : bool (optional)
             Determines if the path separators in the tile config file should be
             kept as the are or be adjusted to the currently used environment.
+        size : (int, int)  <optional>
+            Size of each tile in pixels as a tuple (x, y). If omitted it will
+            try to extract the information from the image files on the disk.
 
         Returns
         -------
@@ -191,14 +194,15 @@ class FluoViewMosaic(object):
         app('# Define the number of dimensions we are working on\n')
         app('dim = 3\n')
         app('# Define the image coordinates (in pixels)\n')
-        try:
-            size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
-        except IOError as err:
-            # if reading the OIF fails, we just issue a warning and continue
-            # with the next mosaic:
-            log.warn('\n*** WARNING *** WARNING *** WARNING ***\n%s' % err)
-            log.warn('=====> SKIPPING MOSAIC %i <=====\n' % idx)
-            return
+        if size is None:
+            try:
+                size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
+            except IOError as err:
+                # if reading the OIF fails, we just issue a warning and
+                # continue with the next mosaic:
+                log.warn('\n*** WARNING *** WARNING *** WARNING ***\n%s' % err)
+                log.warn('=====> SKIPPING MOSAIC %i <=====\n' % idx)
+                return
         ratio = self.mosaics[idx]['ratio'] / 100
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size[0]
@@ -210,7 +214,7 @@ class FluoViewMosaic(object):
             app('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
         return(conf)
 
-    def write_tile_config(self, idx, path='', fixpath=False):
+    def write_tile_config(self, idx, path='', fixpath=False, size=None):
         """Generate and write the tile configuration file.
 
         Call the method to generate the corresponding tile configuration and
@@ -225,9 +229,11 @@ class FluoViewMosaic(object):
             The output directory, if empty the input directory is used.
         fixpath : bool (optional)
             Passed on to gen_tile_config().
+        size : (int, int)  <optional>
+            Passed on to gen_tile_config().
         """
         # TAG: move_to_superclass
-        config = self.gen_tile_config(idx, fixpath)
+        config = self.gen_tile_config(idx, fixpath, size)
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
         if(path == ''):
@@ -239,14 +245,14 @@ class FluoViewMosaic(object):
         out.close()
         log.warn('Wrote tile config to %s' % out.name)
 
-    def write_all_tile_configs(self, path='', fixpath=False):
+    def write_all_tile_configs(self, path='', fixpath=False, size=None):
         """Wrapper to generate all TileConfiguration.txt files.
 
         All arguments are directly passed on to write_tile_config().
         """
         # TAG: move_to_superclass
         for i in xrange(self.experiment['mcount']):
-            self.write_tile_config(i, path, fixpath)
+            self.write_tile_config(i, path, fixpath, size)
 
     def dim_from_oif(self, oif):
         """Read image dimensions from a .oif file.
