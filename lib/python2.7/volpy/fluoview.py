@@ -176,10 +176,10 @@ class FluoViewMosaic(object):
         ----------
         idx : int
             The index of the mosaic to generate the tile config for.
-        fixpath : bool (optional)
+        fixpath : bool
             Determines if the path separators in the tile config file should be
             kept as the are or be adjusted to the currently used environment.
-        size : (int, int)  <optional>
+        size : (int, int)
             Size of each tile in pixels as a tuple (x, y). If omitted it will
             try to extract the information from the image files on the disk.
 
@@ -227,11 +227,11 @@ class FluoViewMosaic(object):
         ----------
         idx : int
             Index number of the mosaic to write the tile config for.
-        path : str (optional)
+        path : str
             The output directory, if empty the input directory is used.
-        fixpath : bool (optional)
+        fixpath : bool
             Passed on to gen_tile_config().
-        size : (int, int)  <optional>
+        size : (int, int)
             Passed on to gen_tile_config().
         """
         # TAG: move_to_superclass
@@ -305,11 +305,11 @@ class FluoViewMosaic(object):
         pfx : str
             The prefix for the two template files, will be completed with the
             corresponding suffixes "_head.ijm" and "_body.ijm".
-        path : str (optional)
+        path : str
             The path to use as input directory *INSIDE* the macro.
-        tplpath : str (optional)
+        tplpath : str
             The path to a directory or zip file containing the templates.
-        flat : bool (optional)
+        flat : bool
             Used to request a flattened string instead of a list of strings.
 
         Returns
@@ -361,10 +361,10 @@ class FluoViewMosaic(object):
         ----------
         code : list(str)
             The code as a list of strings, one per line.
-        fname : str (optional)
+        fname : str
             The desired output filename, if empty the directory name (usually
             describing the dataset) is used with a generic suffix.
-        dname : str (optional)
+        dname : str
             The output directory, if empty the input directory is used.
         """
         if fname is None:
