@@ -208,6 +208,8 @@ class FluoViewMosaic(object):
             xpos = img['xno'] * ratio * size[0]
             ypos = img['yno'] * ratio * size[1]
             # fix wrong filenames from stupid Olympus software:
+            # TODO: this needs to be adjusted / overloaded if the method is
+            # moved to a superclass!
             imgf = img['imgf'].replace('.oif', '_01.oif')
             if(fixpath):
                 imgf = imgf.replace('\\', sep)
