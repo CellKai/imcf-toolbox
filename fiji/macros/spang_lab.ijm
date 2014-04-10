@@ -13,32 +13,27 @@
  * image for visual control
  */
 
-
-if (nImages < 1) {
-    msg = "Please open one image before running the macro!";
+infile = File.openDialog("Select a ZVI file");
+// exit cleanly if the user clicks on cancel:
+if (infile == '') {
+    exit;
+}
+run("Bio-Formats Importer", "open=&infile " +
+	"autoscale color_mode=Colorized view=Hyperstack stack_order=XYCZT");
+getDimensions(sizeX, sizeY, sizeC, sizeS, sizeF);
+orig_image = getTitle();
+if (sizeC != 3) {
+    msg = "This dataset has " + sizeC + " channels, whereas a 3-channel" +
+        " dataset was expected! Stopping.";
     showMessage("Error", msg);
     exit;
 }
 
-// assemble an array containing the currently open images:
-// print("number of images: " + nImages);
-setBatchMode(true);
-names = newArray(nImages);
-for (i=0; i < nImages; i++){
-    selectImage(i+1);
-    names[i] = getTitle();
-}
-// sort the names array so we can try to pre-assign the correct
-// channels (given the files are named in a sensible way)
-Array.sort(names);
-setBatchMode(false);
-
-
 // ***** USER INPUT DIALOG ***** //
 Dialog.create("Cells segmentation parameters");
-msg = "Assign images to channels:";
 //Dialog.addMessage(msg);
-Dialog.addChoice("Select image to use for SEGMENTATION:", names, names[0]);
+channels = newArray("1", "2", "3");
+Dialog.addChoice("Select channel to use for SEGMENTATION:", channels, "2");
 Dialog.addNumber("CLAHE slope maximum: ", 4);
 // threshold method selection (FIXME: complete the list!)
 methods = newArray('Phansalkar', 'Niblack', 'Otsu', 'Mean', 'Median');
@@ -51,7 +46,8 @@ Dialog.addSlider("Circularity maximum:", 0.1, 1, 1);
 Dialog.show();
 
 
-ch_segm = Dialog.getChoice();
+ch_segm = parseInt(Dialog.getChoice());
+Stack.setChannel(ch_segm);
 clahe_max = Dialog.getNumber();
 thr_method = Dialog.getChoice();
 thr_radius = Dialog.getNumber();
@@ -70,8 +66,7 @@ roiManager("reset");
 run("Select None");
 
 // duplicate the red channel to create the mask
-selectImage(ch_segm);
-run("Duplicate...", "title=masking_channel");
+run("Duplicate...", "title=masking_channel duplicate channels=&ch_segm");
 selectImage("masking_channel");
 //run("Enhance Contrast", "saturated=5.0");
 run("Enhance Local Contrast (CLAHE)",
@@ -90,7 +85,7 @@ run("Analyze Particles...",
     + " show=Nothing exclude clear add");
 selectImage("masking_channel");
 close(); // not required in batch mode
-selectImage(ch_segm);
+selectImage(orig_image);
 roiManager("Show All");
 
 
