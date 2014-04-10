@@ -102,11 +102,6 @@ run("Grid/Collection stitching");
 </macro>
 
 <button> 5 line 2
-label=FluoView OIF Stitcher
-icon=icons/oif_stitcher.png
-arg=<macro>
-run("Olympus FluoView OIF Stitcher");
-</macro>
 
 <button> 6 line 2
 label=Stack Registration
