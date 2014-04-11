@@ -28,15 +28,15 @@ main_panel = JPanel()
 ### panel 1
 panel1 = JPanel()
 panel1.add(lbl_foo)
-choice = JComboBox(choice_list)
-panel1.add(choice)
+cb1 = JComboBox(choice_list)
+panel1.add(cb1)
 
 ### panel 2
 panel2 = JPanel()
 panel2.add(lbl_bar)
-choice = JComboBox(sorted(list(rois.keys())))
-choice.addActionListener(Listener(lbl_bar))
-panel2.add(choice)
+cb2 = JComboBox(sorted(list(rois.keys())))
+cb2.addActionListener(Listener(lbl_bar))
+panel2.add(cb2)
 
 frame = JFrame("Swing GUI Test Frame")
 frame.getContentPane().add(main_panel)
