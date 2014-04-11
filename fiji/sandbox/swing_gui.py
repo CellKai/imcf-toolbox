@@ -12,13 +12,19 @@ class Listener(ActionListener):
     roimgr.select(roi_ni[sel])
 
 
+def update_roi_mappings():
+    global roi_in
+    global roi_ni
+    for i in range(roimgr.getCount()):
+        name = roimgr.getName(i)
+        roi_in.append(name)
+        roi_ni[name] = i
+
+
 roimgr = RoiManager.getInstance()
 roi_ni = {}
 roi_in = []
-for i in range(roimgr.getCount()):
-    name = roimgr.getName(i)
-    roi_in.append(name)
-    roi_ni[name] = i
+update_roi_mappings()
 print roi_in
 print roi_ni
 
