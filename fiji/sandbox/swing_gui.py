@@ -17,21 +17,30 @@ class Listener(ActionListener):
 roimgr = RoiManager.getInstance()
 rois = roimgr.getROIs()
 
-panel = JPanel()
 
 choice_list = ["foo", "bar", "777"]
 
 lbl_foo = JLabel("foo label")
 lbl_bar = JLabel("bar label")
-panel.add(lbl_foo)
+
+main_panel = JPanel()
+
+### panel 1
+panel1 = JPanel()
+panel1.add(lbl_foo)
 choice = JComboBox(choice_list)
-panel.add(choice)
-panel.add(lbl_bar)
+panel1.add(choice)
+
+### panel 2
+panel2 = JPanel()
+panel2.add(lbl_bar)
 choice = JComboBox(sorted(list(rois.keys())))
 choice.addActionListener(Listener(lbl_bar))
-panel.add(choice)
+panel2.add(choice)
 
 frame = JFrame("Swing GUI Test Frame")
-frame.getContentPane().add(panel)
+frame.getContentPane().add(main_panel)
+main_panel.add(panel1)
+main_panel.add(panel2)
 frame.pack()
 frame.setVisible(True)
