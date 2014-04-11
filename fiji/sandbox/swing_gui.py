@@ -3,15 +3,17 @@ from java.awt import Color, GridLayout
 from java.awt.event import ActionListener
 
 panel = JPanel()
-layout = GridLayout(4, 2)
+layout = GridLayout(2, 2)
 panel.setLayout(layout)
 
 choice_list = ["foo", "bar", "777"]
 
-panel.add(JLabel("foo label"))
+lbl_foo = JLabel("foo label")
+lbl_bar = JLabel("bar label")
+panel.add(lbl_foo)
 choice = JComboBox(choice_list)
 panel.add(choice)
-panel.add(JLabel("bar label"))
+panel.add(lbl_bar)
 choice = JComboBox(choice_list)
 panel.add(choice)
 
