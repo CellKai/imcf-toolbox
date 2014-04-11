@@ -14,6 +14,9 @@ class Listener(ActionListener):
     frame.pack()
 
 
+roimgr = RoiManager.getInstance()
+rois = roimgr.getROIs()
+
 panel = JPanel()
 
 choice_list = ["foo", "bar", "777"]
@@ -24,7 +27,7 @@ panel.add(lbl_foo)
 choice = JComboBox(choice_list)
 panel.add(choice)
 panel.add(lbl_bar)
-choice = JComboBox(choice_list)
+choice = JComboBox(sorted(list(rois.keys())))
 choice.addActionListener(Listener(lbl_bar))
 panel.add(choice)
 
