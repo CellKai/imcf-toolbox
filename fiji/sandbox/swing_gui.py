@@ -10,8 +10,6 @@ class Listener(ActionListener):
   def actionPerformed(self, event):
     sel = self.cb.getSelectedItem()
     print sel
-    global frame
-    frame.pack()
 
 
 roimgr = RoiManager.getInstance()
