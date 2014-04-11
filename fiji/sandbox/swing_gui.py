@@ -7,10 +7,9 @@ class Listener(ActionListener):
   def __init__(self, label):
     self.label = label
   def actionPerformed(self, event):
-    global frame
     msg = "ActionListener called!"
     self.label.setText(msg)
-    print event
+    global frame
     frame.pack()
 
 
