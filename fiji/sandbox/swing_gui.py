@@ -20,22 +20,22 @@ rois = roimgr.getROIs()
 
 choice_list = ["foo", "bar", "777"]
 
-lbl_foo = JLabel("foo label")
-lbl_bar = JLabel("bar label")
+lbl1 = JLabel("foo label")
+lbl2 = JLabel("bar label")
 
 main_panel = JPanel()
 
 ### panel 1
 panel1 = JPanel()
-panel1.add(lbl_foo)
+panel1.add(lbl1)
 cb1 = JComboBox(choice_list)
 panel1.add(cb1)
 
 ### panel 2
 panel2 = JPanel()
-panel2.add(lbl_bar)
+panel2.add(lbl2)
 cb2 = JComboBox(sorted(list(rois.keys())))
-cb2.addActionListener(Listener(lbl_bar))
+cb2.addActionListener(Listener(lbl2))
 panel2.add(cb2)
 
 frame = JFrame("Swing GUI Test Frame")
