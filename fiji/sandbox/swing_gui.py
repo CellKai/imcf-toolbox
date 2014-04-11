@@ -10,6 +10,7 @@ class Listener(ActionListener):
     global frame
     msg = "ActionListener called!"
     self.label.setText(msg)
+    print event
     frame.pack()
 
 
