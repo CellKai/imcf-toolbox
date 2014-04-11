@@ -14,8 +14,6 @@ class Listener(ActionListener):
 
 
 panel = JPanel()
-layout = GridLayout(2, 2)
-panel.setLayout(layout)
 
 choice_list = ["foo", "bar", "777"]
 
