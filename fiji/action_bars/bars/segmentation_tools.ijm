@@ -60,9 +60,9 @@ arg=<macro>
 run("Analyze Particles...");
 </macro>
 <button>
-label=(void)
+label=ROI Manager
 arg=<macro>
-run("");
+run("ROI Manager...");
 </macro>
 <button>
 label=(void)
