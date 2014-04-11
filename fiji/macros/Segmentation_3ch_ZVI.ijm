@@ -81,6 +81,7 @@ run("Convert to Mask");
 run("Fill Holes");
 run("Open");
 run("Watershed");
+setBatchMode(false);
 run("Analyze Particles...",
     "size=&size_min-&size_max pixel circularity=&circ_min-&circ_max"
     + " show=Nothing exclude clear add");
@@ -90,4 +91,3 @@ selectImage(orig_image);
 roiManager("Show All");
 
 
-setBatchMode(false);
