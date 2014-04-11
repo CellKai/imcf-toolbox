@@ -4,11 +4,12 @@ from java.awt.event import ActionListener
 
 
 class Listener(ActionListener):
-  def __init__(self, label):
+  def __init__(self, label, cb):
     self.label = label
+    self.cb = cb
   def actionPerformed(self, event):
-    msg = "ActionListener called!"
-    self.label.setText(msg)
+    sel = self.cb.getSelectedItem()
+    print sel
     global frame
     frame.pack()
 
@@ -34,7 +35,7 @@ panel1.add(cb1)
 panel2 = JPanel()
 panel2.add(lbl2)
 cb2 = JComboBox(sorted(list(rois.keys())))
-cb2.addActionListener(Listener(lbl2))
+cb2.addActionListener(Listener(lbl2, cb2))
 panel2.add(cb2)
 
 frame = JFrame("Swing GUI Test Frame")
