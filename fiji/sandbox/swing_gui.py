@@ -9,7 +9,9 @@ class Listener(ActionListener):
     self.cb = cb
   def actionPerformed(self, event):
     sel = self.cb.getSelectedItem()
-    print sel
+    global roimgr
+    global roi_ni
+    roimgr.select(roi_ni[sel])
 
 
 roimgr = RoiManager.getInstance()
