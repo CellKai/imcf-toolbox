@@ -47,7 +47,6 @@ Dialog.show();
 
 
 ch_segm = parseInt(Dialog.getChoice());
-Stack.setChannel(ch_segm);
 clahe_max = Dialog.getNumber();
 thr_method = Dialog.getChoice();
 thr_radius = Dialog.getNumber();
@@ -65,6 +64,8 @@ roiManager("reset");
 // make sure nothing is selected
 run("Select None");
 
+selectImage(orig_image);
+Stack.setChannel(ch_segm);
 // duplicate the red channel to create the mask
 run("Duplicate...", "title=masking_channel duplicate channels=&ch_segm");
 selectImage("masking_channel");
