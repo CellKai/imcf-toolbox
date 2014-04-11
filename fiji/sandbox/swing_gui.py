@@ -14,6 +14,15 @@ class Listener(ActionListener):
 
 roimgr = RoiManager.getInstance()
 rois = roimgr.getROIs()
+rois_array = roimgr.getRoisAsArray()
+roi_ni = {}
+roi_in = []
+for i in range(roimgr.getCount()):
+    name = roimgr.getName(i)
+    roi_in.append(name)
+    roi_ni[name] = i
+print roi_in
+print roi_ni
 
 
 choice_list = ["foo", "bar", "777"]
