@@ -65,9 +65,9 @@ arg=<macro>
 run("ROI Manager...");
 </macro>
 <button>
-label=(void)
+label=Segm. 3ch ZVI
 arg=<macro>
-run("");
+run("Segmentation 3ch ZVI");
 </macro>
 </line>
 
