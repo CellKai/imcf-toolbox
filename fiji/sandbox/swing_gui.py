@@ -1,5 +1,5 @@
-from javax.swing import JScrollPane, JPanel, JComboBox, JLabel, JFrame
-from java.awt import Color, GridLayout
+from javax.swing import JPanel, JComboBox, JLabel, JFrame
+from java.awt import GridLayout
 from java.awt.event import ActionListener
 
 
@@ -9,14 +9,10 @@ class Listener(ActionListener):
     self.cb = cb
   def actionPerformed(self, event):
     sel = self.cb.getSelectedItem()
-    global roimgr
-    global roi_ni
     roimgr.select(roi_ni[sel])
 
 
 roimgr = RoiManager.getInstance()
-rois = roimgr.getROIs()
-rois_array = roimgr.getRoisAsArray()
 roi_ni = {}
 roi_in = []
 for i in range(roimgr.getCount()):
@@ -43,7 +39,7 @@ panel1.add(cb1)
 ### panel 2
 panel2 = JPanel()
 panel2.add(lbl2)
-cb2 = JComboBox(sorted(list(rois.keys())))
+cb2 = JComboBox(sorted(list(roi_ni.keys())))
 cb2.addActionListener(Listener(lbl2, cb2))
 panel2.add(cb2)
 
