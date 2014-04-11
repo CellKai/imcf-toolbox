@@ -2,6 +2,15 @@ from javax.swing import JScrollPane, JPanel, JComboBox, JLabel, JFrame
 from java.awt import Color, GridLayout
 from java.awt.event import ActionListener
 
+
+class Listener(ActionListener):
+  def __init__(self, label):
+    self.label = label
+  def actionPerformed(self, event):
+    msg = "ActionListener called!"
+    self.label.setText(msg)
+
+
 panel = JPanel()
 layout = GridLayout(2, 2)
 panel.setLayout(layout)
@@ -15,6 +24,7 @@ choice = JComboBox(choice_list)
 panel.add(choice)
 panel.add(lbl_bar)
 choice = JComboBox(choice_list)
+choice.addActionListener(Listener(lbl_bar))
 panel.add(choice)
 
 frame = JFrame("Swing GUI Test Frame")
