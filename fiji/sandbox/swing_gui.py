@@ -1,4 +1,4 @@
-from javax.swing import JPanel, JComboBox, JLabel, JFrame
+from javax.swing import JPanel, JComboBox, JLabel, JFrame, JButton
 from java.awt import GridLayout
 from java.awt.event import ActionListener
 
@@ -10,6 +10,13 @@ class Listener(ActionListener):
   def actionPerformed(self, event):
     sel = self.cb.getSelectedItem()
     roimgr.select(roi_ni[sel])
+
+
+class ButtonListener(ActionListener):
+  def __init__(self, btn):
+    self.btn = btn
+  def actionPerformed(self, event):
+    print event
 
 
 def update_roi_mappings():
@@ -40,7 +47,10 @@ main_panel = JPanel()
 panel1 = JPanel()
 panel1.add(lbl1)
 cb1 = JComboBox(choice_list)
+btn1 = JButton("Accept")
+btn1.addActionListener(ButtonListener(btn1))
 panel1.add(cb1)
+panel1.add(btn1)
 
 ### panel 2
 panel2 = JPanel()
