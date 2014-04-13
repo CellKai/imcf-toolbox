@@ -55,7 +55,7 @@ panel1.add(btn1)
 ### panel 2
 panel2 = JPanel()
 panel2.add(lbl2)
-cb2 = JComboBox(sorted(list(roi_ni.keys())))
+cb2 = JComboBox(sorted(roi_ni.keys()))
 cb2.addActionListener(Listener(lbl2, cb2))
 panel2.add(cb2)
 
