@@ -1,4 +1,4 @@
-from javax.swing import JPanel, JComboBox, JLabel, JFrame, JButton
+from javax.swing import JPanel, JComboBox, JLabel, JFrame, JButton, JList
 from java.awt import GridLayout
 from java.awt.event import ActionListener
 
@@ -59,9 +59,15 @@ cb2 = JComboBox(sorted(roi_ni.keys()))
 cb2.addActionListener(Listener(lbl2, cb2))
 panel2.add(cb2)
 
+### panel 3
+pnl3 = JPanel()
+lst1 = JList(sorted(roi_ni.keys()))
+pnl3.add(lst1)
+
 frame = JFrame("Swing GUI Test Frame")
 frame.getContentPane().add(main_panel)
 main_panel.add(panel1)
 main_panel.add(panel2)
+main_panel.add(pnl3)
 frame.pack()
 frame.setVisible(True)
