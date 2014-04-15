@@ -40,8 +40,7 @@ javax.swing.AbstractListModel m = new javax.swing.AbstractListModel() {
 };
 return m;
         """, {}, javax.swing.AbstractListModel)
-print "Weaver created! Type:"
-print type(wcode)
+print "Weaver created!"
 listmodel = wcode.call()
 print "Weaver called!"
 
