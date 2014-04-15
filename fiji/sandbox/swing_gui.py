@@ -2,6 +2,9 @@ from javax.swing import JPanel, JComboBox, JLabel, JFrame, JButton, JList
 from java.awt import GridLayout
 from java.awt.event import ActionListener
 
+import javax
+from fiji.scripting import Weaver
+
 
 class Listener(ActionListener):
   def __init__(self, label, cb):
@@ -27,6 +30,19 @@ def update_roi_mappings():
         roi_in.append(name)
         roi_ni[name] = i
 
+wcode = Weaver.inline(
+	"""
+javax.swing.AbstractListModel m = new javax.swing.AbstractListModel() {
+    String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+    public int getSize() { return strings.length; }
+    public Object getElementAt(int i) { return strings[i]; }
+};
+return m;
+        """, {}, javax.swing.AbstractListModel)
+print "Weaver created! Type:"
+print type(wcode)
+listmodel = wcode.call()
+print "Weaver called!"
 
 roimgr = RoiManager.getInstance()
 roi_ni = {}
@@ -61,7 +77,7 @@ panel2.add(cb2)
 
 ### panel 3
 pnl3 = JPanel()
-lst1 = JList(sorted(roi_ni.keys()))
+lst1 = JList(listmodel)
 pnl3.add(lst1)
 
 frame = JFrame("Swing GUI Test Frame")
