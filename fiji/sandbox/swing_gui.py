@@ -2,8 +2,9 @@ from javax.swing import JPanel, JComboBox, JLabel, JFrame, JButton, JList
 from java.awt import GridLayout
 from java.awt.event import ActionListener
 
-import javax
+import javax.swing
 from fiji.scripting import Weaver
+import sys
 
 
 class Listener(ActionListener):
@@ -45,6 +46,9 @@ listmodel = wcode.call()
 print "Weaver called!"
 
 roimgr = RoiManager.getInstance()
+if roimgr is None:
+  print "No ROIs defined."
+  sys.exit(0)
 roi_ni = {}
 roi_in = []
 update_roi_mappings()
