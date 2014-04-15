@@ -25,10 +25,6 @@ parsing them itself, plugin-arguments have to be prefixed with a TRIPLE dash
 
 MOSAICLOG="../../sample_data/fluoview/minimal_1mosaic_15pct/MATL_Mosaic.log"
 ImageJ-linux64 --headless FluoView_OIF_Stitcher.py ---mosaiclog $MOSAICLOG
-
-NOTE: the plugin is not yet capable of being called in batch from within a
-macroas it will present the parsing results in a GUI dialog and ask for
-confirmation before running the actual stitching process.
 """
 
 import sys
