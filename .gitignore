@@ -12,5 +12,6 @@ __testdata
 *.class
 *.jar
 
-# Fiji dist target
-fiji/dist/
+# dist and build targets
+dist/
+build/
