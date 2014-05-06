@@ -11,7 +11,9 @@ Python shell that can import the required `ImarisLib` module and use it to
 communicate with a running Imaris instance.
 
 `ipythonXT.cmd` does the same job but is using the IPython console (either via
-the standard Windows `cmd` console or using the Qt console of IPython.
+the standard Windows `cmd` console or using the Qt console of IPython. This
+script expects the [Anaconda](http://continuum.io/) distribution of Python
+being installed.
 
 Both cmd scripts require the desired Imaris version as a parameter, using the
 following syntax:
