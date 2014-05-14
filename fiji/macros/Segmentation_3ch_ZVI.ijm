@@ -87,7 +87,14 @@ run("Analyze Particles...",
     + " show=Nothing exclude clear add");
 selectImage("masking_channel");
 close(); // not required in batch mode
+
+setBatchMode(false);
+
 selectImage(orig_image);
+setSlice(2); // make sure to have the correct channel for measuring
 roiManager("Show All");
 
+run("ROI Manager...");
+run("Set Measurements...", "area mean min center redirect=None decimal=0");
+roiManager("Measure");
 
