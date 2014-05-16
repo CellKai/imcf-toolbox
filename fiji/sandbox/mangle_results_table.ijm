@@ -1,6 +1,3 @@
-// String.paste requires 1.48j
-requires("1.48j");
-
 selectWindow("Results");
 
 // make sure the ID column is disabled:
