@@ -1,13 +1,11 @@
-selectWindow("Results");
-
 // make sure the ID column is disabled:
 setOption("ShowRowNumbers", false);
 updateResults;
 
-orig = "Original Results";
-IJ.renameResults("Results", orig);
-
+// get the data and close the original Results table:
+selectWindow("Results");
 lines = split(getInfo("window.contents"), "\n");
+run("Close");
 
 headings = split(lines[0], "\t");
 for (i=1; i < lines.length; i+=1) {
