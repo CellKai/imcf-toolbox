@@ -13,7 +13,7 @@ function get_table_selection(){
         String.copyResults();
         str = String.paste();
         fields = split(str, "\t");
-        return(fields[0]);
+        return fields[0];
 }
 
 function upd_roim_selection_from_results(){
