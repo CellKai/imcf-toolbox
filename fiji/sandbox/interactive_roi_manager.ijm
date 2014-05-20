@@ -9,6 +9,44 @@ function get_table_selection(){
         return fields[0];
 }
 
+function get_table_row_by_id(id){
+    // look up a given ID in the Results table and return the
+    // row (index number) if it exists, otherwise -1
+    // TODO: after refactoring get_table_selection this should
+    // not be required any more
+    setOption("ShowRowNumbers", true);
+    updateResults;
+    id_ret = -1;
+    for (i=0; i < nResults; i++){
+        id_cur = getResult("ID", i);
+        if (id == id_cur){
+            id_ret = i;
+        }
+    }
+    setOption("ShowRowNumbers", false);
+    updateResults;
+    return id_ret;
+}
+
+function get_table_row_by_roiname(name){
+    // look up a given ROI-name in the Results table and return the
+    // row (index number) if it exists, otherwise -1
+    // TODO: after refactoring get_table_selection this needs to
+    // be refactored as well
+    setOption("ShowRowNumbers", true);
+    updateResults;
+    id_ret = -1;
+    for (i=0; i < nResults; i++){
+        name_cur = getResultString("ROI", i);
+        if (name == name_cur){
+            id_ret = i;
+        }
+    }
+    setOption("ShowRowNumbers", false);
+    updateResults;
+    return id_ret;
+}
+
 function upd_roim_selection_from_results(){
         sel = get_table_selection();
         //print(sel);
