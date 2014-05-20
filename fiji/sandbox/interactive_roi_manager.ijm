@@ -111,8 +111,3 @@ function create_status_table(title) {
     run("New... ", "name="+title+" type=Table");
 }
 
-/*
-for (i=0; i < nResults; i++) {
-    
-}
-*/
