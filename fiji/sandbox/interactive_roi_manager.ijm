@@ -104,10 +104,11 @@ function table_name(title){
     return "[" + title + "]";
 }
 
-function create_status_table(title){
-        name = "[" + title + "]";
-        run("New... ", "name="+name+" type=Table");
-        return name;
+function create_status_table(title) {
+    // create a table window, requires the title enclosed in square
+    // brackets (see table_name() for details)
+    // NOTE: the blank at the end of "New... " is required!!!
+    run("New... ", "name="+title+" type=Table");
 }
 
 /*
