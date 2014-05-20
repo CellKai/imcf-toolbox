@@ -72,31 +72,36 @@ function roim_select(id) {
     roiManager("select", id);
 }
 
-function create_advanced_results_table(){
-        // make sure the ID column is disabled:
-        setOption("ShowRowNumbers", false);
-        updateResults;
+function create_advanced_results_table() {
+    // convert an existing "Results" table into a new one that has a fixed
+    // "ID" column (which doesn't change when elements get deleted) and some
+    // additional columns (the ROI name, Mother- and Daughter-Cell property)
+    // make sure the ID column is disabled:
+    setOption("ShowRowNumbers", false);
+    updateResults;
 
-        // get the data and close the original Results table:
-        selectWindow("Results");
-        lines = split(getInfo("window.contents"), "\n");
-        run("Close");
+    // get the data and close the original Results table:
+    selectWindow("Results");
+    lines = split(getInfo("window.contents"), "\n");
+    run("Close");
 
-        headings = split(lines[0], "\t");
-        for (i=1; i < lines.length; i+=1) {
-            roiManager("select", i-1);
-            name = Roi.getName;
-            setResult("ID", i-1, i);
-            setResult("ROI", i-1, name);
-            fields = split(lines[i], "\t");
-            for (j=0; j < fields.length; j++) {
-                setResult(headings[j], i-1, fields[j]);
-            }
+    headings = split(lines[0], "\t");
+    for (i=1; i < lines.length; i+=1) {
+        roiManager("select", i-1);
+        name = Roi.getName;
+        setResult("ID", i-1, i);
+        setResult("ROI", i-1, name);
+        fields = split(lines[i], "\t");
+        for (j=0; j < fields.length; j++) {
+            setResult(headings[j], i-1, fields[j]);
         }
+        setResult("Mothercell", i-1, "");
+        setResult("Daughtercell", i-1, "");
+    }
 
-        // make sure the ID column is disabled:
-        setOption("ShowRowNumbers", false);
-        updateResults;
+    // make sure the ID column is disabled:
+    setOption("ShowRowNumbers", false);
+    updateResults;
 }
 
 function table_name(title){
