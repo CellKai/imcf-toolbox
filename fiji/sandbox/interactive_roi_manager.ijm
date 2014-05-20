@@ -1,10 +1,3 @@
-/*
-//print(Roi.getName);
-Roi.setProperty("celltype", "mother");
-//print(Roi.getProperties);
-Roi.setStrokeColor("red");
-Roi.setStrokeWidth(5);
-*/
 
 
 // NOTE: the following only works for "Results" tables and returns
