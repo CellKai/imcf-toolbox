@@ -47,11 +47,18 @@ function get_table_row_by_roiname(name){
     return id_ret;
 }
 
-function upd_roim_selection_from_results(){
-        sel = get_table_selection();
-        //print(sel);
-        roiManager("Deselect");
-        roiManager("select", sel - 1);
+function roim_select_from_results(){
+    // update the ROI manager selection to match the selected
+    // entry from the Results window
+    sel = get_table_selection();
+    //print(sel);
+    roim_select(sel);
+}
+
+function roim_select(id) {
+    // select a single entry in the ROI manager
+    roiManager("Deselect");
+    roiManager("select", id);
 }
 
 function create_advanced_results_table(){
