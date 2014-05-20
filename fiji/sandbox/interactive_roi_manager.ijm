@@ -111,3 +111,19 @@ function create_status_table(title) {
     run("New... ", "name="+title+" type=Table");
 }
 
+function get_status_table(title) {
+    // return contents of status table (NOTE: name *MAY NOT* be given
+    // with the surrounding square brackets!)
+    selectWindow(title);
+    return getInfo("window.contents");
+}
+
+function set_status_table(table, value) {
+    // set the content of the status table (name required in square
+    // brackets, see table_name() for details)
+    // create the "primary cell" status table if not existing:
+    if (window_exists(pcw) == false) {
+        create_status_table(pct);
+    }
+    print(table, "\\Update0:" + value);
+}
