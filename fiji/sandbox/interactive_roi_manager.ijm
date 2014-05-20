@@ -9,14 +9,15 @@ function window_exists(title) {
     return false;
 }
 
-// NOTE: "String.copyResults" works on the default "Results" table, this function
-// returns the value of the first field (assuming it contains an ID or similar)
-function get_table_selection(){
-        // TODO: refactor this to return an array(row, ID, ROI)
-        String.copyResults();
-        str = String.paste();
-        fields = split(str, "\t");
-        return fields[0];
+function get_table_selection() {
+    // return the value of the first field of the "Results" table's current
+    // selection ("String.copyResults" ALWAYS works on the default "Results"
+    // table, no way to adjust this!)
+    // TODO: refactor this to return an array(row, ID, ROI)
+    String.copyResults();
+    str = String.paste();
+    fields = split(str, "\t");
+    return fields[0];
 }
 
 function get_table_row_by_id(id){
