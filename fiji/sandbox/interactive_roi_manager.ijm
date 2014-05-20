@@ -6,13 +6,6 @@ Roi.setStrokeColor("red");
 Roi.setStrokeWidth(5);
 */
 
-curs = "Current original cell";
-cur = "[" + curs + "]";
-
-function create_curcell_table(){
-        run("Table...", "name=" + cur + " width=250 height=150");
-        print(cur, "\\Headings:ID\tname");
-}
 
 // NOTE: the following only works for "Results" tables and returns
 // the value of the first field (assuming it contains an ID or similar)
@@ -57,12 +50,11 @@ function create_advanced_results_table(){
         updateResults;
 }
 
-//create_curcell_table();
-
-upd_roim_selection_from_results();
-
-//setResult("id", cur, "1");
-//setResult("name", cur, "0001-0040");
+function create_status_table(title){
+        name = "[" + title + "]";
+        run("New... ", "name="+name+" type=Table");
+        return name;
+}
 
 /*
 for (i=0; i < nResults; i++) {
