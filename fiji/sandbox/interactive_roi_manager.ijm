@@ -154,3 +154,20 @@ function roi_mark_primary() {
     set_status_table(pct, (sel_id+1));
     setResult("Mothercell", row, "M-" + (sel_id+1));
 }
+
+// global variables for "primary cell" window and table:
+pcw = "Current mother cell";
+pct = table_name(pcw);
+
+arg = getArgument();
+if (arg == "init") {
+    create_advanced_results_table();
+} else if (arg == "update_selection") {
+    roim_select_from_results();
+} else if (arg == "get_status") {
+    print(get_status_table(pcw));
+} else if (arg == "mark_primary") {
+    roi_mark_primary();
+} else {
+    print("ERROR: no or unknown argument given!");
+}
