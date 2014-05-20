@@ -1,3 +1,13 @@
+function window_exists(title) {
+    // walk through the list of open (non-image) windows and
+    // check if a window with the given title exists
+    windows = getList("window.titles");
+    for (i=0; i<windows.length; i++) {
+        if (windows[i] == title)
+            return true;
+    }
+    return false;
+}
 
 // NOTE: "String.copyResults" works on the default "Results" table, this function
 // returns the value of the first field (assuming it contains an ID or similar)
