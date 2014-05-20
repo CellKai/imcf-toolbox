@@ -133,3 +133,24 @@ function set_status_table(table, value) {
     }
     print(table, "\\Update0:" + value);
 }
+
+function roi_mark_primary() {
+    // mark the ROI currently selected as a "primary" ROI, updating its status
+    // in the table, highlighting it using a large stroke width and adding the
+    // corresponding properties to the ROI in the manager
+    sel_id = roiManager("index");
+    sel_name = Roi.getName();
+    row = get_table_row_by_roiname(sel_name);
+    // before resetting the stroke width, we need to select the previous
+    // primary cell (stored in the status table)
+    roim_select(parseInt(get_status_table(pcw)) - 1);
+    Roi.setStrokeWidth(1);
+    roim_select(sel_id);
+    // now we adjust the new cell
+    Roi.setStrokeColor("red");
+    Roi.setStrokeWidth(7);
+    Roi.setProperty("Mothercell", "M-" + (sel_id+1));
+    //print(Roi.getProperties);
+    set_status_table(pct, (sel_id+1));
+    setResult("Mothercell", row, "M-" + (sel_id+1));
+}
