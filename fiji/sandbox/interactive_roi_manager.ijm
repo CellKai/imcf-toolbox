@@ -98,6 +98,12 @@ function create_advanced_results_table(){
         updateResults;
 }
 
+function table_name(title){
+    // convenience wrapper creating the string surrounded by square
+    // brackets required to create and print to a table window
+    return "[" + title + "]";
+}
+
 function create_status_table(title){
         name = "[" + title + "]";
         run("New... ", "name="+name+" type=Table");
