@@ -1,8 +1,8 @@
 
-
-// NOTE: the following only works for "Results" tables and returns
-// the value of the first field (assuming it contains an ID or similar)
+// NOTE: "String.copyResults" works on the default "Results" table, this function
+// returns the value of the first field (assuming it contains an ID or similar)
 function get_table_selection(){
+        // TODO: refactor this to return an array(row, ID, ROI)
         String.copyResults();
         str = String.paste();
         fields = split(str, "\t");
