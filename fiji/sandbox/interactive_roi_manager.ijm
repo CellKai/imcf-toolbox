@@ -155,6 +155,24 @@ function roi_mark_primary() {
     setResult("Mothercell", row, "M-" + (sel_id+1));
 }
 
+function roi_mark_secondary() {
+    // mark the ROI currently selected as a "secondary" ROI, updating its
+    // status in the table, highlighting it using a different color and adding
+    // the corresponding properties to the ROI in the manager
+    sel_id = roiManager("index");
+    sel_name = Roi.getName();
+    row = get_table_row_by_roiname(sel_name);
+    // we need the primary cell's id to create the relation
+    pc_id = parseInt(get_status_table(pcw)) - 1;
+    Roi.setStrokeWidth(1);
+    Roi.setStrokeColor("green");
+    Roi.setProperty("Daughtercell", "M-" + pc_id + ":D-" + (sel_id+1));
+    //print(Roi.getProperties);
+    setResult("Mothercell", row, "M-" + pc_id);
+    setResult("Daughtercell", row, "D-" + (sel_id+1));
+}
+
+
 // global variables for "primary cell" window and table:
 pcw = "Current mother cell";
 pct = table_name(pcw);
@@ -168,6 +186,8 @@ if (arg == "init") {
     print(get_status_table(pcw));
 } else if (arg == "mark_primary") {
     roi_mark_primary();
+} else if (arg == "mark_secondary") {
+    roi_mark_secondary();
 } else {
     print("ERROR: no or unknown argument given!");
 }
