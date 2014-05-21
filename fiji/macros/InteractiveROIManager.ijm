@@ -163,7 +163,7 @@ function roi_mark_secondary() {
     sel_name = Roi.getName();
     row = get_table_row_by_roiname(sel_name);
     // we need the primary cell's id to create the relation
-    pc_id = parseInt(get_status_table(pcw)) - 1;
+    pc_id = parseInt(get_status_table(pcw));
     Roi.setStrokeWidth(1);
     Roi.setStrokeColor("green");
     Roi.setProperty("Daughtercell", "M-" + pc_id + ":D-" + (sel_id+1));
@@ -178,6 +178,7 @@ pcw = "Current mother cell";
 pct = table_name(pcw);
 
 arg = getArgument();
+//print(arg);
 if (arg == "init") {
     create_advanced_results_table();
 } else if (arg == "update_selection") {
