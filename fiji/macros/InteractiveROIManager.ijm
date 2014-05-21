@@ -144,7 +144,10 @@ function set_status_table(table, value) {
     // set the content of the status table (name required in square
     // brackets, see table_name() for details)
     // create the "primary cell" status table if not existing:
+    logger(3, "status table name: " + table);
+    logger(3, "new status value: " + value);
     if (window_exists(pcw) == false) {
+        logger(4, "creating status table " + table);
         create_status_table(pct);
     }
     print(table, "\\Update0:" + value);
@@ -155,8 +158,10 @@ function roi_mark_primary() {
     // in the table, highlighting it using a large stroke width and adding the
     // corresponding properties to the ROI in the manager
     sel_id = roiManager("index");
+    logger(3, "selected ROI index (0-based): " + sel_id);
     sel_name = Roi.getName();
     row = get_table_row_by_roiname(sel_name);
+    logger(3, "selected ROI name: " + sel_name);
     // before resetting the stroke width, we need to select the previous
     // primary cell (stored in the status table)
     roim_select(parseInt(get_status_table(pcw)) - 1);
@@ -166,7 +171,7 @@ function roi_mark_primary() {
     Roi.setStrokeColor("red");
     Roi.setStrokeWidth(7);
     Roi.setProperty("Mothercell", "M-" + (sel_id+1));
-    //print(Roi.getProperties);
+    logger(3, "ROI properties: " + Roi.getProperties);
     set_status_table(pct, (sel_id+1));
     setResult("Mothercell", row, "M-" + (sel_id+1));
 }
@@ -176,14 +181,16 @@ function roi_mark_secondary() {
     // status in the table, highlighting it using a different color and adding
     // the corresponding properties to the ROI in the manager
     sel_id = roiManager("index");
+    logger(3, "selected ROI index (0-based): " + sel_id);
     sel_name = Roi.getName();
+    logger(3, "selected ROI name: " + sel_name);
     row = get_table_row_by_roiname(sel_name);
     // we need the primary cell's id to create the relation
     pc_id = parseInt(get_status_table(pcw));
     Roi.setStrokeWidth(1);
     Roi.setStrokeColor("green");
     Roi.setProperty("Daughtercell", "M-" + pc_id + ":D-" + (sel_id+1));
-    //print(Roi.getProperties);
+    logger(3, "ROI properties: " + Roi.getProperties);
     setResult("Mothercell", row, "M-" + pc_id);
     setResult("Daughtercell", row, "D-" + (sel_id+1));
 }
@@ -196,7 +203,7 @@ pcw = "Current mother cell";
 pct = table_name(pcw);
 
 arg = getArgument();
-//print(arg);
+logger(5, "arguments: " + arg);
 if (arg == "init") {
     create_advanced_results_table();
 } else if (arg == "update_selection") {
