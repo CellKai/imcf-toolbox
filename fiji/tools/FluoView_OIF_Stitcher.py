@@ -37,6 +37,7 @@ from os.path import join, dirname, basename
 # ImageJ imports
 from ij import IJ
 from ij.io import OpenDialog
+# TODO: check if this is causing problems when running headless:
 from ij.gui import GenericDialog
 
 # explicitly add our libs to the module search path
