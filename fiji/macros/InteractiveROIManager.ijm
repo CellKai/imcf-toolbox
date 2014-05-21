@@ -1,3 +1,5 @@
+///////////////////////////////////////////////////////////////////////////////
+
 function logger(level, msg) {
     // verbosity logging, print "msg" only if "level" is equal or
     // higher than the value of the global variable "loglevel"
@@ -174,6 +176,9 @@ function roi_mark_primary() {
     logger(3, "ROI properties: " + Roi.getProperties);
     set_status_table(pct, (sel_id+1));
     setResult("Mothercell", row, "M-" + (sel_id+1));
+    // we need to reset the "Daughtercell" value as well in case the ROI was
+    // labeled as being of that type before:
+    setResult("Daughtercell", row, "");
 }
 
 function roi_mark_secondary() {
