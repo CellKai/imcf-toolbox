@@ -1,3 +1,11 @@
+function logger(level, msg) {
+    // verbosity logging, print "msg" only if "level" is equal or
+    // higher than the value of the global variable "loglevel"
+    // levels: 0:quiet, 3:warn, 4:info, 5:debug
+    if (loglevel - level >= 0)
+        print(msg);
+}
+
 function window_exists(title) {
     // walk through the list of open (non-image) windows and
     // check if a window with the given title exists
@@ -172,6 +180,8 @@ function roi_mark_secondary() {
     setResult("Daughtercell", row, "D-" + (sel_id+1));
 }
 
+// set the global loglevel (0:quiet, 3:warn, 4:info, 5:debug):
+loglevel = 3;
 
 // global variables for "primary cell" window and table:
 pcw = "Current mother cell";
