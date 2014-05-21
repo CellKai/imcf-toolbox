@@ -116,6 +116,13 @@ icon=icons/segmentation.png
 arg=<macro>
 run("Segmentation Toolbar");
 </macro>
+
+<button> 8 line 2
+label=Run Fiji Updater
+icon=icons/run_updater.png
+arg=<macro>
+run("Update Fiji");
+</macro>
 </line>
 
 // end of file
