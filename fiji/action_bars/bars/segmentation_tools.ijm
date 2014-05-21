@@ -42,9 +42,9 @@ arg=<macro>
 run("Auto Local Threshold");
 </macro>
 <button>
-label=(void)
+label=Interactive ROI Toolbar
 arg=<macro>
-run("");
+run("Interactive ROI Toolbar");
 </macro>
 </line>
 
