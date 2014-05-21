@@ -77,6 +77,9 @@ function roim_select_from_results(){
 function roim_select(id) {
     // select a single entry in the ROI manager
     roiManager("Deselect");
+    // check for invalid index (e.g. after initialization)
+    if (id < 0)
+        return;
     roiManager("select", id);
 }
 
