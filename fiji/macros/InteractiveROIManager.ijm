@@ -130,7 +130,12 @@ function create_status_table(title) {
 
 function get_status_table(title) {
     // return contents of status table (NOTE: name *MAY NOT* be given
-    // with the surrounding square brackets!)
+    // with the surrounding square brackets!), if the table does
+    // not exist yet, it will be created and 0 will be returned
+    if (window_exists(pcw) == false) {
+        create_status_table(pct);
+        return 0;
+    }
     selectWindow(title);
     return getInfo("window.contents");
 }
