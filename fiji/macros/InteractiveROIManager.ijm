@@ -70,8 +70,8 @@ function roim_select_from_results(){
     // update the ROI manager selection to match the selected
     // entry from the Results window
     sel = get_table_selection();
-    //print(sel);
-    roim_select(sel);
+    logger(4, "selection in results table: " + sel);
+    roim_select(sel-1);
 }
 
 function roim_select(id) {
