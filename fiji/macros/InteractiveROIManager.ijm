@@ -196,7 +196,7 @@ function roi_mark_secondary() {
 }
 
 // set the global loglevel (0:quiet, 3:warn, 4:info, 5:debug):
-loglevel = 3;
+loglevel = 0;
 
 // global variables for "primary cell" window and table:
 pcw = "Current mother cell";
