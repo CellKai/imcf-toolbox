@@ -1,8 +1,6 @@
 plugins.config
 README.md
-*.class
-*.java
-*.py
-*.pyc
-*.ijm
+*_*.class
+*_*.java
+*_*.ijm
 templates/*.ijm
