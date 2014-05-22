@@ -1,4 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
+// PLEASE NOTE: this macro is intended as a pseudo-library and thus has no   //
+// underscore in its filename, so ImageJ doesn't put it somewhere in its     //
+// menu automatically where it doesn't make sense as it is required being    //
+// called with a parameter to trigger the desired function. It is meant to   //
+// be used in conjunction with an ActionBar toolbar instead.                 //
+///////////////////////////////////////////////////////////////////////////////
 
 function logger(level, msg) {
     // verbosity logging, print "msg" only if "level" is equal or
