@@ -32,7 +32,7 @@ setBatchMode(use_batch_mode);
 // stitching parameters template
 tpl  = "type=[Positions from file] ";
 tpl += "order=[Defined by TileConfiguration] ";
-tpl += "directory=" + input_dir + " ";
+tpl += "directory=[" + input_dir + "] ";
 tpl += "fusion_method=[Linear Blending] ";
 tpl += "regression_threshold=0.30 ";
 tpl += "max/avg_displacement_threshold=2.50 ";
@@ -48,7 +48,7 @@ if(compute) {
 for (id = 0; id < mcount; id++) {
 	layout_file = "mosaic_" + IJ.pad(id, padlen) + ".txt";
 	ome_tiff = "mosaic_" + IJ.pad(id, padlen) + ".ome.tif ";
-	param = tpl + "layout_file=" + layout_file;
+	param = tpl + "layout_file=[" + layout_file + "]";
 	print(hr);
 	print("*** [" + name + "]: processing " + layout_file);
 	run("Grid/Collection stitching", param);
