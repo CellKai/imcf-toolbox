@@ -98,6 +98,7 @@ def main_interactive():
 
 def main_noninteractive():
     """The main routine for running non-interactively."""
+    global imcftpl
     args = parse_arguments()
     set_loglevel(args.verbose)
     log.info('Running in non-interactive mode.')
@@ -106,6 +107,8 @@ def main_noninteractive():
     fname = basename(args.mosaiclog)
     mosaic = fv.FluoViewMosaic(join(base, fname))
     log.warn(gen_mosaic_details(mosaic))
+    if args.templates is not None:
+        imcftpl = args.templates
     code = mosaic.gen_stitching_macro_code('templates/stitching', path=base,
                                            tplpath=imcftpl, flat=True)
     if not args.dryrun:
@@ -133,6 +136,8 @@ def parse_arguments():
     add = parser.add_argument  # shorthand to improve readability
     add("--mosaiclog", metavar='FILE', required=True,
         help='FluoView "MATL_Mosaic.log" XML file with stage positions')
+    add("--templates", required=False,
+        help='path containing the "templates/" subdirectory')
     add("--dry-run", action="store_true", dest="dryrun", default=False,
         help="print generated macro but don't run stitcher")
     add("--verbose", action="count", default=0)
