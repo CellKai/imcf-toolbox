@@ -369,17 +369,17 @@ class FluoViewMosaic(object):
         """
         if fname is None:
             fname = self.infile['dname'] + '_stitch_all.ijm'
-            log.debug('Macro output filename: %s' % fname)
+            log.debug('Macro output filename: "%s".' % fname)
         if dname is None:
             # if not requested other, write to input directory:
             fname = join(self.infile['path'], fname)
-            log.debug('Macro output directory: %s' % self.infile['path'])
+            log.debug('Macro output directory: "%s".' % self.infile['path'])
         else:
             fname = join(dname, fname)
         out = open(fname, 'w')
         out.writelines(code)
         out.close()
-        log.warn('Wrote macro template to %s' % out.name)
+        log.warn('Wrote macro template to "%s".' % out.name)
 
 
 if __name__ == "__main__":
