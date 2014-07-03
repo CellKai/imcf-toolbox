@@ -48,6 +48,7 @@ sys.path.append(join(imcfdir, 'imcf_libs.jar'))
 
 import fluoview as fv
 from log import log, set_loglevel
+from misc import flatten
 
 
 def ui_get_input_file():
@@ -87,13 +88,13 @@ def main_interactive():
     msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
-    code = mosaic.gen_stitching_macro_code('templates/stitching', path=base,
-                                           tplpath=imcftpl, flat=True)
+    code = mosaic.gen_stitching_macro_code('templates/stitching',
+                                           path=base, tplpath=imcftpl)
     if dialog.wasOKed():
         mosaic.write_all_tile_configs(fixpath=True)
-        IJ.runMacro(code)
+        IJ.runMacro(flatten(code))
     else:
-        print(code)
+        print(flatten(code))
 
 
 def main_noninteractive():
@@ -109,16 +110,17 @@ def main_noninteractive():
     log.warn(gen_mosaic_details(mosaic))
     if args.templates is not None:
         imcftpl = args.templates
-    code = mosaic.gen_stitching_macro_code('templates/stitching', path=base,
-                                           tplpath=imcftpl, flat=True)
+    code = mosaic.gen_stitching_macro_code('templates/stitching',
+                                           path=base, tplpath=imcftpl)
     if not args.dryrun:
         log.info('Writing tile configuration files.')
         mosaic.write_all_tile_configs(fixpath=True)
         log.info('Launching stitching macro.')
-        IJ.runMacro(code)
+        mosaic.write_stitching_macro(code, fname='stitch_all.ijm')
+        IJ.runMacro(flatten(code))
     else:
         log.info('Dry-run was selected. Printing generated macro:')
-        log.warn(code)
+        log.warn(flatten(code))
 
 
 def parse_arguments():
