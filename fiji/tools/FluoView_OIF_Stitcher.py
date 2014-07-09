@@ -81,7 +81,7 @@ def main_interactive():
     if (base is None):
         return
     log.warn(base + fname)
-    mosaic = fv.FluoViewMosaic(base + fname)
+    mosaic = fv.FluoViewMosaic(join(base, fname))
     dialog = GenericDialog('FluoView OIF Stitcher')
     msg = gen_mosaic_details(mosaic)
     msg += "\n \nPress [OK] to write tile configuration files\n"
