@@ -236,6 +236,7 @@ class FluoViewMosaic(object):
             Passed on to gen_tile_config().
         """
         # TAG: move_to_superclass
+        log.info('write_tile_config(%i)' % idx)
         config = self.gen_tile_config(idx, fixpath, size)
         # filename is zero-padded to the total number of mosaics:
         fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
