@@ -191,9 +191,6 @@ class FluoViewMosaic(object):
         # TAG: move_to_superclass
         conf = list()
         app = conf.append
-        app('# Define the number of dimensions we are working on\n')
-        app('dim = 3\n')
-        app('# Define the image coordinates (in pixels)\n')
         if size is None:
             try:
                 size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
@@ -202,7 +199,11 @@ class FluoViewMosaic(object):
                 # continue with the next mosaic:
                 log.warn('\n*** WARNING *** WARNING *** WARNING ***\n%s' % err)
                 log.warn('=====> SKIPPING MOSAIC %i <=====\n' % idx)
-                return
+                app('# ERROR: %s\n' % err)
+                return conf
+        app('# Define the number of dimensions we are working on\n')
+        app('dim = 3\n')
+        app('# Define the image coordinates (in pixels)\n')
         ratio = self.mosaics[idx]['ratio'] / 100
         for img in self.mosaics[idx]['tiles']:
             xpos = img['xno'] * ratio * size[0]
@@ -214,7 +215,7 @@ class FluoViewMosaic(object):
             if(fixpath):
                 imgf = imgf.replace('\\', sep)
             app('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
-        return(conf)
+        return conf
 
     def write_tile_config(self, idx, path='', fixpath=False, size=None):
         """Generate and write the tile configuration file.
