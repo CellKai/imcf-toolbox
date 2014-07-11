@@ -3,7 +3,7 @@
 """Parse a FluoView project file and generate code for ImageJ's stitcher."""
 
 import volpy.fluoview as fv
-from log import log, set_loglevel
+from log import set_loglevel
 import sys
 import argparse
 from os.path import dirname, basename
