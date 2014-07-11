@@ -112,10 +112,11 @@ def main_noninteractive():
     code = mosaic.gen_stitching_macro_code('templates/stitching',
                                            path=base, tplpath=imcftpl)
     if not args.dryrun:
+        log.info('Writing stitching macro.')
+        mosaic.write_stitching_macro(code, fname='stitch_all.ijm')
         log.info('Writing tile configuration files.')
         mosaic.write_all_tile_configs(fixpath=True)
         log.info('Launching stitching macro.')
-        mosaic.write_stitching_macro(code, fname='stitch_all.ijm')
         IJ.runMacro(flatten(code))
     else:
         log.info('Dry-run was selected. Printing generated macro:')
