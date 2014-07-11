@@ -6,6 +6,8 @@ import volpy.fluoview as fv
 from log import log, set_loglevel
 import sys
 import argparse
+from os.path import dirname, basename
+
 
 def parse_arguments():
     """Parse commandline arguments."""
@@ -31,10 +33,17 @@ def main():
     args = parse_arguments()
     set_loglevel(args.verbosity)
 
+    dname = dirname(args.mosaic.name)
+    fname = basename(args.mosaic.name)
+    if args.out is None:
+        dout = dname
+    else:
+        dout = args.out
+
     mosaic = fv.FluoViewMosaic(args.mosaic.name)
-    mosaic.write_all_tile_configs(path=args.out, fixpath=args.fixsep)
-    code = mosaic.gen_stitching_macro_code('stitching')
-    mosaic.write_stitching_macro(code, dname=args.out)
+    mosaic.write_all_tile_configs(path=dout, fixpath=args.fixsep)
+    code = mosaic.gen_stitching_macro_code('stitching', path=dname)
+    mosaic.write_stitching_macro(code, dname=dout)
 
 
 if __name__ == "__main__":
