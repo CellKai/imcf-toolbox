@@ -14,6 +14,11 @@ import codecs
 # it will also be required for other input formats, several methods should be
 # moved there (they are tagged with "move_to_superclass")
 
+# REFACTOR: split into a generic Experiment class (that is subclassed as
+# FluoViewExperiment, which can be created by parsing a MATL_Mosaic.log file)
+# and a Mosaic class (which holds the information for *one* tiling) where an
+# Experiment object keeps a list of Mosaic objects.
+
 
 class FluoViewMosaic(object):
 
