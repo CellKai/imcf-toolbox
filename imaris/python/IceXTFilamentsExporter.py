@@ -8,7 +8,7 @@
 # <CustomTools>
 #  <Menu>
 #   <Submenu name="Filaments Functions">
-#   <Item name="Filaments Exporter" icon="Matlab"
+#   <Item name="Filaments Exporter (Python)" icon="Python"
 #      tooltip="Export points of selected Filaments to CSV.">
 #     <Command>PythonXT::IceXTFilamentsExporter(%i)</Command>
 #   </Item>
@@ -16,7 +16,7 @@
 #  </Menu>
 #  <SurpassTab>
 #   <SurpassComponent name="bpFilaments">
-#     <Item name="Export Filaments to CSV">
+#     <Item name="Export Filaments to CSV (Python)">
 #       <Command>PythonXT::IceXTFilamentsExporter(%i)</Command>
 #     </Item>
 #   </SurpassComponent>
@@ -82,7 +82,7 @@ def export_filaments(conn):
         if fname == '':
             print('aborting due to user request')
             return None
-        print('writing filament format to "%s"' % fname)
+        print('writing filament export to "%s"' % fname)
 
         # gives a list of 3-tuples with coordinates:
         pos_xyz = filaments.GetPositionsXYZ(i)
