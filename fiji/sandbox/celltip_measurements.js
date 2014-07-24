@@ -14,6 +14,14 @@ imp = IJ.getImage();
 name = imp.title;
 IJ.log(name);
 
+/*
+cs = new ChannelSplitter();
+channels = cs.split(imp);
+//channels[0]
+//imp[C1-140328-AtT20-3-V-ACTH-30-60-30.lsm (1024x1024x1x23x1)]
+channels[0].show();
+*/
+
 IJ.run(imp, "Split Channels", "");
 
 imp = WindowManager.getImage("C1-" + name);
