@@ -14,8 +14,6 @@ imp = IJ.getImage();
 name = imp.title;
 IJ.log(name);
 
-rm = RoiManager.getInstance();
-if (rm==null) rm = new RoiManager();
 IJ.run(imp, "Split Channels", "");
 
 imp = WindowManager.getImage("C1-" + name);
@@ -42,5 +40,8 @@ IJ.run(imp3, "Convert to Mask", "method=IJ_IsoData background=Dark black");
 IJ.run("Set Measurements...", "area mean min center integrated redirect=None decimal=0");
 IJ.run(imp3, "Analyze Particles...", "size=25-Infinity pixel exclude clear include add slice");
 IJ.selectWindow("C3-" + name);
+
+rm = RoiManager.getInstance();
+if (rm==null) rm = new RoiManager();
 rm.runCommand("Measure");
 
