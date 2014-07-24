@@ -1,3 +1,9 @@
+/* TODO:
+ *  - measure both channels
+ *  - pick the z-slice with the slider before running the macro
+ *  - save results and ROIs into files
+ */
+
 importClass(Packages.ij.IJ);
 importClass(Packages.ij.Prefs);
 importClass(Packages.ij.WindowManager);
