@@ -1,4 +1,7 @@
 importClass(Packages.ij.IJ);
+importClass(Packages.ij.Prefs);
+importClass(Packages.ij.WindowManager);
+importClass(Packages.ij.plugin.ImageCalculator);
 importClass(Packages.ij.plugin.frame.RoiManager);
 
 imp = IJ.getImage();
