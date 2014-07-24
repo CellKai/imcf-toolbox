@@ -23,18 +23,9 @@ Prefs.blackBackground = true;
 IJ.setAutoThreshold(imp3, "IJ_IsoData dark");
 IJ.run(imp3, "Convert to Mask", "method=IJ_IsoData background=Dark black");
 
-/*
-IJ.run("Close");
-//IJ.run("Threshold...");
-IJ.resetThreshold(imp);
-IJ.resetThreshold(imp);
-IJ.resetThreshold(imp);
-IJ.run("Close");
-*/
 
 IJ.run("Set Measurements...", "area mean min center integrated redirect=None decimal=0");
 IJ.run(imp3, "Analyze Particles...", "size=25-Infinity pixel exclude clear include add slice");
-//IJ.run(imp, "Measure", "");
 IJ.selectWindow("C3-" + name);
 rm.runCommand("Measure");
 
