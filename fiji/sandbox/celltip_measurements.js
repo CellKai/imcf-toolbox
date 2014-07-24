@@ -6,6 +6,7 @@ importClass(Packages.ij.plugin.frame.RoiManager);
 
 imp = IJ.getImage();
 name = imp.title;
+IJ.log(name);
 
 rm = RoiManager.getInstance();
 if (rm==null) rm = new RoiManager();
@@ -20,6 +21,11 @@ imp2 = WindowManager.getImage("C3-" + name);
 ic = new ImageCalculator();
 imp3 = ic.run("Add create stack", imp1, imp2);
 imp3.show();
+
+z_slice = 9;
+imp1.setZ(z_slice);
+imp2.setZ(z_slice);
+imp3.setZ(z_slice);
 
 IJ.run(imp3, "Median...", "radius=1.3 stack");
 Prefs.blackBackground = true;
