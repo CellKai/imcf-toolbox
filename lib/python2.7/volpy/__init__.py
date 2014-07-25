@@ -654,12 +654,12 @@ class Points3D(object):
 
     def __init__(self, csvfile):
         """Load point coordinates from a CSV file."""
-        self.edm = None
-        self.mdpair = None
+        self.edm = None                         # euclidean distance matrix
+        self.mdpair = None                      # the max-distance pair
         self.data = None
         self.__load_data__(csvfile)
         log.debug(ppr.pformat(self.data))
-        self.limits = [[0, 0], [0, 0], [0, 0]]
+        self.limits = [[0, 0], [0, 0], [0, 0]]  # bounding box
         self.set_limits_defaults()
 
     def __load_data__(self, infile):
@@ -676,8 +676,8 @@ class Points3D(object):
 
     def set_limits(self, xmin=None, xmax=None, ymin=None, ymax=None,
                    zmin=None, zmax=None):
-        """Set the volume limits."""
-        # we have 7 arguments, which is perfectly fine in our case, so
+        """Set the volume limits (bounding box)."""
+        # having 7 arguments is fine in our case, so
         # pylint: disable-msg=R0913
         if xmin is not None:
             self.limits[0][0] = xmin
