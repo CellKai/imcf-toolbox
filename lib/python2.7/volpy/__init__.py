@@ -825,6 +825,71 @@ class GreedyPath(object):
         self.length = length
 
 
+class Vertex(object):
+
+    """A class for vertices with a maximum of two connections per vertex."""
+
+    def __init__(self, idx):
+        """Create a new vertex object with empty connections.
+
+        Parameters
+        ----------
+        idx : int
+            The (unique) index number of this vertex.
+
+        Instance Variables
+        ------------------
+        idx : int
+        connections : tuple(int)
+            The index numbers of connected vertices. Can be None if not
+            connected. If only *one* connection exists, it will always be
+            stored in connections[0], while connections[1] will be None.
+        """
+        self.idx = idx
+        self.connections = tuple((None, None))
+
+    def add_conn(self, endpoint):
+        """Add a new connection between this anbetween this and another vertex.
+
+        Create a new connection between this vertex and another one, denoted by
+        the index number of the endpoint of this connection. Does nothing if
+        the connection already exists, raises an IndexError if this vertex
+        already has two (distinct) connections.
+
+        Parameters
+        ----------
+        endpoint : int
+            The index number of the vertex to connect to.
+        """
+        # do nothing in case the connection already exists:
+        if (self.connections[0] == endpoint) or (self.connections[1] == endpoint):
+            return
+        if self.connections[0] == None:
+            self.connections[0] =  endpoint
+        elif self.connections[1] == None:
+            self.connections[1] =  endpoint
+        else:
+            raise IndexError
+
+    def connect(self, edge):
+        """Add a new edge to this vertex.
+
+        Currently mostly a wrapper to be agnostic against the order of index
+        numbers given in the edge tuple, plus some sanity checking. Raises an
+        IndexError in case the edge doesn't belong to this vertex.
+
+        Parameters
+        ----------
+        connections : tuple(int)
+        """
+        if edge[0] == self.idx:
+            self.add_conn(edge[1])
+        elif edge[1] == self.idx:
+            self.add_conn(edge[0])
+        else:
+            raise IndexError
+
+
 class CellJunction(Points3D):
 
     """Class representing cell junctions (rims of touching areas)."""
