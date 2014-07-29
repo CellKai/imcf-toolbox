@@ -798,10 +798,31 @@ class GreedyPath(object):
 
     """Construct greedy paths from points in 3D space."""
 
-    def __init__(self, points_3d, extrema, mask):
-        """Calculate the greedy path from extrema[0] to extrema[1]."""
-        (self.path, self.mask, self.length) = \
-            path_greedy(points_3d.get_edm(), mask, extrema)
+    def __init__(self, p3d, extrema, mask):
+        """Calculate the greedy path from extrema[0] to extrema[1].
+
+        Parameters
+        ----------
+        p3d : Points3D
+            The coordinates as a Points3D object.
+        extrema : tuple(int)
+            The pair of index numbers denoting start and stop.
+        mask : list
+            The array mask (a binary list) or 'None'.
+
+        Instance Variables
+        ------------------
+        path : list(int)
+            [4, 3, 2, 1, 0, 11]
+        mask : list(int)
+            [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1]
+        mask : numpy.float64
+            6.5106588526894855
+        """
+        (path, mask, length) = path_greedy(points_3d.get_edm(), mask, extrema)
+        self.path = path
+        self.mask = mask
+        self.length = length
 
 
 class CellJunction(Points3D):
