@@ -840,13 +840,13 @@ class Vertex(object):
         Instance Variables
         ------------------
         idx : int
-        connections : tuple(int)
+        connections : list(int)
             The index numbers of connected vertices. Can be None if not
             connected. If only *one* connection exists, it will always be
             stored in connections[0], while connections[1] will be None.
         """
         self.idx = idx
-        self.connections = tuple((None, None))
+        self.connections = list((None, None))
 
     def add_conn(self, endpoint):
         """Add a new connection between this anbetween this and another vertex.
@@ -880,7 +880,7 @@ class Vertex(object):
 
         Parameters
         ----------
-        connections : tuple(int)
+        connections : list(int)
         """
         if edge[0] == self.idx:
             self.add_conn(edge[1])
