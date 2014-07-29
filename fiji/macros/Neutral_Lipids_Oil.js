@@ -1,7 +1,71 @@
 importClass(Packages.ij.IJ);
+importClass(Packages.ij.gui.GenericDialog);
+importClass(Packages.ij.io.SaveDialog);
+importClass(Packages.ij.plugin.filter.ParticleAnalyzer);
+importClass(Packages.ij.measure.ResultsTable);
+importClass(Packages.ij.measure.Measurements);
+importClass(Packages.java.lang.Double);
 
-imp = IJ.getImage();
-IJ.run(imp, "8-bit", "");
-IJ.run(imp, "Auto Local Threshold", "method=Phansalkar radius=30 parameter_1=0 parameter_2=0");
-IJ.run(imp, "Watershed", "");
-IJ.run(imp, "Analyze Particles...", "size=50-Infinity circularity=0.60-1.00 exclude clear add in_situ");
+
+pixelsize = 0.170;
+ltm = 'Phansalkar';  // local thresholding method
+// methods from https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Local_Threshold.java
+ltm_all = ["Bernsen", "Contrast", "Mean", "Median", "MidGrey",
+           "Niblack", "Otsu", "Phansalkar", "Sauvola"];
+radius = 30;
+erosion = 5;
+smin = 1;
+smax = 0;
+cmin = 0.00;
+cmax = 1.00;
+
+gd = new GenericDialog("Oil Red O Segmentation");
+gd.addNumericField("Pixel size in µm:", pixelsize, 3);
+gd.addChoice("Local Thresholding Method:", ltm_all, ltm);
+gd.addNumericField("Local Thresholding Radius: ", radius, 0);
+gd.addNumericField("Watershed erosion: ", erosion, 2);
+gd.addNumericField("Size min: ", smin, 2);
+gd.addNumericField("Size max (0 for Infinity): ", smax, 2);
+gd.addNumericField("Circularity min: ", cmin, 2);
+gd.addNumericField("Circularity max: ", cmax, 2);
+gd.showDialog();
+
+//res = gd.getNumericFields();
+pixelsize = gd.getNextNumber();
+radius = gd.getNextNumber();
+erosion = gd.getNextNumber();
+smin = gd.getNextNumber();
+smax = gd.getNextNumber();
+cmin = gd.getNextNumber();
+cmax = gd.getNextNumber();
+
+if (! (gd.wasCanceled())) process();
+
+function process() {
+	imp = IJ.getImage();
+
+	IJ.run(imp, "Properties...", "unit=um pixel_width=" + pixelsize +
+		" pixel_height=" + pixelsize);
+	IJ.run(imp, "8-bit", "");
+	IJ.run(imp, "Auto Local Threshold", "method=" + ltm +
+		" radius=" + radius + " parameter_1=0 parameter_2=0");
+	//IJ.run(imp, "Watershed", "");
+	IJ.run(imp, "Watershed Irregular Features", "erosion=" + erosion);
+	if (smax == 0) smax = Double.POSITIVE_INFINITY;
+	set_measurements =
+		Measurements.AREA +
+		Measurements.CENTER_OF_MASS +
+		Measurements.SHAPE_DESCRIPTORS +
+		Measurements.INTEGRATED_DENSITY;
+	rt = new ResultsTable();
+	// ParticleAnalyzer(int options, int measurements, ResultsTable rt,
+	//     double minSize, double maxSize, double minCirc, double maxCirc)
+	pa = new ParticleAnalyzer(ParticleAnalyzer.ADD_TO_MANAGER,
+		set_measurements, rt, smin, smax, cmin, cmax);
+	pa.setHideOutputImage(true);
+	pa.analyze(imp);
+	rt.show("Oil Red O measurements");
+	sd = new SaveDialog('Save measurement results as...', imp.shortTitle + "_results", ".csv");
+	fout = sd.getDirectory() + sd.getFileName();
+	rt.saveAs(fout);
+}
