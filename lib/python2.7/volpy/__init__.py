@@ -864,9 +864,9 @@ class Vertex(object):
         # do nothing in case the connection already exists:
         if (self.connections[0] == endpoint) or (self.connections[1] == endpoint):
             return
-        if self.connections[0] == None:
+        if self.connections[0] is None:
             self.connections[0] =  endpoint
-        elif self.connections[1] == None:
+        elif self.connections[1] is None:
             self.connections[1] =  endpoint
         else:
             raise IndexError
