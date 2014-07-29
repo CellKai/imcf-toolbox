@@ -790,8 +790,30 @@ class Points3D(object):
 
 
 class Filament(Points3D):
+
     """Filament objects in 3D space based on a Points3D object."""
-    pass
+
+    def __init__(self, csv_coords, csv_edges):
+        """Set up the 'Filaments' object.
+
+        [x] populate p3d obj from csv_coords
+        [ ] populate filament list of connections (edges) from csv_edges
+        [ ] build masks
+        [ ] calculate lengths
+        """
+        super(Filament, self).__init__(csv_coords)
+        # create a list with index numbers of all p3d points:
+        self.vertices = [None] * len(self.data)
+        edges_raw = np.loadtxt(csv_edges, dtype=int, delimiter=',')
+        for edge in edges_raw:
+            if self.vertices[edge[0]] is None:
+                self.vertices[edge[0]] = Vertex(edge[0])
+            if self.vertices[edge[1]] is None:
+                self.vertices[edge[1]] = Vertex(edge[1])
+            self.vertices[edge[0]].connect(edge)
+            self.vertices[edge[1]].connect(edge)
+
+        # self.edges = list()
 
 
 class GreedyPath(object):
