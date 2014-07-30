@@ -789,19 +789,21 @@ class Points3D(object):
         return bitmap
 
 
-class Filament(Points3D):
+class Filament(object):
 
     """Filament objects in 3D space based on a Points3D object."""
 
-    def __init__(self, csv_coords, csv_edges):
+    def __init__(self, csv_edges):
         """Set up the 'Filaments' object by parsing data from CSV files.
 
-        [x] populate p3d obj from csv_coords
+        TODO:
+        [x] filament should not inherit from Points3D as this would prevent
+            reusing a Points3D object for multiple filaments
+        [-] populate p3d obj from csv_coords
         [x] populate filament list of connections (edges) from csv_edges
         [ ] build masks
         [ ] calculate lengths
         """
-        super(Filament, self).__init__(csv_coords)
         # create a list with index numbers of all p3d points:
         self.vertices = dict()
         edges_raw = np.loadtxt(csv_edges, dtype=int, delimiter=',')
