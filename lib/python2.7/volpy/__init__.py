@@ -889,7 +889,7 @@ class GreedyPath(object):
         mask : numpy.float64
             6.5106588526894855
         """
-        (path, mask, length) = path_greedy(points_3d.get_edm(), mask, extrema)
+        (path, mask, length) = path_greedy(p3d.get_edm(), mask, extrema)
         self.path = path
         self.mask = mask
         self.length = length
