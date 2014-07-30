@@ -25,6 +25,7 @@
 
 __version__ = 33
 
+import csv
 from os.path import split, join
 
 from Tkinter import Tk
