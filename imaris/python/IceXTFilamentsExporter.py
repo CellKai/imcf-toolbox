@@ -33,8 +33,12 @@ from tkFileDialog import asksaveasfilename
 from tkMessageBox import askyesno
 
 import ImarisLib
-# FIXME: try/except for pIceImarisConnector
-from pIceImarisConnector import pIceImarisConnector
+try:
+    from pIceImarisConnector import pIceImarisConnector
+except:
+    Tk().withdraw()
+    askyesno('ERROR', "Couldn't find pIceImarisConnector!")
+
 
 
 def IceXTFilamentsExporter(ims_app_id=None):
