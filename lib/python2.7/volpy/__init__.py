@@ -794,10 +794,10 @@ class Filament(Points3D):
     """Filament objects in 3D space based on a Points3D object."""
 
     def __init__(self, csv_coords, csv_edges):
-        """Set up the 'Filaments' object.
+        """Set up the 'Filaments' object by parsing data from CSV files.
 
         [x] populate p3d obj from csv_coords
-        [ ] populate filament list of connections (edges) from csv_edges
+        [x] populate filament list of connections (edges) from csv_edges
         [ ] build masks
         [ ] calculate lengths
         """
@@ -819,6 +819,7 @@ class Filament(Points3D):
         # self.edges = list()
 
     def buildpath(self):
+        """Take a list of edges and generate a sequence from it."""
         path = list()
         i = 0
         path.append(i)
@@ -860,7 +861,8 @@ class Filament(Points3D):
                 log.debug("%s + [%s]" % (path, inext))
                 path.append(inext)
             else:
-                if self.vertices: raise IndexError
+                if self.vertices:
+                    raise IndexError
         return path
 
 
@@ -921,7 +923,7 @@ class Vertex(object):
     def __repr__(self):
         return "id: %s, conn: %s" % (self.idx, self.connections)
 
-    def add_conn(self, endpoint):
+    def add_conn(self, end):
         """Add a new connection between this anbetween this and another vertex.
 
         Create a new connection between this vertex and another one, denoted by
@@ -931,16 +933,16 @@ class Vertex(object):
 
         Parameters
         ----------
-        endpoint : int
+        end : int
             The index number of the vertex to connect to.
         """
         # do nothing in case the connection already exists:
-        if (self.connections[0] == endpoint) or (self.connections[1] == endpoint):
+        if (self.connections[0] == end) or (self.connections[1] == end):
             return
         if self.connections[0] is None:
-            self.connections[0] =  endpoint
+            self.connections[0] = end
         elif self.connections[1] is None:
-            self.connections[1] =  endpoint
+            self.connections[1] = end
         else:
             raise IndexError
 
