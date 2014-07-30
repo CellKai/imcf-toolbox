@@ -819,6 +819,7 @@ class Filament(object):
             self.vertices[edge[0]].connect(edge)
             self.vertices[edge[1]].connect(edge)
         log.debug(self.vertices)
+        self.path = self.buildpath()
 
         # self.edges = list()
 
