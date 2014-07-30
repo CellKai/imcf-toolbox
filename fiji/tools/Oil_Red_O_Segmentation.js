@@ -20,10 +20,16 @@ cmin = 0.00;
 cmax = 1.00;
 
 gd = new GenericDialog("Oil Red O Segmentation");
-gd.addNumericField("Pixel size in µm:", pixelsize, 3);
-gd.addChoice("Local Thresholding Method:", ltm_all, ltm);
+gd.addNumericField("Calibration: pixel size in µm", pixelsize, 3);
+gd.setInsets(20, 0, 5);
+gd.addChoice("Select the Local Thresholding Method:", ltm_all, ltm);
 gd.addNumericField("Local Thresholding Radius: ", radius, 0);
+gd.setInsets(20, 0, 3);
 gd.addNumericField("Watershed erosion: ", erosion, 2);
+gd.setInsets(20, 0, 3);
+// TODO: we could use a slider by calculating the max possible
+// size using the pixel size and the calibration values
+// gd.addSlider("Size min:", 0, 999999999, smin);
 gd.addNumericField("Size min: ", smin, 2);
 gd.addNumericField("Size max (0 for Infinity): ", smax, 2);
 gd.addNumericField("Circularity min: ", cmin, 2);
