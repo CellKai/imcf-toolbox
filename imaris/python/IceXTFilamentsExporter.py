@@ -83,12 +83,12 @@ def export_filaments(conn):
         fname = '%s-p3d-%d.csv' % (fname_orig, i)
         opts = {'initialfile': fname,
                 'initialdir': fpath,
-                'title': 'File name for the filaments export'}
+                'title': 'File name for the Points3D export'}
         fname = asksaveasfilename(**opts)
         if fname == '':
             print('aborting due to user request')
             return None
-        print('writing filament export to "%s"' % fname)
+        print('writing p3d export to "%s"' % fname)
 
         # gives a list of 3-tuples with coordinates:
         pos_xyz = filaments.GetPositionsXYZ(i)
