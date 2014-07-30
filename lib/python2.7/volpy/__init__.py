@@ -870,6 +870,9 @@ class Vertex(object):
         self.idx = idx
         self.connections = list((None, None))
 
+    def __repr__(self):
+        return "id: %s, conn: %s" % (self.idx, self.connections)
+
     def add_conn(self, endpoint):
         """Add a new connection between this anbetween this and another vertex.
 
