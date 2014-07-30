@@ -76,8 +76,6 @@ def export_filaments(conn):
 
     # extract positions of filament points for each and store them
     for i in range(filaments.GetNumberOfFilaments()):
-        # gives a list of tuples denoting the edges:
-        # filaments.GetEdges(i)
         (fpath, fname_orig) = split(conn.GetCurrentFileName())
         fname_orig = fname_orig.rsplit('.', 1)[0]  # remove suffix
         fname = '%s-p3d-%d.csv' % (fname_orig, i)
@@ -97,3 +95,17 @@ def export_filaments(conn):
             for row in pos_xyz:
                 csvwriter.writerow(row)
 
+        fname = '%s-edges-%d.csv' % (fname_orig, i)
+        opts = {'initialfile': fname,
+                'initialdir': fpath,
+                'title': 'File name for the Edges export'}
+        fname = asksaveasfilename(**opts)
+        if fname == '':
+            print('aborting due to user request')
+            return None
+        print('writing edges export to "%s"' % fname)
+        edges = filaments.GetEdges(i)
+        with open(fname, 'wb') as csvout:
+            csvwriter = csv.writer(csvout)
+            for edge in edges:
+                csvwriter.writerow(edge)
