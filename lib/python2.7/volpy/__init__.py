@@ -995,28 +995,26 @@ class CellJunction(Points3D):
 
     """Class representing cell junctions (rims of touching areas)."""
 
-    def __init__(self, csvfile):
+    def __init__(self, csv_p3d, csv_edges):
         """Run tesselation method to calculate an area approximation.
 
         The points with the maximum distance in the given Points3D object are
         considered to be the extrema of the cell junction, they are used to
         build the connecting paths and to run the tesselation algorithm.
         """
-        super(CellJunction, self).__init__(csvfile)
+        super(CellJunction, self).__init__(csv_p3d)
         self._te_max = None   # ID of longest transversal edge
         self._vtxlist = []   # a list of lists of 3-tuples of coordinates
         self._area = 0   # combined area of all tesselation polygons
 
-        # First calculate the shortest path using *all* points, then calculate
-        # the shortest path using only the remaining points. This results in
-        # two separate point lists forming a loop that can then be used for the
-        # tesselation procedure.
-        filaments = self.filaments = [None, None]
-        filaments[0] = GreedyPath(self, self.get_mdpair(), None)
-        filaments[1] = GreedyPath(self, self.get_mdpair(), filaments[0].mask)
-        self.perimeter = filaments[0].length + filaments[1].length
-        (self.edges, self.triangles) = \
-            tesselate(filaments[1].path, filaments[0].path, self.get_edm())
+        filaments = Filament(self, csv_edges)
+        self.perimeter = filaments.length
+        paths = filaments.splitpaths(self.get_mdpair())
+        paths[1].reverse()
+        log.info("filament paths:\n--\n%s\n--\n%s\n" % (paths[0], paths[1]))
+        edges, triangles = tesselate(paths[0], paths[1], self.get_edm())
+        self.edges = edges
+        self.triangles = triangles
         log.warn("------------ largest distance results -------------")
         log.warn("idx numbers:\t" + ppr.pformat(self.get_mdpair()))
         log.warn("coordinates:\t" + ppr.pformat(self.get_mdpair_coords()))

@@ -21,6 +21,8 @@ def parse_arguments():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument('-i', '--infile', required=True, type=file,
         help='CSV file containing filament coordinates')
+    argparser.add_argument('-e', '--edges', required=True, type=file,
+        help='CSV file containing filament edges')
     argparser.add_argument('-o', '--outfile', type=argparse.FileType('w'),
         help='CSV file to store the results')
     argparser.add_argument('--plot', dest='plot', action='store_const',
@@ -44,7 +46,7 @@ def main():
     args = parse_arguments()
     set_loglevel(args.verbosity)
 
-    junction = vp.CellJunction(args.infile)
+    junction = vp.CellJunction(args.infile, args.edges)
 
     if args.outfile:
         junction.write_output(args.outfile, args.infile)
