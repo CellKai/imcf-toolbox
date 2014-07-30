@@ -799,6 +799,8 @@ class Filament(object):
         TODO:
         [x] filament should not inherit from Points3D as this would prevent
             reusing a Points3D object for multiple filaments
+        [ ] instead, a p3d object should be created separately and a reference
+            to it should be passed to the filament upon creation
         [-] populate p3d obj from csv_coords
         [x] populate filament list of connections (edges) from csv_edges
         [ ] build masks
