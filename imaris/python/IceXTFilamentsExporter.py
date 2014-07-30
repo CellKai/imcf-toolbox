@@ -16,7 +16,7 @@
 #  </Menu>
 #  <SurpassTab>
 #   <SurpassComponent name="bpFilaments">
-#     <Item name="Export Filaments to CSV (Python)">
+#     <Item name="THIS DOES NOT WORK">
 #       <Command>PythonXT::IceXTFilamentsExporter(%i)</Command>
 #     </Item>
 #   </SurpassComponent>
