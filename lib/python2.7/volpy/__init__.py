@@ -818,6 +818,51 @@ class Filament(Points3D):
 
         # self.edges = list()
 
+    def buildpath(self):
+        path = list()
+        i = 0
+        path.append(i)
+        # shorthand
+        vtx = self.vertices[i]
+        path.append(vtx.connections[0])
+        vtx.connections[0] = None
+        log.debug(self.vertices)
+        log.debug(path)
+        while self.vertices:
+            log.debug("----------- processing remaining vertices -----------")
+            i = path[-1]
+            vtx = self.vertices[i]
+            log.debug('cur vertex id: %s, last path id: %s' % (vtx.idx, i))
+            if not vtx.idx == i:
+                raise IndexError
+            inext = None
+            log.debug("last path elemet (i): %s" % i)
+            for iconn in xrange(len(vtx.connections)):
+                log.debug(" -- processing next connection --")
+                log.debug("connection pointer: %s" % iconn)
+                log.debug("current vertex: %s" % vtx)
+                if vtx.connections[iconn] is None:
+                    # "connection is 'None', skipping..."
+                    continue
+                if vtx.connections[iconn] == path[len(path)-2]:
+                    # connection is the preceding one, so just remove it
+                    vtx.connections[iconn] = None
+                else:
+                    # connection links to a successor element, store it
+                    inext = vtx.connections[iconn]
+                    vtx.connections[iconn] = None
+                log.debug(self.vertices)
+            if vtx.connections == [None, None]:
+                # all connections processed, remove the vertex:
+                self.vertices.pop(i)
+            # can only happen with malformed vertices, still need to check:
+            if inext is not None:
+                log.debug("%s + [%s]" % (path, inext))
+                path.append(inext)
+            else:
+                if self.vertices: raise IndexError
+        return path
+
 
 class GreedyPath(object):
 
