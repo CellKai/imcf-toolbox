@@ -793,19 +793,20 @@ class Filament(object):
 
     """Filament objects in 3D space based on a Points3D object."""
 
-    def __init__(self, csv_edges):
+    def __init__(self, p3d, csv_edges):
         """Set up the 'Filaments' object by parsing data from CSV files.
 
         TODO:
         [x] filament should not inherit from Points3D as this would prevent
             reusing a Points3D object for multiple filaments
-        [ ] instead, a p3d object should be created separately and a reference
+        [x] instead, a p3d object should be created separately and a reference
             to it should be passed to the filament upon creation
         [-] populate p3d obj from csv_coords
         [x] populate filament list of connections (edges) from csv_edges
-        [ ] build masks
-        [ ] calculate lengths
+        [-] build masks
+        [x] calculate lengths
         """
+        self.p3d = p3d
         # create a list with index numbers of all p3d points:
         self.vertices = dict()
         edges_raw = np.loadtxt(csv_edges, dtype=int, delimiter=',')
@@ -819,18 +820,20 @@ class Filament(object):
             self.vertices[edge[0]].connect(edge)
             self.vertices[edge[1]].connect(edge)
         log.debug(self.vertices)
-        self.path = self.buildpath()
+        self.path, self.length = self.buildpath()
 
         # self.edges = list()
 
     def buildpath(self):
         """Take a list of edges and generate a sequence from it."""
         path = list()
+        pathlen = 0
         i = 0
         path.append(i)
         # shorthand
         vtx = self.vertices[i]
         path.append(vtx.connections[0])
+        pathlen += self.p3d.get_edm()[path[len(path)-2], path[-1]]
         vtx.connections[0] = None
         log.debug(self.vertices)
         log.debug(path)
@@ -865,13 +868,14 @@ class Filament(object):
             if inext is not None:
                 log.debug("%s + [%s]" % (path, inext))
                 path.append(inext)
+                pathlen += self.p3d.get_edm()[path[len(path)-2], path[-1]]
             else:
                 if self.vertices:
                     raise IndexError
         # TODO: this should go into a subclass "FilamentRing" or similar:
         if not path[0] == path[-1]:
             raise ValueError('Path endpoints are not connected!')
-        return path[:-1]
+        return (path[:-1], pathlen)
 
     def splitpaths(self, splitpoints):
         """Split a path using a start and stop index.
