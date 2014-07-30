@@ -830,8 +830,7 @@ class Filament(object):
         pathlen = 0
         i = 0
         path.append(i)
-        # shorthand
-        vtx = self.vertices[i]
+        vtx = self.vertices[i]  # shorthand for current vertex
         path.append(vtx.connections[0])
         pathlen += self.p3d.get_edm()[path[len(path)-2], path[-1]]
         vtx.connections[0] = None
@@ -864,12 +863,12 @@ class Filament(object):
             if vtx.connections == [None, None]:
                 # all connections processed, remove the vertex:
                 self.vertices.pop(i)
-            # can only happen with malformed vertices, still need to check:
             if inext is not None:
                 log.debug("%s + [%s]" % (path, inext))
                 path.append(inext)
                 pathlen += self.p3d.get_edm()[path[len(path)-2], path[-1]]
             else:
+                # FIXME: do we need this?
                 if self.vertices:
                     raise IndexError
         # TODO: this should go into a subclass "FilamentRing" or similar:
