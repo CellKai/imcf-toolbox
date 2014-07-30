@@ -78,8 +78,9 @@ def export_filaments(conn):
     for i in range(filaments.GetNumberOfFilaments()):
         # gives a list of tuples denoting the edges:
         # filaments.GetEdges(i)
-        (fpath, fname) = split(conn.GetCurrentFileName())
-        fname = '%s-filaments-%d.csv' % (fname, i)
+        (fpath, fname_orig) = split(conn.GetCurrentFileName())
+        fname_orig = fname_orig.rsplit('.', 1)[0]  # remove suffix
+        fname = '%s-p3d-%d.csv' % (fname_orig, i)
         opts = {'initialfile': fname,
                 'initialdir': fpath,
                 'title': 'File name for the filaments export'}
