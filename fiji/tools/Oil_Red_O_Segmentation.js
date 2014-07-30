@@ -72,6 +72,8 @@ function process() {
 	pa.analyze(imp);
 	rt.show("Oil Red O measurements");
 	sd = new SaveDialog('Save measurement results as...', imp.shortTitle + "_results", ".csv");
-	fout = sd.getDirectory() + sd.getFileName();
+	fout = sd.getFileName();
+	if (fout == null) return;
+	fout = sd.getDirectory() + fout;
 	rt.saveAs(fout);
 }
