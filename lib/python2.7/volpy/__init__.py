@@ -803,15 +803,18 @@ class Filament(Points3D):
         """
         super(Filament, self).__init__(csv_coords)
         # create a list with index numbers of all p3d points:
-        self.vertices = [None] * len(self.data)
+        self.vertices = dict()
         edges_raw = np.loadtxt(csv_edges, dtype=int, delimiter=',')
         for edge in edges_raw:
-            if self.vertices[edge[0]] is None:
+            # if self.vertices[edge[0]] is None:
+            if not edge[0] in self.vertices:
                 self.vertices[edge[0]] = Vertex(edge[0])
-            if self.vertices[edge[1]] is None:
+            # if self.vertices[edge[1]] is None:
+            if not edge[1] in self.vertices:
                 self.vertices[edge[1]] = Vertex(edge[1])
             self.vertices[edge[0]].connect(edge)
             self.vertices[edge[1]].connect(edge)
+        log.debug(self.vertices)
 
         # self.edges = list()
 
