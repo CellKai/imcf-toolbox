@@ -867,7 +867,10 @@ class Filament(object):
             else:
                 if self.vertices:
                     raise IndexError
-        return path
+        # TODO: this should go into a subclass "FilamentRing" or similar:
+        if not path[0] == path[-1]:
+            raise ValueError('Path endpoints are not connected!')
+        return path[:-1]
 
 
 class GreedyPath(object):
