@@ -873,6 +873,21 @@ class Filament(object):
             raise ValueError('Path endpoints are not connected!')
         return path[:-1]
 
+    def splitpaths(self, splitpoints):
+        """Split a path using a start and stop index.
+
+        Returns (split0, split1) where split0[0] == split1[-1] and split1[0] ==
+        split0[-1].
+        """
+        i_start = self.path.index(splitpoints[0])
+        i_stop = self.path.index(splitpoints[1])
+        if i_start > i_stop:
+            i_start, i_stop = i_stop, i_start
+        log.debug("splitting path at positions: %s, %s" % (i_start, i_stop))
+        split0 = self.path[i_start:i_stop+1]
+        split1 = self.path[i_stop:] + self.path[:i_start+1]
+        return (split0, split1)
+
 
 class GreedyPath(object):
 
