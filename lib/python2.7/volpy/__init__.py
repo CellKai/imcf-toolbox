@@ -970,7 +970,9 @@ class Vertex(object):
         elif self.connections[1] is None:
             self.connections[1] = end
         else:
-            raise IndexError
+            raise IndexError('Error connecting vertex %s to %s (existing '
+                             'connections: %s, %s).' % (self.idx, end,
+                             self.connections[0], self.connections[1]))
 
     def connect(self, edge):
         """Add a new edge to this vertex.
