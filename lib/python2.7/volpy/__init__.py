@@ -834,17 +834,15 @@ class Filament(object):
         path.append(vtx.connections[0])
         pathlen += self.p3d.get_edm()[path[len(path)-2], path[-1]]
         vtx.connections[0] = None
-        log.debug(self.vertices)
-        log.debug(path)
         while self.vertices:
-            log.debug("----------- processing remaining vertices -----------")
+            # log.debug("----------- processing remaining vertices -----------")
             i = path[-1]
             vtx = self.vertices[i]
-            log.debug('cur vertex id: %s, last path id: %s' % (vtx.idx, i))
+            # log.debug('cur vertex id: %s, last path id: %s' % (vtx.idx, i))
             if not vtx.idx == i:
                 raise IndexError
             inext = None
-            log.debug("last path elemet (i): %s" % i)
+            # log.debug("last path elemet (i): %s" % i)
             for iconn in xrange(len(vtx.connections)):
                 # log.debug(" -- conn-ptr: %s, cur vtx:" % (iconn, vtx))
                 if vtx.connections[iconn] is None:
@@ -857,7 +855,7 @@ class Filament(object):
                     # connection links to a successor element, store it
                     inext = vtx.connections[iconn]
                     vtx.connections[iconn] = None
-                log.debug(self.vertices)
+                # log.debug(self.vertices)
             if vtx.connections == [None, None]:
                 # all connections processed, remove the vertex:
                 self.vertices.pop(i)
