@@ -5,6 +5,8 @@
 GUI for Junction statistics calculations.
 """
 
+# FIXME: needs to be adjusted to new filaments structure (p3d+edges)
+
 import sys
 import volpy as vp
 import volpy.plot as plot

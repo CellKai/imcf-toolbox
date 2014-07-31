@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "ERROR: needs to be adjusted to new filaments structure (p3d+edges)"
+exit 1
+
 # Poor man's multithreading via shell jobs.
 
 MAX_JOBS=4
