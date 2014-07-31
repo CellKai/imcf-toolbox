@@ -990,7 +990,8 @@ class Vertex(object):
         elif edge[1] == self.idx:
             self.add_conn(edge[0])
         else:
-            raise IndexError
+            log.error('Vtx: %s, edge: %s, %s' % (self.idx, edge[0], edge[1]))
+            raise IndexError('Edge does not belong to this vertex!')
 
 
 class CellJunction(Points3D):
