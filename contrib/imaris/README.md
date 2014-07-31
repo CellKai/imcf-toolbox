@@ -1,4 +1,6 @@
 
+TODO: update for new filaments structure using edges instead of p3d only
+
 Testing the GUI
 ===============
 The `--preset` switch can be used to facilitate testing the GUI from the
@@ -30,6 +32,3 @@ PRESETS="le_infile=${IN},le_outfile=${OUT},"\
 rm -v "${OUT}"
 python spots_to_bitmap_gui.py --preset $PRESETS
 ```
-
-TODO: should go into 'contrib'
-
