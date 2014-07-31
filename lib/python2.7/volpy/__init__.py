@@ -870,7 +870,8 @@ class Filament(object):
             else:
                 # FIXME: do we need this?
                 if self.vertices:
-                    raise IndexError
+                    log.error("Remaining vertices: %s" % self.vertices)
+                    raise IndexError("Couldn't build filament path!")
         # TODO: this should go into a subclass "FilamentRing" or similar:
         if not path[0] == path[-1]:
             raise ValueError('Path endpoints are not connected!')
