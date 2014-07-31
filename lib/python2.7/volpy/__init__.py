@@ -506,7 +506,7 @@ def tesselate(pl1, pl2, edm):
     # finally add the last triangle containing the endpoint
     vappend(triangles, (list_a[0], list_b[0], end_a), 'triangles')
 
-    log.info("edges from tesselation: %s" % edges)
+    log.info("-- edges from tesselation: %s" % edges)
     log.debug("triangles from tesselation: %s" % triangles)
     return (edges, triangles)
 
@@ -846,9 +846,7 @@ class Filament(object):
             inext = None
             log.debug("last path elemet (i): %s" % i)
             for iconn in xrange(len(vtx.connections)):
-                log.debug(" -- processing next connection --")
-                log.debug("connection pointer: %s" % iconn)
-                log.debug("current vertex: %s" % vtx)
+                # log.debug(" -- conn-ptr: %s, cur vtx:" % (iconn, vtx))
                 if vtx.connections[iconn] is None:
                     # "connection is 'None', skipping..."
                     continue
@@ -1015,7 +1013,8 @@ class CellJunction(Points3D):
         self.perimeter = filaments.length
         paths = filaments.splitpaths(self.get_mdpair())
         paths[1].reverse()
-        log.info("filament paths:\n--\n%s\n--\n%s\n" % (paths[0], paths[1]))
+        log.info("-- filament path 0:\n%s" % paths[0])
+        log.info("-- filament path 1:\n%s" % paths[1])
         edges, triangles = tesselate(paths[0], paths[1], self.get_edm())
         self.edges = edges
         self.triangles = triangles
