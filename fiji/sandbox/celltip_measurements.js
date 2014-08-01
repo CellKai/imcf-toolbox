@@ -1,5 +1,4 @@
 /* TODO:
- *  - use proper imp# names
  *  - use ChannelSplitter() etc.?
  */
 
@@ -30,28 +29,23 @@ combined = ic.run("Add create stack", channels[1], channels[2]);
 
 IJ.run(imp, "Split Channels", "");
 
-imp = WindowManager.getImage("C1-" + name);
-//imp.close();
-
-imp1 = WindowManager.getImage("C2-" + name);
-imp2 = WindowManager.getImage("C3-" + name);
+imp_c1 = WindowManager.getImage("C1-" + name);
+imp_c2 = WindowManager.getImage("C2-" + name);
+imp_c3 = WindowManager.getImage("C3-" + name);
 
 ic = new ImageCalculator();
-imp3 = ic.run("Add create stack", imp1, imp2);
-imp3.show();
+imp_combined = ic.run("Add create stack", imp_c2, imp_c3);
+imp_combined.show();
+imp_combined.setZ(z_slice);
 
-imp1.setZ(z_slice);
-imp2.setZ(z_slice);
-imp3.setZ(z_slice);
-
-IJ.run(imp3, "Median...", "radius=1.3 stack");
+IJ.run(imp_combined, "Median...", "radius=1.3 stack");
 Prefs.blackBackground = true;
-IJ.setAutoThreshold(imp3, "IJ_IsoData dark");
-IJ.run(imp3, "Convert to Mask", "method=IJ_IsoData background=Dark black");
+IJ.setAutoThreshold(imp_combined, "IJ_IsoData dark");
+IJ.run(imp_combined, "Convert to Mask", "method=IJ_IsoData background=Dark black");
 
 
 IJ.run("Set Measurements...", "area mean min center integrated redirect=None decimal=0");
-IJ.run(imp3, "Analyze Particles...", "size=25-Infinity pixel exclude clear include add slice");
+IJ.run(imp_combined, "Analyze Particles...", "size=25-Infinity pixel exclude clear include add slice");
 
 // prepare the ROI Manager
 rm = RoiManager.getInstance();
@@ -62,9 +56,10 @@ IJ.selectWindow("C3-" + name);
 rm.runCommand("Measure");
 rt = ResultsTable.getResultsTable();
 rtw = ResultsTable.getResultsWindow();
-rtw.rename('Results ' + imp2.shortTitle);
+rtw.rename('Results ' + imp_c3.shortTitle);
 
-sd = new SaveDialog('Save measurement results as...', imp2.shortTitle + "_results", ".csv");
+sd = new SaveDialog('Save measurement results as...',
+	imp_c3.shortTitle + "_z" + z_slice + "_results", ".csv");
 fout = sd.getFileName();
 if (fout != null) {
 	fout = sd.getDirectory() + fout;
@@ -76,9 +71,10 @@ IJ.selectWindow("C2-" + name);
 rm.runCommand("Measure");
 rt = ResultsTable.getResultsTable();
 rtw = ResultsTable.getResultsWindow();
-rtw.rename('Results ' + imp1.shortTitle);
+rtw.rename('Results ' + imp_c2.shortTitle);
 
-sd = new SaveDialog('Save measurement results as...', imp1.shortTitle + "_results", ".csv");
+sd = new SaveDialog('Save measurement results as...',
+	imp_c2.shortTitle + "_z" + z_slice + "_results", ".csv");
 fout = sd.getFileName();
 if (fout != null) {
 	fout = sd.getDirectory() + fout;
