@@ -1,6 +1,5 @@
 /* TODO:
  *  - measure both channels
- *  - pick the z-slice with the slider before running the macro
  *  - save results and ROIs into files
  */
 
@@ -12,6 +11,7 @@ importClass(Packages.ij.plugin.frame.RoiManager);
 
 imp = IJ.getImage();
 name = imp.title;
+z_slice = imp.z;  // remember the z-position
 IJ.log(name);
 
 /*
@@ -36,7 +36,6 @@ ic = new ImageCalculator();
 imp3 = ic.run("Add create stack", imp1, imp2);
 imp3.show();
 
-z_slice = 9;
 imp1.setZ(z_slice);
 imp2.setZ(z_slice);
 imp3.setZ(z_slice);
