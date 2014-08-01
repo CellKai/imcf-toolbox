@@ -20,11 +20,16 @@ roim = RoiManager(True)
 # 6. The minimum circularity of a particle
 # 7. The maximum circularity
 pa = ParticleAnalyzer(ParticleAnalyzer.ADD_TO_MANAGER,
-	Measurements.AREA, table, 0,
+	Measurements.AREA
+	+ Measurements.CENTER_OF_MASS
+	+ Measurements.SHAPE_DESCRIPTORS
+	+ Measurements.INTEGRATED_DENSITY,
+	table, 0,
 	Double.POSITIVE_INFINITY, 0.0, 1.0)
 pa.setHideOutputImage(True)
  
 if pa.analyze(imp):
   print "All ok"
+  table.show("foooo");
 else:
   print "There was a problem in analyzing", blobs
