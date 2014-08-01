@@ -12,7 +12,6 @@ importClass(Packages.ij.plugin.frame.RoiManager);
 imp = IJ.getImage();
 name = imp.title;
 z_slice = imp.z;  // remember the z-position
-IJ.log(name);
 
 /*
 cs = new ChannelSplitter();
