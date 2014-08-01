@@ -51,32 +51,22 @@ IJ.run(imp_combined, "Analyze Particles...", "size=25-Infinity pixel exclude cle
 rm = RoiManager.getInstance();
 if (rm==null) rm = new RoiManager();
 
-// channel 3 measuring and saving
-IJ.selectWindow("C3-" + name);
-rm.runCommand("Measure");
-rt = ResultsTable.getResultsTable();
-rtw = ResultsTable.getResultsWindow();
-rtw.rename('Results ' + imp_c3.shortTitle);
 
-sd = new SaveDialog('Save measurement results as...',
-	imp_c3.shortTitle + "_z" + z_slice + "_results", ".csv");
-fout = sd.getFileName();
-if (fout != null) {
-	fout = sd.getDirectory() + fout;
-	rt.saveAs(fout);
+function measure_save(imp) {
+	WindowManager.setCurrentWindow(imp.getWindow())
+	rm.runCommand("Measure");
+	rt = ResultsTable.getResultsTable();
+	rtw = ResultsTable.getResultsWindow();
+	rtw.rename('Results ' + imp.shortTitle);
+	
+	sd = new SaveDialog('Save measurement results as...',
+		imp.shortTitle + "_z" + z_slice + "_results", ".csv");
+	fout = sd.getFileName();
+	if (fout != null) {
+		fout = sd.getDirectory() + fout;
+		rt.saveAs(fout);
+	}
 }
 
-// channel 2 measuring and saving
-IJ.selectWindow("C2-" + name);
-rm.runCommand("Measure");
-rt = ResultsTable.getResultsTable();
-rtw = ResultsTable.getResultsWindow();
-rtw.rename('Results ' + imp_c2.shortTitle);
-
-sd = new SaveDialog('Save measurement results as...',
-	imp_c2.shortTitle + "_z" + z_slice + "_results", ".csv");
-fout = sd.getFileName();
-if (fout != null) {
-	fout = sd.getDirectory() + fout;
-	rt.saveAs(fout);
-}
+measure_save(imp_c2);
+measure_save(imp_c3);
