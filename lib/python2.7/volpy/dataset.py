@@ -86,3 +86,22 @@ class ImageData(DataSet):
             'Y': 0,
             'Z': 0
         }
+
+
+class MosaicData(DataSet):
+
+    """Special DataSet class for mosaic / tiling datasets."""
+
+    def __init__(self, st_type, st_path):
+        """Set up the mosaic dataset object.
+
+        Parameters
+        ----------
+        st_type, st_path : see superclass
+
+        Instance Variables
+        ------------------
+        subvol : list(ImageData)
+        """
+        super(MosaicData, self).__init__('mosaic', st_type, st_path)
+        self.subvol = list()
