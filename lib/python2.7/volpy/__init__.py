@@ -963,16 +963,17 @@ class Vertex(object):
             The index number of the vertex to connect to.
         """
         # do nothing in case the connection already exists:
-        if (self.connections[0] == end) or (self.connections[1] == end):
+        if end in self.connections:
             return
-        if self.connections[0] is None:
-            self.connections[0] = end
-        elif self.connections[1] is None:
-            self.connections[1] = end
-        else:
-            raise IndexError('Error connecting vertex %s to %s (existing '
-                             'connections: %s, %s).' % (self.idx, end,
-                             self.connections[0], self.connections[1]))
+        for i in xrange(len(self.connections)):
+            if self.connections[i] is None:
+                self.connections[i] = end
+                return
+        # if we did not return by now, the vertex already has its maximum
+        # number of connections - which is usually an error:
+        raise IndexError('Vertex %s reached its maximum number of connections'
+                         ' (%s).' % (self.idx, end,
+                         self.connections))
 
     def connect(self, edge):
         """Add a new edge to this vertex.
