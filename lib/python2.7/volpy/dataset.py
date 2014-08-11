@@ -105,3 +105,29 @@ class MosaicData(DataSet):
         """
         super(MosaicData, self).__init__('mosaic', st_type, st_path)
         self.subvol = list()
+
+
+class MosaicDataCuboid(MosaicData):
+
+    """Special case of a full cuboid mosaic volume."""
+
+    def __init__(self, st_type, st_path, dim):
+        """Set up the mosaic dataset object.
+
+        Parameters
+        ----------
+        st_type, st_path : see superclass
+        dim : list(int, int, int)
+            Number of sub-volumes (stacks) in all spatial dimensions.
+
+        Instance Variables
+        ------------------
+        subvol : list(ImageData)
+        dim = {
+            'X': int,  # number of sub-volumes in X-direction
+            'Y': int,  # number of sub-volumes in Y-direction
+            'Z': int   # number of sub-volumes in Z-direction
+        }
+        """
+        super(MosaicDataCuboid, self).__init__(st_type, st_path)
+        self.dim = {'X': dim[0], 'Y': dim[1], 'Z': dim[2]}
