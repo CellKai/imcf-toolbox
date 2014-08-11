@@ -45,3 +45,44 @@ class DataSet(object):
         else:
             self.storage['dname'] = dirname(st_path)
             self.storage['fname'] = basename(st_path)
+
+
+class ImageData(DataSet):
+
+    """Special DataSet class for images, 2D to 5D."""
+
+    def __init__(self, ds_type, st_type, st_path):
+        """Set up the image dataset object.
+
+        Parameters
+        ----------
+        ds_type : str
+            One of ('mosaic', 'stack', 'single')
+        st_type : str
+            'single' : a single file container with the full dataset
+            'tree' : a directory hierarchy
+            'sequence' : a sequence of files
+        st_path : str
+            The full path to either a file or directory, depending on the
+            storage type of this dataset.
+
+        Instance Variables
+        ------------------
+        dim = {
+            'B': int,  # bit depth
+            'C': int,  # channels
+            'T': int,  # timepoints
+            'X': int,
+            'Y': int,
+            'Z': int
+        }
+        """
+        super(ImageData, self).__init__(ds_type, st_type, st_path)
+        self.dim = {
+            'B': 0,  # bit depth
+            'C': 0,  # channels
+            'T': 0,  # timepoints
+            'X': 0,
+            'Y': 0,
+            'Z': 0
+        }
