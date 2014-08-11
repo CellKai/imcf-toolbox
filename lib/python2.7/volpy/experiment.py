@@ -37,9 +37,8 @@ class Experiment(list):
         self.infile['dname'] = basename(self.infile['path'])
         self.infile['fname'] = basename(infile)
         log.debug(self.infile)
-        self.datasets = list()
 
     def add_dataset(self, dset):
         """Add a dataset to this experiment."""
         log.debug("Adding a dataset.")
-        self.datasets.append(dset)
+        self.append(dset)
