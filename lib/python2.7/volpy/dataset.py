@@ -3,6 +3,7 @@
 """Classes to handle various types of datasets."""
 
 from os.path import dirname, basename, isdir
+from log import log
 
 
 class DataSet(object):
@@ -29,6 +30,7 @@ class DataSet(object):
         ds_type : str
         storage : {'type':str, 'full':str, 'fname':str, 'dname':str}
         """
+        log.debug("Creating a 'Dataset' object.")
         ds_type_allowed = ('mosaic', 'stack', 'single')
         st_type_allowed = ('single', 'tree', 'sequence')
         if not ds_type in ds_type_allowed:
@@ -49,7 +51,7 @@ class DataSet(object):
 
 class ImageData(DataSet):
 
-    """Special DataSet class for images, 2D to 5D."""
+    """Specific DataSet class for images, 2D to 5D."""
 
     def __init__(self, ds_type, st_type, st_path):
         """Set up the image dataset object.
@@ -78,6 +80,8 @@ class ImageData(DataSet):
         }
         """
         super(ImageData, self).__init__(ds_type, st_type, st_path)
+        log.debug("Creating an 'ImageData' object.")
+        log.debug("ds_type: '%s'" % self.ds_type)
         self.dim = {
             'B': 0,  # bit depth
             'C': 0,  # channels
