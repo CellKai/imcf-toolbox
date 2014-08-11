@@ -864,8 +864,11 @@ class Filament(object):
                 path.append(inext)
                 pathlen += self.p3d.get_edm()[path[len(path)-2], path[-1]]
             else:
-                # FIXME: do we need this?
+                # this can happen if the edges don't form a ring
+                # TODO: write a test case!
                 if self.vertices:
+                    log.error("\nERROR building filament path!\n")
+                    log.error("Vtx connections: %s" % vtx.connections)
                     log.error("Remaining vertices: %s" % self.vertices)
                     raise IndexError("Couldn't build filament path!")
         # TODO: this should go into a subclass "FilamentRing" or similar:
