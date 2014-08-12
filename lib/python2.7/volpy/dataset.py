@@ -85,6 +85,7 @@ class ImageData(DataSet):
             'Y': 0,
             'Z': 0
         }
+        self.stageinfo = None
 
 
 class MosaicData(DataSet):
