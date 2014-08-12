@@ -37,3 +37,21 @@ class Experiment(list):
         """Add a dataset to this experiment."""
         log.debug("Adding a dataset.")
         self.append(dset)
+
+
+class MosaicExperiment(Experiment):
+
+    """Class for mosaic / tiling experiments."""
+
+    def __init__(self, infile):
+        """Set up the common experiment properties.
+
+        Parameters
+        ----------
+        infile : str
+            The experiment file or folder.
+
+        Instance Variables
+        ------------------
+        """
+        super(MosaicExperiment, self).__init__(infile)
