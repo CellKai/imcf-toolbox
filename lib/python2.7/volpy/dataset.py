@@ -2,8 +2,8 @@
 
 """Classes to handle various types of datasets."""
 
-from os.path import dirname, basename, isdir
 from log import log
+from volpy.pathtools import parse_path
 
 
 class DataSet(object):
@@ -28,7 +28,7 @@ class DataSet(object):
         Instance Variables
         ------------------
         ds_type : str
-        storage : {'type':str, 'full':str, 'fname':str, 'dname':str}
+        storage : pathtools.parse_path
         """
         log.debug("Creating a 'Dataset' object.")
         ds_type_allowed = ('mosaic', 'stack', 'single')
@@ -38,15 +38,10 @@ class DataSet(object):
         if not st_type in st_type_allowed:
             raise TypeError("Illegal storage type: %s." % st_type)
         self.ds_type = ds_type
-        self.storage = {'type': st_type, 'full': st_path}
-        if st_type == 'single' and isdir(st_path):
+        self.storage = parse_path(st_path)
+        self.storage['type'] = st_type
+        if st_type == 'single' and self.storage['fname'] == '':
             raise TypeError("File name missing for storage type 'single'.")
-        if isdir(st_path):
-            self.storage['dname'] = st_path
-            self.storage['fname'] = None
-        else:
-            self.storage['dname'] = dirname(st_path)
-            self.storage['fname'] = basename(st_path)
 
 
 class ImageData(DataSet):
