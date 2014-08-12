@@ -136,3 +136,13 @@ class MosaicDataCuboid(MosaicData):
         """
         super(MosaicDataCuboid, self).__init__(st_type, st_path)
         self.dim = {'X': dim[0], 'Y': dim[1], 'Z': dim[2]}
+        self.overlap = 0
+        self.overlap_units = 'px'
+
+    def set_overlap(self, value, units='px'):
+        """Set the overlap amount and unit."""
+        units_allowed = ['px', 'pct', 'um', 'nm', 'mm']
+        if units not in units_allowed:
+            raise TypeError('Unknown overlap unit given: %s' % units)
+        self.overlap = value
+        self.overlap_units = units
