@@ -106,6 +106,11 @@ class MosaicData(DataSet):
         super(MosaicData, self).__init__('mosaic', st_type, st_path)
         self.subvol = list()
 
+    def add_subvol(self, img_ds):
+        """Add a subvolume to this dataset."""
+        log.debug('Dataset type: %s' % type(img_ds))
+        self.subvol.append(img_ds)
+
 
 class MosaicDataCuboid(MosaicData):
 
