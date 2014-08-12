@@ -2,12 +2,10 @@
 
 """Tools to process microscopy experiment data."""
 
-from os import sep
-# from os.path import basename, dirname, join, exists
-from os.path import basename, dirname
 from log import log
 # from misc import readtxt, flatten
 # from volpy import dataset
+from volpy.pathtools import parse_path
 
 
 class Experiment(list):
@@ -32,11 +30,8 @@ class Experiment(list):
         """
         super(Experiment, self).__init__()
         log.debug("Creating an 'Experiment' object.")
-        self.infile = {'dname': '', 'fname': '', 'path': ''}
-        self.infile['path'] = dirname(infile).replace('\\', sep)
-        self.infile['dname'] = basename(self.infile['path'])
-        self.infile['fname'] = basename(infile)
-        log.debug(self.infile)
+        self.infile = parse_path(infile)
+        log.warn(self.infile)
 
     def add_dataset(self, dset):
         """Add a dataset to this experiment."""
