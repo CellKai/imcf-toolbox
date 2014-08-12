@@ -13,30 +13,41 @@ def parse_path(path):
     No tests based on existing files are done, as this is supposed to also work
     on path strings that don't exist on the system running this code.
 
+    Returns
+    -------
+    parsed = {
+        'orig' : str   # string as passed into this function
+        'full' : str   # separators adjusted to current platform
+        'path' : str   # like previous, up to (including) the last separator
+        'dname' : str  # segment between the last two separators (directory)
+        'fname' : str  # segment after the last separator (filename)
+    }
+
     Example
     -------
+
+    >>> path_to_file = pathtools.parse_path('/tmp/foo/file')
+    >>> path_to_dir = pathtools.parse_path('/tmp/foo/')
 
     orig : The full path string as given to this function.
     full : Backslashes replaced by the current separator.
 
-    path : 'full' up to the last segment (excluded!), with trailing separator.
-    >>> pathtools.parse_path('/tmp/foo/file')['path']
+    path : 'full' up to the last separator (included)
+    >>> path_to_file['path']
     '/tmp/foo/'
-    >>> pathtools.parse_path('/tmp/foo/')['path']
+    >>> path_to_dir['path']
     '/tmp/foo/'
 
-    dname : The last directory of 'full'.
-    >>> pathtools.parse_path('/tmp/foo/file')['dname']
+    dname : The last directory of the path in 'full'.
+    >>> path_to_file['dname']
     'foo'
-    >>> pathtools.parse_path('/tmp/foo/')['dname']
+    >>> path_to_dir['dname']
     'foo'
 
     fname : The filename of 'full', empty in case of a directory.
-        '/tmp/foo/file' -> 'file'
-        '/tmp/foo/'     -> ''
-    >>> pathtools.parse_path('/tmp/foo/file')['fname']
+    >>> path_to_file['fname']
     'file'
-    >>> pathtools.parse_path('/tmp/foo/')['fname']
+    >>> path_to_dir['fname']
     ''
     """
     parsed = {}
