@@ -53,8 +53,11 @@ class MosaicExperiment(Experiment):
 
         Instance Variables
         ------------------
+        supplement : dict
+            Keeps supplementary information specific to the mosaic type.
         """
         super(MosaicExperiment, self).__init__(infile)
+        self.supplement = {}
 
     def add_mosaics(self):
         """Abstract method to add mosaics to this experiment."""
