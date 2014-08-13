@@ -3,9 +3,11 @@
 """ImageJ related stuff like reading measurement results, etc."""
 
 import numpy as np
+from os.path import join, dirname, exists
 import volpy as vp
 import csv
 import misc
+from misc import readtxt, flatten
 from log import log
 
 
@@ -203,3 +205,73 @@ class WingJStructure(object):
         np.savetxt(files[2], mindists['CT'], fmt='%.5f', delimiter=',')
         log.info('Writing "%s".' % misc.filename(files[3]))
         np.savetxt(files[3], mindists['orig'], fmt='%.5f', delimiter=',')
+
+
+def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
+    """Generate code in ImageJ's macro language to stitch the mosaics.
+
+    Take two template files ("head" and "body") and generate an ImageJ
+    macro to stitch the mosaics. Using the splitted templates allows for
+    setting default values in the head that can be overridden in this
+    generator method (the ImageJ macro language doesn't have a command to
+    check if a variable is set or not, it just exits with an error).
+
+    Parameters
+    ----------
+    experiment : volpy.experiment.MosaicExperiment
+        The object containing all information about the mosaic.
+    pfx : str
+        The prefix for the two template files, will be completed with the
+        corresponding suffixes "_head.ijm" and "_body.ijm".
+    path : str
+        The path to use as input directory *INSIDE* the macro.
+    tplpath : str
+        The path to a directory or zip file containing the templates.
+    flat : bool
+        Used to request a flattened string instead of a list of strings.
+
+    Returns
+    -------
+    ijm : list(str) or str
+        The generated macro code as a list of str (one str per line) or as
+        a single long string if requested via the "flat" parameter.
+    """
+    # TODO: generalize by supplying a dict with values to put between the head
+    # and body section of the macro
+    ## mcount = self.experiment['mcount']  # FIXME
+    mcount = experiment.supplement['mcount']
+    # by default templates are expected in a subdir of the current package:
+    if (tplpath == ''):
+        tplpath = join(dirname(__file__), 'ijm_templates')
+        log.debug('Looking for template directory: %s' % tplpath)
+        if not exists(tplpath):
+            tplpath += '.zip'
+            log.debug('Looking for template directory: %s' % tplpath)
+    if not exists(tplpath):
+        raise IOError("Template directory can't be found!")
+    log.info('Template directory: %s' % tplpath)
+    ijm = readtxt(pfx + '_head.ijm', tplpath)
+    ijm.append('\n')
+
+    ## ijm.append('name = "%s";\n' % self.infile['dname'])  # FIXME
+    ijm.append('name = "%s";\n' % experiment.infile['dname'])
+    ijm.append('padlen = %i;\n' % len(str(mcount)))
+    ijm.append('mcount = %i;\n' % mcount)
+    # windows path separator (in)sanity:
+    path = path.replace('\\', '\\\\')
+    ijm.append('input_dir="%s";\n' % path)
+    ijm.append('use_batch_mode = true;\n')
+
+    # If the overlap is below a certain level (5 percent), we disable
+    # computing the actual positions and subpixel accuracy:
+    ## if (self.mosaics[0]['ratio'] > 95.0):  # FIXME
+    if (experiment[0].get_overlap('pct') < 5.0):
+        ijm.append('compute = false;\n')
+
+    ijm.append('\n')
+    ijm += readtxt(pfx + '_body.ijm', tplpath)
+    log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
+    if (flat):
+        return(flatten(ijm))
+    else:
+        return(ijm)
