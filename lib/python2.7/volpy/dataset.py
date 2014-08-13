@@ -2,6 +2,9 @@
 
 """Classes to handle various types of datasets."""
 
+import codecs
+import ConfigParser
+
 from log import log
 from volpy.pathtools import parse_path
 
@@ -86,6 +89,77 @@ class ImageData(DataSet):
             'Z': 0
         }
         self.stageinfo = None
+
+
+class ImageDataOIF(ImageData):
+
+    """Specific DataSet class for images in Olympus OIF format."""
+
+    def __init__(self, st_path):
+        """Set up the image dataset object.
+
+        Parameters
+        ----------
+        st_path : str
+            The full path to the .OIF file.
+
+        Instance Variables
+        ------------------
+        For inherited variables, see ImageData.
+        """
+        super(ImageDataOIF, self).__init__('stack', 'tree', st_path)
+        log.debug("Creating an 'ImageDataOIF' object.")
+        self.parser = self.setup_parser()
+        self._dim = None  # override _dim to mark it as not yet known
+
+    def setup_parser(self):
+        """Set up the ConfigParser object for this .oif file.
+
+        Use the 'codecs' package to set up a ConfigParser object that can
+        properly handle the UTF-16 encoded .oif files.
+        """
+        # TODO: investigate usage of 'io' package instead of 'codecs'
+        oif = self.storage['full']
+        # TODO: identify and remember *real* oif file instead of just blindly
+        # appending '_01' to the file name (and use below where marked with
+        # FOLLOWUP_REAL_OIF_NAME):
+        oif = oif.replace('.oif', '_01.oif')
+        log.warn('Parsing OIF file: %s' % oif)
+        try:
+            conv = codecs.open(oif, "r", "utf16")
+        except IOError:
+            raise IOError("Error parsing OIF file (does it exist?): %s" % oif)
+        parser = ConfigParser.RawConfigParser()
+        parser.readfp(conv)
+        conv.close()
+        log.debug('Finished parsing OIF file.')
+        return parser
+
+    def parse_dimensions(self):
+        """Read image dimensions from a ConfigParser object.
+
+        Returns
+        -------
+        dim : (int, int)
+            Pixel dimensions in X and Y direction as tuple.
+        """
+        # TODO: parse missing information: Z slices, channels, timepoints
+        get = self.parser.get
+        try:
+            dim_h = get(u'Reference Image Parameter', u'ImageHeight')
+            dim_w = get(u'Reference Image Parameter', u'ImageWidth')
+        except ConfigParser.NoOptionError:
+            raise ValueError("Can't read image dimensions from %s." %
+                             self.storage['full'])  # FOLLOWUP_REAL_OIF_NAME
+        dim = (int(dim_w), int(dim_h))
+        log.warn('Parsed image dimensions: %s %s' % dim)
+        return dim
+
+    def get_dimensions(self):
+        """Lazy parsing of the image dimensions."""
+        if self._dim is None:
+            self._dim = self.parse_dimensions()
+        return self._dim
 
 
 class MosaicData(DataSet):
