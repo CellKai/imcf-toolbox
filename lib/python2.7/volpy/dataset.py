@@ -65,7 +65,7 @@ class ImageData(DataSet):
 
         Instance Variables
         ------------------
-        dim = {
+        _dim = {
             'B': int,  # bit depth
             'C': int,  # channels
             'T': int,  # timepoints
@@ -77,7 +77,7 @@ class ImageData(DataSet):
         super(ImageData, self).__init__(ds_type, st_type, st_path)
         log.debug("Creating an 'ImageData' object.")
         log.debug("ds_type: '%s'" % self.ds_type)
-        self.dim = {
+        self._dim = {
             'B': 0,  # bit depth
             'C': 0,  # channels
             'T': 0,  # timepoints
