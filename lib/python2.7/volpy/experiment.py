@@ -55,3 +55,7 @@ class MosaicExperiment(Experiment):
         ------------------
         """
         super(MosaicExperiment, self).__init__(infile)
+
+    def add_mosaics(self):
+        """Abstract method to add mosaics to this experiment."""
+        raise NotImplementedError('add_mosaics() not implemented!')
