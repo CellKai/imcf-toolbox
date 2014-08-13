@@ -171,10 +171,9 @@ def readtxt(fname, path='', flat=False):
         fin = zipread.open(fname)
     else:
         fin = open(join(path, fname), 'r')
+    txt = fin.readlines()  # returns file as a list, one entry per line
     if (flat):
-        txt = flatten(fin.readlines())
-    else:
-        txt = fin.readlines()
+        txt = flatten(txt)
     fin.close()
     if (zipread is not None):
         zipread.close()
