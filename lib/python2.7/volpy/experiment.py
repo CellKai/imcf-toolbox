@@ -10,7 +10,7 @@ from volpy.pathtools import parse_path
 
 class Experiment(list):
 
-    """Generic class for microscopy experiment data."""
+    """Abstract class for generic microscopy experiment data."""
 
     def __init__(self, infile):
         """Set up the common experiment properties.
@@ -41,7 +41,7 @@ class Experiment(list):
 
 class MosaicExperiment(Experiment):
 
-    """Class for mosaic / tiling experiments."""
+    """Abstract class for mosaic / tiling experiments."""
 
     def __init__(self, infile):
         """Set up the common experiment properties.
