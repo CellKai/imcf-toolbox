@@ -22,10 +22,7 @@ class Experiment(list):
 
         Instance Variables
         ------------------
-        infile : {'path': str,    # full path to input file
-                  'dname': str,   # the directory name (last part of 'path')
-                  'fname': str    # the input *file*name
-                 }
+        infile : pathtools.parse_path
         datasets : list(Dataset)
         """
         super(Experiment, self).__init__()
