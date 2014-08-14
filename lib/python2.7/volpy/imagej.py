@@ -244,8 +244,6 @@ def gen_tile_config(mosaic_ds, fixpath=False):
         coord_format = '(%f, %f)\n'
     app('# Define the image coordinates (in pixels)\n')
     for subvol in mosaic_ds.subvol:
-        # this will be broken for OIF files until the FOLLOWUP_REAL_OIF_NAME
-        # is fixed in the dataset module:
         line = '%s; ;' % subvol.storage['full']
         # TODO: investigate if the stitcher accepts '/' as pathsep on windows
         if(fixpath):

@@ -4,6 +4,7 @@
 
 import codecs
 import ConfigParser
+from os.path import exists
 
 from log import log
 from volpy.pathtools import parse_path
@@ -138,10 +139,40 @@ class ImageDataOIF(ImageData):
         ------------------
         For inherited variables, see ImageData.
         """
+        log.debug("ImageDataOIF(%s)" % st_path)
         super(ImageDataOIF, self).__init__('stack', 'tree', st_path)
-        log.debug("Creating an 'ImageDataOIF' object.")
+        self.storage = self.validate_oifpath()
         self.parser = self.setup_parser()
         self._dim = None  # override _dim to mark it as not yet known
+
+    def validate_oifpath(self):
+        """Fix the broken .oif paths in FluoView experiment files.
+
+        The FluoView software usually stores corrupted filenames in its
+        experiment description files, that have a missing suffix, e.g.
+
+            Slide1sec001\\Slide1sec001.oif
+
+        whereas the correct filename would be
+
+            Slide1sec001\\Slide1sec001_01.oif
+
+        This function attempts to fix this by checking if the supplied path is
+        actually existing and trying the default suffix if not. Raises an
+        IOError exception if no corresponding file can be found.
+
+        Returns
+        -------
+        storage : pathtools.parse_path
+        """
+        oif = self.storage
+        log.debug("Validating oif path: %s" % oif)
+        if not exists(oif['full']):
+            oif = parse_path(oif['orig'].replace('.oif', '_01.oif'))
+            log.debug("Trying next path: %s" % oif['full'])
+        if not exists(oif['full']):
+            raise IOError("Can't find OIF file: %s" % oif)
+        return oif
 
     def setup_parser(self):
         """Set up the ConfigParser object for this .oif file.
@@ -151,10 +182,6 @@ class ImageDataOIF(ImageData):
         """
         # TODO: investigate usage of 'io' package instead of 'codecs'
         oif = self.storage['full']
-        # TODO: identify and remember *real* oif file instead of just blindly
-        # appending '_01' to the file name (and use below where marked with
-        # FOLLOWUP_REAL_OIF_NAME):
-        oif = oif.replace('.oif', '_01.oif')
         log.info('Parsing OIF file: %s' % oif)
         try:
             conv = codecs.open(oif, "r", "utf16")
@@ -186,8 +213,7 @@ class ImageDataOIF(ImageData):
             dim_t = get(u'Axis 4 Parameters Common', u'MaxSize')
             axis_t = get(u'Axis 4 Parameters Common', u'AxisName')
         except ConfigParser.NoOptionError:
-            raise ValueError("Can't read image dimensions from %s." %
-                             self.storage['full'])  # FOLLOWUP_REAL_OIF_NAME
+            raise ValueError("Error in dimensions: %s." % self.storage['full'])
         # check if we got the right axis for Z/Ch/T, set to 0 otherwise:
         if not axis_z == u'"Z"':
             log.warn("WARNING: couldn't find Z axis in metadata!")
