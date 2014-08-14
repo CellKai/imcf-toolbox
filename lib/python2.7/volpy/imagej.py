@@ -3,6 +3,7 @@
 """ImageJ related stuff like reading measurement results, etc."""
 
 import numpy as np
+from os import sep
 from os.path import join, dirname, exists
 import volpy as vp
 import csv
@@ -205,6 +206,53 @@ class WingJStructure(object):
         np.savetxt(files[2], mindists['CT'], fmt='%.5f', delimiter=',')
         log.info('Writing "%s".' % misc.filename(files[3]))
         np.savetxt(files[3], mindists['orig'], fmt='%.5f', delimiter=',')
+
+
+def gen_tile_config(mosaic_ds, fixpath=False):
+    """Generate a tile configuration for Fiji's stitcher.
+
+    Generate a layout configuration file for a ceartain mosaic in the format
+    readable by Fiji's "Grid/Collection stitching" plugin. The configuration is
+    stored in a file in the input directory carrying the mosaic's index number
+    as a suffix.
+
+    Parameters
+    ----------
+    mosaic_ds : volpy.dataset.MosaicData
+        The mosaic dataset to generate the tile config for.
+    fixpath : bool
+        Convert path separators in the tileconfig to current OS environment?
+
+    Returns
+    -------
+    config : list(str)
+        The tile configuration as a list of strings, one per line.
+    """
+    conf = list()
+    app = conf.append
+    subvol_size_z = mosaic_ds.subvol[0].get_dimensions()['Z']
+    subvol_position_dim = len(mosaic_ds.subvol[0].position['relative'])
+    app('# Define the number of dimensions we are working on\n')
+    if subvol_size_z > 1:
+        app('dim = 3\n')
+        if subvol_position_dim < 3:
+            coord_format = '(%f, %f, 0.0)\n'
+        else:
+            coord_format = '(%f, %f, %f)\n'
+    else:
+        app('dim = 2\n')
+        coord_format = '(%f, %f)\n'
+    app('# Define the image coordinates (in pixels)\n')
+    for subvol in mosaic_ds.subvol:
+        # this will be broken for OIF files until the FOLLOWUP_REAL_OIF_NAME
+        # is fixed in the dataset module:
+        line = '%s; ;' % subvol.storage['full']
+        # TODO: investigate if the stitcher accepts '/' as pathsep on windows
+        if(fixpath):
+            line = line.replace('\\', sep)
+        line += coord_format % subvol.position['relative']
+        app(line)
+    return conf
 
 
 def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
