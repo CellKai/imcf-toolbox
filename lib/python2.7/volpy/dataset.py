@@ -239,3 +239,14 @@ class MosaicDataCuboid(MosaicData):
             raise TypeError('Unknown overlap unit given: %s' % units)
         self.overlap = value
         self.overlap_units = units
+
+    def get_overlap(self, units='pct'):
+        """Get the overlap amount in a specific unit."""
+        # TODO: implement conversion for other units:
+        # units_allowed = ['px', 'pct', 'um', 'nm', 'mm']
+        units_allowed = ['pct']
+        if units not in units_allowed:
+            raise TypeError('Unknown overlap unit requested: %s' % units)
+        if units != self.overlap_units:
+            raise NotImplementedError('Unit conversion not implemented!')
+        return self.overlap
