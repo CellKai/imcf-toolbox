@@ -76,8 +76,12 @@ class ImageData(DataSet):
             'Y': int,
             'Z': int
         }
-        stageinfo : list(float)
-            List with stage coordinates (2 or 3 elements).
+        position : dict
+            Spatial information for multi-image datasets:
+            {
+                'stage' : (float, float),    # raw stage coords
+                'relative' : (float, float)  # relative coords in pixels
+            }
         supplement : dict
             Keeps supplementary information specific to the mosaic type.
         """
@@ -92,13 +96,16 @@ class ImageData(DataSet):
             'Y': 0,
             'Z': 0
         }
-        self.stageinfo = None
+        self.position = {      # spatial information for multi-image datasets
+            'stage' : None,    # raw stage coordinates
+            'relative' : None  # relative coordinates in pixel values (float)
+        }
         self.supplement = {}
 
     def set_stagecoords(self, coords):
         """Set the stageinfo coordinates for this object."""
         log.info("Setting stage coordinates: %s." % str(coords))
-        self.stageinfo = coords
+        self.position['stage'] = coords
 
     def set_tilenumbers(self, tileno_x, tileno_y, tileno_z=None):
         """Set the tile number in the supplementary informations."""
