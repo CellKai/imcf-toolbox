@@ -162,16 +162,39 @@ class ImageDataOIF(ImageData):
         dim : (int, int)
             Pixel dimensions in X and Y direction as tuple.
         """
-        # TODO: parse missing information: Z slices, channels, timepoints
         get = self.parser.get
         try:
-            dim_h = get(u'Reference Image Parameter', u'ImageHeight')
-            dim_w = get(u'Reference Image Parameter', u'ImageWidth')
+            dim_b = get(u'Reference Image Parameter', u'ValidBitCounts')
+            dim_x = get(u'Reference Image Parameter', u'ImageHeight')
+            dim_y = get(u'Reference Image Parameter', u'ImageWidth')
+            dim_z = get(u'Axis 3 Parameters Common', u'MaxSize')
+            axis_z = get(u'Axis 3 Parameters Common', u'AxisName')
+            dim_c = get(u'Axis 2 Parameters Common', u'MaxSize')
+            axis_c = get(u'Axis 2 Parameters Common', u'AxisName')
+            dim_t = get(u'Axis 4 Parameters Common', u'MaxSize')
+            axis_t = get(u'Axis 4 Parameters Common', u'AxisName')
         except ConfigParser.NoOptionError:
             raise ValueError("Can't read image dimensions from %s." %
                              self.storage['full'])  # FOLLOWUP_REAL_OIF_NAME
-        dim = (int(dim_w), int(dim_h))
-        log.warn('Parsed image dimensions: %s %s' % dim)
+        # check if we got the right axis for Z/Ch/T, set to 0 otherwise:
+        if not axis_z == u'"Z"':
+            log.warn("WARNING: couldn't find Z axis in metadata!")
+            dim_z = 0
+        if not axis_c == u'"Ch"':
+            log.warn("WARNING: couldn't find channels in metadata!")
+            dim_c = 0
+        if not axis_t == u'"T"':
+            log.warn("WARNING: couldn't find timepoints in metadata!")
+            dim_t = 0
+        dim = {
+            'B': int(dim_b),  # bit depth
+            'C': int(dim_c),  # channels
+            'T': int(dim_t),  # timepoints
+            'X': int(dim_x),
+            'Y': int(dim_y),
+            'Z': int(dim_z)
+        }
+        log.warn('Parsed image dimensions: %s' % dim)
         return dim
 
     def get_dimensions(self):
