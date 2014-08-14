@@ -215,6 +215,24 @@ class ImageDataOIF(ImageData):
             self._dim = self.parse_dimensions()
         return self._dim
 
+    def set_relpos(self, overlap):
+        """Set the relative coordinates in pixels for this object.
+
+        Parameters
+        ----------
+        overlap : float
+            The overlap between tiles in percent.
+        """
+        ratio = (100.0 - overlap) / 100
+        size_x = self.get_dimensions()['X']
+        size_y = self.get_dimensions()['Y']
+        tileno_x = self.supplement['tileno'][0]
+        tileno_y = self.supplement['tileno'][1]
+        pos_x = size_x * ratio * tileno_x
+        pos_y = size_y * ratio * tileno_y
+        log.info("Setting relative coordinates: %s, %s." % (pos_x, pos_y))
+        self.position['relative'] = (pos_x, pos_y)
+
 
 class MosaicData(DataSet):
 
