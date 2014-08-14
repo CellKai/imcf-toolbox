@@ -208,7 +208,7 @@ class WingJStructure(object):
         np.savetxt(files[3], mindists['orig'], fmt='%.5f', delimiter=',')
 
 
-def gen_tile_config(mosaic_ds, fixpath=False):
+def gen_tile_config(mosaic_ds, fixsep=False):
     """Generate a tile configuration for Fiji's stitcher.
 
     Generate a layout configuration file for a ceartain mosaic in the format
@@ -220,7 +220,7 @@ def gen_tile_config(mosaic_ds, fixpath=False):
     ----------
     mosaic_ds : volpy.dataset.MosaicData
         The mosaic dataset to generate the tile config for.
-    fixpath : bool
+    fixsep : bool
         Convert path separators in the tileconfig to current OS environment?
 
     Returns
@@ -246,7 +246,7 @@ def gen_tile_config(mosaic_ds, fixpath=False):
     for subvol in mosaic_ds.subvol:
         line = '%s; ;' % subvol.storage['full']
         # TODO: investigate if the stitcher accepts '/' as pathsep on windows
-        if(fixpath):
+        if(fixsep):
             line = line.replace('\\', sep)
         line += coord_format % subvol.position['relative']
         app(line)
