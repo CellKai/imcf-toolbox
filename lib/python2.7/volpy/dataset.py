@@ -95,6 +95,20 @@ class ImageData(DataSet):
         self.stageinfo = None
         self.supplement = {}
 
+    def set_stagecoords(self, coords):
+        """Set the stageinfo coordinates for this object."""
+        log.info("Setting stage coordinates: %s." % str(coords))
+        self.stageinfo = coords
+
+    def set_tilenumbers(self, tileno_x, tileno_y, tileno_z=None):
+        """Set the tile number in the supplementary informations."""
+        log.info("Tile numbers: %s,%s,%s." % (tileno_x, tileno_y, tileno_z))
+        self.supplement['tileno'] = (tileno_x, tileno_y, tileno_z)
+
+    def get_dimensions(self):
+        """Lazy parsing of the image dimensions."""
+        raise NotImplementedError('get_dimensions() not implemented!')
+
 
 class ImageDataOIF(ImageData):
 
