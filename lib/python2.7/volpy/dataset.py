@@ -143,7 +143,7 @@ class ImageDataOIF(ImageData):
         # appending '_01' to the file name (and use below where marked with
         # FOLLOWUP_REAL_OIF_NAME):
         oif = oif.replace('.oif', '_01.oif')
-        log.warn('Parsing OIF file: %s' % oif)
+        log.info('Parsing OIF file: %s' % oif)
         try:
             conv = codecs.open(oif, "r", "utf16")
         except IOError:
@@ -194,7 +194,7 @@ class ImageDataOIF(ImageData):
             'Y': int(dim_y),
             'Z': int(dim_z)
         }
-        log.warn('Parsed image dimensions: %s' % dim)
+        log.info('Parsed image dimensions: %s' % dim)
         return dim
 
     def get_dimensions(self):
