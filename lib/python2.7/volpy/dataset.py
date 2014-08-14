@@ -76,6 +76,10 @@ class ImageData(DataSet):
             'Y': int,
             'Z': int
         }
+        stageinfo : list(float)
+            List with stage coordinates (2 or 3 elements).
+        supplement : dict
+            Keeps supplementary information specific to the mosaic type.
         """
         super(ImageData, self).__init__(ds_type, st_type, st_path)
         log.debug("Creating an 'ImageData' object.")
@@ -89,6 +93,7 @@ class ImageData(DataSet):
             'Z': 0
         }
         self.stageinfo = None
+        self.supplement = {}
 
 
 class ImageDataOIF(ImageData):
