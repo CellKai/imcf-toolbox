@@ -107,6 +107,11 @@ class ImageData(DataSet):
         log.info("Setting stage coordinates: %s." % str(coords))
         self.position['stage'] = coords
 
+    def set_relpos(self, coords):
+        """Set the relative coordinates in pixels for this object."""
+        log.info("Setting relative coordinates: %s." % str(coords))
+        self.position['relative'] = coords
+
     def set_tilenumbers(self, tileno_x, tileno_y, tileno_z=None):
         """Set the tile number in the supplementary informations."""
         log.info("Tile numbers: %s,%s,%s." % (tileno_x, tileno_y, tileno_z))
