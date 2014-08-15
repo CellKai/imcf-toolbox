@@ -253,6 +253,46 @@ def gen_tile_config(mosaic_ds, fixsep=False):
     return conf
 
 
+def write_tile_config(mosaic_ds, outdir='', fixsep=False):
+    """Generate and write the tile configuration file.
+
+    Call the function to generate the corresponding tile configuration and
+    store the result in a file. The naming scheme is "mosaic_xyz.txt" where
+    "xyz" is the zero-padded index number of this particular mosaic.
+
+    Parameters
+    ----------
+    mosaic_ds : volpy.dataset.MosaicData
+        The mosaic dataset to write the tile config for.
+    outdir : str
+        The output directory, if empty the input directory is used.
+    fixsep : bool
+        Passed on to gen_tile_config().
+    """
+    log.info('write_tile_config(%i)' % mosaic_ds.supplement['index'])
+    config = gen_tile_config(mosaic_ds, fixsep)
+    # TODO: add some padding mechanism to the experiment/dataset classes
+    # fname = 'mosaic_%0*i.txt' % (len(str(len(mosaic_ds))))
+    fname = 'mosaic_%s.txt' % mosaic_ds.supplement['index']
+    if(outdir == ''):
+        fname = join(mosaic_ds.storage['path'], fname)
+    else:
+        fname = join(outdir, fname)
+    out = open(fname, 'w')
+    out.writelines(config)
+    out.close()
+    log.warn('Wrote tile config to %s' % out.name)
+
+
+def write_all_tile_configs(experiment, outdir='', fixsep=False):
+    """Wrapper to generate all TileConfiguration.txt files.
+
+    All arguments are directly passed on to write_tile_config().
+    """
+    for mosaic_ds in experiment:
+        write_tile_config(mosaic_ds, outdir, fixsep)
+
+
 def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
     """Generate code in ImageJ's macro language to stitch the mosaics.
 
