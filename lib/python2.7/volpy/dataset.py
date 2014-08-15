@@ -28,6 +28,8 @@ class DataSet(object):
         st_path : str
             The full path to either a file or directory, depending on the
             storage type of this dataset.
+        supplement : dict
+            An auxiliary dict to keep supplementary information.
 
         Instance Variables
         ------------------
@@ -46,6 +48,7 @@ class DataSet(object):
         self.storage['type'] = st_type
         if st_type == 'single' and self.storage['fname'] == '':
             raise TypeError("File name missing for storage type 'single'.")
+        self.supplement = {}
 
 
 class ImageData(DataSet):
@@ -83,8 +86,6 @@ class ImageData(DataSet):
                 'stage' : (float, float),    # raw stage coords
                 'relative' : (float, float)  # relative coords in pixels
             }
-        supplement : dict
-            Keeps supplementary information specific to the mosaic type.
         """
         super(ImageData, self).__init__(ds_type, st_type, st_path)
         log.debug("Creating an 'ImageData' object.")
@@ -101,7 +102,6 @@ class ImageData(DataSet):
             'stage' : None,    # raw stage coordinates
             'relative' : None  # relative coordinates in pixel values (float)
         }
-        self.supplement = {}
 
     def set_stagecoords(self, coords):
         """Set the stageinfo coordinates for this object."""
