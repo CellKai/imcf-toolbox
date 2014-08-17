@@ -99,8 +99,8 @@ class ImageData(DataSet):
             'Z': 0
         }
         self.position = {      # spatial information for multi-image datasets
-            'stage' : None,    # raw stage coordinates
-            'relative' : None  # relative coordinates in pixel values (float)
+            'stage': None,    # raw stage coordinates
+            'relative': None  # relative coordinates in pixel values (float)
         }
 
     def set_stagecoords(self, coords):
