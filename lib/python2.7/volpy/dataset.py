@@ -212,8 +212,9 @@ class ImageDataOIF(ImageData):
             axis_c = get(u'Axis 2 Parameters Common', u'AxisName')
             dim_t = get(u'Axis 4 Parameters Common', u'MaxSize')
             axis_t = get(u'Axis 4 Parameters Common', u'AxisName')
-        except ConfigParser.NoOptionError:
-            raise ValueError("Error in dimensions: %s." % self.storage['full'])
+        except ConfigParser.NoOptionError as err:
+            raise ValueError("Error parsing dimensions from %s: %s" %
+                             (self.storage['full'], err))
         # check if we got the right axis for Z/Ch/T, set to 0 otherwise:
         if not axis_z == u'"Z"':
             log.warn("WARNING: couldn't find Z axis in metadata!")
@@ -307,6 +308,7 @@ class MosaicDataCuboid(MosaicData):
         }
         """
         super(MosaicDataCuboid, self).__init__(st_type, st_path)
+        log.info('Mosaic: %ix%ix%i' % (dim[0], dim[1], dim[2]))
         self.dim = {'X': dim[0], 'Y': dim[1], 'Z': dim[2]}
         self.overlap = 0
         self.overlap_units = 'px'
@@ -316,6 +318,9 @@ class MosaicDataCuboid(MosaicData):
         units_allowed = ['px', 'pct', 'um', 'nm', 'mm']
         if units not in units_allowed:
             raise TypeError('Unknown overlap unit given: %s' % units)
+        # TODO: this warning should be displayed for other units as well
+        if units == 'pct' and value <= 5.0:
+            log.warn('Low overlap %.1f%%!' % value)
         self.overlap = value
         self.overlap_units = units
 
