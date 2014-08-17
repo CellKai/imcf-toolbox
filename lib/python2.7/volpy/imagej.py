@@ -244,7 +244,7 @@ def gen_tile_config(mosaic_ds, fixsep=False):
         coord_format = '(%f, %f)\n'
     app('# Define the image coordinates (in pixels)\n')
     for subvol in mosaic_ds.subvol:
-        line = '%s; ;' % subvol.storage['full']
+        line = '%s; ; ' % subvol.storage['full']
         # TODO: investigate if the stitcher accepts '/' as pathsep on windows
         if(fixsep):
             line = line.replace('\\', sep)
