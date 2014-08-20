@@ -7,16 +7,19 @@ function printArray(a) {
           print(i+": "+a[i]);
 }
 
-filelist = getFileList(dir);
-tileconfigs = newArray(filelist.length);
-ti = 0;  // the tileconfig index
-for (fi=0; fi<filelist.length; fi++) {
-	if(matches(filelist[fi], 'mosaic_[0-9]+\.txt')) {
-		tileconfigs[ti] = filelist[fi];
-		//print(tileconfigs[ti]);
-		ti++;
+function get_tileconfig_files(dir) {
+	filelist = getFileList(dir);
+	tileconfigs = newArray(filelist.length);
+	ti = 0;  // the tileconfig index
+	for (fi=0; fi<filelist.length; fi++) {
+		if(matches(filelist[fi], 'mosaic_[0-9]+\.txt')) {
+			tileconfigs[ti] = filelist[fi];
+			//print(tileconfigs[ti]);
+			ti++;
+		}
 	}
+	return Array.trim(tileconfigs, ti);
 }
-tileconfigs = Array.trim(tileconfigs, ti);
 
+tileconfigs = get_tileconfig_files(dir);
 printArray(tileconfigs);
