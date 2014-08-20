@@ -361,3 +361,22 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
         return(flatten(ijm))
     else:
         return(ijm)
+
+
+def write_stitching_macro(code, fname, dname):
+    """Write generated macro code into a file.
+
+    Parameters
+    ----------
+    code : list(str)
+        The code as a list of strings, one per line.
+    fname : str
+        The desired output filename.
+    dname : str
+        The output directory.
+    """
+    fname = join(dname, fname)
+    log.debug('Writing macro to output directory: "%s".' % fname)
+    with open(fname, 'w') as out:
+        out.writelines(code)
+        log.warn('Wrote macro template to "%s".' % out.name)
