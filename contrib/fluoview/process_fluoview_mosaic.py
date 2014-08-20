@@ -3,6 +3,7 @@
 """Parse a FluoView project file and generate code for ImageJ's stitcher."""
 
 import volpy.fluoview as fv
+import volpy.imagej as ij
 from log import set_loglevel
 import sys
 import argparse
@@ -40,10 +41,10 @@ def main():
     else:
         dout = args.out
 
-    mosaic = fv.FluoViewMosaic(args.mosaic.name)
-    mosaic.write_all_tile_configs(path=dout, fixpath=args.fixsep)
-    code = mosaic.gen_stitching_macro_code('stitching', path=dname)
-    mosaic.write_stitching_macro(code, dname=dout)
+    mosaic = fv.FluoViewOIFMosaic(args.mosaic.name)
+    ij.write_all_tile_configs(mosaic)
+    code = ij.gen_stitching_macro_code(mosaic, 'stitching', path=dname)
+    ij.write_stitching_macro(code, 'stitch_all.ijm', dout)
 
 
 if __name__ == "__main__":
