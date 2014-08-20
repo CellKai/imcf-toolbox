@@ -35,7 +35,7 @@ def main():
 
     dname = dirname(args.mosaic.name)
     fname = basename(args.mosaic.name)
-    if args.out is None:
+    if args.out == '':
         dout = dname
     else:
         dout = args.out
