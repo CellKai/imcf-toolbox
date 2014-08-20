@@ -3,24 +3,13 @@
 """Tools to process data produced with Olympus FluoView."""
 
 import xml.etree.ElementTree as etree
-from os import sep
-from os.path import basename, dirname, join, exists
 from log import log
-from misc import readtxt, flatten
-import ConfigParser
-import codecs
 
-# TODO: a superclass for generic mosaic type experiments should be created as
-# it will also be required for other input formats, several methods should be
-# moved there (they are tagged with "move_to_superclass")
-
-# REFACTOR: split into a generic Experiment class (that is subclassed as
-# FluoViewExperiment, which can be created by parsing a MATL_Mosaic.log file)
-# and a Mosaic class (which holds the information for *one* tiling) where an
-# Experiment object keeps a list of Mosaic objects.
+from volpy.experiment import MosaicExperiment
+from volpy.dataset import MosaicDataCuboid, ImageDataOIF
 
 
-class FluoViewMosaic(object):
+class FluoViewOIFMosaic(MosaicExperiment):
 
     """Object representing a tiled ("mosaic") project from Olympus FluoView.
 
@@ -56,77 +45,56 @@ class FluoViewMosaic(object):
 
         Instance Variables
         ------------------
-        infile : {'path': str,    # path to input XML file
-                  'dname': str,   # the directory name (last part of 'path')
-                  'fname': str    # the input XML filename
-                 }
         tree : xml.etree.ElementTree
-        experiment : {'mcount': int, # number of mosaics
+        supplement : {'mcount': int, # highest index reported by FluoView
                       'xdir': str,   # X axis direction
                       'ydir': str    # Y axis direction
                      }
-        mosaics : list of mosaics (dicts, see parse_mosaic)
         """
-        log.info('Reading FluoView Mosaic XML...')
-        self.infile = {}
-        self.infile['path'] = dirname(infile).replace('\\', sep)
-        self.infile['dname'] = basename(self.infile['path'])
-        self.infile['fname'] = basename(infile)
-        log.debug(self.infile)
-        # a dictionary of experiment-wide settings
-        self.experiment = {}
-        # a list of dicts with mosaic specific settings
-        self.mosaics = []
-        self.tree = etree.parse(infile)
-        self.check_fvxml()
-        self.parse_all_mosaics()
-        log.info('Done.')
+        super(FluoViewOIFMosaic, self).__init__(infile)
+        self.tree = self.validate_xml()
+        self.add_mosaics()
 
-    def check_fvxml(self):
-        """Check XML for being a valid FluoView mosaic experiment file.
+    def validate_xml(self):
+        """Parse and check XML for being a valid FluoView mosaic experiment.
 
         Evaluate the XML tree for known elements like the root tag (expected to
         be "XYStage", and some of the direct children to make sure the parsed
         file is in fact a FluoView mosaic XML file. Raises exceptions in case
         something expected can't be found in the tree.
-        """
-        root = self.tree.getroot()
-        if not root.tag == 'XYStage':
-            raise TypeError('Unexpected value: %s' % root.tag)
-        # the statements below raise an AttributeError if no such element was
-        # found as a 'NoneType' is returned then:
-        self.experiment['xdir'] = root.find('XAxisDirection').text
-        self.experiment['ydir'] = root.find('YAxisDirection').text
-        # FIXME: mcount is WRONG, it gives the index number of the last mosaic
-        # in the project, but a project might e.g. only contain mosaics number
-        # 5 and 6 (so "2" would be correct but mcount is "6"):
-        self.experiment['mcount'] = int(root.find('NumberOfMosaics').text)
-        # currently we only support LTR and TTB experiments:
-        if not self.experiment['xdir'] == 'LeftToRight':
-            raise TypeError('Unsupported XAxis configuration')
-        if not self.experiment['ydir'] == 'TopToBottom':
-            raise TypeError('Unsupported YAxis configuration')
-
-    def parse_all_mosaics(self):
-        """Wrapper to parse all mosaic parts.
-
-        Call the mosaic parser for all "Mosaic" XML subtrees and collect the
-        resulting dicts in the object's mosaics variable.
-        """
-        for mosaic_subtree in self.tree.getroot().findall('Mosaic'):
-            self.mosaics.append(self.parse_mosaic(mosaic_subtree))
-
-    def parse_mosaic(self, mosaic_xmltree):
-        """Parse a mosaic XML subtree and assemble a dict from it.
-
-        Parameters
-        ----------
-        mosaic_xmltree : xml.etree.ElementTree.Element
-            The subtree of the XML ElementTree containing the details of a
-            single mosaic.
 
         Returns
         -------
+        tree : xml.etree.ElementTree
+        """
+        log.info('Validating FluoView Mosaic XML...')
+        tree = etree.parse(self.infile['full'])
+        root = tree.getroot()
+        if not root.tag == 'XYStage':
+            raise TypeError('Unexpected value: %s' % root.tag)
+        # find() raises an AttributeError if no such element is found:
+        xdir = root.find('XAxisDirection').text
+        ydir = root.find('YAxisDirection').text
+        # WARNING: 'mcount' is the HIGHEST INDEX number, not the total count!
+        mcount = int(root.find('NumberOfMosaics').text)
+        # currently we only support LTR and TTB experiments:
+        if xdir != 'LeftToRight' or ydir != 'TopToBottom':
+            raise TypeError('Unsupported Axis configuration')
+        self.supplement = {
+            'xdir': xdir,
+            'ydir': ydir,
+            'mcount': mcount
+        }
+        log.info('Finished validating XML.')
+        return tree
+
+    def add_mosaics(self):
+        """Parse a list of XML subtrees and create MosaicDatasets from them.
+
+        Old datastructure
+        -----------------
+        This is the previously used datastructure, for documentation purposes.
+
         mosaic : {'id': int,
                   'ratio': float,  # non-overlapping tile percentage
                   'xcount': int,   # number of tiles in X
@@ -141,252 +109,45 @@ class FluoViewMosaic(object):
                            }]
                  }
         """
-        idx = int(mosaic_xmltree.attrib['No'])
-        assert mosaic_xmltree.find('XScanDirection').text == 'LeftToRight'
-        assert mosaic_xmltree.find('YScanDirection').text == 'TopToBottom'
-        xcount = int(mosaic_xmltree.find('XImages').text)
-        ycount = int(mosaic_xmltree.find('YImages').text)
-        ratio = float(mosaic_xmltree.find('IndexRatio').text)
-        log.info('Mosaic %i: %ix%i' % (idx, xcount, ycount))
-        # warn if overlap is below 5 percent:
-        if (ratio > 95.0):
-            log.warn('WARNING: overlap of mosaic %i is only %.1f%%!' %
-                     (idx, (100.0 - ratio)))
-        images = []
-        for img in mosaic_xmltree.findall('ImageInfo'):
-            info = {
-                'imgid': int(img.find('No').text),
-                'xpos': float(img.find('XPos').text),
-                'ypos': float(img.find('YPos').text),
-                'xno': int(img.find('Xno').text),
-                'yno': int(img.find('Yno').text),
-                'imgf': img.find('Filename').text
-            }
-            images.append(info)
-        return({'id': idx,
-                'xcount': xcount,
-                'ycount': ycount,
-                'ratio': ratio,
-                'tiles': images})
+        for tree in self.tree.getroot().findall('Mosaic'):
+            # lambda functions for tree.find().text and int/float conversions:
+            tft = lambda p: tree.find(p).text
+            tfi = lambda p: int(tft(p))
+            tff = lambda p: float(tft(p))
+            idx = int(tree.attrib['No'])
+            assert tft('XScanDirection') == 'LeftToRight'
+            assert tft('YScanDirection') == 'TopToBottom'
 
-    def gen_tile_config(self, idx, fixpath=False, size=None):
-        """Generate a tile configuration for Fiji's stitcher.
+            # assemble the dataset (MosaicDataCuboid):
+            # use the infile for the mosaic_ds infile as well as individual
+            # mosaics don't have separate project files in our case
+            mosaic_ds = MosaicDataCuboid('tree', self.infile['orig'],
+                                         (tfi('XImages'), tfi('YImages'), 1))
+            mosaic_ds.set_overlap(100.0 - tff('IndexRatio'), 'pct')
+            mosaic_ds.supplement['index'] = idx
 
-        Generate a layout configuration file for a ceartain mosaic in the
-        format readable by Fiji's "Grid/Collection stitching" plugin. The
-        configuration is stored in a file in the input directory carrying the
-        mosaic's index number as a suffix.
-
-        Parameters
-        ----------
-        idx : int
-            The index of the mosaic to generate the tile config for.
-        fixpath : bool
-            Determines if the path separators in the tile config file should be
-            kept as the are or be adjusted to the currently used environment.
-        size : (int, int)
-            Size of each tile in pixels as a tuple (x, y). If omitted it will
-            try to extract the information from the image files on the disk.
-
-        Returns
-        -------
-        config : list(str)
-            The tile configuration as a list of strings, one per line.
-        """
-        # TAG: move_to_superclass
-        conf = list()
-        app = conf.append
-        if size is None:
-            try:
-                size = self.dim_from_oif(self.mosaics[idx]['tiles'][0]['imgf'])
-            except IOError as err:
-                # if reading the OIF fails, we just issue a warning and
-                # continue with the next mosaic:
-                log.warn('\n*** WARNING *** WARNING *** WARNING ***\n%s' % err)
-                log.warn('=====> SKIPPING MOSAIC %i <=====\n' % idx)
-                app('# ERROR: %s\n' % err)
-                return conf
-        app('# Define the number of dimensions we are working on\n')
-        app('dim = 3\n')
-        app('# Define the image coordinates (in pixels)\n')
-        ratio = self.mosaics[idx]['ratio'] / 100
-        for img in self.mosaics[idx]['tiles']:
-            xpos = img['xno'] * ratio * size[0]
-            ypos = img['yno'] * ratio * size[1]
-            # fix wrong filenames from stupid Olympus software:
-            # TODO: this needs to be adjusted / overloaded if the method is
-            # moved to a superclass!
-            imgf = img['imgf'].replace('.oif', '_01.oif')
-            if(fixpath):
-                imgf = imgf.replace('\\', sep)
-            app('%s; ; (%f, %f, %f)\n' % (imgf, xpos, ypos, 0))
-        return conf
-
-    def write_tile_config(self, idx, path='', fixpath=False, size=None):
-        """Generate and write the tile configuration file.
-
-        Call the method to generate the corresponding tile configuration and
-        store the result in a file. The naming scheme is "mosaic_xyz.txt" where
-        "xyz" is the zero-padded index number of this particular mosaic.
-
-        Parameters
-        ----------
-        idx : int
-            Index number of the mosaic to write the tile config for.
-        path : str
-            The output directory, if empty the input directory is used.
-        fixpath : bool
-            Passed on to gen_tile_config().
-        size : (int, int)
-            Passed on to gen_tile_config().
-        """
-        # TAG: move_to_superclass
-        log.info('write_tile_config(%i)' % idx)
-        config = self.gen_tile_config(idx, fixpath, size)
-        # filename is zero-padded to the total number of mosaics:
-        fname = 'mosaic_%0*i.txt' % (len(str(len(self.mosaics))), idx)
-        if(path == ''):
-            fname = join(self.infile['path'], fname)
-        else:
-            fname = join(path, fname)
-        out = open(fname, 'w')
-        out.writelines(config)
-        out.close()
-        log.warn('Wrote tile config to %s' % out.name)
-
-    def write_all_tile_configs(self, path='', fixpath=False, size=None):
-        """Wrapper to generate all TileConfiguration.txt files.
-
-        All arguments are directly passed on to write_tile_config().
-        """
-        # TAG: move_to_superclass
-        for i in xrange(self.experiment['mcount']):
-            self.write_tile_config(i, path, fixpath, size)
-
-    def dim_from_oif(self, oif):
-        """Read image dimensions from a .oif file.
-
-        Parameters
-        ----------
-        oif : str
-            The .oif file to read the dimensions from.
-
-        Returns
-        -------
-        dim : (int, int)
-            Pixel dimensions in X and Y direction as tuple.
-        """
-        oif = oif.replace('\\', sep)
-        oif = oif.replace('.oif', '_01.oif')
-        oif = join(self.infile['path'], oif)
-        log.debug('Parsing OIF file for dimensions: %s' % oif)
-        # we're using ConfigParser which can't handle UTF-16 (and UTF-8) files
-        # properly, so we need the help of "codecs" to parse the file
-        try:
-            conv = codecs.open(oif, "r", "utf16")
-        except IOError:
-            raise IOError("Can't find required OIF file for parsing image" +
-                          " dimensions: %s" % oif)
-        parser = ConfigParser.RawConfigParser()
-        parser.readfp(conv)
-        try:
-            dim_h = parser.get(u'Reference Image Parameter', u'ImageHeight')
-            dim_w = parser.get(u'Reference Image Parameter', u'ImageWidth')
-        except ConfigParser.NoOptionError:
-            raise ValueError("Can't read image dimensions from %s." % oif)
-        dim = (int(dim_w), int(dim_h))
-        log.warn('Dimensions: %s %s' % dim)
-        return dim
-
-    def gen_stitching_macro_code(self, pfx, path='', tplpath='', flat=False):
-        """Generate code in ImageJ's macro language to stitch the mosaics.
-
-        Take two template files ("head" and "body") and generate an ImageJ
-        macro to stitch the mosaics. Using the splitted templates allows for
-        setting default values in the head that can be overridden in this
-        generator method (the ImageJ macro language doesn't have a command to
-        check if a variable is set or not, it just exits with an error).
-
-        Parameters
-        ----------
-        pfx : str
-            The prefix for the two template files, will be completed with the
-            corresponding suffixes "_head.ijm" and "_body.ijm".
-        path : str
-            The path to use as input directory *INSIDE* the macro.
-        tplpath : str
-            The path to a directory or zip file containing the templates.
-        flat : bool
-            Used to request a flattened string instead of a list of strings.
-
-        Returns
-        -------
-        ijm : list(str) or str
-            The generated macro code as a list of str (one str per line) or as
-            a single long string if requested via the "flat" parameter.
-        """
-        # TAG: move_to_superclass
-        mcount = self.experiment['mcount']
-        # by default templates are expected in a subdir of the current package:
-        if (tplpath == ''):
-            tplpath = join(dirname(__file__), 'ijm_templates')
-            log.debug('Looking for template directory: %s' % tplpath)
-            if not exists(tplpath):
-                tplpath += '.zip'
-                log.debug('Looking for template directory: %s' % tplpath)
-        if not exists(tplpath):
-            raise IOError("Template directory can't be found!")
-        log.info('Template directory: %s' % tplpath)
-        ijm = readtxt(pfx + '_head.ijm', tplpath)
-        ijm.append('\n')
-
-        ijm.append('name = "%s";\n' % self.infile['dname'])
-        ijm.append('padlen = %i;\n' % len(str(mcount)))
-        ijm.append('mcount = %i;\n' % mcount)
-        # windows path separator (in)sanity:
-        path = path.replace('\\', '\\\\')
-        ijm.append('input_dir="%s";\n' % path)
-        ijm.append('use_batch_mode = true;\n')
-
-        # If the overlap is below a certain level (5 percent), we disable
-        # computing the actual positions and subpixel accuracy:
-        if (self.mosaics[0]['ratio'] > 95.0):
-            ijm.append('compute = false;\n')
-
-        ijm.append('\n')
-        ijm += readtxt(pfx + '_body.ijm', tplpath)
-        log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
-        if (flat):
-            return(flatten(ijm))
-        else:
-            return(ijm)
-
-    def write_stitching_macro(self, code, fname=None, dname=None):
-        """Write generated macro code into a file.
-
-        Parameters
-        ----------
-        code : list(str)
-            The code as a list of strings, one per line.
-        fname : str
-            The desired output filename, if empty the directory name (usually
-            describing the dataset) is used with a generic suffix.
-        dname : str
-            The output directory, if empty the input directory is used.
-        """
-        if fname is None:
-            fname = self.infile['dname'] + '_stitch_all.ijm'
-            log.debug('Macro output filename: "%s".' % fname)
-        if dname is None:
-            # if not requested other, write to input directory:
-            fname = join(self.infile['path'], fname)
-            log.debug('Macro output directory: "%s".' % self.infile['path'])
-        else:
-            fname = join(dname, fname)
-        out = open(fname, 'w')
-        out.writelines(code)
-        out.close()
-        log.warn('Wrote macro template to "%s".' % out.name)
+            # Parsing and assembling the ImageData section should be considered
+            # to be moved into a separate method.
+            # ImageData section:
+            for img in tree.findall('ImageInfo'):
+                tft = lambda p: img.find(p).text
+                tfi = lambda p: int(img.find(p).text)
+                tff = lambda p: float(img.find(p).text)
+                try:
+                    oif_ds = ImageDataOIF(self.infile['path']
+                                          + tft('Filename'))
+                    oif_ds.set_stagecoords((tff('XPos'), tff('YPos')))
+                    oif_ds.set_tilenumbers(tfi('Xno'), tfi('Yno'))
+                    oif_ds.set_relpos(mosaic_ds.get_overlap('pct'))
+                    oif_ds.supplement['index'] = tfi('No')
+                    mosaic_ds.add_subvol(oif_ds)
+                except IOError as err:
+                    log.info('Broken/missing image data: %s' % err)
+                    mosaic_ds = None
+            if mosaic_ds is not None:
+                self.add_dataset(mosaic_ds)
+            else:
+                log.warn('Mosaic %s: incomplete subvolumes, SKIPPING!' % idx)
 
 
 if __name__ == "__main__":
