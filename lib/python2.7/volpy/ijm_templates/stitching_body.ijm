@@ -4,7 +4,6 @@
  * Variables REQUIRED to be set for body:
  *   name : str (dataset name)
  *   padlen : int (padding length for mosaic numbering)
- *   mcount : int (total number of mosaics in dataset)
  *   compute : boolean (whether to compute the overlap)
 \*/
 
@@ -45,9 +44,10 @@ if(compute) {
     tpl += "subpixel_accuracy ";
 }
 
-for (id = 0; id < mcount; id++) {
-	layout_file = "mosaic_" + IJ.pad(id, padlen) + ".txt";
-	ome_tiff = "mosaic_" + IJ.pad(id, padlen) + ".ome.tif ";
+tileconfigs = get_tileconfig_files(input_dir);
+for (i = 0; i < tileconfigs.length; i++) {
+    layout_file = tileconfigs[i];
+    ome_tiff = replace(layout_file, '.txt', '.ome.tif');
 	param = tpl + "layout_file=[" + layout_file + "]";
 	print(hr);
 	print("*** [" + name + "]: processing " + layout_file);
@@ -62,7 +62,7 @@ for (id = 0; id < mcount; id++) {
 }
 duration = (getTime() - time_start) / 1000;
 print(hr);
-print("[" + name + "]: processed " + mcount + " mosaics.");
+print("[" + name + "]: processed " + tileconfigs.length + " mosaics.");
 print("Overall duration: " + duration + "s");
 print(hr);
 

@@ -324,8 +324,6 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
     """
     # TODO: generalize by supplying a dict with values to put between the head
     # and body section of the macro
-    ## mcount = self.experiment['mcount']  # FIXME
-    mcount = experiment.supplement['mcount']
     # by default templates are expected in a subdir of the current package:
     if (tplpath == ''):
         tplpath = join(dirname(__file__), 'ijm_templates')
@@ -339,10 +337,7 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
     ijm = readtxt(pfx + '_head.ijm', tplpath)
     ijm.append('\n')
 
-    ## ijm.append('name = "%s";\n' % self.infile['dname'])  # FIXME
     ijm.append('name = "%s";\n' % experiment.infile['dname'])
-    ijm.append('padlen = %i;\n' % len(str(mcount)))
-    ijm.append('mcount = %i;\n' % mcount)
     # windows path separator (in)sanity:
     path = path.replace('\\', '\\\\')
     ijm.append('input_dir="%s";\n' % path)
@@ -350,7 +345,6 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
 
     # If the overlap is below a certain level (5 percent), we disable
     # computing the actual positions and subpixel accuracy:
-    ## if (self.mosaics[0]['ratio'] > 95.0):  # FIXME
     if (experiment[0].get_overlap('pct') < 5.0):
         ijm.append('compute = false;\n')
 
