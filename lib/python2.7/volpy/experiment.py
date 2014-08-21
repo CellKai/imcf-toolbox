@@ -26,9 +26,9 @@ class Experiment(list):
         datasets : list(Dataset)
         """
         super(Experiment, self).__init__()
-        log.debug("Creating an 'Experiment' object.")
+        log.info("Creating an 'Experiment' object.")
         self.infile = parse_path(infile)
-        log.warn(self.infile)
+        log.debug(self.infile)
 
     def add_dataset(self, dset):
         """Add a dataset to this experiment."""
