@@ -3,9 +3,7 @@
 """Tools to process microscopy experiment data."""
 
 from log import log
-# from misc import readtxt, flatten
-# from volpy import dataset
-from volpy.pathtools import parse_path
+from microscopy.pathtools import parse_path
 
 
 class Experiment(list):

@@ -7,7 +7,7 @@ import ConfigParser
 from os.path import exists
 
 from log import log
-from volpy.pathtools import parse_path
+from microscopy.pathtools import parse_path
 
 
 class DataSet(object):

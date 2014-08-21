@@ -5,8 +5,8 @@
 import xml.etree.ElementTree as etree
 from log import log
 
-from volpy.experiment import MosaicExperiment
-from volpy.dataset import MosaicDataCuboid, ImageDataOIF
+from microscopy.experiment import MosaicExperiment
+from microscopy.dataset import MosaicDataCuboid, ImageDataOIF
 
 
 class FluoViewOIFMosaic(MosaicExperiment):
