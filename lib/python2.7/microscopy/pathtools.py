@@ -2,6 +2,7 @@
 
 """Helper functions to work with filenames."""
 
+import platform
 from os import sep
 import os.path
 
@@ -58,6 +59,31 @@ def parse_path(path):
     parsed['fname'] = os.path.basename(path)
     parsed['dname'] = os.path.basename(os.path.dirname(parsed['path']))
     return parsed
+
+
+def jython_fiji_exists(path):
+    """Wrapper to work around problems with Jython 2.7 in Fiji.
+
+    In current Fiji, the Jython implementation of os.path.exists(path) raises a
+    java.lang.AbstractMethodError iff 'path' doesn't exist. This function
+    catches the exception to allow normal usage of the exists() call.
+    """
+    try:
+        return os.path.exists(path)
+    except java.lang.AbstractMethodError:
+        return False
+
+
+# pylint: disable-msg=C0103
+#   we use the variable name 'exists' in its common spelling (lowercase), so
+#   removing this workaround will be straightforward at a later point
+if platform.python_implementation() == 'Jython':
+    # pylint: disable-msg=F0401
+    #   java.lang is only importable within Jython, pylint would complain
+    import java.lang
+    exists = jython_fiji_exists
+else:
+    exists = os.path.exists
 
 
 if __name__ == "__main__":
