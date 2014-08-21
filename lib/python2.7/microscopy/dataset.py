@@ -4,10 +4,9 @@
 
 import codecs
 import ConfigParser
-from os.path import exists
 
 from log import log
-from microscopy.pathtools import parse_path
+from microscopy.pathtools import parse_path, exists
 
 
 class DataSet(object):
