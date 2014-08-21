@@ -42,7 +42,7 @@ def main():
         dout = args.out
 
     mosaic = fv.FluoViewOIFMosaic(args.mosaic.name)
-    ij.write_all_tile_configs(mosaic)
+    ij.write_all_tile_configs(mosaic, fixsep=args.fixsep)
     code = ij.gen_stitching_macro_code(mosaic, 'stitching', path=dname)
     ij.write_stitching_macro(code, 'stitch_all.ijm', dout)
 
