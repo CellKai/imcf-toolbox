@@ -3,7 +3,7 @@
 """Helper functions to work with filenames."""
 
 from os import sep
-from os.path import basename, dirname
+import os.path
 
 
 def parse_path(path):
@@ -54,9 +54,9 @@ def parse_path(path):
     parsed['orig'] = path
     path = path.replace('\\', sep)
     parsed['full'] = path
-    parsed['path'] = dirname(path) + sep
-    parsed['fname'] = basename(path)
-    parsed['dname'] = basename(dirname(parsed['path']))
+    parsed['path'] = os.path.dirname(path) + sep
+    parsed['fname'] = os.path.basename(path)
+    parsed['dname'] = os.path.basename(os.path.dirname(parsed['path']))
     return parsed
 
 
