@@ -3,7 +3,6 @@
 /*\
  * Variables REQUIRED to be set for body:
  *   name : str (dataset name)
- *   padlen : int (padding length for mosaic numbering)
  *   compute : boolean (whether to compute the overlap)
 \*/
 
