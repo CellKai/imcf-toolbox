@@ -1,5 +1,5 @@
 // an auto-run script with some sanity checking (which is almost impossible
-// with using the macro language
+// with the macro language as it doesn't allow for catching errors/exceptions)
 
 importClass(Packages.ij.IJ);
 
