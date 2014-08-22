@@ -1,1 +1,1 @@
-../../../lib/python2.7/volpy/ijm_templates/stitching_head.ijm
+../../../lib/python2.7/microscopy/ijm_templates/stitching_head.ijm
