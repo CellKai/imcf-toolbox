@@ -4,11 +4,11 @@ BARS = $(wildcard bars/*.ijm)
 ICONS = $(wildcard icons/*)
 CONF = plugins.config
 
-BARS_AUTORUN = $(wildcard macros/*.ijm)
+BARS_AUTORUN = ../auto_run/IMCF_AutoRun_Safe.js
 
 DIST = ../dist
 JAR = $(DIST)/plugins/IMCF/$(subst .lst,.jar,$(PKGLIST))
-AUTO = $(DIST)/macros/AutoRun/imcf_toolbar.ijm
+AUTO = $(DIST)/plugins/Scripts/AutoRun/IMCF_AutoRun_Safe.js
 
 # NOTE: $(@D) references the directory part of a target
 
