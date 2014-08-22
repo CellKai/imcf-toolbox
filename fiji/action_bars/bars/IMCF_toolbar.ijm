@@ -102,6 +102,11 @@ run("Grid/Collection stitching");
 </macro>
 
 <button> 5 line 2
+label=Jython Interpreter
+icon=icons/python.png
+arg=<macro>
+run("Jython Interpreter");
+</macro>
 
 <button> 6 line 2
 label=Stack Registration
