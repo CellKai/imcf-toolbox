@@ -16,6 +16,7 @@ for path in sys.path:
 
 import log
 import misc
+import imcf
 import microscopy
 from microscopy import pathtools
 from microscopy import dataset

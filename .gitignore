@@ -15,3 +15,6 @@ __testdata
 # dist and build targets
 dist/
 build/
+
+# auto-generated files
+fiji/libs/src/imcf.py

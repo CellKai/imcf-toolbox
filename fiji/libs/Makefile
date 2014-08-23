@@ -8,27 +8,30 @@ JAR = $(DIST)/plugins/IMCF/imcf_libs.jar
 
 .PHONY: $(JAR)
 
-all: msg_01 build msg_02 $(JAR) msg_03
+all: head update_ver build $(JAR) tail
 
 clean:
 	rm -v $(JAR)
 
-msg_01:
+head:
 	@ echo '================= $(JAR) ================='
-	@ echo '++++++++++ compiling jython bytecode ++++++++++'
 
-msg_02:
-	@ echo '---------- compiling jython bytecode ----------'
+tail:
+	@ echo '================= $(JAR) ================='
+
+update_ver:
 	@ echo
-	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
-
-msg_03:
-	@ echo '------------- assembling JAR file -------------'
-	@ echo '================= $(JAR) ================='
-
+	@ echo '+++++++++++++ updating version file +++++++++++++'
+	./update_imcf_version.sh
+	@ echo '------------- updating version file -------------'
 build:
+	@ echo '++++++++++ compiling jython bytecode ++++++++++'
 	$(JAVA) -jar $(JYTHON) build.py
+	@ echo '---------- compiling jython bytecode ----------'
 
 # create the JAR file
 $(JAR):
+	@ echo
+	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
 	cd src ; zip -9 -r ../$(JAR) . --include '*.class'
+	@ echo '------------- assembling JAR file -------------'
