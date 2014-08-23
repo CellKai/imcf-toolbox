@@ -17,4 +17,4 @@ dist/
 build/
 
 # auto-generated files
-fiji/libs/src/imcf.py
+lib/python2.7/imcf.py

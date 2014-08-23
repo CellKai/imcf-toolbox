@@ -8,7 +8,7 @@ JAR = $(DIST)/plugins/IMCF/imcf_libs.jar
 
 .PHONY: $(JAR)
 
-all: head update_ver build $(JAR) tail
+all: head build $(JAR) tail
 
 clean:
 	rm -v $(JAR)
@@ -19,11 +19,6 @@ head:
 tail:
 	@ echo '================= $(JAR) ================='
 
-update_ver:
-	@ echo
-	@ echo '+++++++++++++ updating version file +++++++++++++'
-	./update_imcf_version.sh
-	@ echo '------------- updating version file -------------'
 build:
 	@ echo '++++++++++ compiling jython bytecode ++++++++++'
 	$(JAVA) -jar $(JYTHON) build.py
