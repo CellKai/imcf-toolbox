@@ -153,4 +153,6 @@ class FluoViewOIFMosaic(MosaicExperiment):
 if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
     import doctest
-    doctest.testmod()
+    import sys
+    VERB = '-v' in sys.argv
+    doctest.testmod(verbose=VERB)
