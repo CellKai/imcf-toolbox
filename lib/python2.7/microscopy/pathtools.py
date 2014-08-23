@@ -92,6 +92,6 @@ if __name__ == "__main__":
     print('Running doctest on file "%s".' % __file__)
     import doctest
     import sys
-    from volpy import pathtools
+    from microscopy import pathtools
     VERB = '-v' in sys.argv
     doctest.testmod(verbose=VERB)
