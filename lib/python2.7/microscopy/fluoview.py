@@ -25,19 +25,25 @@ class FluoViewOIFMosaic(MosaicExperiment):
 
     Example
     -------
-    >>> import volpy.fluoview as fv
+    >>> import microscopy.fluoview as fv
+    >>> import microscopy.imagej as ij
     >>> from log import set_loglevel
     >>> set_loglevel(3)
-    >>> mosaic = fv.FluoViewMosaic('TESTDATA/mosaic/MATL_Mosaic.log')
-    >>> mosaic.experiment['mcount']
+    >>> mosaic = fv.FluoViewOIFMosaic('TESTDATA/OIFmosaic/MATL_Mosaic.log')
+    >>> len(mosaic)
     1
-    >>> mosaic.experiment['xdir']
+    >>> mosaic.supplement['xdir']
     'LeftToRight'
-    >>> mosaic.mosaics[0]['tiles'][0]['imgf']
-    'Slide1sec001\\\\Slide1sec001.oif'
-    >>> mosaic.write_all_tile_configs()
-    >>> code = mosaic.gen_stitching_macro_code('stitching')
-    >>> mosaic.write_stitching_macro(code)
+    >>> mosaic[0].dim
+    {'Y': 2, 'X': 2, 'Z': 1}
+    >>> mosaic[0].subvol[0].storage['dname']
+    'Slide1sec001'
+    >>> mosaic[0].subvol[0].storage['fname']
+    'Slide1sec001_01.oif'
+    >>> dname = mosaic[0].storage['path']
+    >>> ij.write_all_tile_configs(mosaic)
+    >>> code = ij.gen_stitching_macro_code(mosaic, 'stitching')
+    >>> ij.write_stitching_macro(code, 'stitch_all.ijm', dname)
     """
 
     def __init__(self, infile):
