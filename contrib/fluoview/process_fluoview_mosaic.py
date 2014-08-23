@@ -2,8 +2,8 @@
 
 """Parse a FluoView project file and generate code for ImageJ's stitcher."""
 
-import volpy.fluoview as fv
-import volpy.imagej as ij
+import microscopy.fluoview as fv
+import microscopy.imagej as ij
 from log import set_loglevel
 import sys
 import argparse
