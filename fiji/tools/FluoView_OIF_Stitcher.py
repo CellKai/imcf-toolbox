@@ -43,9 +43,10 @@ from ij.gui import GenericDialog
 from java.lang.System import getProperty
 imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
 imcftpl = join(imcfdir, 'imcf_macros.jar')
-sys.path.append(join(imcfdir, 'imcf_libs.jar'))
+# sys.path.append(join(imcfdir, 'imcf_libs.jar'))  # FIXME: remove?
 
-import fluoview as fv
+import microscopy.fluoview as fv
+from microscopy import imagej
 from log import log, set_loglevel
 from misc import flatten
 
@@ -65,12 +66,11 @@ def gen_mosaic_details(mosaics):
     """Generate human readable string of details about the parsed mosaics."""
     # TODO: could go into fluoview package
     msg = ""
-    mcount = mosaics.experiment['mcount']
-    msg += "Parsed %i mosaics from the FluoView project log.\n \n" % mcount
-    for mos in mosaics.mosaics:
-        msg += "Mosaic %i: " % mos['id']
-        msg += "%i x %i tiles, " % (mos['xcount'], mos['ycount'])
-        msg += "%i%% overlap.\n" % int(100 - mos['ratio'])
+    msg += "Parsed %i mosaics from the FluoView project.\n \n" % len(mosaics)
+    for mos in mosaics:
+        msg += "Mosaic %i: " % mos.supplement['index']
+        msg += "%i x %i tiles, " % (mos.dim['X'], mos.dim['Y'])
+        msg += "%.1f%% overlap.\n" % mos.get_overlap()
     return(msg)
 
 
@@ -80,17 +80,21 @@ def main_interactive():
     if (base is None):
         return
     log.warn(base + fname)
-    mosaic = fv.FluoViewMosaic(join(base, fname))
+    mosaics = fv.FluoViewOIFMosaic(join(base, fname))
     dialog = GenericDialog('FluoView OIF Stitcher')
-    msg = gen_mosaic_details(mosaic)
+    msg = gen_mosaic_details(mosaics)
     msg += "\n \nPress [OK] to write tile configuration files\n"
     msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
-    code = mosaic.gen_stitching_macro_code('templates/stitching',
+    code = imagej.gen_stitching_macro_code(mosaics, 'templates/stitching',
                                            path=base, tplpath=imcftpl)
     if dialog.wasOKed():
-        mosaic.write_all_tile_configs(fixpath=True)
+        log.info('Writing stitching macro.')
+        imagej.write_stitching_macro(code, fname='stitch_all.ijm', dname=base)
+        log.info('Writing tile configuration files.')
+        imagej.write_all_tile_configs(mosaics, fixsep=True)
+        log.info('Launching stitching macro.')
         IJ.runMacro(flatten(code))
     else:
         print(flatten(code))
@@ -105,17 +109,17 @@ def main_noninteractive():
     log.debug('Python FluoView package file: %s' % fv.__file__)
     base = dirname(args.mosaiclog)
     fname = basename(args.mosaiclog)
-    mosaic = fv.FluoViewMosaic(join(base, fname))
-    log.warn(gen_mosaic_details(mosaic))
+    mosaics = fv.FluoViewOIFMosaic(join(base, fname))
+    log.warn(gen_mosaic_details(mosaics))
     if args.templates is not None:
         imcftpl = args.templates
-    code = mosaic.gen_stitching_macro_code('templates/stitching',
+    code = imagej.gen_stitching_macro_code(mosaics, 'templates/stitching',
                                            path=base, tplpath=imcftpl)
     if not args.dryrun:
         log.info('Writing stitching macro.')
-        mosaic.write_stitching_macro(code, fname='stitch_all.ijm')
+        imagej.write_stitching_macro(code, fname='stitch_all.ijm', dname=base)
         log.info('Writing tile configuration files.')
-        mosaic.write_all_tile_configs(fixpath=True)
+        imagej.write_all_tile_configs(mosaics, fixsep=True)
         log.info('Launching stitching macro.')
         IJ.runMacro(flatten(code))
     else:
