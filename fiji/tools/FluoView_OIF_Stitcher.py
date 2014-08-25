@@ -25,6 +25,15 @@ parsing them itself, plugin-arguments have to be prefixed with a TRIPLE dash
 
 MOSAICLOG="../../sample_data/fluoview/minimal_1mosaic_15pct/MATL_Mosaic.log"
 ImageJ-linux64 --headless FluoView_OIF_Stitcher.py ---mosaiclog $MOSAICLOG
+
+
+For debugging the interactive mode within Fiji, start the Jython Interpreter
+and run the following commands:
+
+>>> import sys
+>>> sys.path.insert(0, '/opt/imcf_toolbox/fiji/tools')
+>>> import FluoView_OIF_Stitcher as st
+>>> st.main_interactive()
 """
 
 import sys
