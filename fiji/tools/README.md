@@ -23,17 +23,37 @@ Testing with the Jython Console
 ===============================
 
 To test scripts and modules, the Jython Console is a very helpful tool. For
-importing custom packages, the path needs to be extended. The following example
-does this for the FluoView Stitcher:
+importing custom packages, the path needs to be extended.
+
 
 ```
 import sys
 imcftb = '/opt/imcf_toolbox/'
 sys.path.insert(0, imcftb + 'fiji/tools')
 sys.path.insert(0, imcftb + 'fiji/libs/src')
+```
 
+Then you can import and run the FluoView Stitcher:
+```
 import FluoView_OIF_Stitcher as st
 
 st.main_interactive()
+```
 
+For running the mosaic parser directly, use this:
+```
+from microscopy import fluoview
+from microscopy import imagej
+(base, fname) = st.ui_get_input_file()
+mosaic = fluoview.FluoViewOIFMosaic(base + fname)
+```
+
+To make the default log messages go to the ImageJ log window, use the custom
+logging handler provided in the 'ijpy' module:
+```
+from log import log
+import ijpy
+ijlogger = ijpy.IJLogHandler()
+log.addHandler(ijlogger)
+log.warn('oooomph!')
 ```
