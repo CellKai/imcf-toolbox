@@ -102,6 +102,15 @@ def main_interactive():
     IJ.showStatus("Finished parsing mosaics.")
     IJ.showProgress(0.7)
     dialog = GenericDialog('FluoView OIF Stitcher')
+    if len(mosaics) == 0:
+        msg = ("Couldn't find any (valid) mosaics in the project file.\n"
+               " \n"
+               "Please make sure to have all files available!\n"
+               " \n"
+               "Will stop now.\n")
+        dialog.addMessage(msg)
+        dialog.showDialog()
+        return
     msg = gen_mosaic_details(mosaics)
     log.warn(msg)
     msg += "\n \nPress [OK] to write tile configuration files\n"
