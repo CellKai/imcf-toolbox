@@ -90,11 +90,17 @@ def main_interactive():
     log.addHandler(ijlogger)
     msg = "FluoView OIF stitcher (%s), interactive mode." % imcf.VERSION
     log.warn(msg)
+    IJ.showStatus(msg)
+    IJ.showProgress(0.0)
     (base, fname) = ui_get_input_file()
     if (base is None):
         return
     log.warn("Parsing project file: %s" % (base + fname))
+    IJ.showStatus("Parsing mosaics...")
+    IJ.showProgress(0.2)
     mosaics = fv.FluoViewOIFMosaic(join(base, fname))
+    IJ.showStatus("Finished parsing mosaics.")
+    IJ.showProgress(0.7)
     dialog = GenericDialog('FluoView OIF Stitcher')
     msg = gen_mosaic_details(mosaics)
     log.warn(msg)
@@ -111,10 +117,13 @@ def main_interactive():
 
     if dialog.wasOKed():
         log.warn('Writing stitching macro.')
+        IJ.showProgress(0.8)
         imagej.write_stitching_macro(code, fname='stitch_all.ijm', dname=base)
         log.warn('Writing tile configuration files.')
+        IJ.showProgress(0.9)
         imagej.write_all_tile_configs(mosaics, fixsep=True)
         log.warn('Launching stitching macro.')
+        IJ.showProgress(1.0)
         IJ.runMacro(flatten(code))
 
 
