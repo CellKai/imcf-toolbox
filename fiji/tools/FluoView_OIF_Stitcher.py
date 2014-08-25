@@ -57,6 +57,8 @@ import microscopy.fluoview as fv
 from microscopy import imagej
 from log import log, set_loglevel
 from misc import flatten
+from ijpy import IJLogHandler
+import imcf
 
 
 def ui_get_input_file():
@@ -84,28 +86,36 @@ def gen_mosaic_details(mosaics):
 
 def main_interactive():
     """The main routine for running interactively."""
+    ijlogger = IJLogHandler()
+    log.addHandler(ijlogger)
+    msg = "FluoView OIF stitcher (%s), interactive mode." % imcf.VERSION
+    log.warn(msg)
     (base, fname) = ui_get_input_file()
     if (base is None):
         return
-    log.warn(base + fname)
+    log.warn("Parsing project file: %s" % (base + fname))
     mosaics = fv.FluoViewOIFMosaic(join(base, fname))
     dialog = GenericDialog('FluoView OIF Stitcher')
     msg = gen_mosaic_details(mosaics)
+    log.warn(msg)
     msg += "\n \nPress [OK] to write tile configuration files\n"
     msg += "and continue with running the stitcher."
     dialog.addMessage(msg)
     dialog.showDialog()
+
     code = imagej.gen_stitching_macro_code(mosaics, 'templates/stitching',
                                            path=base, tplpath=imcftpl)
+    log.warn("============= generated macro code =============")
+    log.warn(flatten(code))
+    log.warn("============= end of generated  macro code =============")
+
     if dialog.wasOKed():
-        log.info('Writing stitching macro.')
+        log.warn('Writing stitching macro.')
         imagej.write_stitching_macro(code, fname='stitch_all.ijm', dname=base)
-        log.info('Writing tile configuration files.')
+        log.warn('Writing tile configuration files.')
         imagej.write_all_tile_configs(mosaics, fixsep=True)
-        log.info('Launching stitching macro.')
+        log.warn('Launching stitching macro.')
         IJ.runMacro(flatten(code))
-    else:
-        print(flatten(code))
 
 
 def main_noninteractive():
