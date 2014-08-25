@@ -18,6 +18,7 @@ import log
 import misc
 import imcf
 import microscopy
+import ijpy
 from microscopy import pathtools
 from microscopy import dataset
 from microscopy import experiment
