@@ -28,16 +28,12 @@ does this for the FluoView Stitcher:
 
 ```
 import sys
-imcftb = '/full/path/to/imcf_toolbox/'
+imcftb = '/opt/imcf_toolbox/'
 sys.path.insert(0, imcftb + 'fiji/tools')
-sys.path.insert(0, imcftb + 'lib/python2.7/microscopy')
-sys.path.insert(0, imcftb + 'lib/python2.7')
+sys.path.insert(0, imcftb + 'fiji/libs/src')
 
-from microscopy import fluoview
-from microscopy import imagej
 import FluoView_OIF_Stitcher as st
 
-(base, fname) = st.ui_get_input_file()
+st.main_interactive()
 
-mosaic = fluoview.FluoViewOIFMosaic(base + fname)
 ```
