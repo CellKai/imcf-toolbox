@@ -52,7 +52,6 @@ from ij.gui import GenericDialog
 from java.lang.System import getProperty
 imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
 imcftpl = join(imcfdir, 'imcf_macros.jar')
-# sys.path.append(join(imcfdir, 'imcf_libs.jar'))  # FIXME: remove?
 
 import microscopy.fluoview as fv
 from microscopy import imagej
