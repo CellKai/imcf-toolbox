@@ -7,8 +7,6 @@ CONF = plugins.config
 DIST = ../dist
 JAR = $(DIST)/plugins/IMCF/$(subst .lst,.jar,$(PKGLIST))
 
-# NOTE: $(@D) references the directory part of a target
-
 all: msg_01 $(CLASSES) msg_02 $(JAR) msg_03
 
 clean:
@@ -30,6 +28,8 @@ msg_03:
 # compile the plugin wrappers
 %.class: %.java %.py
 	fiji-linux64 --javac $<
+
+# NOTE: $(@D) references the directory part of a target
 
 # create the JAR file
 $(JAR): $(SCRIPTS) $(CLASSES) $(CONF) $(PKGLIST)
