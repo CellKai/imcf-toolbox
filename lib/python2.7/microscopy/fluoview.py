@@ -108,47 +108,55 @@ class FluoViewOIFMosaic(MosaicExperiment):
         return trees
 
     def add_mosaics(self):
-        """Parse a list of XML subtrees and create MosaicDatasets from them.
+        """Run the parser for all relevant XML subtrees."""
+        for tree in self.mosaictrees:
+            self.add_mosaic(tree)
+
+    def add_mosaic(self, tree):
+        """Parse an XML subtree and create a MosaicDataset from it.
+
+        Parameters
+        ----------
+        tree : xml.etree.ElementTree.Element
         """
-        for tree in self.tree.getroot().findall('Mosaic'):
-            # lambda functions for tree.find().text and int/float conversions:
-            tft = lambda p: tree.find(p).text
-            tfi = lambda p: int(tft(p))
-            tff = lambda p: float(tft(p))
-            idx = int(tree.attrib['No'])
-            assert tft('XScanDirection') == 'LeftToRight'
-            assert tft('YScanDirection') == 'TopToBottom'
+        # lambda functions for tree.find().text and int/float conversions:
+        tft = lambda p: tree.find(p).text
+        tfi = lambda p: int(tft(p))
+        tff = lambda p: float(tft(p))
+        idx = int(tree.attrib['No'])
+        assert tft('XScanDirection') == 'LeftToRight'
+        assert tft('YScanDirection') == 'TopToBottom'
 
-            # assemble the dataset (MosaicDataCuboid):
-            # use the infile for the mosaic_ds infile as well as individual
-            # mosaics don't have separate project files in our case
-            mosaic_ds = MosaicDataCuboid('tree', self.infile['orig'],
-                                         (tfi('XImages'), tfi('YImages'), 1))
-            mosaic_ds.set_overlap(100.0 - tff('IndexRatio'), 'pct')
-            mosaic_ds.supplement['index'] = idx
+        # assemble the dataset (MosaicDataCuboid):
+        # use the infile for the mosaic_ds infile as well as individual
+        # mosaics don't have separate project files in our case
+        mosaic_ds = MosaicDataCuboid('tree', self.infile['orig'],
+                                     (tfi('XImages'), tfi('YImages'), 1))
+        mosaic_ds.set_overlap(100.0 - tff('IndexRatio'), 'pct')
+        mosaic_ds.supplement['index'] = idx
 
-            # Parsing and assembling the ImageData section should be considered
-            # to be moved into a separate method.
-            # ImageData section:
-            for img in tree.findall('ImageInfo'):
-                tft = lambda p: img.find(p).text
-                tfi = lambda p: int(img.find(p).text)
-                tff = lambda p: float(img.find(p).text)
-                try:
-                    oif_ds = ImageDataOIF(self.infile['path']
-                                          + tft('Filename'))
-                    oif_ds.set_stagecoords((tff('XPos'), tff('YPos')))
-                    oif_ds.set_tilenumbers(tfi('Xno'), tfi('Yno'))
-                    oif_ds.set_relpos(mosaic_ds.get_overlap('pct'))
-                    oif_ds.supplement['index'] = tfi('No')
-                    mosaic_ds.add_subvol(oif_ds)
-                except IOError as err:
-                    log.info('Broken/missing image data: %s' % err)
-                    mosaic_ds = None
-            if mosaic_ds is not None:
-                self.add_dataset(mosaic_ds)
-            else:
-                log.warn('Mosaic %s: incomplete subvolumes, SKIPPING!' % idx)
+        # Parsing and assembling the ImageData section should be considered
+        # to be moved into a separate method.
+        # ImageData section:
+        for img in tree.findall('ImageInfo'):
+            tft = lambda p: img.find(p).text
+            tfi = lambda p: int(img.find(p).text)
+            tff = lambda p: float(img.find(p).text)
+            try:
+                oif_ds = ImageDataOIF(self.infile['path']
+                                      + tft('Filename'))
+                oif_ds.set_stagecoords((tff('XPos'), tff('YPos')))
+                oif_ds.set_tilenumbers(tfi('Xno'), tfi('Yno'))
+                oif_ds.set_relpos(mosaic_ds.get_overlap('pct'))
+                oif_ds.supplement['index'] = tfi('No')
+                mosaic_ds.add_subvol(oif_ds)
+            except IOError as err:
+                log.info('Broken/missing image data: %s' % err)
+                mosaic_ds = None
+        if mosaic_ds is not None:
+            self.add_dataset(mosaic_ds)
+        else:
+            log.warn('Mosaic %s: incomplete subvolumes, SKIPPING!' % idx)
 
 
 if __name__ == "__main__":
