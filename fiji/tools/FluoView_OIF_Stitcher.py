@@ -108,6 +108,7 @@ def main_interactive():
                "Please make sure to have all files available!\n"
                " \n"
                "Will stop now.\n")
+        log.warn(msg)
         dialog.addMessage(msg)
         dialog.showDialog()
         return
