@@ -102,24 +102,6 @@ class FluoViewOIFMosaic(MosaicExperiment):
 
     def add_mosaics(self):
         """Parse a list of XML subtrees and create MosaicDatasets from them.
-
-        Old datastructure
-        -----------------
-        This is the previously used datastructure, for documentation purposes.
-
-        mosaic : {'id': int,
-                  'ratio': float,  # non-overlapping tile percentage
-                  'xcount': int,   # number of tiles in X
-                  'ycount': int,   # number of tiles in Y
-                  'tiles': [{
-                             'imgf': str,    # tile filename
-                             'imgid': int,   # tile ID
-                             'xno': int,     # tile index in X direction
-                             'yno': int,     # tile index in Y direction
-                             'xpos': float,  # tile position in X direction
-                             'ypos': float   # tile position in Y direction
-                           }]
-                 }
         """
         for tree in self.tree.getroot().findall('Mosaic'):
             # lambda functions for tree.find().text and int/float conversions:
