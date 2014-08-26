@@ -64,6 +64,7 @@ class FluoViewOIFMosaic(MosaicExperiment):
         """
         super(FluoViewOIFMosaic, self).__init__(infile)
         self.tree = self.validate_xml()
+        self.mosaictrees = self.find_mosaictrees()
         if runparser:
             self.add_mosaics()
 
@@ -99,6 +100,12 @@ class FluoViewOIFMosaic(MosaicExperiment):
         }
         log.info('Finished validating XML.')
         return tree
+
+    def find_mosaictrees(self):
+        """Locate potential mosaics within the XML tree."""
+        trees = self.tree.getroot().findall('Mosaic')
+        log.warn("Found %i potential mosaics in XML." % len(trees))
+        return trees
 
     def add_mosaics(self):
         """Parse a list of XML subtrees and create MosaicDatasets from them.
