@@ -152,7 +152,9 @@ class FluoViewOIFMosaic(MosaicExperiment):
                 mosaic_ds.add_subvol(oif_ds)
             except IOError as err:
                 log.info('Broken/missing image data: %s' % err)
+                # this subvolume is broken, so we entirely cancel this mosaic:
                 mosaic_ds = None
+                break
         if mosaic_ds is not None:
             self.add_dataset(mosaic_ds)
         else:
