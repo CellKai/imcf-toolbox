@@ -1,6 +1,6 @@
 .PHONY: all
 
-DIRS = action_bars auto_run tools libs macros
+DIRS = $(shell find -mindepth 1 -type d)
 
 # process all dirs specified above:
 all:
@@ -8,4 +8,3 @@ all:
 
 clean:
 	@ for i in $(DIRS); do make --directory $$i clean; done
-	@ rm -rvf dist/

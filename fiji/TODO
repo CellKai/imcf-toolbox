@@ -1,1 +1,1 @@
-integrate "auto_run" and "scripts" into Makefiles
+integrate "scripts" into Makefiles
