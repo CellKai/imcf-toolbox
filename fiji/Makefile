@@ -1,6 +1,6 @@
 .PHONY: all
 
-DIRS = action_bars auto_run tools libs macros
+DIRS = action_bars auto_run libs macros scripts tools
 
 # process all dirs specified above:
 all:
