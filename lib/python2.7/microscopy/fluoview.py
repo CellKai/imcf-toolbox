@@ -46,7 +46,7 @@ class FluoViewOIFMosaic(MosaicExperiment):
     >>> ij.write_stitching_macro(code, 'stitch_all.ijm', dname)
     """
 
-    def __init__(self, infile):
+    def __init__(self, infile, runparser=True):
         """Parse all required values from the XML file.
 
         Instance Variables
@@ -56,10 +56,16 @@ class FluoViewOIFMosaic(MosaicExperiment):
                       'xdir': str,   # X axis direction
                       'ydir': str    # Y axis direction
                      }
+
+        Parameters
+        ----------
+        runparser : bool (optional)
+            Determines whether the tree should be parsed immediately.
         """
         super(FluoViewOIFMosaic, self).__init__(infile)
         self.tree = self.validate_xml()
-        self.add_mosaics()
+        if runparser:
+            self.add_mosaics()
 
     def validate_xml(self):
         """Parse and check XML for being a valid FluoView mosaic experiment.
