@@ -11,7 +11,7 @@ JAR = $(DIST)/plugins/IMCF/imcf_libs.jar
 all: head build $(JAR) tail
 
 clean:
-	rm -v $(JAR)
+	@ rm -vf $(JAR)
 
 head:
 	@ echo '================= $(JAR) ================='
@@ -24,9 +24,12 @@ build:
 	$(JAVA) -jar $(JYTHON) build.py
 	@ echo '---------- compiling jython bytecode ----------'
 
+# NOTE: $(@D) references the directory part of a target
+
 # create the JAR file
 $(JAR):
 	@ echo
 	@ echo '+++++++++++++ assembling JAR file +++++++++++++'
+	@ mkdir -pv $(@D)
 	cd src ; zip -9 -r ../$(JAR) . --include '*.class'
 	@ echo '------------- assembling JAR file -------------'
