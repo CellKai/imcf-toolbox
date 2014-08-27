@@ -75,8 +75,12 @@ def ui_get_input_file():
 def gen_mosaic_details(mosaics):
     """Generate human readable string of details about the parsed mosaics."""
     # TODO: could go into fluoview package
-    msg = ""
-    msg += "Parsed %i mosaics from the FluoView project.\n \n" % len(mosaics)
+    failcount = len(mosaics.mosaictrees) - len(mosaics)
+    msg = "Parsed %i mosaics from the FluoView project.\n \n " % len(mosaics)
+    if failcount > 0:
+        msg += ("\n==== WARNING ====== WARNING ====\n \n"
+                "Parsing failed on %i mosaic(s). Missing files?\n "
+                "\n==== WARNING ====== WARNING ====\n \n \n" % failcount)
     for mos in mosaics:
         msg += "Mosaic %i: " % mos.supplement['index']
         msg += "%i x %i tiles, " % (mos.dim['X'], mos.dim['Y'])
