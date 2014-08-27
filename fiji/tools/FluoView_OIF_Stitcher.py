@@ -95,9 +95,12 @@ def main_interactive():
     if (base is None):
         return
     log.warn("Parsing project file: %s" % (base + fname))
+    IJ.showStatus("Parsing experiment file...")
+    mosaics = fv.FluoViewOIFMosaic(join(base, fname), runparser=False)
     IJ.showStatus("Parsing mosaics...")
-    mosaics = fv.FluoViewOIFMosaic(join(base, fname))
-    IJ.showStatus("Finished parsing mosaics.")
+    for subtree in mosaics.mosaictrees:
+        mosaics.add_mosaic(subtree)
+    IJ.showStatus("Parsed %i mosaics." % len(mosaics))
     dialog = GenericDialog('FluoView OIF Stitcher')
     if len(mosaics) == 0:
         msg = ("Couldn't find any (valid) mosaics in the project file.\n"
