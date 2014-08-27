@@ -52,7 +52,9 @@ def gen_tile_config(mosaic_ds, fixsep=False):
     app('# Define the image coordinates (in pixels)\n')
     for vol in mosaic_ds.subvol:
         line = '%s; ; ' % join(vol.storage['dname'], vol.storage['fname'])
-        # TODO: investigate if the stitcher accepts '/' as pathsep on windows
+        # TODO: the stitcher accepts '/' as pathsep on windows, so we could
+        # get rid of this switch and just replace it by forward slashes in
+        # any case:
         if(fixsep):
             line = line.replace('\\', sep)
         line += coord_format % vol.position['relative']
