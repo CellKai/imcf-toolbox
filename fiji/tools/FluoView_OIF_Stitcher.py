@@ -98,8 +98,14 @@ def main_interactive():
     IJ.showStatus("Parsing experiment file...")
     mosaics = fv.FluoViewOIFMosaic(join(base, fname), runparser=False)
     IJ.showStatus("Parsing mosaics...")
+    progress = 0.0
+    count = len(mosaics.mosaictrees)
+    step = 1.0 / count
     for subtree in mosaics.mosaictrees:
+        IJ.showProgress(progress)
         mosaics.add_mosaic(subtree)
+        progress += step
+    IJ.showProgress(progress)
     IJ.showStatus("Parsed %i mosaics." % len(mosaics))
     dialog = GenericDialog('FluoView OIF Stitcher')
     if len(mosaics) == 0:
