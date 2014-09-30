@@ -6,7 +6,11 @@ compute = true;  // whether to compute the overlap)
 input_dir = '';  // user will be asked if empty
 use_batch_mode = false;
 
+// remember starting time to calculate overall runtime
 time_start = getTime();
+// generate a timestamp string to print into the logfile
+getDateAndTime(year, month, dow, dom, hour, minute, second, msec);
+tstamp = "" + year + "-" + month + "-" + dom + "_" + hour + "" + minute;
 
 function get_tileconfig_files(dir) {
     /* Generate an array with tile config files.

@@ -65,6 +65,13 @@ print("[" + name + "]: processed " + tileconfigs.length + " mosaics.");
 print("Overall duration: " + duration + "s");
 print(hr);
 
+// save the "Log" window into a text file:
+logmessages = getInfo("log");
+fh = File.open(output_dir + sep + 'log_stitching_' + tstamp + '.txt');
+print(fh, tstamp); // write the timestamp as first line
+print(fh, logmessages);
+File.close(fh);
+
 setBatchMode(false);
 
 // END stitching macro BODY
