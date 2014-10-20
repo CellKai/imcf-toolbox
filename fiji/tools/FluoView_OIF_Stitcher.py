@@ -34,6 +34,17 @@ and run the following commands:
 >>> sys.path.insert(0, '/opt/imcf_toolbox/fiji/tools')
 >>> import FluoView_OIF_Stitcher as st
 >>> st.main_interactive()
+
+To use the script that is actually deployed in a Fiji installation (in the
+.jar file), use the following commands to adjust the Python path:
+
+import sys
+from os.path import join
+from java.lang.System import getProperty
+imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
+sys.path.insert(0, join(imcfdir, 'imcf_tools.jar'))
+import FluoView_OIF_Stitcher as st
+st.main_interactive()
 """
 
 import sys
