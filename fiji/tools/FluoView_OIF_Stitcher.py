@@ -101,11 +101,7 @@ def gen_mosaic_details(mosaics):
 
 def main_interactive():
     """The main routine for running interactively."""
-    ijlogger = IJLogHandler()
-    log.addHandler(ijlogger)
-    msg = "FluoView OIF stitcher (%s), interactive mode." % imcf.VERSION
-    log.warn(msg)
-    IJ.showStatus(msg)
+    log.info('Running in interactive mode.')
     (base, fname) = ui_get_input_file()
     if (base is None):
         return
@@ -213,6 +209,10 @@ def parse_arguments():
 # Fiji's menu, this allows being imported in the Jython console for testing
 # and debugging purposes:
 if (__name__ == '__main__'):
+    ijlogger = IJLogHandler()
+    log.addHandler(ijlogger)
+    log.warn("FluoView OIF stitcher (%s)." % imcf.VERSION)
+    log.warn("Arguments (sys.argv): %s" % sys.argv)
     if (len(sys.argv) > 0):
         sys.exit(main_noninteractive())
     else:
