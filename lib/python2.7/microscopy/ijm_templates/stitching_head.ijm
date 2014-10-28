@@ -1,8 +1,5 @@
 // BEGIN stitching macro HEAD
 
-// clear the "Log" window before doing anything else:
-print("\\Clear");
-
 // default values required to be set:
 name = '';  // the dataset name
 compute = true;  // whether to compute the overlap)
