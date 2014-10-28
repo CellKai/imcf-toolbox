@@ -1,6 +1,6 @@
 FIJI = $(shell cat fijipath)
 JAVA = $(FIJI)/java/linux-amd64/jdk1.6.0_24/jre/bin/java
-JYTHON = $(FIJI)/jars/jython-2.7-b1.jar
+JYTHON = $(shell cat jythonpath)/jython-2.7-b1.jar
 
 DIST = ../dist
 JAR = $(DIST)/plugins/IMCF/imcf_libs.jar
