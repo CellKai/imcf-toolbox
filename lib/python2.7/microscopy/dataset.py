@@ -168,12 +168,12 @@ class ImageDataOlympus(ImageData):
         """
         fpath = self.storage
         ext = fpath['ext']
-        log.debug("Validating oib path: %s" % fpath)
+        log.debug("Validating file path: %s" % fpath)
         if not exists(fpath['full']):
             fpath = parse_path(fpath['orig'].replace(ext, '_01' + ext))
             log.debug("Trying next path: %s" % fpath['full'])
         if not exists(fpath['full']):
-            raise IOError("Can't find OIB file: %s" % fpath)
+            raise IOError("Can't find file: %s" % fpath)
         return fpath
 
     def parse_dimensions(self):
@@ -262,7 +262,6 @@ class ImageDataOIF(ImageDataOlympus):
         """
         log.debug("ImageDataOIF(%s)" % st_path)
         super(ImageDataOIF, self).__init__(st_path)
-        self.storage = self.validate_filepath()
         self.parser = self.setup_parser()
         self._dim = None  # override _dim to mark it as not yet known
 
