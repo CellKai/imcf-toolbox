@@ -22,6 +22,7 @@ def parse_path(path):
         'path' : str   # like previous, up to (including) the last separator
         'dname' : str  # segment between the last two separators (directory)
         'fname' : str  # segment after the last separator (filename)
+        'ext' : str    # filename extension, containing max 1 period
     }
 
     Example
@@ -58,6 +59,7 @@ def parse_path(path):
     parsed['path'] = os.path.dirname(path) + sep
     parsed['fname'] = os.path.basename(path)
     parsed['dname'] = os.path.basename(os.path.dirname(parsed['path']))
+    parsed['ext'] = os.path.splitext(parsed['fname'])[1]
     return parsed
 
 
