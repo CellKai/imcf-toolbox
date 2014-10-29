@@ -320,29 +320,41 @@ class ImageDataOIB(ImageData):
         Use the 'codecs' package to set up a ConfigParser object that can
         properly handle the UTF-16 encoded .oib files.
         """
+        oibinfo = 'OibInfo.txt'
+        encoding = 'utf16'
+        expected_version = '2.0.0.0'
         # TODO: investigate usage of 'io' package instead of 'codecs'
         oib = self.storage['full']
         log.info('Parsing OIB file: %s' % oib)
-        ole = OleFileIO_PL.OleFileIO(oib)
-        stream = ole.openstream(['OibInfo.txt'])
         try:
-            conv = codecs.decode(stream.read(), 'utf16')
-        except IOError:
-            raise IOError("Error parsing OIB file (does it exist?): %s" % oib)
+            ole = OleFileIO_PL.OleFileIO(oib)
+        except IOError as err:
+            raise IOError("Error parsing OIB file: %s" % err)
+        log.warn('Parsing OIB description file "%s".' % oibinfo)
+        try:
+            stream = ole.openstream([oibinfo])
+        except IOError as err:
+            raise IOError("OIB description (%s) missing: %s" % (oibinfo, err))
+        try:
+            conv = codecs.decode(stream.read(), encoding)
+        except UnicodeDecodeError as err:
+            raise UnicodeDecodeError("OIB has unexpected encoding: %s" % err)
         parser = ConfigParser.RawConfigParser()
         parser.readfp(StringIO(conv))
         oibver = parser.get(u'OibSaveInfo', u'Version')
         mainfile = parser.get(u'OibSaveInfo', u'MainFileName')
-        log.warn('OIB Format Version: %s' % oibver)
-        log.warn('Main File Name: %s' % mainfile)
+        if oibver != expected_version:
+            log.warn('WARNING: OIB has unknown format version %s!' % oibver)
+        else:
+            log.info('OIB Format Version: %s' % oibver)
+        log.debug('Main File Name: %s' % mainfile)
         stream.close()
+        log.warn('Finished parsing OIB description file.')
         # replace stream and parser with the mainfile:
         stream = ole.openstream([mainfile])
-        conv = codecs.decode(stream.read(), 'utf16')
-        parser = ConfigParser.RawConfigParser()
+        conv = codecs.decode(stream.read(), encoding)
         parser.readfp(StringIO(conv))
-
-        # conv.close()
+        # clean up and return the parser:
         log.debug('Finished parsing OIB file.')
         stream.close()
         ole.close()
