@@ -405,8 +405,12 @@ class ImageDataOIB(ImageDataOlympus):
     def setup_parser(self):
         """Set up the ConfigParser object for this .oib file.
 
-        Use the 'codecs' package to set up a ConfigParser object that can
-        properly handle the UTF-16 encoded .oib files.
+        Use the 'OleFileIO_PL' package to open the OIB container file, read in
+        the description file (using the 'codecs' package to properly handle the
+        UTF-16 encoding). Some minor checks on the description file are done
+        where also the "main" file of the OIB container (containing all the
+        metadata like dimensions, channels, etc.) is identified and eventually
+        the parser is set up for this file.
         """
         oibinfo = 'OibInfo.txt'
         encoding = 'utf16'
