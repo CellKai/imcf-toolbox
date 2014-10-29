@@ -382,7 +382,7 @@ class ImageDataOIF(ImageData):
         self.position['relative'] = (pos_x, pos_y)
 
 
-class ImageDataOIB(ImageData):
+class ImageDataOIB(ImageDataOlympus):
 
     """Specific DataSet class for images in Olympus OIB format."""
 
@@ -396,43 +396,11 @@ class ImageDataOIB(ImageData):
 
         Instance Variables
         ------------------
-        For inherited variables, see ImageData.
+        For inherited variables, see ImageDataOlympus (and ImageData).
         """
         log.debug("ImageDataOIB(%s)" % st_path)
-        super(ImageDataOIB, self).__init__('stack', 'tree', st_path)
-        self.storage = self.validate_filepath()
+        super(ImageDataOIB, self).__init__(st_path)
         self.parser = self.setup_parser()
-        self._dim = None  # override _dim to mark it as not yet known
-
-    def validate_filepath(self):
-        """Fix the broken filenames in FluoView experiment files.
-
-        The FluoView software usually stores corrupted filenames in its
-        experiment description files, that have a missing suffix, e.g.
-
-            Slide1sec001\\Slide1sec001.oib
-
-        whereas the correct filename would be
-
-            Slide1sec001\\Slide1sec001_01.oib
-
-        This function attempts to fix this by checking if the supplied path is
-        actually existing and trying the default suffix if not. Raises an
-        IOError exception if no corresponding file can be found.
-
-        Returns
-        -------
-        storage : pathtools.parse_path
-        """
-        fpath = self.storage
-        ext = fpath['ext']
-        log.debug("Validating oib path: %s" % fpath)
-        if not exists(fpath['full']):
-            fpath = parse_path(fpath['orig'].replace(ext, '_01' + ext))
-            log.debug("Trying next path: %s" % fpath['full'])
-        if not exists(fpath['full']):
-            raise IOError("Can't find OIB file: %s" % fpath)
-        return fpath
 
     def setup_parser(self):
         """Set up the ConfigParser object for this .oib file.
@@ -479,73 +447,6 @@ class ImageDataOIB(ImageData):
         stream.close()
         ole.close()
         return parser
-
-    def parse_dimensions(self):
-        """Read image dimensions from a ConfigParser object.
-
-        Returns
-        -------
-        dim : (int, int)
-            Pixel dimensions in X and Y direction as tuple.
-        """
-        get = self.parser.get
-        try:
-            dim_b = get(u'Reference Image Parameter', u'ValidBitCounts')
-            dim_x = get(u'Reference Image Parameter', u'ImageHeight')
-            dim_y = get(u'Reference Image Parameter', u'ImageWidth')
-            dim_z = get(u'Axis 3 Parameters Common', u'MaxSize')
-            axis_z = get(u'Axis 3 Parameters Common', u'AxisName')
-            dim_c = get(u'Axis 2 Parameters Common', u'MaxSize')
-            axis_c = get(u'Axis 2 Parameters Common', u'AxisName')
-            dim_t = get(u'Axis 4 Parameters Common', u'MaxSize')
-            axis_t = get(u'Axis 4 Parameters Common', u'AxisName')
-        except ConfigParser.NoOptionError as err:
-            raise ValueError("Error parsing dimensions from %s: %s" %
-                             (self.storage['full'], err))
-        # check if we got the right axis for Z/Ch/T, set to 0 otherwise:
-        if not axis_z == u'"Z"':
-            log.warn("WARNING: couldn't find Z axis in metadata!")
-            dim_z = 0
-        if not axis_c == u'"Ch"':
-            log.warn("WARNING: couldn't find channels in metadata!")
-            dim_c = 0
-        if not axis_t == u'"T"':
-            log.warn("WARNING: couldn't find timepoints in metadata!")
-            dim_t = 0
-        dim = {
-            'B': int(dim_b),  # bit depth
-            'C': int(dim_c),  # channels
-            'T': int(dim_t),  # timepoints
-            'X': int(dim_x),
-            'Y': int(dim_y),
-            'Z': int(dim_z)
-        }
-        log.info('Parsed image dimensions: %s' % dim)
-        return dim
-
-    def get_dimensions(self):
-        """Lazy parsing of the image dimensions."""
-        if self._dim is None:
-            self._dim = self.parse_dimensions()
-        return self._dim
-
-    def set_relpos(self, overlap):
-        """Set the relative coordinates in pixels for this object.
-
-        Parameters
-        ----------
-        overlap : float
-            The overlap between tiles in percent.
-        """
-        ratio = (100.0 - overlap) / 100
-        size_x = self.get_dimensions()['X']
-        size_y = self.get_dimensions()['Y']
-        tileno_x = self.supplement['tileno'][0]
-        tileno_y = self.supplement['tileno'][1]
-        pos_x = size_x * ratio * tileno_x
-        pos_y = size_y * ratio * tileno_y
-        log.info("Setting relative coordinates: %s, %s." % (pos_x, pos_y))
-        self.position['relative'] = (pos_x, pos_y)
 
 
 class MosaicData(DataSet):
