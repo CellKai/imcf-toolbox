@@ -280,22 +280,21 @@ class ImageDataOIB(ImageData):
         """
         log.debug("ImageDataOIB(%s)" % st_path)
         super(ImageDataOIB, self).__init__('stack', 'tree', st_path)
-        ## self.storage = self.validate_oibpath()
+        self.storage = self.validate_filepath()
         self.parser = self.setup_parser()
         self._dim = None  # override _dim to mark it as not yet known
 
-    def validate_oibpath(self):
-        raise Exception('implementation needs to be updated!')
-        """Fix the broken .oib paths in FluoView experiment files.
+    def validate_filepath(self):
+        """Fix the broken filenames in FluoView experiment files.
 
         The FluoView software usually stores corrupted filenames in its
         experiment description files, that have a missing suffix, e.g.
 
-            Slide1sec001\\Slide1sec001.oif
+            Slide1sec001\\Slide1sec001.oib
 
         whereas the correct filename would be
 
-            Slide1sec001\\Slide1sec001_01.oif
+            Slide1sec001\\Slide1sec001_01.oib
 
         This function attempts to fix this by checking if the supplied path is
         actually existing and trying the default suffix if not. Raises an
@@ -305,14 +304,15 @@ class ImageDataOIB(ImageData):
         -------
         storage : pathtools.parse_path
         """
-        oif = self.storage
-        log.debug("Validating oif path: %s" % oif)
-        if not exists(oif['full']):
-            oif = parse_path(oif['orig'].replace('.oif', '_01.oif'))
-            log.debug("Trying next path: %s" % oif['full'])
-        if not exists(oif['full']):
-            raise IOError("Can't find OIB file: %s" % oif)
-        return oif
+        fpath = self.storage
+        ext = fpath['ext']
+        log.debug("Validating oib path: %s" % fpath)
+        if not exists(fpath['full']):
+            fpath = parse_path(fpath['orig'].replace(ext, '_01' + ext))
+            log.debug("Trying next path: %s" % fpath['full'])
+        if not exists(fpath['full']):
+            raise IOError("Can't find OIB file: %s" % fpath)
+        return fpath
 
     def setup_parser(self):
         """Set up the ConfigParser object for this .oib file.
