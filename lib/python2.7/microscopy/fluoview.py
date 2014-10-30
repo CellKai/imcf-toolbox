@@ -6,10 +6,10 @@ import xml.etree.ElementTree as etree
 from log import log
 
 from microscopy.experiment import MosaicExperiment
-from microscopy.dataset import MosaicDataCuboid, ImageDataOIF
+from microscopy.dataset import MosaicDataCuboid, ImageDataOIF, ImageDataOIB
 
 
-class FluoViewOIFMosaic(MosaicExperiment):
+class FluoViewMosaic(MosaicExperiment):
 
     """Object representing a tiled ("mosaic") project from Olympus FluoView.
 
@@ -29,7 +29,7 @@ class FluoViewOIFMosaic(MosaicExperiment):
     >>> import microscopy.imagej as ij
     >>> from log import set_loglevel
     >>> set_loglevel(3)
-    >>> mosaic = fv.FluoViewOIFMosaic('TESTDATA/OIFmosaic/MATL_Mosaic.log')
+    >>> mosaic = fv.FluoViewMosaic('TESTDATA/OIFmosaic/MATL_Mosaic.log')
     >>> len(mosaic)
     1
     >>> mosaic.supplement['xdir']
@@ -62,7 +62,7 @@ class FluoViewOIFMosaic(MosaicExperiment):
         runparser : bool (optional)
             Determines whether the tree should be parsed immediately.
         """
-        super(FluoViewOIFMosaic, self).__init__(infile)
+        super(FluoViewMosaic, self).__init__(infile)
         self.tree = self.validate_xml()
         self.mosaictrees = self.find_mosaictrees()
         if runparser:
@@ -143,10 +143,14 @@ class FluoViewOIFMosaic(MosaicExperiment):
             tfi = lambda p: int(img.find(p).text)
             tff = lambda p: float(img.find(p).text)
             subvol_fname = tft('Filename')
-            subvol_reader = ImageDataOIF
+            if subvol_fname[-3:] == 'oif':
+                subvol_reader = ImageDataOIF
+            elif subvol_fname[-3:] == 'oib':
+                subvol_reader = ImageDataOIB
+            else:
+                raise IOError('Unknown dataset type: %s.' % subvol_fname)
             try:
-                subvol_ds = subvol_reader(self.infile['path']
-                                      + subvol_fname)
+                subvol_ds = subvol_reader(self.infile['path'] + subvol_fname)
                 subvol_ds.set_stagecoords((tff('XPos'), tff('YPos')))
                 subvol_ds.set_tilenumbers(tfi('Xno'), tfi('Yno'))
                 subvol_ds.set_relpos(mosaic_ds.get_overlap('pct'))
