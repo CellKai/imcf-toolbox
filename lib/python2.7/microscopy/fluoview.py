@@ -142,14 +142,16 @@ class FluoViewOIFMosaic(MosaicExperiment):
             tft = lambda p: img.find(p).text
             tfi = lambda p: int(img.find(p).text)
             tff = lambda p: float(img.find(p).text)
+            subvol_fname = tft('Filename')
+            subvol_reader = ImageDataOIF
             try:
-                oif_ds = ImageDataOIF(self.infile['path']
-                                      + tft('Filename'))
-                oif_ds.set_stagecoords((tff('XPos'), tff('YPos')))
-                oif_ds.set_tilenumbers(tfi('Xno'), tfi('Yno'))
-                oif_ds.set_relpos(mosaic_ds.get_overlap('pct'))
-                oif_ds.supplement['index'] = tfi('No')
-                mosaic_ds.add_subvol(oif_ds)
+                subvol_ds = subvol_reader(self.infile['path']
+                                      + subvol_fname)
+                subvol_ds.set_stagecoords((tff('XPos'), tff('YPos')))
+                subvol_ds.set_tilenumbers(tfi('Xno'), tfi('Yno'))
+                subvol_ds.set_relpos(mosaic_ds.get_overlap('pct'))
+                subvol_ds.supplement['index'] = tfi('No')
+                mosaic_ds.add_subvol(subvol_ds)
             except IOError as err:
                 log.info('Broken/missing image data: %s' % err)
                 # this subvolume is broken, so we entirely cancel this mosaic:
@@ -159,6 +161,7 @@ class FluoViewOIFMosaic(MosaicExperiment):
             self.add_dataset(mosaic_ds)
         else:
             log.warn('Mosaic %s: incomplete subvolumes, SKIPPING!' % idx)
+            log.warn('First incomplete/missing subvolume: %s' % subvol_fname)
 
 
 if __name__ == "__main__":
