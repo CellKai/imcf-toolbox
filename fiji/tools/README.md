@@ -45,7 +45,7 @@ For running the mosaic parser directly, use this:
 from microscopy import fluoview
 from microscopy import imagej
 (base, fname) = st.ui_get_input_file()
-mosaic = fluoview.FluoViewOIFMosaic(base + fname)
+mosaic = fluoview.FluoViewMosaic(base + fname)
 ```
 
 To make the default log messages go to the ImageJ log window, use the custom

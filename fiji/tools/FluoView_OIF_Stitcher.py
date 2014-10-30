@@ -107,7 +107,7 @@ def main_interactive():
         return
     log.warn("Parsing project file: %s" % (base + fname))
     IJ.showStatus("Parsing experiment file...")
-    mosaics = fv.FluoViewOIFMosaic(join(base, fname), runparser=False)
+    mosaics = fv.FluoViewMosaic(join(base, fname), runparser=False)
     IJ.showStatus("Parsing mosaics...")
     progress = 0.0
     count = len(mosaics.mosaictrees)
@@ -160,7 +160,7 @@ def main_noninteractive():
     log.debug('Python FluoView package file: %s' % fv.__file__)
     base = dirname(args.mosaiclog)
     fname = basename(args.mosaiclog)
-    mosaics = fv.FluoViewOIFMosaic(join(base, fname))
+    mosaics = fv.FluoViewMosaic(join(base, fname))
     log.warn(gen_mosaic_details(mosaics))
     if args.templates is not None:
         imcftpl = args.templates
