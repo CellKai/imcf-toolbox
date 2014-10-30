@@ -325,7 +325,7 @@ class ImageDataOIB(ImageDataOlympus):
             ole = OleFileIO_PL.OleFileIO(oib)
         except IOError as err:
             raise IOError("Error parsing OIB file: %s" % err)
-        log.warn('Parsing OIB description file "%s".' % oibinfo)
+        log.info('Parsing OIB description file "%s".' % oibinfo)
         try:
             stream = ole.openstream([oibinfo])
         except IOError as err:
@@ -344,7 +344,7 @@ class ImageDataOIB(ImageDataOlympus):
             log.info('OIB Format Version: %s' % oibver)
         log.debug('Main File Name: %s' % mainfile)
         stream.close()
-        log.warn('Finished parsing OIB description file.')
+        log.info('Finished parsing OIB description file.')
         # replace stream and parser with the mainfile:
         stream = ole.openstream([mainfile])
         conv = codecs.decode(stream.read(), encoding)
