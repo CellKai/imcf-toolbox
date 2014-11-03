@@ -1,10 +1,12 @@
 importClass(Packages.ij.IJ);
 importClass(Packages.ij.gui.GenericDialog);
 importClass(Packages.ij.io.SaveDialog);
+importClass(Packages.ij.io.DirectoryChooser);
 importClass(Packages.ij.plugin.filter.ParticleAnalyzer);
 importClass(Packages.ij.measure.ResultsTable);
 importClass(Packages.ij.measure.Measurements);
 importClass(Packages.java.lang.Double);
+importClass(Packages.java.io.File);
 
 
 pixelsize = 0.170;
@@ -45,10 +47,27 @@ smax = gd.getNextNumber();
 cmin = gd.getNextNumber();
 cmax = gd.getNextNumber();
 
-if (! (gd.wasCanceled())) process();
+// if (! (gd.wasCanceled())) process();
+if (! (gd.wasCanceled())) {
+    dc = DirectoryChooser('Directory with input files (.tif)');
+    if (dc.getDirectory()) {
+        process_directory(dc.getDirectory());
+    }
+}
 
-function process() {
-	imp = IJ.getImage();
+function process_directory(dirname) {
+    print(dirname);
+    var dirlist = File(dirname).list();
+    // TODO: process only TIF files
+    for (var i = 0; i < dirlist.length; i++) {
+        print(dirlist[i]);
+        process_file(dirname, dirlist[i]);
+    }
+}
+
+function process_file(dir, file) {
+	// imp = IJ.getImage();
+    imp = IJ.openImage(dir + file);
 
 	IJ.run(imp, "Properties...", "unit=um pixel_width=" + pixelsize +
 		" pixel_height=" + pixelsize);
@@ -71,9 +90,15 @@ function process() {
 	pa.setHideOutputImage(true);
 	pa.analyze(imp);
 	rt.show("Oil Red O measurements");
+    /*
 	sd = new SaveDialog('Save measurement results as...', imp.shortTitle + "_results", ".csv");
 	fout = sd.getFileName();
 	if (fout == null) return;
 	fout = sd.getDirectory() + fout;
+    */
+    fout = dir + imp.shortTitle + "_results.csv";
 	rt.saveAs(fout);
+
+    print(imp.getShortTitle());
+    imp.close();
 }
