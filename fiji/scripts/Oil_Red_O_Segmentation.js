@@ -57,11 +57,14 @@ if (! (gd.wasCanceled())) {
 
 function process_directory(dirname) {
     print(dirname);
-    var dirlist = File(dirname).list();
-    // TODO: process only TIF files
-    for (var i = 0; i < dirlist.length; i++) {
-        print(dirlist[i]);
-        process_file(dirname, dirlist[i]);
+    var filelist = File(dirname).list();
+    for (var i = 0; i < filelist.length; i++) {
+        var file = filelist[i];
+        if (file.toUpperCase().endsWith('TIF') ||
+            file.toUpperCase().endsWith('TIFF')) {
+            print(file);
+            process_file(dirname, file);
+        }
     }
 }
 
