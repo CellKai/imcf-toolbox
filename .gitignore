@@ -1,5 +1,6 @@
-# vim swap files
+# vim swap and session files 
 .*.sw?
+Session.vim
 
 # Python stuff
 *.pyc
