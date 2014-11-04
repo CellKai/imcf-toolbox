@@ -4,7 +4,7 @@
 
 import codecs
 import ConfigParser
-import OleFileIO_PL
+import olefile
 from io import StringIO
 
 from log import log
@@ -308,7 +308,7 @@ class ImageDataOIB(ImageDataOlympus):
     def setup_parser(self):
         """Set up the ConfigParser object for this .oib file.
 
-        Use the 'OleFileIO_PL' package to open the OIB container file, read in
+        Use the 'olefile' package to open the OIB container file, read in
         the description file (using the 'codecs' package to properly handle the
         UTF-16 encoding). Some minor checks on the description file are done
         where also the "main" file of the OIB container (containing all the
@@ -322,7 +322,7 @@ class ImageDataOIB(ImageDataOlympus):
         oib = self.storage['full']
         log.info('Parsing OIB file: %s' % oib)
         try:
-            ole = OleFileIO_PL.OleFileIO(oib)
+            ole = olefile.OleFileIO(oib)
         except IOError as err:
             raise IOError("Error parsing OIB file: %s" % err)
         log.info('Parsing OIB description file "%s".' % oibinfo)
