@@ -1,4 +1,4 @@
-SCRIPTS = $(wildcard *.js)
+SCRIPTS = $(wildcard *.js *.bsh)
 
 DIST = ../dist
 TGT = $(DIST)/plugins/Scripts/Plugins/IMCF_Utilities/
