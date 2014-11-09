@@ -2,6 +2,11 @@
 
 """ImageJ related stuff like reading measurement results, etc."""
 
+"""TODO: consider creating a generic superclass for macro templates, providing
+the methods required for all templates and derived subclasses that contain a
+required method that adds the specific variables-setting code.
+"""
+
 from log import log
 
 from os import sep
