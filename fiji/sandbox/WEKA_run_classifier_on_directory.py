@@ -29,3 +29,5 @@ for root, directories, filenames in os.walk(indir):
       IJ.log("Finished classification, saving results...")
       IJ.save(result, path + "_result.tif")
       IJ.log("Saved results as '%s'." % path + "_result.tif")
+      input_image.close()
+      result.close()
