@@ -15,6 +15,7 @@ __testdata
 
 # dist and build targets
 dist/
+dist_*/
 build/
 
 # auto-generated files
