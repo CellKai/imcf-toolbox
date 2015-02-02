@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<protocol VERSION="4">
+<blocks>
+<block ID="921601803" blockType="plugins.spop.medianfilter.MedianFilter" className="plugins.spop.medianfilter.MedianFilter" collapsed="false" definedName="Median Filter" height="127" width="186" xLocation="12" yLocation="16">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Type" name="Type" runtime="false" value="3D" visible="false"/>
+<variable ID="Half Size" name="Half Size" runtime="false" value="1" visible="false"/>
+</input>
+<output>
+<variable ID="Output" name="Output" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1505735727" blockType="plugins.adufour.thresholder.Thresholder" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="Thresholder" height="171" width="239" xLocation="15" yLocation="161">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="100.0" visible="false"/>
+<variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
+</input>
+<output>
+<variable ID="output" name="Binary output" runtime="false" visible="false"/>
+<variable ID="ROI" name="ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="969155633" blockType="plugins.adufour.roi.LabelExtractor" className="plugins.adufour.roi.LabelExtractor" collapsed="false" definedName="Label Extractor" height="127" width="296" xLocation="34" yLocation="349">
+<variables>
+<input>
+<variable ID="input sequence" name="Labeled sequence" runtime="false" visible="false"/>
+<variable ID="extract mode" name="Extract" runtime="false" value="ANY_LABEL_VS_BACKGROUND" visible="false"/>
+<variable ID="value" name="Value" runtime="false" value="0.0" visible="false"/>
+</input>
+<output>
+<variable ID="ROI" name="ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1811232298" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="93" width="214" xLocation="281" yLocation="0">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="65507485" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" collapsed="false" definedName="Wavelet Spot Detector Block" height="382" width="288" xLocation="370" yLocation="103">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="false"/>
+<variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="false"/>
+<variable ID="input Sequence ROIs" name="input Sequence ROIs" runtime="false" visible="false"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 1" name="Scale 1" runtime="false" value="true" visible="false"/>
+<variable ID="Scale 2" name="Scale 2" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 3" name="Scale 3" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 4" name="Scale 4" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 5" name="Scale 5" runtime="false" value="false" visible="false"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" runtime="false" value="25" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" runtime="false" value="100" visible="false"/>
+<variable ID="Force 2D Wavelets" name="Force 2D Wavelets" runtime="false" value="true" visible="false"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="686301479" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" collapsed="false" definedName="Connected Components" height="347" width="304" xLocation="702" yLocation="16">
+<variables>
+<input>
+<variable ID="input" name="Input" runtime="false" visible="false"/>
+<variable ID="method" name="Extraction mode" runtime="false" value="BACKGROUND" visible="false"/>
+<variable ID="value" name="Value" runtime="false" value="0" visible="false"/>
+<variable ID="no edge (X)" name="Remove border objects (X)" runtime="false" value="false" visible="false"/>
+<variable ID="no edge (Y)" name="Remove border objects (Y)" runtime="false" value="false" visible="false"/>
+<variable ID="no edge (Z)" name="Remove border objects (Z)" runtime="false" value="false" visible="false"/>
+<variable ID="size filter" name="Filter objects by size" runtime="false" value="false" visible="false"/>
+<variable ID="min. size" name="Min. size" runtime="false" value="1" visible="false"/>
+<variable ID="max. size" name="Max. size" runtime="false" value="10000" visible="false"/>
+<variable ID="Export to Excel" name="Export to Excel" runtime="false" value="false" visible="false"/>
+<variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
+</input>
+<output>
+<variable ID="labeled sequence" name="output" runtime="false" visible="false"/>
+<variable ID="objects" name="components" runtime="false" visible="false"/>
+<variable ID="list of extracted ROI" name="list of ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="677474806" blockType="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" className="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" collapsed="false" definedName="Connected Component Painter" height="105" width="271" xLocation="1056" yLocation="8">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="false"/>
+<variable ID="components" name="components" runtime="false" visible="false"/>
+<variable ID="RGBA Color" name="RGBA Color" runtime="false" value="255 0 0 255" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1196119129" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" collapsed="true" definedName="Wavelet Spot Detector Block" height="391" width="288" xLocation="1068" yLocation="133">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="false"/>
+<variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="false"/>
+<variable ID="input Sequence ROIs" name="input Sequence ROIs" runtime="false" visible="false"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 1" name="Scale 1" runtime="false" value="true" visible="false"/>
+<variable ID="Scale 2" name="Scale 2" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 3" name="Scale 3" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 4" name="Scale 4" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 5" name="Scale 5" runtime="false" value="false" visible="false"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" runtime="false" value="44" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" runtime="false" value="100" visible="false"/>
+<variable ID="Force 2D Wavelets" name="Force 2D Wavelets" runtime="false" value="true" visible="false"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1067402766" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" collapsed="false" definedName="Connected Components" height="347" width="313" xLocation="1121" yLocation="186">
+<variables>
+<input>
+<variable ID="input" name="Input" runtime="false" visible="false"/>
+<variable ID="method" name="Extraction mode" runtime="false" value="BACKGROUND" visible="false"/>
+<variable ID="value" name="Value" runtime="false" value="0" visible="false"/>
+<variable ID="no edge (X)" name="Remove border objects (X)" runtime="false" value="true" visible="false"/>
+<variable ID="no edge (Y)" name="Remove border objects (Y)" runtime="false" value="true" visible="false"/>
+<variable ID="no edge (Z)" name="Remove border objects (Z)" runtime="false" value="true" visible="false"/>
+<variable ID="size filter" name="Filter objects by size" runtime="false" value="false" visible="false"/>
+<variable ID="min. size" name="Min. size" runtime="false" value="1" visible="false"/>
+<variable ID="max. size" name="Max. size" runtime="false" value="10000" visible="false"/>
+<variable ID="Export to Excel" name="Export to Excel" runtime="false" value="false" visible="false"/>
+<variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
+</input>
+<output>
+<variable ID="labeled sequence" name="output" runtime="false" visible="false"/>
+<variable ID="objects" name="components" runtime="false" visible="false"/>
+<variable ID="list of extracted ROI" name="list of ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1530609720" blockType="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" className="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" collapsed="false" definedName="Connected Component Painter" height="105" width="271" xLocation="1508" yLocation="286">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="false"/>
+<variable ID="components" name="components" runtime="false" visible="false"/>
+<variable ID="RGBA Color" name="RGBA Color" runtime="false" value="255 0 0 255" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1721432189" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="212" width="229" xLocation="1502" yLocation="31">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="1505735727" dstVarID="Input" srcBlockID="921601803" srcVarID="Output"/>
+<link dstBlockID="1811232298" dstVarID="target sequence" srcBlockID="921601803" srcVarID="Input"/>
+<link dstBlockID="969155633" dstVarID="input sequence" srcBlockID="1505735727" srcVarID="output"/>
+<link dstBlockID="1811232298" dstVarID="input rois" srcBlockID="969155633" srcVarID="ROI"/>
+<link dstBlockID="65507485" dstVarID="input Sequence" srcBlockID="1811232298" srcVarID="target sequence"/>
+<link dstBlockID="686301479" dstVarID="input" srcBlockID="65507485" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="677474806" dstVarID="input Sequence" srcBlockID="686301479" srcVarID="input"/>
+<link dstBlockID="677474806" dstVarID="components" srcBlockID="686301479" srcVarID="objects"/>
+<link dstBlockID="1067402766" dstVarID="input" srcBlockID="1196119129" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="1530609720" dstVarID="input Sequence" srcBlockID="1067402766" srcVarID="input"/>
+<link dstBlockID="1530609720" dstVarID="components" srcBlockID="1067402766" srcVarID="objects"/>
+<link dstBlockID="1721432189" dstVarID="object" srcBlockID="1530609720" srcVarID="input Sequence"/>
+</links>
+</protocol>
