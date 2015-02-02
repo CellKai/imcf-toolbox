@@ -4,7 +4,8 @@ from trainableSegmentation import WekaSegmentation
 from ij import IJ
 
 indir = "/scratch/data/__TESTFILES/weka"
-modelfile = os.path.join(indir, "bg_vs_tissue.model")
+# modelfile = os.path.join(indir, "bg_vs_tissue.model")
+modelfile = os.path.join(indir, "tissue_fibrotic_bg.model")
 infile = os.path.join(indir, "1462_mko_ctx_1.tif")
 
 input_image = IJ.openImage(infile)
