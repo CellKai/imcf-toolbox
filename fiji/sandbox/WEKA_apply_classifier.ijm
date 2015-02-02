@@ -1,7 +1,7 @@
-inpath="/scratch/data/__TESTFILES/weka/";
-infile="1462_mko_ctx_1.tif";
-outpath=inpath + "weka_results/"
-model="bg_vs_tissue.model";
+inpath="D:\\WEKA_Niko\\";
+modelfile="fibrosis_group1.model";
+infile="1462_mko_ctx.tif";
+outpath="D:\\WEKA_Niko\\results\\";
 
 function start_weka() {
 	open(inpath + infile);
@@ -37,11 +37,18 @@ function apply_classifier(file) {
 	IJ.log("Finished classifying " + file + " (" + duration + ").");
 }
 
+//start_weka();
+//load_classifier();
+//apply_classifier("1442_wt_ctx.tif");
+//apply_classifier("1442_wt_ctx.tif");
+apply_classifier("1455_mko_ctx.tif");
+apply_classifier("1456_mko_ctx.tif");
+apply_classifier("1461_mko_ctx.tif");
+apply_classifier("1462_mko_ctx.tif");
+apply_classifier("1463_mko_ctx.tif");
+apply_classifier("1467_mko_ctx.tif");
+apply_classifier("1468_mko_ctx.tif");
+apply_classifier("1469_wt_ctx.tif");
+apply_classifier("1470_wt_ctx.tif");
+apply_classifier("1475_wt_ctx.tif");
 
-// NOTE: uncomment and run ONE AFTER THE OTHER, as currently the calls
-// themselves fail to wait for completion and thus uncommenting all lines at
-// once will cause the macro to fail!
-
-start_weka();
-// load_classifier();
-// apply_classifier();
