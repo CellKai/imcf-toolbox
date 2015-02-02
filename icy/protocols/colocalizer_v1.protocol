@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<protocol VERSION="4">
+<blocks>
+<block ID="1864768850" blockType="plugins.adufour.blocks.tools.input.Sequence" className="plugins.adufour.blocks.tools.input.Sequence" xLocation="28" yLocation="132">
+<variables>
+<input>
+<variable ID="input sequence" name="sequence" value="No Sequence" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="307003261" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" xLocation="130" yLocation="250">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" value="No Sequence" visible="false"/>
+<variable ID="channel" name="channel" value="0" visible="false"/>
+</input>
+<output>
+<variable ID="extracted" name="extracted" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1858166774" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" xLocation="362" yLocation="69">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" visible="false"/>
+<variable ID="Spot to detect" name="Spot to detect" value="BRIGHT_SPOT" visible="false"/>
+<variable ID="input Sequence ROIs" name="input Sequence ROIs" value="No Sequence" visible="false"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" value="false" visible="false"/>
+<variable ID="Scale 1" name="Scale 1" value="false" visible="false"/>
+<variable ID="Scale 2" name="Scale 2" value="true" visible="false"/>
+<variable ID="Scale 3" name="Scale 3" value="false" visible="false"/>
+<variable ID="Scale 4" name="Scale 4" value="false" visible="false"/>
+<variable ID="Scale 5" name="Scale 5" value="false" visible="false"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" value="100" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" value="100" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" value="100" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" value="100" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" value="100" visible="false"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="940567481" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" xLocation="729" yLocation="100">
+<variables>
+<input>
+<variable ID="input" name="Input" visible="false"/>
+<variable ID="method" name="Extraction mode" value="VALUE" visible="false"/>
+<variable ID="value" name="Value" value="255" visible="false"/>
+<variable ID="no edge (X)" name="  along X" value="false" visible="false"/>
+<variable ID="no edge (Y)" name="  along Y" value="false" visible="false"/>
+<variable ID="no edge (Z)" name="  along Z" value="false" visible="false"/>
+<variable ID="size filter" name="Filter objects by size" value="false" visible="false"/>
+<variable ID="min. size" name="Min. size" value="1" visible="false"/>
+<variable ID="max. size" name="Max. size" value="10000" visible="false"/>
+<variable ID="Export to Excel" name="Export to Excel" value="false" visible="false"/>
+<variable ID="Excel file" name="Excel file" visible="false"/>
+</input>
+<output>
+<variable ID="labeled sequence" name="output" visible="false"/>
+<variable ID="objects" name="components" visible="false"/>
+<variable ID="list of extracted ROI" name="list of ROI" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1037161656" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" xLocation="131" yLocation="370">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" value="No Sequence" visible="false"/>
+<variable ID="channel" name="channel" value="1" visible="false"/>
+</input>
+<output>
+<variable ID="extracted" name="extracted" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="2005789930" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" xLocation="361" yLocation="542">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" visible="false"/>
+<variable ID="Spot to detect" name="Spot to detect" value="BRIGHT_SPOT" visible="false"/>
+<variable ID="input Sequence ROIs" name="input Sequence ROIs" value="No Sequence" visible="false"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" value="false" visible="false"/>
+<variable ID="Scale 1" name="Scale 1" value="false" visible="false"/>
+<variable ID="Scale 2" name="Scale 2" value="true" visible="false"/>
+<variable ID="Scale 3" name="Scale 3" value="false" visible="false"/>
+<variable ID="Scale 4" name="Scale 4" value="false" visible="false"/>
+<variable ID="Scale 5" name="Scale 5" value="false" visible="false"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" value="100" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" value="100" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" value="100" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" value="100" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" value="100" visible="false"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1393370850" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" xLocation="726" yLocation="539">
+<variables>
+<input>
+<variable ID="input" name="Input" visible="false"/>
+<variable ID="method" name="Extraction mode" value="VALUE" visible="false"/>
+<variable ID="value" name="Value" value="255" visible="false"/>
+<variable ID="no edge (X)" name="  along X" value="false" visible="false"/>
+<variable ID="no edge (Y)" name="  along Y" value="false" visible="false"/>
+<variable ID="no edge (Z)" name="  along Z" value="false" visible="false"/>
+<variable ID="size filter" name="Filter objects by size" value="false" visible="false"/>
+<variable ID="min. size" name="Min. size" value="1" visible="false"/>
+<variable ID="max. size" name="Max. size" value="10000" visible="false"/>
+<variable ID="Export to Excel" name="Export to Excel" value="false" visible="false"/>
+<variable ID="Excel file" name="Excel file" visible="false"/>
+</input>
+<output>
+<variable ID="labeled sequence" name="output" visible="false"/>
+<variable ID="objects" name="components" visible="false"/>
+<variable ID="list of extracted ROI" name="list of ROI" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="116592832" blockType="plugins.adufour.blocks.tools.input.Sequence" className="plugins.adufour.blocks.tools.input.Sequence" xLocation="772" yLocation="21">
+<variables>
+<input>
+<variable ID="input sequence" name="sequence" value="No Sequence" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1908074493" blockType="plugins.fab.colocalizer.Colocalizer" className="plugins.fab.colocalizer.Colocalizer" xLocation="1421" yLocation="274">
+<variables>
+<input>
+<variable ID="components set A" name="components set A" value="" visible="false"/>
+<variable ID="components set B" name="components set B" value="" visible="false"/>
+<variable ID="Max distance" name="Max distance" value="4.0" visible="false"/>
+<variable ID="input Sequence" name="input Sequence" value="No Sequence" visible="false"/>
+</input>
+<output>
+<variable ID="Colocalized components" name="Colocalized components" visible="false"/>
+<variable ID="Colocalization % of A over B" name="Colocalization % of A over B" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1956806574" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" xLocation="1075" yLocation="117">
+<variables>
+<input>
+<variable ID="object" name="object" type="icy.sequence.Sequence" value="" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1459745557" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" xLocation="1097" yLocation="534">
+<variables>
+<input>
+<variable ID="object" name="object" type="icy.sequence.Sequence" value="" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1891425033" blockType="plugins.fab.connectedcomponentexportxls.ConnectedComponentExportXLSBlock" className="plugins.fab.connectedcomponentexportxls.ConnectedComponentExportXLSBlock" xLocation="1803" yLocation="415">
+<variables>
+<input>
+<variable ID="components" name="components" value="" visible="false"/>
+<variable ID="input Sequence" name="input Sequence" value="No Sequence" visible="false"/>
+<variable ID="Excel file" name="Excel file" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="450800713" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" xLocation="1809" yLocation="338">
+<variables>
+<input>
+<variable ID="object" name="object" type="java.lang.Double" value="" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1207683864" blockType="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" className="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" xLocation="1534" yLocation="38">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" value="No Sequence" visible="false"/>
+<variable ID="components" name="components" value="" visible="false"/>
+<variable ID="RGBA Color" name="RGBA Color" value="255 0 0 128" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="5821410" blockType="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" className="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" xLocation="1806" yLocation="206">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" value="No Sequence" visible="false"/>
+<variable ID="components" name="components" value="" visible="false"/>
+<variable ID="RGBA Color" name="RGBA Color" value="255 255 0 255" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="269990269" blockType="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" className="plugins.fab.connectedcomponentpainter.ConnectedComponentPainterBlock" xLocation="1180" yLocation="873">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" value="No Sequence" visible="false"/>
+<variable ID="components" name="components" value="" visible="false"/>
+<variable ID="RGBA Color" name="RGBA Color" value="0 255 0 128" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="1908074493" dstVarID="components set A" srcBlockID="940567481" srcVarID="objects"/>
+<link dstBlockID="1908074493" dstVarID="components set B" srcBlockID="1393370850" srcVarID="objects"/>
+<link dstBlockID="307003261" dstVarID="sequence" srcBlockID="1864768850" srcVarID="input sequence"/>
+<link dstBlockID="1037161656" dstVarID="sequence" srcBlockID="1864768850" srcVarID="input sequence"/>
+<link dstBlockID="1858166774" dstVarID="input Sequence ROIs" srcBlockID="307003261" srcVarID="sequence"/>
+<link dstBlockID="1858166774" dstVarID="input Sequence" srcBlockID="307003261" srcVarID="extracted"/>
+<link dstBlockID="2005789930" dstVarID="input Sequence" srcBlockID="1037161656" srcVarID="extracted"/>
+<link dstBlockID="2005789930" dstVarID="input Sequence ROIs" srcBlockID="1037161656" srcVarID="sequence"/>
+<link dstBlockID="940567481" dstVarID="input" srcBlockID="1858166774" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="1393370850" dstVarID="input" srcBlockID="2005789930" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="1956806574" dstVarID="object" srcBlockID="940567481" srcVarID="labeled sequence"/>
+<link dstBlockID="1459745557" dstVarID="object" srcBlockID="1393370850" srcVarID="labeled sequence"/>
+<link dstBlockID="1891425033" dstVarID="components" srcBlockID="1908074493" srcVarID="Colocalized components"/>
+<link dstBlockID="450800713" dstVarID="object" srcBlockID="1908074493" srcVarID="Colocalization % of A over B"/>
+<link dstBlockID="1207683864" dstVarID="components" srcBlockID="940567481" srcVarID="objects"/>
+<link dstBlockID="1207683864" dstVarID="input Sequence" srcBlockID="116592832" srcVarID="input sequence"/>
+<link dstBlockID="116592832" dstVarID="input sequence" srcBlockID="1864768850" srcVarID="input sequence"/>
+<link dstBlockID="5821410" dstVarID="input Sequence" srcBlockID="116592832" srcVarID="input sequence"/>
+<link dstBlockID="269990269" dstVarID="input Sequence" srcBlockID="116592832" srcVarID="input sequence"/>
+<link dstBlockID="5821410" dstVarID="components" srcBlockID="1908074493" srcVarID="Colocalized components"/>
+<link dstBlockID="1908074493" dstVarID="input Sequence" srcBlockID="116592832" srcVarID="input sequence"/>
+<link dstBlockID="269990269" dstVarID="components" srcBlockID="1393370850" srcVarID="objects"/>
+<link dstBlockID="1891425033" dstVarID="input Sequence" srcBlockID="116592832" srcVarID="input sequence"/>
+</links>
+</protocol>
