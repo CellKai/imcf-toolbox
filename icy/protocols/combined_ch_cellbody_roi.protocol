@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <protocol VERSION="4">
 <blocks>
-<block ID="979937563" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" width="219" xLocation="14" yLocation="11">
-<variables>
-<input>
-<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
-<variable ID="channel" name="channel" runtime="false" value="1" visible="false"/>
-</input>
-<output>
-<variable ID="extracted" name="extracted" runtime="false" visible="false"/>
-</output>
-</variables>
-</block>
-<block ID="1108057921" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" width="219" xLocation="32" yLocation="143">
+<block ID="1108057921" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="219" xLocation="34" yLocation="167">
 <variables>
 <input>
 <variable ID="sequence" name="sequence" runtime="false" visible="false"/>
@@ -23,7 +12,18 @@
 </output>
 </variables>
 </block>
-<block ID="407137863" blockType="plugins.ylemontag.mathoperations.MathOperationBinaryBlock" className="plugins.ylemontag.mathoperations.MathOperationPlugin" collapsed="false" definedName="Math operation binary" height="127" width="225" xLocation="23" yLocation="270">
+<block ID="979937563" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="219" xLocation="9" yLocation="36">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
+<variable ID="channel" name="channel" runtime="false" value="1" visible="false"/>
+</input>
+<output>
+<variable ID="extracted" name="extracted" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="407137863" blockType="plugins.ylemontag.mathoperations.MathOperationBinaryBlock" className="plugins.ylemontag.mathoperations.MathOperationPlugin" collapsed="false" definedName="Math operation binary" height="298" keepsResults="true" width="225" xLocation="27" yLocation="290">
 <variables>
 <input>
 <variable ID="Operation" name="op" runtime="false" value="ADD" visible="false"/>
@@ -35,12 +35,12 @@
 </output>
 </variables>
 </block>
-<block ID="1799274107" blockType="plugins.adufour.filtering.GaussianFilter" className="plugins.adufour.filtering.FilterToolbox" collapsed="false" definedName="Gaussian filter" height="149" width="215" xLocation="309" yLocation="223">
+<block ID="1799274107" blockType="plugins.adufour.filtering.GaussianFilter" className="plugins.adufour.filtering.FilterToolbox" collapsed="false" definedName="Gaussian filter" height="149" keepsResults="true" width="215" xLocation="314" yLocation="356">
 <variables>
 <input>
 <variable ID="input" name="input" runtime="false" visible="false"/>
-<variable ID="filterX" name="sigma (x)" runtime="false" value="1.0" visible="false"/>
-<variable ID="filterY" name="sigma (y)" runtime="false" value="1.0" visible="false"/>
+<variable ID="filterX" name="sigma (x)" runtime="false" value="2.0" visible="false"/>
+<variable ID="filterY" name="sigma (y)" runtime="false" value="2.0" visible="false"/>
 <variable ID="filterZ" name="sigma (z)" runtime="false" value="1.0" visible="false"/>
 </input>
 <output>
@@ -48,12 +48,12 @@
 </output>
 </variables>
 </block>
-<block ID="1596923051" blockType="plugins.adufour.thresholder.Thresholder" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="Thresholder" height="171" width="262" xLocation="311" yLocation="9">
+<block ID="1596923051" blockType="plugins.adufour.thresholder.Thresholder" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="Thresholder" height="171" keepsResults="true" width="262" xLocation="300" yLocation="117">
 <variables>
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="false"/>
 <variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
-<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="4.0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="3.0 30.0" visible="false"/>
 <variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
 </input>
 <output>
@@ -62,15 +62,7 @@
 </output>
 </variables>
 </block>
-<block ID="1498586156" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="252" width="263" xLocation="667" yLocation="15">
-<variables>
-<input>
-<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="false"/>
-</input>
-<output/>
-</variables>
-</block>
-<block ID="1439483039" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" collapsed="false" definedName="Connected Components" height="347" width="260" xLocation="963" yLocation="5">
+<block ID="1439483039" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" collapsed="false" definedName="Connected Components" height="347" keepsResults="true" width="260" xLocation="643" yLocation="86">
 <variables>
 <input>
 <variable ID="input" name="Input" runtime="false" visible="false"/>
@@ -79,9 +71,9 @@
 <variable ID="no edge (X)" name="Remove border objects (X)" runtime="false" value="true" visible="false"/>
 <variable ID="no edge (Y)" name="Remove border objects (Y)" runtime="false" value="true" visible="false"/>
 <variable ID="no edge (Z)" name="Remove border objects (Z)" runtime="false" value="false" visible="false"/>
-<variable ID="size filter" name="Filter objects by size" runtime="false" value="false" visible="false"/>
-<variable ID="min. size" name="Min. size" runtime="false" value="1" visible="false"/>
-<variable ID="max. size" name="Max. size" runtime="false" value="10000" visible="false"/>
+<variable ID="size filter" name="Filter objects by size" runtime="false" value="true" visible="false"/>
+<variable ID="min. size" name="Min. size" runtime="false" value="10000" visible="false"/>
+<variable ID="max. size" name="Max. size" runtime="false" value="9910000" visible="false"/>
 <variable ID="Export to Excel" name="Export to Excel" runtime="false" value="false" visible="false"/>
 <variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
 </input>
@@ -92,10 +84,70 @@
 </output>
 </variables>
 </block>
-<block ID="1831022925" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="211" width="254" xLocation="353" yLocation="433">
+<block ID="1498586156" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="true" definedName="Display" height="393" keepsResults="true" width="358" xLocation="621" yLocation="451">
 <variables>
 <input>
 <variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="349842775" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="361" keepsResults="true" width="384" xLocation="360" yLocation="537">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1834288496" blockType="plugins.fab.connectedcomponentexportxls.ConnectedComponentExportXLSBlock" className="plugins.fab.connectedcomponentexportxls.ConnectedComponentExportXLSBlock" collapsed="false" definedName="Connected components XLS export Block" height="105" keepsResults="true" width="329" xLocation="1031" yLocation="127">
+<variables>
+<input>
+<variable ID="components" name="components" runtime="false" value="" visible="false"/>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="false"/>
+<variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1128781519" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="224" xLocation="1005" yLocation="0">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="false" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="219888155" blockType="plugins.adufour.connectedcomponents.ConnectedComponents" className="plugins.adufour.connectedcomponents.ConnectedComponents" collapsed="false" definedName="Connected Components" height="347" keepsResults="true" width="304" xLocation="991" yLocation="519">
+<variables>
+<input>
+<variable ID="input" name="Input" runtime="false" visible="false"/>
+<variable ID="method" name="Extraction mode" runtime="false" value="VALUE" visible="false"/>
+<variable ID="value" name="Value" runtime="false" value="2" visible="false"/>
+<variable ID="no edge (X)" name="Remove border objects (X)" runtime="false" value="true" visible="false"/>
+<variable ID="no edge (Y)" name="Remove border objects (Y)" runtime="false" value="true" visible="false"/>
+<variable ID="no edge (Z)" name="Remove border objects (Z)" runtime="false" value="false" visible="false"/>
+<variable ID="size filter" name="Filter objects by size" runtime="false" value="true" visible="false"/>
+<variable ID="min. size" name="Min. size" runtime="false" value="500" visible="false"/>
+<variable ID="max. size" name="Max. size" runtime="false" value="9910000" visible="false"/>
+<variable ID="Export to Excel" name="Export to Excel" runtime="false" value="false" visible="false"/>
+<variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
+</input>
+<output>
+<variable ID="labeled sequence" name="output" runtime="false" visible="false"/>
+<variable ID="objects" name="components" runtime="false" visible="false"/>
+<variable ID="list of extracted ROI" name="list of ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="2004336425" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="224" xLocation="1036" yLocation="274">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="false" visible="false"/>
 </input>
 <output/>
 </variables>
@@ -108,6 +160,11 @@
 <link dstBlockID="407137863" dstVarID="In 1" srcBlockID="979937563" srcVarID="extracted"/>
 <link dstBlockID="407137863" dstVarID="In 2" srcBlockID="1108057921" srcVarID="extracted"/>
 <link dstBlockID="1799274107" dstVarID="input" srcBlockID="407137863" srcVarID="Out" srcVarType="icy.sequence.Sequence"/>
-<link dstBlockID="1831022925" dstVarID="object" srcBlockID="1439483039" srcVarID="labeled sequence"/>
+<link dstBlockID="1128781519" dstVarID="target sequence" srcBlockID="979937563" srcVarID="sequence"/>
+<link dstBlockID="1128781519" dstVarID="input rois" srcBlockID="1439483039" srcVarID="list of extracted ROI"/>
+<link dstBlockID="349842775" dstVarID="object" srcBlockID="1799274107" srcVarID="output"/>
+<link dstBlockID="219888155" dstVarID="input" srcBlockID="1596923051" srcVarID="output"/>
+<link dstBlockID="2004336425" dstVarID="input rois" srcBlockID="219888155" srcVarID="list of extracted ROI"/>
+<link dstBlockID="2004336425" dstVarID="target sequence" srcBlockID="979937563" srcVarID="sequence"/>
 </links>
 </protocol>
