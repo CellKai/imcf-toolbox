@@ -20,3 +20,6 @@ build/
 
 # auto-generated files
 lib/python2.7/imcf.py
+
+# Icy protocol screenshots
+icy/protocols/*.png
