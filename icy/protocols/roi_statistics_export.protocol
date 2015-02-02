@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<protocol VERSION="4">
+<blocks>
+<block ID="1453415204" blockType="plugins.adufour.blocks.tools.roi.GetROIFromSequence" className="plugins.adufour.blocks.tools.roi.GetROIFromSequence" collapsed="false" definedName="Get ROI from sequence" height="105" keepsResults="true" width="257" xLocation="54" yLocation="52">
+<variables>
+<input>
+<variable ID="input sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="selection state of ROI to extract" name="ROI to get" runtime="false" value="ALL" visible="false"/>
+</input>
+<output>
+<variable ID="extracted rois" name="List of ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="748314127" blockType="plugins.adufour.roi.ROIMeasures" className="plugins.adufour.roi.ROIMeasures" collapsed="false" definedName="ROI Statistics" height="105" keepsResults="true" width="278" xLocation="455" yLocation="26">
+<variables>
+<input>
+<variable ID="Regions of interest" name="Regions of interest" runtime="false" visible="false"/>
+<variable ID="Sequence" name="Sequence" runtime="false" visible="false"/>
+</input>
+<output>
+<variable ID="Workbook" name="Workbook" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="442330818" blockType="plugins.adufour.blocks.tools.io.WorkbookToFile" className="plugins.adufour.blocks.tools.io.WorkbookToFile" collapsed="false" definedName="Workbook to file" height="207" keepsResults="true" width="496" xLocation="842" yLocation="19">
+<variables>
+<input>
+<variable ID="workbook" name="workbook" runtime="false" visible="false"/>
+<variable ID="file format" name="file format" runtime="false" value="Spreadsheet" visible="false"/>
+<variable ID="output file" name="output file" runtime="false" visible="false"/>
+<variable ID="If file exists" name="If file exists" runtime="false" value="Overwrite" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="442330818" dstVarID="workbook" srcBlockID="748314127" srcVarID="Workbook"/>
+<link dstBlockID="748314127" dstVarID="Regions of interest" srcBlockID="1453415204" srcVarID="extracted rois"/>
+<link dstBlockID="748314127" dstVarID="Sequence" srcBlockID="1453415204" srcVarID="input sequence"/>
+</links>
+</protocol>
