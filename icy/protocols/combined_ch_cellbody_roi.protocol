@@ -112,7 +112,7 @@
 <input>
 <variable ID="target sequence" name="Source" runtime="false" visible="false"/>
 <variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
-<variable ID="replace existing" name="Overwrite" runtime="false" value="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="false"/>
 </input>
 <output/>
 </variables>
