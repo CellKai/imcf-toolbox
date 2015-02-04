@@ -30,7 +30,7 @@
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="false"/>
 <variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
-<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="20.0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="15.0" visible="false"/>
 <variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
 </input>
 <output>
@@ -49,7 +49,7 @@
 <variable ID="no edge (Y)" name="Remove border objects (Y)" runtime="false" value="true" visible="false"/>
 <variable ID="no edge (Z)" name="Remove border objects (Z)" runtime="false" value="false" visible="false"/>
 <variable ID="size filter" name="Filter objects by size" runtime="false" value="true" visible="false"/>
-<variable ID="min. size" name="Min. size" runtime="false" value="100" visible="false"/>
+<variable ID="min. size" name="Min. size" runtime="false" value="10" visible="false"/>
 <variable ID="max. size" name="Max. size" runtime="false" value="99910000" visible="false"/>
 <variable ID="Export to Excel" name="Export to Excel" runtime="false" value="false" visible="false"/>
 <variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
