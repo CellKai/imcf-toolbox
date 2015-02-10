@@ -1,9 +1,9 @@
 importClass(Packages.ij.IJ);
 importClass(Packages.ij.ImagePlus);
-importClass(Packages.ij.process.ImageProcessor);
-importClass(Packages.ij.plugin.ChannelSplitter);
 importClass(Packages.ij.io.DirectoryChooser);
 importClass(Packages.ij.io.FileSaver);
+importClass(Packages.ij.process.ImageProcessor);
+importClass(Packages.ij.plugin.ChannelSplitter);
 importClass(Packages.java.io.File);
 
 var dir = DirectoryChooser("Select a directory...").getDirectory();
