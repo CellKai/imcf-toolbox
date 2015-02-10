@@ -49,10 +49,15 @@ function splitImageByChannelAndSlice(imgf) {
 	}
 }
 
+
 dir = DirectoryChooser("Select a directory...").getDirectory();
 skip = getSlicesToSkip();
 
 files = File(dir).list();
 for (var i = 0; i < files.length; i++) {
-	splitImageByChannelAndSlice(files[i]);
+	if (files[i].substr(-4).toLowerCase() == ".tif") {
+		splitImageByChannelAndSlice(files[i]);
+	} else {
+		print("Skipping " + files[i]);
+	}
 }
