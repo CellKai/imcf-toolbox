@@ -10,13 +10,18 @@ importClass(Packages.java.io.File);
 var dir = DirectoryChooser("Select a directory...").getDirectory();
 print(dir);
 
-gd = new GenericDialog("Skip slices");
-gd.addNumericField("Skip slices at top", 0, 0);
-gd.addNumericField("Skip slices at bottom", 0, 0);
-gd.showDialog();
-skip = [];
-skip[0] = gd.getNextNumber();
-skip[1] = gd.getNextNumber();
+function getSlicesToSkip() {
+	var gd = new GenericDialog("Skip slices");
+	gd.addNumericField("Skip slices at top", 0, 0);
+	gd.addNumericField("Skip slices at bottom", 0, 0);
+	gd.showDialog();
+	var skip = [];
+	skip[0] = gd.getNextNumber();
+	skip[1] = gd.getNextNumber();
+	return skip;
+}
+
+skip = getSlicesToSkip();
 
 files = File(dir).list();
 for (var i = 0; i < files.length; i++) {
