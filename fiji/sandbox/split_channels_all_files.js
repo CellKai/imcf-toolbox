@@ -36,9 +36,13 @@ skip = getSlicesToSkip();
 
 files = File(dir).list();
 for (var i = 0; i < files.length; i++) {
-    print("Processing file " + files[i]);
-    imp = IJ.openImage(dir + files[i]);
-    fname = splitFileName(files[i]);
+	splitImageByChannelAndSlice(files[i]);
+}
+
+function splitImageByChannelAndSlice(imgf) {
+    print("Processing file " + imgf);
+    imp = IJ.openImage(dir + imgf);
+    fname = splitFileName(imgf);
     channels = ChannelSplitter().split(imp);
 	for (var j = 0; j < channels.length; j++) {
 		ch_name = channels[j].getTitle().split("-")[0];
