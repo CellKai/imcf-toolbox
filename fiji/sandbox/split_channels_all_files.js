@@ -7,9 +7,6 @@ importClass(Packages.ij.process.ImageProcessor);
 importClass(Packages.ij.plugin.ChannelSplitter);
 importClass(Packages.java.io.File);
 
-var dir = DirectoryChooser("Select a directory...").getDirectory();
-print(dir);
-
 function getSlicesToSkip() {
 	var gd = new GenericDialog("Skip slices");
 	gd.addNumericField("Skip slices at top", 0, 0);
@@ -21,6 +18,7 @@ function getSlicesToSkip() {
 	return skip;
 }
 
+dir = DirectoryChooser("Select a directory...").getDirectory();
 skip = getSlicesToSkip();
 
 files = File(dir).list();
