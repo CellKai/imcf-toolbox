@@ -31,14 +31,6 @@ function splitFileName(fname) {
 	return pieces;
 }
 
-dir = DirectoryChooser("Select a directory...").getDirectory();
-skip = getSlicesToSkip();
-
-files = File(dir).list();
-for (var i = 0; i < files.length; i++) {
-	splitImageByChannelAndSlice(files[i]);
-}
-
 function splitImageByChannelAndSlice(imgf) {
     print("Processing file " + imgf);
     imp = IJ.openImage(dir + imgf);
@@ -55,4 +47,12 @@ function splitImageByChannelAndSlice(imgf) {
 			FileSaver(ImagePlus(fname[0], ip)).saveAsTiff(dir + fout);
 		}
 	}
+}
+
+dir = DirectoryChooser("Select a directory...").getDirectory();
+skip = getSlicesToSkip();
+
+files = File(dir).list();
+for (var i = 0; i < files.length; i++) {
+	splitImageByChannelAndSlice(files[i]);
 }
