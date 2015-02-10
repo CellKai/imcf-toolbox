@@ -31,7 +31,7 @@ function splitFileName(fname) {
 	return pieces;
 }
 
-function splitImageByChannelAndSlice(imgf) {
+function splitImageByChannelAndSlice(imgf, skip) {
     IJ.log("Processing file " + imgf);
     imp = IJ.openImage(dir + imgf);
     fname = splitFileName(imgf);
@@ -56,7 +56,7 @@ skip = getSlicesToSkip();
 files = File(dir).list();
 for (var i = 0; i < files.length; i++) {
 	if (files[i].substr(-4).toLowerCase() == ".tif") {
-		splitImageByChannelAndSlice(files[i]);
+		splitImageByChannelAndSlice(files[i], skip);
 	} else {
 		IJ.log("Skipping " + files[i]);
 	}
