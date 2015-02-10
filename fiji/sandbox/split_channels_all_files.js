@@ -32,7 +32,7 @@ function splitFileName(fname) {
 }
 
 function splitImageByChannelAndSlice(imgf) {
-    print("Processing file " + imgf);
+    IJ.log("Processing file " + imgf);
     imp = IJ.openImage(dir + imgf);
     fname = splitFileName(imgf);
     channels = ChannelSplitter().split(imp);
@@ -43,7 +43,7 @@ function splitImageByChannelAndSlice(imgf) {
 		for (var z = 1 + skip[0] ; z <= stack.getSize() - skip[1] ; z++) {
 			ip = stack.getProcessor(z);
 			fout = ch_name + "/" + fname[0] + "-z" + z + fname[1];
-			print("Writing channel " + ch_name + ", slice " + z + ": " + fout);
+			IJ.log("Writing channel " + ch_name + ", slice " + z + ": " + fout);
 			FileSaver(ImagePlus(fname[0], ip)).saveAsTiff(dir + fout);
 		}
 	}
@@ -58,6 +58,6 @@ for (var i = 0; i < files.length; i++) {
 	if (files[i].substr(-4).toLowerCase() == ".tif") {
 		splitImageByChannelAndSlice(files[i]);
 	} else {
-		print("Skipping " + files[i]);
+		IJ.log("Skipping " + files[i]);
 	}
 }
