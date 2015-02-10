@@ -1,11 +1,13 @@
 importClass(Packages.ij.IJ);
 importClass(Packages.ij.WindowManager);
+importClass(Packages.ij.io.DirectoryChooser);
 importClass(Packages.ij.io.FileSaver);
 importClass(Packages.java.io.File);
 
-var dir = '/home/ehrenfeu/imageproc/data/fabia_morgane/BI19/';
-files = File(dir).list();
+var dir = DirectoryChooser("Select a directory...").getDirectory();
+print(dir);
 
+files = File(dir).list();
 for (var i = 0; i < files.length; i++) {
     print(files[i]);
     imp = IJ.openImage(dir + files[i]);
