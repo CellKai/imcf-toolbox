@@ -52,6 +52,7 @@ function splitImageByChannelAndSlice(imgf, skip) {
 
 dir = DirectoryChooser("Select a directory...").getDirectory();
 skip = getSlicesToSkip();
+// TODO: sanity checks on user input!!!
 
 files = File(dir).list();
 for (var i = 0; i < files.length; i++) {
