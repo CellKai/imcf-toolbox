@@ -74,7 +74,18 @@
 </output>
 </variables>
 </block>
-<block ID="324748497" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="242" xLocation="571" yLocation="521">
+<block ID="89902962" blockType="plugins.adufour.blocks.tools.roi.MergeROI" className="plugins.adufour.blocks.tools.roi.MergeROI" collapsed="false" definedName="Merge ROI" height="105" keepsResults="true" width="174" xLocation="444" yLocation="465">
+<variables>
+<input>
+<variable ID="List of ROI" name="List of ROI" runtime="false" visible="false"/>
+<variable ID="Merge operation" name="Merge operation" runtime="false" value="OR" visible="false"/>
+</input>
+<output>
+<variable ID="Merged ROI" name="Merged ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="324748497" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="242" xLocation="549" yLocation="586">
 <variables>
 <input>
 <variable ID="target sequence" name="Source" runtime="false" visible="false"/>
@@ -90,8 +101,9 @@
 <link dstBlockID="1937653441" dstVarID="Input" srcBlockID="422997212" srcVarID="Output"/>
 <link dstBlockID="1492730748" dstVarID="Input" srcBlockID="422997212" srcVarID="Output"/>
 <link dstBlockID="1937653441" dstVarID="Manual thresholds" srcBlockID="1492730748" srcVarID="result"/>
-<link dstBlockID="324748497" dstVarID="input rois" srcBlockID="183933802" srcVarID="list of extracted ROI"/>
 <link dstBlockID="183933802" dstVarID="input" srcBlockID="1937653441" srcVarID="output"/>
 <link dstBlockID="324748497" dstVarID="target sequence" srcBlockID="1706983127" srcVarID="sequence"/>
+<link dstBlockID="89902962" dstVarID="List of ROI" srcBlockID="183933802" srcVarID="list of extracted ROI"/>
+<link dstBlockID="324748497" dstVarID="input rois" srcBlockID="89902962" srcVarID="Merged ROI"/>
 </links>
 </protocol>
