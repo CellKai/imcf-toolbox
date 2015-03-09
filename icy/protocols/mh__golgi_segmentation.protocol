@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<protocol VERSION="4">
+<blocks>
+<block ID="882682254" blockType="plugins.adufour.filtering.GaussianFilter" className="plugins.adufour.filtering.FilterToolbox" collapsed="false" definedName="Gaussian filter" height="149" keepsResults="true" width="228" xLocation="9" yLocation="5">
+<variables>
+<input>
+<variable ID="input" name="input" runtime="false" visible="false"/>
+<variable ID="filterX" name="sigma (x)" runtime="false" value="4.0" visible="false"/>
+<variable ID="filterY" name="sigma (y)" runtime="false" value="4.0" visible="false"/>
+<variable ID="filterZ" name="sigma (z)" runtime="false" value="0.0" visible="false"/>
+</input>
+<output>
+<variable ID="output" name="output" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1805304793" blockType="plugins.adufour.thresholder.KMeansThresholdBlock" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="K means threshold" height="127" keepsResults="true" width="228" xLocation="125" yLocation="174">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
+<variable ID="Classes" name="Classes" runtime="false" value="3" visible="false"/>
+</input>
+<output>
+<variable ID="thresholds" name="thresholds" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="37115751" blockType="plugins.adufour.thresholder.Thresholder" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="Thresholder" height="171" keepsResults="true" width="272" xLocation="390" yLocation="139">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" visible="false"/>
+<variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
+</input>
+<output>
+<variable ID="output" name="Binary output" runtime="false" visible="false"/>
+<variable ID="ROI" name="ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1881787865" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="242" xLocation="501" yLocation="17">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1990524928" blockType="plugins.adufour.filtering.GaussianFilter" className="plugins.adufour.filtering.FilterToolbox" collapsed="false" definedName="Gaussian filter" height="149" keepsResults="true" width="228" xLocation="12" yLocation="388">
+<variables>
+<input>
+<variable ID="input" name="input" runtime="false" visible="false"/>
+<variable ID="filterX" name="sigma (x)" runtime="false" value="4.0" visible="false"/>
+<variable ID="filterY" name="sigma (y)" runtime="false" value="4.0" visible="false"/>
+<variable ID="filterZ" name="sigma (z)" runtime="false" value="0.0" visible="false"/>
+</input>
+<output>
+<variable ID="output" name="output" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1577720488" blockType="plugins.tprovoost.bestthreshold.BestThreshold" className="plugins.tprovoost.bestthreshold.BestThreshold" collapsed="false" definedName="Best Threshold" height="171" keepsResults="true" width="203" xLocation="52" yLocation="587">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Method" name="Method" runtime="false" value="Huang" visible="false"/>
+<variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
+<variable ID="Slice" name="Slice" runtime="false" value="0" visible="false"/>
+<variable ID="Time" name="Time" runtime="false" value="0" visible="false"/>
+</input>
+<output>
+<variable ID="result" name="result" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="332365916" blockType="plugins.adufour.thresholder.Thresholder" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="Thresholder" height="171" keepsResults="true" width="272" xLocation="329" yLocation="600">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" visible="false"/>
+<variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
+</input>
+<output>
+<variable ID="output" name="Binary output" runtime="false" visible="false"/>
+<variable ID="ROI" name="ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1326540715" blockType="plugins.adufour.blocks.tools.roi.MergeROI" className="plugins.adufour.blocks.tools.roi.MergeROI" collapsed="false" definedName="Merge ROI" height="105" keepsResults="true" width="174" xLocation="320" yLocation="481">
+<variables>
+<input>
+<variable ID="List of ROI" name="List of ROI" runtime="false" visible="false"/>
+<variable ID="Merge operation" name="Merge operation" runtime="false" value="OR" visible="false"/>
+</input>
+<output>
+<variable ID="Merged ROI" name="Merged ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="2063723482" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="242" xLocation="517" yLocation="423">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="37115751" dstVarID="Input" srcBlockID="1805304793" srcVarID="Input"/>
+<link dstBlockID="37115751" dstVarID="Manual thresholds" srcBlockID="1805304793" srcVarID="thresholds"/>
+<link dstBlockID="1805304793" dstVarID="Input" srcBlockID="882682254" srcVarID="output"/>
+<link dstBlockID="1881787865" dstVarID="input rois" srcBlockID="37115751" srcVarID="ROI"/>
+<link dstBlockID="2063723482" dstVarID="target sequence" srcBlockID="1990524928" srcVarID="input"/>
+<link dstBlockID="1326540715" dstVarID="List of ROI" srcBlockID="332365916" srcVarID="ROI"/>
+<link dstBlockID="2063723482" dstVarID="input rois" srcBlockID="1326540715" srcVarID="Merged ROI"/>
+<link dstBlockID="1881787865" dstVarID="target sequence" srcBlockID="882682254" srcVarID="input"/>
+<link dstBlockID="1577720488" dstVarID="Input" srcBlockID="1990524928" srcVarID="output"/>
+<link dstBlockID="332365916" dstVarID="Manual thresholds" srcBlockID="1577720488" srcVarID="result"/>
+<link dstBlockID="332365916" dstVarID="Input" srcBlockID="1577720488" srcVarID="Input"/>
+</links>
+</protocol>
