@@ -4,7 +4,7 @@
 <block ID="979937563" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="219" xLocation="1" yLocation="0">
 <variables>
 <input>
-<variable ID="sequence" name="sequence" runtime="false" value="Active Sequence" visible="false"/>
+<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
 <variable ID="channel" name="channel" runtime="false" value="1" visible="false"/>
 </input>
 <output>
@@ -15,7 +15,7 @@
 <block ID="1559544246" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="219" xLocation="492" yLocation="31">
 <variables>
 <input>
-<variable ID="sequence" name="sequence" runtime="false" value="Active Sequence" visible="false"/>
+<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
 <variable ID="channel" name="channel" runtime="false" value="0" visible="false"/>
 </input>
 <output>
@@ -26,7 +26,7 @@
 <block ID="1108057921" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="219" xLocation="249" yLocation="14">
 <variables>
 <input>
-<variable ID="sequence" name="sequence" runtime="false" value="Active Sequence" visible="false"/>
+<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
 <variable ID="channel" name="channel" runtime="false" value="2" visible="false"/>
 </input>
 <output>
@@ -76,7 +76,7 @@
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="false"/>
 <variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
-<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="5.0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="15.0" visible="false"/>
 <variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
 </input>
 <output>
@@ -96,7 +96,7 @@
 <variable ID="no edge (Z)" name="Remove border objects (Z)" runtime="false" value="false" visible="false"/>
 <variable ID="size filter" name="Filter objects by size" runtime="false" value="true" visible="false"/>
 <variable ID="min. size" name="Min. size" runtime="false" value="10000" visible="false"/>
-<variable ID="max. size" name="Max. size" runtime="false" value="9910000" visible="false"/>
+<variable ID="max. size" name="Max. size" runtime="false" value="999910000" visible="false"/>
 <variable ID="Export to Excel" name="Export to Excel" runtime="false" value="false" visible="false"/>
 <variable ID="Excel file" name="Excel file" runtime="false" visible="false"/>
 </input>
