@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <protocol VERSION="4">
 <blocks>
-<block ID="1178020433" blockType="plugins.vannary.contourdetection.ContourDetection" className="plugins.vannary.contourdetection.ContourDetection" collapsed="false" definedName="Edge Detection" height="127" keepsResults="true" width="247" xLocation="24" yLocation="21">
+<block ID="875504776" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="207" xLocation="10" yLocation="9">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
+<variable ID="channel" name="channel" runtime="false" value="0" visible="false"/>
+</input>
+<output>
+<variable ID="extracted" name="extracted" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1178020433" blockType="plugins.vannary.contourdetection.ContourDetection" className="plugins.vannary.contourdetection.ContourDetection" collapsed="false" definedName="Edge Detection" height="127" keepsResults="true" width="247" xLocation="255" yLocation="13">
 <variables>
 <input>
 <variable ID="Input" name="Input" runtime="false" visible="false"/>
@@ -76,10 +87,11 @@
 </blocks>
 <links>
 <link dstBlockID="963219056" dstVarID="Input" srcBlockID="1178020433" srcVarID="EDGE"/>
-<link dstBlockID="2011484412" dstVarID="target sequence" srcBlockID="1178020433" srcVarID="Input"/>
 <link dstBlockID="690268570" dstVarID="input ROI" srcBlockID="963219056" srcVarID="ROI"/>
 <link dstBlockID="352219317" dstVarID="List of ROI" srcBlockID="690268570" srcVarID="output ROI"/>
 <link dstBlockID="1740664632" dstVarID="input ROI" srcBlockID="352219317" srcVarID="List of hole-filled ROI"/>
 <link dstBlockID="2011484412" dstVarID="input rois" srcBlockID="1740664632" srcVarID="output ROI"/>
+<link dstBlockID="1178020433" dstVarID="Input" srcBlockID="875504776" srcVarID="extracted"/>
+<link dstBlockID="2011484412" dstVarID="target sequence" srcBlockID="875504776" srcVarID="sequence"/>
 </links>
 </protocol>
