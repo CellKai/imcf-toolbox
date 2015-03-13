@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<protocol VERSION="4">
+<blocks>
+<block ID="1178020433" blockType="plugins.vannary.contourdetection.ContourDetection" className="plugins.vannary.contourdetection.ContourDetection" collapsed="false" definedName="Edge Detection" height="127" keepsResults="true" width="247" xLocation="24" yLocation="21">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Alpha value" name="Alpha value" runtime="false" value="2.0" visible="false"/>
+<variable ID="Method:" name="Method:" runtime="false" value="DERICHE" visible="false"/>
+</input>
+<output>
+<variable ID="EDGE" name="EDGE" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="963219056" blockType="plugins.adufour.thresholder.Thresholder" className="plugins.adufour.thresholder.Thresholder" collapsed="false" definedName="Thresholder" height="171" keepsResults="true" width="285" xLocation="38" yLocation="185">
+<variables>
+<input>
+<variable ID="Input" name="Input" runtime="false" visible="false"/>
+<variable ID="Channel" name="Channel" runtime="false" value="0" visible="false"/>
+<variable ID="Manual thresholds" name="Manual thresholds" runtime="false" value="222.0" visible="false"/>
+<variable ID="Treat as percentiles" name="Treat as percentiles" runtime="false" value="false" visible="false"/>
+</input>
+<output>
+<variable ID="output" name="Binary output" runtime="false" visible="false"/>
+<variable ID="ROI" name="ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="690268570" blockType="plugins.adufour.blocks.tools.roi.DilateROI" className="plugins.adufour.blocks.tools.roi.DilateROI" collapsed="false" definedName="Dilate ROI" height="149" keepsResults="true" width="190" xLocation="48" yLocation="381">
+<variables>
+<input>
+<variable ID="input ROI" name="List of ROI" runtime="false" visible="false"/>
+<variable ID="X radius" name="X radius (px)" runtime="false" value="5" visible="false"/>
+<variable ID="Y radius" name="Y radius (px)" runtime="false" value="5" visible="false"/>
+<variable ID="Z radius" name="Z radius (px)" runtime="false" value="1" visible="false"/>
+</input>
+<output>
+<variable ID="output ROI" name="Dilated ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="352219317" blockType="plugins.adufour.morphology.FillHolesInROI" className="plugins.adufour.morphology.FillHolesInROI" collapsed="false" definedName="Fill holes in ROI" height="83" keepsResults="true" width="205" xLocation="265" yLocation="369">
+<variables>
+<input>
+<variable ID="List of ROI" name="List of ROI" runtime="false" visible="false"/>
+</input>
+<output>
+<variable ID="List of hole-filled ROI" name="List of hole-filled ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1740664632" blockType="plugins.adufour.blocks.tools.roi.ErodeROI" className="plugins.adufour.blocks.tools.roi.ErodeROI" collapsed="false" definedName="Erode ROI" height="149" keepsResults="true" width="190" xLocation="276" yLocation="466">
+<variables>
+<input>
+<variable ID="input ROI" name="List of ROI" runtime="false" visible="false"/>
+<variable ID="X radius" name="X radius (px)" runtime="false" value="6" visible="false"/>
+<variable ID="Y radius" name="Y radius (px)" runtime="false" value="6" visible="false"/>
+<variable ID="Z radius" name="Z radius (px)" runtime="false" value="1" visible="false"/>
+</input>
+<output>
+<variable ID="output ROI" name="Eroded ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="2011484412" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="105" keepsResults="true" width="243" xLocation="24" yLocation="638">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="963219056" dstVarID="Input" srcBlockID="1178020433" srcVarID="EDGE"/>
+<link dstBlockID="2011484412" dstVarID="target sequence" srcBlockID="1178020433" srcVarID="Input"/>
+<link dstBlockID="690268570" dstVarID="input ROI" srcBlockID="963219056" srcVarID="ROI"/>
+<link dstBlockID="352219317" dstVarID="List of ROI" srcBlockID="690268570" srcVarID="output ROI"/>
+<link dstBlockID="1740664632" dstVarID="input ROI" srcBlockID="352219317" srcVarID="List of hole-filled ROI"/>
+<link dstBlockID="2011484412" dstVarID="input rois" srcBlockID="1740664632" srcVarID="output ROI"/>
+</links>
+</protocol>
