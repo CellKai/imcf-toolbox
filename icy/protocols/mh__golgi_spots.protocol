@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<protocol VERSION="4">
+<blocks>
+<block ID="131125995" blockType="plugins.tprovoost.sequenceblocks.extract.ExtractChannel" className="plugins.tprovoost.sequenceblocks.SequenceBlocks" collapsed="false" definedName="Extract channel" height="105" keepsResults="true" width="236" xLocation="22" yLocation="9">
+<variables>
+<input>
+<variable ID="sequence" name="sequence" runtime="false" visible="false"/>
+<variable ID="channel" name="channel" runtime="false" value="1" visible="false"/>
+</input>
+<output>
+<variable ID="extracted" name="extracted" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="1945031973" blockType="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" className="plugins.fab.waveletspotdetectorblock.WaveletSpotDetectorBlock" collapsed="false" definedName="Wavelet Spot Detector Block" height="428" keepsResults="true" width="338" xLocation="34" yLocation="139">
+<variables>
+<input>
+<variable ID="input Sequence" name="input Sequence" runtime="false" visible="false"/>
+<variable ID="Spot to detect" name="Spot to detect" runtime="false" value="BRIGHT_SPOT" visible="false"/>
+<variable ID="input Sequence ROIs" name="input Sequence ROIs" runtime="false" visible="false"/>
+<variable ID="Compute WAT considering ROI" name="Compute WAT considering ROI" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 1" name="Scale 1" runtime="false" value="false" visible="false"/>
+<variable ID="Scale 2" name="Scale 2" runtime="false" value="true" visible="false"/>
+<variable ID="Scale 3" name="Scale 3" runtime="false" value="true" visible="false"/>
+<variable ID="Scale 4" name="Scale 4" runtime="false" value="true" visible="false"/>
+<variable ID="Scale 5" name="Scale 5" runtime="false" value="false" visible="false"/>
+<variable ID="Th. scale 1:" name="Th. scale 1:" runtime="false" value="100" visible="false"/>
+<variable ID="Th. scale 2:" name="Th. scale 2:" runtime="false" value="44" visible="false"/>
+<variable ID="Th. scale 3:" name="Th. scale 3:" runtime="false" value="44" visible="false"/>
+<variable ID="Th. scale 4:" name="Th. scale 4:" runtime="false" value="44" visible="false"/>
+<variable ID="Th. scale 5:" name="Th. scale 5:" runtime="false" value="100" visible="false"/>
+<variable ID="Force 2D Wavelets" name="Force 2D Wavelets" runtime="false" value="true" visible="false"/>
+</input>
+<output>
+<variable ID="binary Spot Sequence" name="binary Spot Sequence" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="214601757" blockType="plugins.adufour.roi.LabelExtractor" className="plugins.adufour.roi.LabelExtractor" collapsed="false" definedName="Label Extractor" height="127" keepsResults="true" width="317" xLocation="44" yLocation="601">
+<variables>
+<input>
+<variable ID="input sequence" name="Labeled sequence" runtime="false" visible="false"/>
+<variable ID="extract mode" name="Extract" runtime="false" value="ANY_LABEL_VS_BACKGROUND" visible="false"/>
+<variable ID="value" name="Value" runtime="false" value="255.0" visible="false"/>
+</input>
+<output>
+<variable ID="ROI" name="ROI" runtime="false" visible="false"/>
+</output>
+</variables>
+</block>
+<block ID="543902060" blockType="plugins.adufour.blocks.tools.roi.AddROIToSequence" className="plugins.adufour.blocks.tools.roi.AddROIToSequence" collapsed="false" definedName="Add ROI to sequence" height="106" keepsResults="true" width="242" xLocation="444" yLocation="36">
+<variables>
+<input>
+<variable ID="target sequence" name="Source" runtime="false" visible="false"/>
+<variable ID="input rois" name="ROI to add" runtime="false" visible="false"/>
+<variable ID="replace existing" name="Overwrite" runtime="false" value="true" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+<block ID="1642830147" blockType="plugins.adufour.blocks.tools.Display" className="plugins.adufour.blocks.tools.Display" collapsed="false" definedName="Display" height="190" keepsResults="true" width="219" xLocation="462" yLocation="309">
+<variables>
+<input>
+<variable ID="object" name="object" runtime="false" type="icy.sequence.Sequence" visible="false"/>
+</input>
+<output/>
+</variables>
+</block>
+</blocks>
+<links>
+<link dstBlockID="543902060" dstVarID="target sequence" srcBlockID="131125995" srcVarID="sequence"/>
+<link dstBlockID="1945031973" dstVarID="input Sequence" srcBlockID="131125995" srcVarID="extracted"/>
+<link dstBlockID="214601757" dstVarID="input sequence" srcBlockID="1945031973" srcVarID="binary Spot Sequence"/>
+<link dstBlockID="543902060" dstVarID="input rois" srcBlockID="214601757" srcVarID="ROI"/>
+<link dstBlockID="1642830147" dstVarID="object" srcBlockID="1945031973" srcVarID="binary Spot Sequence"/>
+</links>
+</protocol>
