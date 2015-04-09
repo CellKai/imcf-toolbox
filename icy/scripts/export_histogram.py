@@ -7,7 +7,7 @@ XLS_FILE = '/tmp/icy_py_excel_test.xls'
 
 
 def get_histogram(seq, nbins, bin_min, bin_max):
-	# hist = Histogram.compute(seq, NUM_BINS, val_min + bwh, val_max - bwh)
+	"""Generate a list of [val, count] from the histogram."""
 	hist = Histogram.compute(seq, nbins, bin_min, bin_max)
 	hist_list = []
 	for i in xrange(hist.getNbBins()):
@@ -16,6 +16,19 @@ def get_histogram(seq, nbins, bin_min, bin_max):
 		count = bin.getCount()
 		hist_list.append([val, count])
 	return hist_list
+
+
+def new_xls_row(ws, values):
+	"""Add a new row from a list of values to a worksheet."""
+	global row
+	col = 0
+	for val in values:
+		if type(val) is str or type(val) is unicode:
+			XLSUtil.setCellString(ws, col, row, val)
+		else:
+			XLSUtil.setCellNumber(ws, col, row, val)
+		col += 1
+	row += 1
 
 
 seq = Icy.getMainInterface().getFocusedSequence()
@@ -37,35 +50,29 @@ wb = XLSUtil.createWorkbook(XLS_FILE)
 ws = XLSUtil.createNewPage(wb, "Histogram")
 
 # set excel headers
-XLSUtil.setCellString(ws, 0, 0, "File name")
-XLSUtil.setCellString(ws, 1, 0, seq.name)
-XLSUtil.setCellString(ws, 0, 2, 'Number of channels')
-XLSUtil.setCellNumber(ws, 1, 2, num_c)
-XLSUtil.setCellString(ws, 0, 3, 'Global min')
-XLSUtil.setCellNumber(ws, 1, 3, val_min)
-XLSUtil.setCellString(ws, 0, 4, 'Global max')
-XLSUtil.setCellNumber(ws, 1, 4, val_max)
-
-XLSUtil.setCellString(ws, 0, 6, 'Number of Histogram bins')
-XLSUtil.setCellNumber(ws, 1, 6, NUM_BINS)
-XLSUtil.setCellString(ws, 0, 7, 'Bin width')
-XLSUtil.setCellNumber(ws, 1, 7, bwh*2)
+row = 0
+new_xls_row(ws, ["File name", seq.name])
+row += 1
+new_xls_row(ws, ['Number of channels', num_c])
+new_xls_row(ws, ['Global min', val_min])
+new_xls_row(ws, ['Global max', val_max])
+row += 1
+new_xls_row(ws, ['Number of Histogram bins', NUM_BINS])
+new_xls_row(ws, ['Bin width', bwh*2])
 
 
-row = 9  # internal row counter
+row += 2
 
 for c in xrange(num_c):
 	channel = seq.extractChannel(c)
 	hist = get_histogram(channel, NUM_BINS, val_min + bwh, val_max - bwh)
-	XLSUtil.setCellString(ws, 0, row, 'Histogram for channel')
-	XLSUtil.setCellNumber(ws, 1, row, c)
-	row += 1
+	new_xls_row(ws, ['Histogram for channel', c])
+	overall = 0
 	for i in hist:
-		XLSUtil.setCellNumber(ws, 0, row, i[0])
-		XLSUtil.setCellNumber(ws, 1, row, i[1])
-		row += 1
+		new_xls_row(ws, [i[0], i[1]])
+		overall += i[1]
+	new_xls_row(ws, ['Overall count from bins', overall])
 	row += 2
-
 
 # close and save the excel file
 XLSUtil.saveAndClose(wb)
