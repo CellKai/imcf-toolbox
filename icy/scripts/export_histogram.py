@@ -2,8 +2,9 @@ from icy.main import Icy
 from icy.util import XLSUtil
 from plugins.ylemontag.histogram import Histogram
 
-NUM_BINS = 16
 XLS_FILE = '/tmp/icy_py_excel_test.xls'
+NUM_BINS = 16
+seq = Icy.getMainInterface().getFocusedSequence()
 
 
 def get_histogram(seq, nbins, bin_min, bin_max):
@@ -30,8 +31,6 @@ def new_xls_row(ws, values):
         col += 1
     row += 1
 
-
-seq = Icy.getMainInterface().getFocusedSequence()
 
 print "--------------------------------"
 print('Sequence name: "%s"' % seq.name)
@@ -76,3 +75,5 @@ for c in xrange(num_c):
 
 # close and save the excel file
 XLSUtil.saveAndClose(wb)
+
+print('Wrote Excel file: "%s"' % XLS_FILE)
