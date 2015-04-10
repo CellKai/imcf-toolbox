@@ -5,7 +5,7 @@ from plugins.ylemontag.histogram import Histogram
 XLS_FILE = '/tmp/icy_py_excel_test.xls'
 NUM_BINS = 16
 
-### BLOCKS compatibility
+### compatibility for BLOCKS
 # if 'input0' is existing, we assume running in a Pythonscript block of a
 # protocol and therefore assign the input variables from the block's connectors
 # NOTE: we require ALL of them to be connected in this case!
@@ -42,21 +42,14 @@ def new_xls_row(ws, values):
     row += 1
 
 
-print "--------------------------------"
 print('Sequence name: "%s"' % seq.name)
-print "--------------------------------"
 
-#print dir(seq)
 num_c = seq.getSizeC()
-bounds = seq.getChannelsGlobalBounds()
-val_min = bounds[0]
-val_max = bounds[1]
+val_min, val_max = seq.getChannelsGlobalBounds()
 bwh = (val_max - val_min + 1) / (NUM_BINS * 2)  # bin width half
 
-#  create excel document (workbook)
-wb = XLSUtil.createWorkbook(XLS_FILE)
-# create a new page (sheet) in the excel document
-ws = XLSUtil.createNewPage(wb, "Histogram")
+wb = XLSUtil.createWorkbook(XLS_FILE)             # create a new excel document
+ws = XLSUtil.createNewPage(wb, "Histogram")       # create a new worksheet
 
 # set excel headers
 row = 0
@@ -68,8 +61,6 @@ new_xls_row(ws, ['Global max', val_max])
 row += 1
 new_xls_row(ws, ['Number of Histogram bins', NUM_BINS])
 new_xls_row(ws, ['Bin width', bwh*2])
-
-
 row += 2
 
 for c in xrange(num_c):
@@ -87,5 +78,5 @@ for c in xrange(num_c):
 XLSUtil.saveAndClose(wb)
 
 print('Wrote Excel file: "%s"' % XLS_FILE)
-### BLOCKS compatibility
+### compatibility for BLOCKS
 output0 = XLS_FILE
