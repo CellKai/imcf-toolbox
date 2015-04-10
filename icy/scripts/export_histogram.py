@@ -18,14 +18,15 @@ else:
 
 
 def get_histogram(seq, nbins, bin_min, bin_max):
-    """Generate a list of [val, count] from the histogram."""
+    """Generate two lists with central values and histogram counts."""
     hist = Histogram.compute(seq, nbins, bin_min, bin_max)
-    hist_list = []
-    for i in xrange(hist.getNbBins()):
+    hist_list = [[], []]
+    for i in xrange(nbins):
         bin = hist.getBin(i)
         val = bin.getCentralValue()
         count = bin.getCount()
-        hist_list.append([val, count])
+        hist_list[0].append(val)
+        hist_list[1].append(count)
     return hist_list
 
 
@@ -63,16 +64,16 @@ new_xls_row(ws, ['Number of Histogram bins', NUM_BINS])
 new_xls_row(ws, ['Bin width', bwh*2])
 row += 2
 
+ch_hist = []
 for c in xrange(num_c):
-    channel = seq.extractChannel(c)
-    hist = get_histogram(channel, NUM_BINS, val_min + bwh, val_max - bwh)
-    new_xls_row(ws, ['Histogram for channel', c])
-    overall = 0
-    for i in hist:
-        new_xls_row(ws, [i[0], i[1]])
-        overall += i[1]
-    new_xls_row(ws, ['Overall count from bins', overall])
-    row += 2
+    ch_hist.append(get_histogram(seq.extractChannel(c),
+                                 NUM_BINS, val_min + bwh, val_max - bwh))
+
+new_xls_row(ws, ['Histogram'])
+
+new_xls_row(ws, ['central bin value', ''] + ch_hist[0][0] + ['total'])
+for c in xrange(len(ch_hist)):
+    new_xls_row(ws, ['channel', c] + ch_hist[c][1] + [sum(ch_hist[c][1])])
 
 # close and save the excel file
 XLSUtil.saveAndClose(wb)
