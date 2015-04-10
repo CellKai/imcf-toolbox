@@ -4,7 +4,17 @@ from plugins.ylemontag.histogram import Histogram
 
 XLS_FILE = '/tmp/icy_py_excel_test.xls'
 NUM_BINS = 16
-seq = Icy.getMainInterface().getFocusedSequence()
+
+### BLOCKS compatibility
+# if 'input0' is existing, we assume running in a Pythonscript block of a
+# protocol and therefore assign the input variables from the block's connectors
+# NOTE: we require ALL of them to be connected in this case!
+if 'input0' in locals():
+    XLS_FILE = input0
+    NUM_BINS = input1
+    seq = input2
+else:
+    seq = Icy.getMainInterface().getFocusedSequence()
 
 
 def get_histogram(seq, nbins, bin_min, bin_max):
@@ -77,3 +87,5 @@ for c in xrange(num_c):
 XLSUtil.saveAndClose(wb)
 
 print('Wrote Excel file: "%s"' % XLS_FILE)
+### BLOCKS compatibility
+output0 = XLS_FILE
