@@ -57,6 +57,12 @@ row = 0
 new_xls_row(ws, ["File name", seq.name])
 row += 1
 new_xls_row(ws, ['Number of channels', num_c])
+new_xls_row(ws, ['X Dimension', seq.getSizeX()])
+new_xls_row(ws, ['Y Dimension', seq.getSizeY()])
+new_xls_row(ws, ['Z Dimension', seq.getSizeZ()])
+numpixels = seq.getSizeX() * seq.getSizeY() * seq.getSizeZ()
+new_xls_row(ws, ['Total number of pixels', numpixels])
+print('Total number of pixels: %s' % numpixels)
 new_xls_row(ws, ['Global min', val_min])
 new_xls_row(ws, ['Global max', val_max])
 row += 1
@@ -74,6 +80,7 @@ new_xls_row(ws, ['Histogram'])
 new_xls_row(ws, ['central bin value', ''] + ch_hist[0][0] + ['total'])
 for c in xrange(len(ch_hist)):
     new_xls_row(ws, ['channel', c] + ch_hist[c][1] + [sum(ch_hist[c][1])])
+    print('Total count for channel %s: %s' % (c, sum(ch_hist[c][1])))
 
 # close and save the excel file
 XLSUtil.saveAndClose(wb)
