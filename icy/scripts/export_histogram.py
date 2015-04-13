@@ -73,7 +73,7 @@ row += 2
 ch_hist = []
 for c in xrange(num_c):
     ch_hist.append(get_histogram(seq.extractChannel(c),
-                                 NUM_BINS, val_min + bwh, val_max - bwh))
+                                 NUM_BINS, val_min, val_max))
 
 new_xls_row(ws, ['Histogram'])
 
