@@ -3,7 +3,7 @@ from icy.util import XLSUtil
 from plugins.ylemontag.histogram import Histogram
 
 XLS_FILE = '/tmp/icy_py_excel_test.xls'
-NUM_BINS = 16
+NUM_BINS = 256
 
 ### compatibility for BLOCKS
 # if 'input0' is existing, we assume running in a Pythonscript block of a
@@ -19,7 +19,9 @@ else:
 
 def get_histogram(seq, nbins, bin_min, bin_max):
     """Generate two lists with central values and histogram counts."""
+    print('%s, %s, %s' % (nbins, bin_min, bin_max))
     hist = Histogram.compute(seq, nbins, bin_min, bin_max)
+    print("hist.getBinWidth(): %s" % hist.getBinWidth())
     hist_list = [[], []]
     for i in xrange(nbins):
         bin = hist.getBin(i)
@@ -28,6 +30,19 @@ def get_histogram(seq, nbins, bin_min, bin_max):
         hist_list[0].append(val)
         hist_list[1].append(count)
     return hist_list
+
+
+def get_hist_allch(seq, nbins, bin_min, bin_max):
+    histograms = [[], []]
+    for ci in range(seq.getSizeC()):
+        ch = seq.extractChannel(ci)
+        temp = get_histogram(ch, NUM_BINS, bin_min, bin_max)
+        if histograms[0] == []:
+            histograms[0] = temp[0]
+        if not histograms[0] == temp[0]:
+            return 'ERROR, central bin values in histogram differ!'
+        histograms[1].append(temp[1])
+    return histograms
 
 
 def new_xls_row(ws, values):
@@ -48,6 +63,7 @@ print('Sequence name: "%s"' % seq.name)
 num_c = seq.getSizeC()
 val_min, val_max = seq.getChannelsGlobalBounds()
 bwh = (val_max - val_min + 1) / (NUM_BINS * 2)  # bin width half
+print('Bin width calculated from min/max and NUM_BINS: %s' % (bwh*2))
 
 wb = XLSUtil.createWorkbook(XLS_FILE)             # create a new excel document
 ws = XLSUtil.createNewPage(wb, "Histogram")       # create a new worksheet
@@ -70,17 +86,16 @@ new_xls_row(ws, ['Number of Histogram bins', NUM_BINS])
 new_xls_row(ws, ['Bin width', bwh*2])
 row += 2
 
-ch_hist = []
-for c in xrange(num_c):
-    ch_hist.append(get_histogram(seq.extractChannel(c),
-                                 NUM_BINS, val_min, val_max))
+ch_hist = get_hist_allch(seq, NUM_BINS, val_min + bwh, val_max - bwh)
+# ch_hist = get_hist_allch(seq, NUM_BINS, 0, 3)
 
 new_xls_row(ws, ['Histogram'])
+new_xls_row(ws, ['central bin value', ''] + ch_hist[0] + ['total'])
 
-new_xls_row(ws, ['central bin value', ''] + ch_hist[0][0] + ['total'])
-for c in xrange(len(ch_hist)):
-    new_xls_row(ws, ['channel', c] + ch_hist[c][1] + [sum(ch_hist[c][1])])
-    print('Total count for channel %s: %s' % (c, sum(ch_hist[c][1])))
+ci = 0
+for ch in ch_hist[1]:
+    new_xls_row(ws, ['channel', ci] + ch + [sum(ch)])
+    ci += 1
 
 # close and save the excel file
 XLSUtil.saveAndClose(wb)
