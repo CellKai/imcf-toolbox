@@ -4,6 +4,8 @@
 
 import codecs
 import ConfigParser
+import olefile
+from io import StringIO
 
 from log import log
 from microscopy.pathtools import parse_path, exists
@@ -122,9 +124,9 @@ class ImageData(DataSet):
         raise NotImplementedError('get_dimensions() not implemented!')
 
 
-class ImageDataOIF(ImageData):
+class ImageDataOlympus(ImageData):
 
-    """Specific DataSet class for images in Olympus OIF format."""
+    """Meta DataSet class for images in one of the Olympus file formats."""
 
     def __init__(self, st_path):
         """Set up the image dataset object.
@@ -132,29 +134,29 @@ class ImageDataOIF(ImageData):
         Parameters
         ----------
         st_path : str
-            The full path to the .OIF file.
+            The full path to the dataset file.
 
         Instance Variables
         ------------------
         For inherited variables, see ImageData.
         """
-        log.debug("ImageDataOIF(%s)" % st_path)
-        super(ImageDataOIF, self).__init__('stack', 'tree', st_path)
-        self.storage = self.validate_oifpath()
-        self.parser = self.setup_parser()
+        log.debug("ImageDataOlympus(%s)" % st_path)
+        super(ImageDataOlympus, self).__init__('stack', 'tree', st_path)
+        self.storage = self.validate_filepath()
+        self.parser = None  # needs to be done in the subclass
         self._dim = None  # override _dim to mark it as not yet known
 
-    def validate_oifpath(self):
-        """Fix the broken .oif paths in FluoView experiment files.
+    def validate_filepath(self):
+        """Fix the broken filenames in FluoView experiment files.
 
         The FluoView software usually stores corrupted filenames in its
         experiment description files, that have a missing suffix, e.g.
 
-            Slide1sec001\\Slide1sec001.oif
+            Slide1sec001\\Slide1sec001.oib
 
         whereas the correct filename would be
 
-            Slide1sec001\\Slide1sec001_01.oif
+            Slide1sec001\\Slide1sec001_01.oib
 
         This function attempts to fix this by checking if the supplied path is
         actually existing and trying the default suffix if not. Raises an
@@ -164,33 +166,15 @@ class ImageDataOIF(ImageData):
         -------
         storage : pathtools.parse_path
         """
-        oif = self.storage
-        log.debug("Validating oif path: %s" % oif)
-        if not exists(oif['full']):
-            oif = parse_path(oif['orig'].replace('.oif', '_01.oif'))
-            log.debug("Trying next path: %s" % oif['full'])
-        if not exists(oif['full']):
-            raise IOError("Can't find OIF file: %s" % oif)
-        return oif
-
-    def setup_parser(self):
-        """Set up the ConfigParser object for this .oif file.
-
-        Use the 'codecs' package to set up a ConfigParser object that can
-        properly handle the UTF-16 encoded .oif files.
-        """
-        # TODO: investigate usage of 'io' package instead of 'codecs'
-        oif = self.storage['full']
-        log.info('Parsing OIF file: %s' % oif)
-        try:
-            conv = codecs.open(oif, "r", "utf16")
-        except IOError:
-            raise IOError("Error parsing OIF file (does it exist?): %s" % oif)
-        parser = ConfigParser.RawConfigParser()
-        parser.readfp(conv)
-        conv.close()
-        log.debug('Finished parsing OIF file.')
-        return parser
+        fpath = self.storage
+        ext = fpath['ext']
+        log.debug("Validating file path: %s" % fpath)
+        if not exists(fpath['full']):
+            fpath = parse_path(fpath['orig'].replace(ext, '_01' + ext))
+            log.debug("Trying next path: %s" % fpath['full'])
+        if not exists(fpath['full']):
+            raise IOError("Can't find file: %s" % fpath)
+        return fpath
 
     def parse_dimensions(self):
         """Read image dimensions from a ConfigParser object.
@@ -258,6 +242,118 @@ class ImageDataOIF(ImageData):
         pos_y = size_y * ratio * tileno_y
         log.info("Setting relative coordinates: %s, %s." % (pos_x, pos_y))
         self.position['relative'] = (pos_x, pos_y)
+
+
+class ImageDataOIF(ImageDataOlympus):
+
+    """Specific DataSet class for images in Olympus OIF format."""
+
+    def __init__(self, st_path):
+        """Set up the image dataset object.
+
+        Parameters
+        ----------
+        st_path : str
+            The full path to the .OIF file.
+
+        Instance Variables
+        ------------------
+        For inherited variables, see ImageData.
+        """
+        log.debug("ImageDataOIF(%s)" % st_path)
+        super(ImageDataOIF, self).__init__(st_path)
+        self.parser = self.setup_parser()
+        self._dim = None  # override _dim to mark it as not yet known
+
+    def setup_parser(self):
+        """Set up the ConfigParser object for this .oif file.
+
+        Use the 'codecs' package to set up a ConfigParser object that can
+        properly handle the UTF-16 encoded .oif files.
+        """
+        # TODO: investigate usage of 'io' package instead of 'codecs'
+        oif = self.storage['full']
+        log.info('Parsing OIF file: %s' % oif)
+        try:
+            conv = codecs.open(oif, "r", "utf16")
+        except IOError:
+            raise IOError("Error parsing OIF file (does it exist?): %s" % oif)
+        parser = ConfigParser.RawConfigParser()
+        parser.readfp(conv)
+        conv.close()
+        log.debug('Finished parsing OIF file.')
+        return parser
+
+
+class ImageDataOIB(ImageDataOlympus):
+
+    """Specific DataSet class for images in Olympus OIB format."""
+
+    def __init__(self, st_path):
+        """Set up the image dataset object.
+
+        Parameters
+        ----------
+        st_path : str
+            The full path to the .OIB file.
+
+        Instance Variables
+        ------------------
+        For inherited variables, see ImageDataOlympus (and ImageData).
+        """
+        log.debug("ImageDataOIB(%s)" % st_path)
+        super(ImageDataOIB, self).__init__(st_path)
+        self.parser = self.setup_parser()
+
+    def setup_parser(self):
+        """Set up the ConfigParser object for this .oib file.
+
+        Use the 'olefile' package to open the OIB container file, read in
+        the description file (using the 'codecs' package to properly handle the
+        UTF-16 encoding). Some minor checks on the description file are done
+        where also the "main" file of the OIB container (containing all the
+        metadata like dimensions, channels, etc.) is identified and eventually
+        the parser is set up for this file.
+        """
+        oibinfo = 'OibInfo.txt'
+        encoding = 'utf16'
+        expected_version = '2.0.0.0'
+        # TODO: investigate usage of 'io' package instead of 'codecs'
+        oib = self.storage['full']
+        log.info('Parsing OIB file: %s' % oib)
+        try:
+            ole = olefile.OleFileIO(oib)
+        except IOError as err:
+            raise IOError("Error parsing OIB file: %s" % err)
+        log.info('Parsing OIB description file "%s".' % oibinfo)
+        try:
+            stream = ole.openstream([oibinfo])
+        except IOError as err:
+            raise IOError("OIB description (%s) missing: %s" % (oibinfo, err))
+        try:
+            conv = codecs.decode(stream.read(), encoding)
+        except UnicodeDecodeError as err:
+            raise UnicodeDecodeError("OIB has unexpected encoding: %s" % err)
+        parser = ConfigParser.RawConfigParser()
+        parser.readfp(StringIO(conv))
+        oibver = parser.get(u'OibSaveInfo', u'Version')
+        mainfile = parser.get(u'OibSaveInfo', u'MainFileName')
+        if oibver != expected_version:
+            log.warn('WARNING: OIB has unknown format version %s!' % oibver)
+        else:
+            log.info('OIB Format Version: %s' % oibver)
+        log.debug('Main File Name: %s' % mainfile)
+        stream.close()
+        log.info('Finished parsing OIB description file.')
+        # replace stream and parser with the mainfile:
+        stream = ole.openstream([mainfile])
+        conv = codecs.decode(stream.read(), encoding)
+        parser.readfp(StringIO(conv))
+        # clean up and return the parser:
+        log.debug('Finished parsing OIB file.')
+        stream.close()
+        ole.close()
+        return parser
 
 
 class MosaicData(DataSet):

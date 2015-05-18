@@ -25,4 +25,10 @@ from microscopy import experiment
 from microscopy import fluoview
 from microscopy import imagej
 
+# NOTE: Jython doesn't allow for "relative star imports", so we NEED to do the
+# import on the "olefile.py" part, we cannot use the full package (see
+# http://bugs.jython.org/issue2070 and http://bugs.jython.org/issue1973 for
+# more details on this bug):
+import olefile
+
 print 'Finished importing modules.'

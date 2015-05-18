@@ -17,7 +17,7 @@ basedir = 'TESTDATA/fluoview/'
 
 testfile = basedir + 'minimal_1mosaic_15pct/' + 'MATL_Mosaic.log'
 
-mosaic_exp = fluoview.FluoViewOIFMosaic(testfile)
+mosaic_exp = fluoview.FluoViewMosaic(testfile)
 mdc = mosaic_exp[0]
 mdc.dim
 mdc.get_overlap()

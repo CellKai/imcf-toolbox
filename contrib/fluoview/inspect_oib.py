@@ -9,7 +9,7 @@ read the description file 'OibInfo.txt' from the topmost hierarchy level.
 
 import sys
 import argparse
-import OleFileIO_PL  # at least version 0.31 required
+import olefile
 import codecs
 from log import log, set_loglevel
 
@@ -32,10 +32,10 @@ def main():
     args = parse_arguments()
     set_loglevel(args.verbosity)
 
-    log.debug("Using 'OleFileIO_PL' version %s (%s)." %
-             (OleFileIO_PL.__version__, OleFileIO_PL.__date__))
+    log.debug("Using 'olefile' version %s (%s)." %
+             (olefile.__version__, olefile.__date__))
 
-    ole = OleFileIO_PL.OleFileIO(args.oib)
+    ole = olefile.OleFileIO(args.oib)
     stream = ole.openstream(['OibInfo.txt'])
     # stream = ole.openstream(['Storage00001', 'Stream00060'])
     conv = codecs.decode(stream.read(), 'utf16')

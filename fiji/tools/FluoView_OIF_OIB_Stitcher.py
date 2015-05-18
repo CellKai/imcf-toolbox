@@ -1,4 +1,4 @@
-"""Fiji plugin for stitching FluoView mosaics in OIF format."""
+"""Fiji plugin for stitching FluoView mosaics."""
 
 """
 NOTE: this plugin requires your Jython environment to be updated to 2.7 (beta)
@@ -24,7 +24,7 @@ parsing them itself, plugin-arguments have to be prefixed with a TRIPLE dash
 "---" (both long and short versions):
 
 MOSAICLOG="../../sample_data/fluoview/minimal_1mosaic_15pct/MATL_Mosaic.log"
-ImageJ-linux64 --headless FluoView_OIF_Stitcher.py ---mosaiclog $MOSAICLOG
+ImageJ-linux64 --headless FluoView_OIF_OIB_Stitcher.py ---mosaiclog $MOSAICLOG
 
 
 For debugging the interactive mode within Fiji, start the Jython Interpreter
@@ -32,7 +32,7 @@ and run the following commands:
 
 >>> import sys
 >>> sys.path.insert(0, '/opt/imcf_toolbox/fiji/tools')
->>> import FluoView_OIF_Stitcher as st
+>>> import FluoView_OIF_OIB_Stitcher as st
 >>> st.main_interactive()
 
 To use the script that is actually deployed in a Fiji installation (in the
@@ -43,7 +43,7 @@ from os.path import join
 from java.lang.System import getProperty
 imcfdir = join(getProperty('fiji.dir'), 'plugins', 'IMCF')
 sys.path.insert(0, join(imcfdir, 'imcf_tools.jar'))
-import FluoView_OIF_Stitcher as st
+import FluoView_OIF_OIB_Stitcher as st
 st.main_interactive()
 """
 
@@ -107,7 +107,7 @@ def main_interactive():
         return
     log.warn("Parsing project file: %s" % (base + fname))
     IJ.showStatus("Parsing experiment file...")
-    mosaics = fv.FluoViewOIFMosaic(join(base, fname), runparser=False)
+    mosaics = fv.FluoViewMosaic(join(base, fname), runparser=False)
     IJ.showStatus("Parsing mosaics...")
     progress = 0.0
     count = len(mosaics.mosaictrees)
@@ -118,7 +118,7 @@ def main_interactive():
         progress += step
     IJ.showProgress(progress)
     IJ.showStatus("Parsed %i mosaics." % len(mosaics))
-    dialog = GenericDialog('FluoView OIF Stitcher')
+    dialog = GenericDialog('FluoView OIF / OIB Stitcher')
     if len(mosaics) == 0:
         msg = ("Couldn't find any (valid) mosaics in the project file.\n"
                " \n"
@@ -160,7 +160,7 @@ def main_noninteractive():
     log.debug('Python FluoView package file: %s' % fv.__file__)
     base = dirname(args.mosaiclog)
     fname = basename(args.mosaiclog)
-    mosaics = fv.FluoViewOIFMosaic(join(base, fname))
+    mosaics = fv.FluoViewMosaic(join(base, fname))
     log.warn(gen_mosaic_details(mosaics))
     if args.templates is not None:
         imcftpl = args.templates
@@ -211,7 +211,7 @@ def parse_arguments():
 if (__name__ == '__main__'):
     ijlogger = IJLogHandler()
     log.addHandler(ijlogger)
-    log.warn("FluoView OIF stitcher (%s)." % imcf.VERSION)
+    log.warn("FluoView OIF / OIB stitcher (%s)." % imcf.VERSION)
     log.warn("Arguments (sys.argv): %s" % sys.argv)
     if (len(sys.argv) > 0):
         sys.exit(main_noninteractive())
