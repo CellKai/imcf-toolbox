@@ -46,18 +46,22 @@ if(compute) {
 tileconfigs = get_tileconfig_files(input_dir);
 for (i = 0; i < tileconfigs.length; i++) {
     layout_file = tileconfigs[i];
-    ome_tiff = replace(layout_file, '.txt', '.ome.tif');
+	export_file  = output_dir + sep;
+	export_file += replace(layout_file, '.txt', export_format);
 	param = tpl + "layout_file=[" + layout_file + "]";
 	print(hr);
 	print("*** [" + name + "]: processing " + layout_file);
 	run("Grid/Collection stitching", param);
-	bfexp  = "save=" + output_dir + sep + ome_tiff + " ";
+	bfexp  = "save=" + export_file + " ";
+	if (split_z_slices) {
+		bfexp += "write_each_z_section ";
+	}
 	bfexp += "compression=Uncompressed";
 	print("*** [" + name + "]: finished " + layout_file);
-	print("*** Exporting to OME-TIFF: " + output_dir + sep + ome_tiff);
+	print("*** Exporting to " + export_format + ": " + export_file);
 	run("Bio-Formats Exporter", bfexp);
 	close();
-	print("*** Finished exporting to OME-TIFF.");
+	print("*** Finished exporting to " + export_format + ".");
 }
 duration = (getTime() - time_start) / 1000;
 print(hr);

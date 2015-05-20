@@ -5,6 +5,8 @@ name = '';  // the dataset name
 compute = true;  // whether to compute the overlap)
 input_dir = '';  // user will be asked if empty
 use_batch_mode = false;
+export_format = ".ome.tif";  // usually ".ome.tif" or ".ids"
+split_z_slices = false;
 
 // remember starting time to calculate overall runtime
 time_start = getTime();
