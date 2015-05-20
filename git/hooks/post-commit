@@ -5,5 +5,5 @@
 
 (
 echo '""" AUTO-GENERATED VERSION INFO: DO NOT EDIT!"""'
-echo "VERSION = '$(git describe)'"
+echo "VERSION = '$(git describe --tags)'"
 ) > lib/python2.7/imcf.py
