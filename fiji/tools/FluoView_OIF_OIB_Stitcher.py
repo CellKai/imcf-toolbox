@@ -129,6 +129,15 @@ def main_interactive():
         dialog.addMessage(msg)
         dialog.showDialog()
         return
+    msg = "------------------------ EXPORT OPTIONS ------------------------"
+    dialog.addMessage(msg)
+    formats = ["OME-TIFF", "ICS/IDS"]
+    dialog.addChoice("Export Format", formats, formats[0])
+    dialog.addCheckbox("Split Z slices into separate files?", False)
+    msg = "------------------------ EXPORT OPTIONS ------------------------"
+    dialog.addMessage(msg)
+    dialog.addMessage("")
+    dialog.addMessage("")
     msg = gen_mosaic_details(mosaics)
     log.warn(msg)
     msg += "\n \nPress [OK] to write tile configuration files\n"
@@ -136,8 +145,15 @@ def main_interactive():
     dialog.addMessage(msg)
     dialog.showDialog()
 
+    opts = {}
+    if dialog.getNextChoice() == 'ICS/IDS':
+        opts['export_format'] = '".ids"'
+    else:
+        opts['export_format'] = '".ome.tif"'
+        if dialog.getNextBoolean() == True:
+            opts['split_z_slices'] = 'true'
     code = imagej.gen_stitching_macro_code(mosaics, 'templates/stitching',
-                                           path=base, tplpath=imcftpl)
+                                           path=base, tplpath=imcftpl, opts=opts)
     log.warn("============= generated macro code =============")
     log.warn(flatten(code))
     log.warn("============= end of generated  macro code =============")
