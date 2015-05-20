@@ -133,7 +133,7 @@ def main_interactive():
     dialog.addMessage(msg)
     formats = ["OME-TIFF", "ICS/IDS"]
     dialog.addChoice("Export Format", formats, formats[0])
-    dialog.addCheckbox("Split Z slices into separate files?", False)
+    dialog.addCheckbox("separate files by Z slices (OME-TIFF only)?", False)
     msg = "------------------------ EXPORT OPTIONS ------------------------"
     dialog.addMessage(msg)
     dialog.addMessage("")
