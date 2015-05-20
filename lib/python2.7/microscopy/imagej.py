@@ -107,7 +107,7 @@ def write_all_tile_configs(experiment, outdir='', fixsep=False):
         write_tile_config(mosaic_ds, outdir, fixsep)
 
 
-def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
+def gen_stitching_macro_code(experiment, pfx, path='', tplpath=''):
     """Generate code in ImageJ's macro language to stitch the mosaics.
 
     Take two template files ("head" and "body") and generate an ImageJ
@@ -127,8 +127,6 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
         The path to use as input directory *INSIDE* the macro.
     tplpath : str
         The path to a directory or zip file containing the templates.
-    flat : bool
-        Used to request a flattened string instead of a list of strings.
 
     Returns
     -------
@@ -173,10 +171,7 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', flat=False):
     ijm.append('\n')
     ijm += readtxt(pfx + '_body.ijm', tplpath)
     log.debug('--- ijm ---\n%s\n--- ijm ---' % ijm)
-    if (flat):
-        return(flatten(ijm))
-    else:
-        return(ijm)
+    return(ijm)
 
 
 def write_stitching_macro(code, fname, dname):
