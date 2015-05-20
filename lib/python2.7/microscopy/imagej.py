@@ -107,7 +107,7 @@ def write_all_tile_configs(experiment, outdir='', fixsep=False):
         write_tile_config(mosaic_ds, outdir, fixsep)
 
 
-def gen_stitching_macro_code(experiment, pfx, path='', tplpath=''):
+def gen_stitching_macro_code(experiment, pfx, path='', tplpath='', opts={}):
     """Generate code in ImageJ's macro language to stitch the mosaics.
 
     Take two template files ("head" and "body") and generate an ImageJ
@@ -127,6 +127,11 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath=''):
         The path to use as input directory *INSIDE* the macro.
     tplpath : str
         The path to a directory or zip file containing the templates.
+    opts : dict (optional)
+        A dict with key-value pairs to be put into the macro between the head
+        and body to override the macro's default settings.
+        NOTE: the values are placed literally in the macro code, this means
+        that strings have to be quoted, e.g. opts['foo'] = '"bar baz"'
 
     Returns
     -------
@@ -136,8 +141,6 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath=''):
     """
     # pylint: disable-msg=E1103
     #   the type of 'ijm' is not correctly inferred by pylint and it complains
-    # TODO: generalize by supplying a dict with values to put between the head
-    # and body section of the macro
     # by default templates are expected in a subdir of the current package:
     if (tplpath == ''):
         tplpath = join(dirname(__file__), 'ijm_templates')
@@ -162,6 +165,8 @@ def gen_stitching_macro_code(experiment, pfx, path='', tplpath=''):
     path = path.replace('\\', '\\\\')
     ijm.append('input_dir="%s";\n' % path)
     ijm.append('use_batch_mode = true;\n')
+    for option, value in opts.items():
+        ijm.append('%s = %s;\n' % (option, value))
 
     # If the overlap is below a certain level (5 percent), we disable
     # computing the actual positions and subpixel accuracy:
