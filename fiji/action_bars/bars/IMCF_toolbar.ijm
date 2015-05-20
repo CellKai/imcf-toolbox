@@ -49,25 +49,26 @@ run("Channels Tool...");
 </macro>
 
 <button> 6 line 1
+label=Auto
+//icon=icons/bandpass.png
+arg=<macro>
+run("Auto-Range Contrast + LUT's");
+</macro>
+
+<button> 7 line 1
 label=Median Filter
 icon=icons/median.png
 arg=<macro>
 run("Median...");
 </macro>
 
-<button> 7 line 1
+<button> 8 line 1
 label=Gaussian Blur
 icon=icons/gauss_filter.png
 arg=<macro>
 run("Gaussian Blur...");
 </macro>
 
-<button> 8 line 1
-label=FFT BandPass
-icon=icons/bandpass.png
-arg=<macro>
-run("Bandpass Filter...");
-</macro>
 </line>
 
 // LINE 2:
